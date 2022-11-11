@@ -10,9 +10,11 @@ class DashboardController extends Controller
     public function index()
     {
 
-        return response()->json([
-            'status'=>200,
-            'messege'=>"ok",
-        ]);
+        return view('dashboard',[]);
+
+        // return response()->json([
+        //     'status'=>200,
+        //     'messege'=>"ok",
+        // ]);
     }
 }
