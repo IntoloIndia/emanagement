@@ -18,4 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/billing', function () {
+    return view('billing');
+});
+
 Route::get('dashboard', [DashboardController::class, 'index']);
