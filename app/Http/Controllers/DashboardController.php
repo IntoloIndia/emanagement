@@ -11,6 +11,7 @@ class DashboardController extends Controller
     {
 
         return view('dashboard',[]);
+        
 
         // return response()->json([
         //     'status'=>200,

@@ -8,6 +8,7 @@
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/fontawesome-free/css/all.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/tempusdominus-bootstrap-4.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/icheck-bootstrap.min.css') }}" />
@@ -17,8 +18,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/summernote-bs4.min.css') }}" />
 
-        {{-- <link rel="stylesheet" href="{{ asset('assets/common/css/core.css') }}" /> --}}
-        {{-- <link rel="stylesheet" href="{{ asset('assets/common/css/theme-default.css') }}" /> --}}
+        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 
         <style>
             .sidebar .nav-link p{
@@ -63,11 +63,12 @@
 
         </div>
     </body>
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
+    
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/Chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/sparkline.js') }}"></script>
