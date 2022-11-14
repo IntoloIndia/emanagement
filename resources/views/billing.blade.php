@@ -4,7 +4,7 @@
 @section('content')
    <div class="row">
     <div class="col-lg-7 col-md-12 col-sm-12">
-        <div class="card">
+        <div class="card"style="height: 85vh;">
             <div class="card-header">
                 <b>Billing</b>
             </div>
@@ -36,7 +36,7 @@
                                 <b>Items</b>
                             </div>
                             <div class="col-6 d-flex justify-content-end">
-                                <button class="btn btn-primary btn-sm " id="addItemBtn" onclick="add()"> Add item</button>
+                                <button class="btn btn-primary btn-sm " id="addItemBtn"> Add item</button>
                             </div>
                         </div>
                     </div>
@@ -73,11 +73,11 @@
                                                 class="form-control form-control-sm qty">
                                         </td>
                                         <td style="width: 100px;">
-                                            <input type="number" name="qty[]" 
+                                            <input type="number" name="qty[]" value="1"
                                                 class="form-control form-control-sm qty">
                                         </td>
                                         <td style="width: 170px;">
-                                            <select class="form-select form-select-sm form-control sm" aria-label="Default select example">
+                                            <select class="form-select  form-select-sm form-control sm" aria-label="Default select example">
                                                 <option selected>size</option>
                                                 <option value="1">l</option>
                                                 <option value="2">xl</option>
@@ -159,16 +159,30 @@
 {{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
 
 <script>
-        // $(document).ready(function () {
-        //     alert("hello");
-        //  $(document).on('click','#addItemBtn', function (e) {
-        //         e.preventDefault();
-        //         // addItem();
-        //     });
-        // })
-            function add(){
+        $(document).ready(function () {
+            $(document).on('click','#addItemBtn', function (e) {
+                e.preventDefault();
                 alert("call")
-            }
+                // addItem();
+            });
+
+        //     function addItem() {
+        //     $('#item_list').append($('#item_row').html());
+        //     $("#item_list tr").find(".item").chosen();
+        // }
+        // $(document).on("click",".delete_item", function(){
+        //         if($("#item_list tr").length == 1)
+        //         {
+        //             alert("Order must have at least 1 item.");
+        //             return false;
+        //         }
+        //         $(this).parent().parent().remove();
+        //         calculateTotalAmount();
+        //     });
+        })
+        
+
+           
     </script>
 
 @endsection
