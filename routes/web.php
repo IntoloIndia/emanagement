@@ -15,7 +15,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/login');
 });
 Route::get('/category', function () {
     return view('category');
