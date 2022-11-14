@@ -21,4 +21,8 @@ Route::get('/category', function () {
     return view('category');
 });
 
+Route::get('/billing', function () {
+    return view('billing');
+});
+
 Route::get('dashboard', [DashboardController::class, 'index']);
