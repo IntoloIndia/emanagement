@@ -3,79 +3,11 @@
 
 
 @section('content')
-<div class="row">
-    <div class="col-lg-4 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                <b>Category</b>
-            </div>
-            <div class="card-body">
-                {{-- <form> --}}
-                    <div class="mb-2">
-                      <label for="name" class="form-label">Name</label>
-                      <input type="text" class="form-control" id="name" placeholder="Enter name">
-                      {{-- <p id="dataname"></p> --}}
-                    </div>
-                    <div class="mb-2">
-                        <label for="name" class="form-label">category</label>
-                        <select class="form-select form-control" aria-label="Default select example" id="category" >
-                            <option selected>category</option>
-                            <option value="1">Man</option>
-                            <option value="2">Women</option>
-                            <option value="3">Kids</option>
-                          </select>
-                      </div>
-                      <div class="mb-2">
-                        <label for="name" class="form-label"> sub-category</label>
-                        <select class="form-select form-control " aria-label="Default select example" id="sub-category">
-                            <option selected>sub-category</option>
-                            <option value="1">T-shart</option>
-                            <option value="1">Jeens</option>
-                            <option value="2">Sadhi</option>
-                            <option value="2">kurthi</option>
-                            <option value="3">Taf</option>
-                            <option value="3">shoot</option>
-                          </select>
-                      </div>
-                      <div class="mb-2">
-                        <label for="name" class="form-label">size</label>
-                        <select class="form-select form-control " aria-label="Default select example" id="size">
-                            <option selected>size</option>
-                            <option value="sm">sm</option>
-                            <option value="md">md</option>
-                            <option value="l">l</option>
-                            <option value="xl">xl</option>
-                            <option value="xll">xll</option>
-                          </select>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <input type="color" class="form-control" id="color">
-                              </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                {{-- <input type="text" class="form-control" id="colorname" value="dsfgdfg" disabled> --}}
-                                <p id="colorname"></p>
-                            </div>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-success float-right ml-2" onclick ="saveData()">Submit</button>
-                      {{-- <button type="reset" class="btn btn-primary float-right">Reset</button> --}}
-                      {{-- <input type="reset"> --}}
-                    {{-- </form> --}}
-                </div>
-                {{-- <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                  </div> --}}
-            </div>
-    </div>
-</div>
 
+<div class="row">
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
+<button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Add category
   </button>
   
   <!-- Modal -->
@@ -83,20 +15,52 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">category</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
+          <form>
+            <div class="mb-3">
+              <label for="category_image" class="form-label">category_image</label>
+              <input type="file" class="form-control" id="category_image" aria-describedby="emailHelp">
+              </div>
+            <div class="mb-3">
+              <label for="category" class="form-label">category</label>
+              <input type="text" class="form-control" id="category" placeholder="category name">
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">save</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-
+<div class="row mt-2">
+  <div class="col-lg-2 col-md-3 col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        name
+      </div>
+      <div class="card-body">
+        <img src="../../user-img.jpg" alt="image not found" srcset="">
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-3 col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        name
+      </div>
+      <div class="card-body">
+        <img src="" alt="" srcset="">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 @endsection
 
 

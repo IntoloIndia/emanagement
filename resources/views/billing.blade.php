@@ -40,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body"style="max-height:400px;">
                        <div class="row">
                         <div class="col-md-12 col-sm-12">
                             <table class="table table-striped">
@@ -58,7 +58,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="item_list">
-                                    <tr>
+                                    {{-- <tr>
                                         <td>1</td>
                                         <td style="width: 200px;">
                                             <select class="form-select form-select-sm form-control sm" aria-label="Default select example">
@@ -97,7 +97,7 @@
                                                 class="btn btn-danger btn-flat btn-sm delete_item"><i
                                                     class="far fa-window-close"></i></button>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </tbody>
                             </table>  
                         </div>
@@ -151,7 +151,52 @@
     </div>
    </div>
 
-
+   <table class="hide">
+    <tbody id="item_row">
+        <tr>
+            <td id="count_item"></td>
+            
+            <td style="width: 200px;">
+                <select name="item_id[]" class=" form-select form-select-sm item">
+                    <option selected disabled>Choose..</option>
+                    <option value="1">Man</option>
+                    <option value="2">Women</option>
+                    <option value="3">Kids</option>
+                    {{-- @foreach ($items as $item)
+                        <option value="{{$item->id}}">{{ucwords($item->item_name)}}</option>
+                    @endforeach --}}
+                </select>
+            </td>
+            <td style="width: 100px;">
+                <input type="text" name="item_code[]" class="form-control form-control-sm qty">
+            </td>
+            <td style="width: 100px;">
+                <input type="text" name="qty[]" class="form-control form-control-sm qty">
+            </td>
+            <td style="width: 200px;">
+                <select name="size_id[]" class=" form-select form-select-sm item">
+                    <option selected disabled>Choose..</option>
+                    <option selected>size</option>
+                    <option value="1">l</option>
+                    <option value="2">xl</option>
+                    <option value="3">xll</option>
+                    {{-- @foreach ($items as $item)
+                        <option value="{{$item->id}}">{{ucwords($item->item_name)}}</option>
+                    @endforeach --}}
+                </select>
+            </td>
+            <td style="width: 100px;">
+                <input type="text" name="price[]" class="form-control form-control-sm price" readonly>
+            </td>
+            <td style="width: 150px;">
+                <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table> 
     @endsection
 
 
@@ -162,23 +207,23 @@
         $(document).ready(function () {
             $(document).on('click','#addItemBtn', function (e) {
                 e.preventDefault();
-                alert("call")
-                // addItem();
+                // alert("call")
+                addItem();
             });
 
-        //     function addItem() {
-        //     $('#item_list').append($('#item_row').html());
-        //     $("#item_list tr").find(".item").chosen();
-        // }
-        // $(document).on("click",".delete_item", function(){
-        //         if($("#item_list tr").length == 1)
-        //         {
-        //             alert("Order must have at least 1 item.");
-        //             return false;
-        //         }
-        //         $(this).parent().parent().remove();
-        //         calculateTotalAmount();
-        //     });
+            function addItem() {
+            $('#item_list').append($('#item_row').html());
+            // $("#item_list tr").find(".item").chosen();
+        }
+        $(document).on("click",".delete_item", function(){
+                if($("#item_list tr").length == 1)
+                {
+                    alert("Order must have at least 1 item.");
+                    return false;
+                }
+                $(this).parent().parent().remove();
+                calculateTotalAmount();
+            });
         })
         
 
