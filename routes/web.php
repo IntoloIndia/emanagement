@@ -57,3 +57,14 @@ Route::group(['middleware'=>'billing_auth'], function(){
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
+<<<<<<< HEAD
+Route::get('/size', function () {
+    return view('size');
+});
+Route::get('/items', function () {
+    return view('items');
+});
+
+Route::get('dashboard', [DashboardController::class, 'index']);
+=======
+>>>>>>> 85f271682a71443b3c63a748347a7b8e9eb01e0f
