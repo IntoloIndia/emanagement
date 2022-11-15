@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/OverlayScrollbars.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/summernote-bs4.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
 
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 

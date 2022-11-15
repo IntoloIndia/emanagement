@@ -3,11 +3,11 @@
 
 
 @section('style')
-<style>
-  .small-box>.small-box-footer{
-    background-color: #adb5bd
-  }
-</style>
+  <style>
+      .small-box>.small-box-footer{
+        background-color: #adb5bd
+      }
+  </style>
 
 @endsection
 
@@ -18,20 +18,20 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> {{session('LOGIN_ID')}}
-          <p>New Orders</p> {{session('LOGIN_ROLE')}}
+          <h3>150</h3> 
+          <p>New Orders</p> 
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
         </div>
-        <a href="#ghfsds" class="small-box-footer bg-gray color-palette">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="#ghfsds" class="small-box-footer bg-gray color-palette ">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
 
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> {{session('ADMIN_LOGIN')}}
+          <h3>150</h3>
           <p>New Orders</p>
         </div>
         <div class="icon">
@@ -44,7 +44,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> {{session('ADMIN_LOGIN')}}
+          <h3>150</h3> 
           <p>New Orders</p>
         </div>
         <div class="icon">
@@ -57,7 +57,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> {{session('ADMIN_LOGIN')}}
+          <h3>150</h3> 
           <p>New Orders</p>
         </div>
         <div class="icon">
