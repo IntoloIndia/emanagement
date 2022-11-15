@@ -218,8 +218,8 @@
 
 
 @section('script')
+{{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
 <script>
-  <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script>
     function saveData(e){
         // e.preventDefault()
         let name = document.getElementById('name').value;
@@ -233,15 +233,6 @@
         let  data = {name,color,size,category,subCategory} 
         alert(JSON.stringify(data))
     }
-    var d = new Date();
-
-var month = d.getMonth()+1;
-var day = d.getDate();
-
-var output = d.getFullYear() + '/' +
-    ((''+month).length<2 ? '0' : '') + month + '/' +
-    ((''+day).length<2 ? '0' : '') + day;
-
-alert(output);
+    
 </script>
 @endsection

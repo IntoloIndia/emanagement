@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ColorController;
 use App\MyApp;
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,16 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/category', 'index');
         // Route::post('/orders', 'store');
     });
+
+    Route::controller(SizeController::class)->group(function () {
+        Route::get('admin/size', 'index');
+        Route::post('admin/save-size', 'saveSize');
+    });
+
+    Route::controller(ColorController::class)->group(function () {
+        Route::get('admin/color', 'index');
+        Route::post('admin/save-color', 'saveColor');
+    });
     
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
@@ -61,3 +73,16 @@ Route::group(['middleware'=>'billing_auth'], function(){
 
     Route::get('logout', [AuthController::class, 'logout']);
 });
+
+
+Route::get('/items', function () {
+    return view('items');
+});
+
+Route::get('/users', function () {
+    return view('users');
+});
+
+
+
+
