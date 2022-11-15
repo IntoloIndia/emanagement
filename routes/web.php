@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\MyApp;
 /*
@@ -35,6 +36,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
 
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('admin/admin', 'index');
+    });
+    
     Route::controller(CategoryController::class)->group(function () {
         Route::get('admin/category', 'index');
         // Route::post('/orders', 'store');
@@ -56,15 +61,3 @@ Route::group(['middleware'=>'billing_auth'], function(){
 
     Route::get('logout', [AuthController::class, 'logout']);
 });
-
-<<<<<<< HEAD
-Route::get('/size', function () {
-    return view('size');
-});
-Route::get('/items', function () {
-    return view('items');
-});
-
-Route::get('dashboard', [DashboardController::class, 'index']);
-=======
->>>>>>> 85f271682a71443b3c63a748347a7b8e9eb01e0f
