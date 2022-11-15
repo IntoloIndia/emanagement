@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillingController;
+use App\MyApp;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,11 +23,43 @@ Route::get('/', function () {
 Route::get('/category', function () {
     return view('category');
 });
-
-Route::get('/billing', function () {
-    return view('billing');
+Route::get('/404', function () {
+    return view('404');
 });
 
+
+
+
+Route::get('/login', [AuthController::class, 'index']);
+Route::post('/login-auth', [AuthController::class, 'loginAuth']);
+
+//admin
+Route::group(['middleware'=>'admin_auth'], function(){
+
+    Route::fallback(function () {
+        return view('404');
+    });
+
+    Route::get('admin/dashboard', [DashboardController::class, 'index']);
+    
+    
+    Route::get('admin/logout', [AuthController::class, 'logout']);
+});
+
+//billing
+Route::group(['middleware'=>'billing_auth'], function(){
+
+    Route::fallback(function () {
+        return view('404');
+    });
+
+    Route::get('billing', [BillingController::class, 'index']);
+
+
+    Route::get('logout', [AuthController::class, 'logout']);
+});
+
+<<<<<<< HEAD
 Route::get('/size', function () {
     return view('size');
 });
@@ -33,3 +68,5 @@ Route::get('/items', function () {
 });
 
 Route::get('dashboard', [DashboardController::class, 'index']);
+=======
+>>>>>>> 85f271682a71443b3c63a748347a7b8e9eb01e0f

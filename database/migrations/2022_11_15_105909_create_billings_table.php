@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatogoriesTable extends Migration
+class CreateBillingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateCatogoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('catogories', function (Blueprint $table) {
+        Schema::create('billings', function (Blueprint $table) {
             $table->id();
-            $table->string('category')->nullable();
-            $table->string('category_img')->nullable();
             $table->timestamps();
         });
     }
@@ -24,9 +22,10 @@ class CreateCatogoriesTable extends Migration
     /**
      * Reverse the migrations.
      *
+     * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('catogories');
+        Schema::dropIfExists('billings');
     }
 }
