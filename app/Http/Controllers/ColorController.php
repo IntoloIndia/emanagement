@@ -3,38 +3,36 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\Size;
 use App\Models\Color;
+use App\Models\Size;
 
-class SizeController extends Controller
+class ColorController extends Controller
 {
     public function index(){
         $allSize = Size::all();
         $allColor = Color::all();
         return view('size',[
-            'allSize'=>$allSize,
             'allColor'=>$allColor,
-
+            'allSize'=>$allSize
         
     ]);
     }
-
-    function saveSize(Request $req)
+    function saveColor(Request $req)
     {
         // return view('employee');
         $validator = Validator::make($req->all(),[
-            'size' => 'required|max:191'
+            'color' => 'required|max:191'
         ]);
 
         if($validator->fails())
         {
             return response()->json([
                 'status'=>400,
-                'errors'=>$validator->messages("plz fill size"),
+                'errors'=>$validator->messages("plz fill color code"),
             ]);
         }else{
-            $model = new Size;
-            $model->size = $req->input('size');
+            $model = new Color;
+            $model->color = $req->input('color');
            
             if($model->save()){
                 return response()->json([   
@@ -44,13 +42,5 @@ class SizeController extends Controller
         }
     }
 
-    public function editSize($Size_id)
-    {
-        $sizeData = Size::find($Size_id);
-        return response()->json([
-            'status'=>200,
-            'sizeData'=>$sizeData,
-        ]);
-    }
 
 }

@@ -19,7 +19,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-2">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">item name</label>
                         <input type="text" class="form-control" id="name" placeholder="Enter name">
                         {{-- <p id="dataname"></p> --}}
                     </div>

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ColorController;
 use App\MyApp;
 /*
 |--------------------------------------------------------------------------
@@ -59,14 +61,24 @@ Route::group(['middleware'=>'billing_auth'], function(){
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
-<<<<<<< HEAD
-Route::get('/size', function () {
-    return view('size');
-});
+// Route::get('/size', function () {
+//     return view('size');
+// });
 Route::get('/items', function () {
     return view('items');
 });
 
-Route::get('dashboard', [DashboardController::class, 'index']);
-=======
->>>>>>> 85f271682a71443b3c63a748347a7b8e9eb01e0f
+Route::get('/users', function () {
+    return view('users');
+});
+
+// size and color router 
+Route::get('/size', [SizeController::class, 'index']);
+// Route::put('/edit-size', [SizeController::class, 'editSize']);
+Route::post('/save-size', [SizeController::class, 'saveSize']);
+
+Route::get('/color', [ColorController::class, 'index']);
+Route::post('/save-color', [ColorController::class, 'saveColor']);
+
+
+// Route::get('dashboard', [DashboardController::class, 'index']);
