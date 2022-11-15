@@ -1,14 +1,22 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 
+@section('style')
+
+    <style>
+      .sub_box{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 5px;
+
+      }
+    </style>
+@endsection
 
 @section('content')
 
-<div class="row">
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Add category
-  </button>
   
   <!-- Modal -->
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -38,34 +46,180 @@
       </div>
     </div>
   </div>
-<div class="row mt-2">
-  <div class="col-lg-2 col-md-3 col-sm-12">
+<div class="row">
+  <div class="col-lg-6 col-md-12 col-sm-12">
     <div class="card">
       <div class="card-header">
-        name
+        <div class="row">
+          <div class="col-6">
+            <b>category</b>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              Add category
+            </button>
+          </div>
+        </div>
       </div>
       <div class="card-body">
-        <img src="../../user-img.jpg" alt="image not found" srcset="">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Sno</th>
+              <th scope="col">Image</th>
+              <th scope="col">Category</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>1</td>
+            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
+            <td>name</td>
+            <td>
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><img src="assets/img/avatars/7.png" class="img-fluid" alt="" srcset="" width="35"></td>
+            <td>Mans</td>
+            <td>
+              {{-- <i class="fa-solid fa-pen-to-square"></i> --}}
+              {{-- <i class="bi bi-pencil-square"></i> --}}
+              {{-- <i class="bi bi-trash"></i> --}}
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <div class="col-lg-2 col-md-3 col-sm-12">
-    <div class="card">
+  {{-- sub category div start// --}}
+  <div class="col-lg-6 col-md-12 col-sm-12">
+    <div class="card" style="height: 85vh">
       <div class="card-header">
-        name
+        <div class="row">
+          <div class="col-6">
+            <b> sub_category_name</b>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdropsubcategory">
+              Add sub-category
+            </button>
+            <div class="modal fade" id="staticBackdropsubcategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel"> sub-category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="mb-3">
+                        <label for="sub_category_image" class="form-label">Category</label>
+                        <select class="form-select" aria-label="Default select example" id="category_id">
+                          <option selected>select category</option>
+                          <option value="1">Mans</option>
+                          <option value="2">Womens</option>
+                          <option value="3">Kids</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="sub_category_image" class="form-label">sub_category_image</label>
+                        <input type="file" class="form-control" id="sub_category_image" aria-describedby="emailHelp">
+                        </div>
+                      <div class="mb-3">
+                        <label for="sub-category" class="form-label"> sub-category</label>
+                        <input type="text" class="form-control" id="sub_category" placeholder="category name">
+                      </div>
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">save</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="card-body">
-        <img src="" alt="" srcset="">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-6">
+                <b>Category</b>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-info btn-sm float-right">Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive" style="max-height: 200px">
+           <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Sno</th>
+              <th scope="col">Image</th>
+              <th scope="col">Subcategory </th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>1</td>
+            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
+            <td>name</td>
+            <td>
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
+            <td>name</td>
+            <td>
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><img src="assets/img/avatars/7.png" class="img-fluid" alt="" srcset="" width="35"></td>
+            <td>Mans</td>
+            <td>
+              {{-- <i class="fa-solid fa-pen-to-square"></i> --}}
+              {{-- <i class="bi bi-pencil-square"></i> --}}
+              {{-- <i class="bi bi-trash"></i> --}}
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tbody>
+          </tbody>
+        </table>
+        </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>
-</div>
+  {{-- sub category div end  --}}
 </div>
 @endsection
 
 
 @section('script')
 <script>
+  <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script>
     function saveData(e){
         // e.preventDefault()
         let name = document.getElementById('name').value;
@@ -79,6 +233,15 @@
         let  data = {name,color,size,category,subCategory} 
         alert(JSON.stringify(data))
     }
+    var d = new Date();
+
+var month = d.getMonth()+1;
+var day = d.getDate();
+
+var output = d.getFullYear() + '/' +
+    ((''+month).length<2 ? '0' : '') + month + '/' +
+    ((''+day).length<2 ? '0' : '') + day;
+
+alert(output);
 </script>
-<script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script>
 @endsection

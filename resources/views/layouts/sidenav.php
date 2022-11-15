@@ -77,17 +77,27 @@
 
           <li class="nav-header">NAV BAR</li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-            <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
+            <a href="/category" class="nav-link" >
+            <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-            <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
+            <a href="/billing" class="nav-link">
+            <i class="fas fa-angle-right nav-icon"></i><p>Billing</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/items" class="nav-link">
+            <i class="fas fa-angle-right nav-icon"></i><p>item</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/size" class="nav-link">
+            <i class="fas fa-angle-right nav-icon"></i><p>Size</p>
             </a>
           </li>
 
-          <li class="nav-header">Account</li>
+          <!-- <li class="nav-header">Account</li>
           <li class="nav-item">
             <a href="#" class="nav-link">
             <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
@@ -174,7 +184,7 @@
             <a href="#" class="nav-link">
             <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
             </a>
-          </li>
+          </li> -->
           
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">

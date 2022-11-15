@@ -25,4 +25,11 @@ Route::get('/billing', function () {
     return view('billing');
 });
 
+Route::get('/size', function () {
+    return view('size');
+});
+Route::get('/items', function () {
+    return view('items');
+});
+
 Route::get('dashboard', [DashboardController::class, 'index']);
