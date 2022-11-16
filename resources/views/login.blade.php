@@ -7,11 +7,11 @@
         <title>Management</title>
     
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" >
-        <link rel="stylesheet" href="{{asset('assets/css/fontawesome-free/css/all.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+        <link rel="stylesheet" href="{{asset('public/assets/css/bootstrap.min.css')}}" >
+        <link rel="stylesheet" href="{{asset('public/assets/css/fontawesome-free/css/all.min.css')}}">
+        <link rel="stylesheet" href="{{asset('public/assets/css/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+        <link rel="stylesheet" href="{{asset('public/assets/css/adminlte.min.css')}}">
+        <link rel="stylesheet" href="{{asset('public/assets/css/style.css')}}">
         <!-- PWA  -->
 {{-- <meta name="theme-color" content="#6777ef"/>
 <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
