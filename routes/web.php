@@ -42,6 +42,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(AdminController::class)->group(function () {
         Route::get('admin/admin', 'index');
     });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('admin/user', 'index');
+        Route::post('admin/save-user', 'saveUser');
+    });
     
     Route::controller(CategoryController::class)->group(function () {
         Route::get('admin/category', 'index');
@@ -74,9 +79,6 @@ Route::group(['middleware'=>'billing_auth'], function(){
 
     Route::get('logout', [AuthController::class, 'logout']);
 });
-
-Route::get('/users', [UserController::class, 'index']);
-Route::post('/save-user', [UserController::class, 'saveUser']);
 
 
 
