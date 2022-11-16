@@ -53,6 +53,7 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="admin_id" id="admin_id" value="">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                             <button type="button" id="saveAdminBtn" class="btn btn-primary btn-sm ">Save Admin</button>
@@ -189,5 +190,7 @@
 
 
         });
+
+        
     </script>
 @endsection
