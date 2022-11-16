@@ -43,7 +43,7 @@
                                     <label for="adminEmail" class="form-label">Email</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" name="email" id="email" class="form-control form-control-sm">
+                                    <input type="email" name="email" id="email" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="row mt-1">
@@ -66,6 +66,8 @@
             </div>
         </div>
     </div>
+
+
     {{-- open modal button --}}
     <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -78,7 +80,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Admins</h3>
+                    <h3 class="card-title">Users</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -104,21 +106,22 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             {{$count = "";}}
-                            @foreach ($admins as $list)
+                            @foreach ($allUser as $list)
                                 <tr>
                                     <td>{{++$count}}</td>
-                                    <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td>
+                                    {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
+                                    <td>{{($list->role_id ) }}</td>
                                     <td>{{$list->name}}</td>
                                     <td>{{$list->email}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-secondary btn-sm editAdminBtn" value="{{$list->id}}">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm deleteAdminBtn" value="{{$list->id}}">Delete</button>
+                                        <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm deleteUserBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
 
@@ -127,6 +130,26 @@
     </div>
 
 
+    {{-- delete user modal  --}}
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <h5>Are you sure?</h5>
+                            <button type="button" id="yesDeleteUserBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                            <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                        <hr>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -147,6 +170,34 @@
                 e.preventDefault();
                 saveUser();
             })
+
+            $(document).on('click','.editUserBtn', function (e) {
+                e.preventDefault();
+                const user_id = $(this).val();
+                // alert(user_id);
+                editUser(user_id);
+            });
+
+            $(document).on('click','#updateUserBtn', function (e) {
+                e.preventDefault();
+                const user_id = $(this).val();
+                updateUser(user_id);
+                // alert(user_id);
+            });
+
+            $(document).on('click','.deleteUserBtn', function (e) {
+                e.preventDefault();
+                const user_id = $(this).val();
+                $('#deleteUserModal').modal('show');
+                $('#yesDeleteUserBtn').val(user_id);
+            });
+
+            $(document).on('click','#yesDeleteUserBtn', function (e) {
+                e.preventDefault();
+                const user_id = $(this).val();
+                deleteUser(user_id);
+            });
+
 
         });
 
@@ -179,6 +230,78 @@
                     } else {
                         $('#user_err').html('');
                         $('#userModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+        function editUser(user_id){
+            $.ajax({
+                type: "get",
+                url: "edit-user/"+user_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#userModal').modal('show');
+                        $('#user_err').html('');
+                        $('#user_err').removeClass('alert alert-danger');
+                        $("#userForm").trigger( "reset" ); 
+                        $('#saveUserBtn').addClass('hide');
+                        $('#updateUserBtn').removeClass('hide');
+                        $('#role_id').val(response.user.role_id);
+                        $('#name').val(response.user.name);
+                        $('#email').val(response.user.email);
+                        // $('#password').val(response.user.password);
+
+                        $('#updateUserBtn').val(response.user.id);
+                    }
+                }
+            });
+        }
+
+        function updateUser(user_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#userForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-user/"+user_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#user_err').html('');
+                        $('#user_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#user_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#user_err').html('');
+                        $('#userModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+        function deleteUser(user_id){
+            $.ajax({
+                type: "get",
+                url: "delete-user/"+user_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
                         window.location.reload();
                     }
                 }

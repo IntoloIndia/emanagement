@@ -40,20 +40,25 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
 
     Route::controller(AdminController::class)->group(function () {
-        Route::get('admin/admin', 'index');
+        Route::get('admin/admin','index');
         Route::post('admin/save-admin', 'saveAdmin');
         Route::get('admin/edit-admin/{admin_id}', 'editAdmin');
         Route::post('admin/update-admin/{admin_id}', 'updateAdmin');
-        Route::delete('admin/delete-admin/{admin_id}', 'deleteAdmin');
+        Route::get('admin/delete-admin/{admin_id}', 'deleteAdmin');
     });
 
     Route::controller(UserController::class)->group(function () {
-        Route::get('admin/user', 'index');
+        Route::get('admin/user','index');
         Route::post('admin/save-user', 'saveUser');
+        Route::get('admin/edit-user/{user_id}', 'editUser');
+        Route::post('admin/update-user/{user_id}', 'updateUser');
+        Route::get('admin/delete-user/{user_id}', 'deleteUser');
     });
     
     Route::controller(CategoryController::class)->group(function () {
         Route::get('admin/category', 'index');
+        Route::post('admin/save-category', 'saveCategory');
+
         // Route::post('/orders', 'store');
     });
 
