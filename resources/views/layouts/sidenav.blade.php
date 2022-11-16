@@ -28,13 +28,13 @@
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item menu-open">
-                <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>Dashboard</p></a>
+                <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Dashboard</p></a>
             </li>
             <li class="nav-item menu-open">
-                <a href="admin" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>Admin</p></a>
+                <a href="admin" class="nav-link "><i class="nav-icon fas fa-users-cog"></i><p>Admin</p></a>
             </li>
             <li class="nav-item menu-open">
-                <a href="user" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>User</p></a>
+                <a href="user" class="nav-link "><i class="nav-icon fas fa-users"></i><p>User</p></a>
             </li>
         
             <li class="nav-item">
