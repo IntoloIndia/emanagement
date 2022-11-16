@@ -6,9 +6,9 @@
     <div class="dropdown bg-light mt-1 " style="box-shadow: 0px 0px 2px 0px">
         <button class="btn btn-secondry btn-sm dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
             @if (session('ADMIN_LOGIN'))
-                <img src="{{asset('assets/images/user_active.png')}}" class="rounded-circle" alt="..."> Welcome - {{session('LOGIN_NAME')}}
+                <img src="{{asset('public/assets/images/user_active.png')}}" class="rounded-circle" alt="..."> Welcome - {{session('LOGIN_NAME')}}
             @else
-                <img src="{{asset('assets/images/user_active.png')}}" class="rounded-circle" alt="..."> Welcome - {{session('LOGIN_NAME')}}
+                <img src="{{asset('public/assets/images/user_active.png')}}" class="rounded-circle" alt="..."> Welcome - {{session('LOGIN_NAME')}}
             @endif
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
@@ -32,6 +32,9 @@
             </li>
             <li class="nav-item menu-open">
                 <a href="admin" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>Admin</p></a>
+            </li>
+            <li class="nav-item menu-open">
+                <a href="user" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>User</p></a>
             </li>
         
             <li class="nav-item">
