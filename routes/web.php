@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\UserController;
 use App\MyApp;
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +25,6 @@ use App\MyApp;
 Route::get('/', function () {
     return view('/login');
 });
-Route::get('/category', function () {
-    return view('category');
-});
-Route::get('/404', function () {
-    return view('404');
-});
-
-
 
 
 Route::get('/login', [AuthController::class, 'index']);
@@ -43,6 +38,25 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
 
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
+
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('admin/admin', 'index');
+    });
+    
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('admin/category', 'index');
+        // Route::post('/orders', 'store');
+    });
+
+    Route::controller(SizeController::class)->group(function () {
+        Route::get('admin/size', 'index');
+        Route::post('admin/save-size', 'saveSize');
+    });
+
+    Route::controller(ColorController::class)->group(function () {
+        Route::get('admin/color', 'index');
+        Route::post('admin/save-color', 'saveColor');
+    });
     
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
@@ -61,24 +75,19 @@ Route::group(['middleware'=>'billing_auth'], function(){
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
-// Route::get('/size', function () {
-//     return view('size');
-// });
+Route::get('/users', [UserController::class, 'index']);
+Route::post('/save-user', [UserController::class, 'saveUser']);
+
+
+
 Route::get('/items', function () {
     return view('items');
 });
 
-Route::get('/users', function () {
-    return view('users');
+Route::get('/category', function () {
+    return view('category');
 });
 
-// size and color router 
-Route::get('/size', [SizeController::class, 'index']);
-// Route::put('/edit-size', [SizeController::class, 'editSize']);
-Route::post('/save-size', [SizeController::class, 'saveSize']);
-
-Route::get('/color', [ColorController::class, 'index']);
-Route::post('/save-color', [ColorController::class, 'saveColor']);
 
 
-// Route::get('dashboard', [DashboardController::class, 'index']);
+

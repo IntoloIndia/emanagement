@@ -42,7 +42,7 @@
 
   {{-- sub category modal  --}}
 
-  <div class="modal fade" id="staticBackdropsubcategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="subCateoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -50,7 +50,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="subCategoryForm">
             <div class="mb-3">
               <label for="sub_category_image" class="form-label">Category</label>
               <select class="form-select" aria-label="Default select example" id="category_id">
@@ -86,11 +86,11 @@
       <div class="card-header">
         <div class="row">
           <div class="col-6">
-            <b>category</b>
+            <b>Category</b>
           </div>
           <div class="col-6">
             <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-              Add category
+              <i class="fas fa-plus"></i> Add 
             </button>
           </div>
         </div>
@@ -138,11 +138,11 @@
       <div class="card-header">
         <div class="row">
           <div class="col-6">
-            <b> sub_category_name</b>
+            <b> Sub Category</b>
           </div>
           <div class="col-6">
-            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdropsubcategory">
-              Add sub-category
+            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#subCateoryModal">
+              <i class="fas fa-plus"></i> Add 
             </button>
             
           </div>
@@ -156,7 +156,7 @@
                 <b>Category</b>
               </div>
               <div class="col-6">
-                <button class="btn btn-info btn-sm float-right">Add</button>
+                <button class="btn btn-primary btn-sm float-right"> <i class="fas fa-plus"></i> Add</button>
               </div>
             </div>
           </div>
