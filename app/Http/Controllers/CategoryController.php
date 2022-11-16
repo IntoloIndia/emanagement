@@ -9,7 +9,11 @@ class CategoryController extends Controller
     //
 
     public function index(){
-        return view('category',[]);
+        // return view('category',[]);
+        $allCategory = Category::all();
+        return view('category',[
+            'allCategory' => $allCategory
+        ]);
     }
 
     function saveCategory(Request $req)
@@ -40,7 +44,7 @@ class CategoryController extends Controller
                         @unlink($CategoryImage); 
                     }
             //     }
-                $model->category_img = $req->file('category_img')->store('category-image'. $req->input('category_img'),'public');            
+                $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');            
             
            
             if($model->save()){

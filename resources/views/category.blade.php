@@ -139,28 +139,21 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tr>
-            <td>1</td>
-            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
-            <td>name</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-primary btn-sm">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td><img src="assets/img/avatars/7.png" class="img-fluid" alt="" srcset="" width="35"></td>
-            <td>Mans</td>
-            <td>
-              {{-- <i class="fa-solid fa-pen-to-square"></i> --}}
-              {{-- <i class="bi bi-pencil-square"></i> --}}
-              {{-- <i class="bi bi-trash"></i> --}}
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-primary btn-sm">Delete</button>
-            </td>
-          </tr>
+          @php
+           $count = 0;   
+          @endphp
           <tbody>
+            @foreach ($allCategory as $list)
+                <tr>
+                  <td>{{++$count}}</td>
+                  <td><img src="{{asset('/storage/app/public/'.$list->category_img)}}" alt="image not found" srcset="" width="35" height="35"></td>
+                  <td>{{$list->category}}</td>
+                  <td>
+                    <button type="button" class="btn btn-info btn-sm editCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm deleteCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                </td>
+                </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -205,6 +198,7 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
+          <tbody>
           <tr>
             <td>1</td>
             <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
@@ -235,7 +229,6 @@
               <button class="btn btn-primary btn-sm">Delete</button>
             </td>
           </tr>
-          <tbody>
           </tbody>
         </table>
         </div>
