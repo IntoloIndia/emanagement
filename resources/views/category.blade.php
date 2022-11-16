@@ -3,15 +3,7 @@
 
 @section('style')
 
-    <style>
-      .sub_box{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 5px;
-
-      }
-    </style>
+    
 @endsection
 
 @section('content')
@@ -46,6 +38,48 @@
       </div>
     </div>
   </div>
+  {{-- end category modal  --}}
+
+  {{-- sub category modal  --}}
+
+  <div class="modal fade" id="staticBackdropsubcategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> sub-category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="sub_category_image" class="form-label">Category</label>
+              <select class="form-select" aria-label="Default select example" id="category_id">
+                <option selected>select category</option>
+                <option value="1">Mans</option>
+                <option value="2">Womens</option>
+                <option value="3">Kids</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="sub_category_image" class="form-label">sub_category_image</label>
+              <input type="file" class="form-control" id="sub_category_image" aria-describedby="emailHelp">
+              </div>
+            <div class="mb-3">
+              <label for="sub-category" class="form-label"> sub-category</label>
+              <input type="text" class="form-control" id="sub_category" placeholder="category name">
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- end sub category modal  --}}
 <div class="row">
   <div class="col-lg-6 col-md-12 col-sm-12">
     <div class="card">
@@ -110,42 +144,7 @@
             <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdropsubcategory">
               Add sub-category
             </button>
-            <div class="modal fade" id="staticBackdropsubcategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel"> sub-category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="sub_category_image" class="form-label">Category</label>
-                        <select class="form-select" aria-label="Default select example" id="category_id">
-                          <option selected>select category</option>
-                          <option value="1">Mans</option>
-                          <option value="2">Womens</option>
-                          <option value="3">Kids</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="sub_category_image" class="form-label">sub_category_image</label>
-                        <input type="file" class="form-control" id="sub_category_image" aria-describedby="emailHelp">
-                        </div>
-                      <div class="mb-3">
-                        <label for="sub-category" class="form-label"> sub-category</label>
-                        <input type="text" class="form-control" id="sub_category" placeholder="category name">
-                      </div>
-                      
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">save</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
