@@ -13,6 +13,14 @@ class AuthAPIController extends Controller
 {
     //
 
+    public function getAdmin(Request $req){
+        $admin = Admin::all();
+        return response()->json([
+            'status'=>400,
+            'admin'=>$admin
+        ]); 
+    }
+
     public function adminLogin(Request $req)
     {
         $email = $req->input('email');
