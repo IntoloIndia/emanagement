@@ -41,6 +41,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(AdminController::class)->group(function () {
         Route::get('admin/admin', 'index');
+        Route::post('admin/save-admin', 'saveAdmin');
+        Route::get('admin/edit-admin/{admin_id}', 'editAdmin');
+        Route::post('admin/update-admin/{admin_id}', 'updateAdmin');
+        Route::delete('admin/delete-admin/{admin_id}', 'deleteAdmin');
     });
 
     Route::controller(UserController::class)->group(function () {

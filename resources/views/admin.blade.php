@@ -20,7 +20,7 @@
                                     <label for="adminRole" class="form-label">Admin Role</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <select id="role" name="role" class="form-select form-select-sm">
+                                    <select id="role_id" name="role_id" class="form-select form-select-sm">
                                         <option selected disabled >Choose...</option>
                                         @foreach ($roles as $list)
                                             <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="admin_id" id="admin_id" value="">
+                        {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                             <button type="button" id="saveAdminBtn" class="btn btn-primary btn-sm ">Save Admin</button>
@@ -121,21 +121,21 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             {{$count = "";}}
                             @foreach ($admins as $list)
                                 <tr>
                                     <td>{{++$count}}</td>
-                                    <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td>
-                                    <td>{{$list->name}}</td>
+                                    <td>{{($list->role_id == MyApp::ADMINISTRATOR) ? "Administrator" : "Billing" }}</td>
+                                    <td>{{ucwords($list->name)}}</td>
                                     <td>{{$list->email}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-secondary btn-sm editAdminBtn" value="{{$list->id}}">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm deleteAdminBtn" value="{{$list->id}}">Delete</button>
+                                        <button type="button" class="btn btn-info btn-sm editAdminBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm deleteAdminBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
 
@@ -190,6 +190,102 @@
 
 
         });
+
+        function saveAdmin(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#adminForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "save-admin",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#admin_err').html('');
+                        $('#admin_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#admin_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#admin_err').html('');
+                        $('#adminModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+        function editAdmin(admin_id){
+            $.ajax({
+                type: "get",
+                url: "edit-admin/"+admin_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#adminModal').modal('show');
+                        $('#admin_err').html('');
+                        $('#admin_err').removeClass('alert alert-danger');
+                        $("#adminForm").trigger( "reset" ); 
+                        $('#saveAdminBtn').addClass('hide');
+                        $('#updateAdminBtn').removeClass('hide');
+                        $('#role_id').val(response.admin.role_id);
+                        $('#name').val(response.admin.name);
+                        $('#email').val(response.admin.email);
+
+                        $('#updateAdminBtn').val(response.admin.id);
+                    }
+                }
+            });
+        }
+
+        function updateAdmin(admin_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#adminForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-admin/"+admin_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#admin_err').html('');
+                        $('#admin_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#admin_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#admin_err').html('');
+                        $('#adminModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
+
 
         
     </script>
