@@ -1,5 +1,5 @@
 <a href="index3.html" class="brand-link">
-    <span class="brand-text text-dark">E-MAN</span>
+    <span class="brand-text text-dark">I-MAN</span>
 </a>
 
 <div class="sidebar">
@@ -32,6 +32,9 @@
             </li>
             <li class="nav-item menu-open">
                 <a href="admin" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>Admin</p></a>
+            </li>
+            <li class="nav-item menu-open">
+                <a href="user" class="nav-link "><i class="nav-icon fas fa-tachometer-alt"></i><p>User</p></a>
             </li>
         
             <li class="nav-item">

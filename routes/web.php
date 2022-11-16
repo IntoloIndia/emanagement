@@ -84,9 +84,6 @@ Route::get('/items', function () {
     return view('items');
 });
 
-Route::get('/category', function () {
-    return view('category');
-});
 
 
 
