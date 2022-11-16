@@ -65,6 +65,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+
           <form id="subcategoryForm">
               @csrf
               <div class="modal-body">
@@ -106,6 +107,7 @@
                   <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                   <button type="button" id="saveCategoryBtn" class="btn btn-primary btn-sm ">Save </button>
                   <button type="button" id="updateCategoryBtn" class="btn btn-primary btn-sm hide">Update </button>
+
               </div>
           </form>
       </div>
