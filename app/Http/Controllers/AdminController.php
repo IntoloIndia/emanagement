@@ -17,14 +17,9 @@ class AdminController extends Controller
         // $admins = Admin::all()->sortBy('role');
         $admins = Admin::all();
         $roles = Role::all();
-        // return view('admin',[
-        //     'admins' => $admins,
-        //     'roles' => $roles
-        // ]);
-
-        return response()->json([
-            'admins'=>$admins,
-            'roles'=>$roles
+        return view('admin',[
+            'admins' => $admins,
+            'roles' => $roles
         ]);
     }
 

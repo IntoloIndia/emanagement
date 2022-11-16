@@ -18,7 +18,6 @@ class UserController extends Controller
 
     function saveUser(Request $req)
     {
-        // return view('employee');
         $validator = Validator::make($req->all(),[
             'user_role' => 'required|max:191',
             'name'=>'required|max:191',
