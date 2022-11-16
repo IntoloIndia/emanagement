@@ -1,5 +1,5 @@
 <a href="index3.html" class="brand-link">
-    <span class="brand-text text-dark">E-MAN</span>
+    <span class="brand-text text-dark">I-MAN</span>
 </a>
 
 <div class="sidebar">

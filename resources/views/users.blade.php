@@ -66,6 +66,8 @@
             </div>
         </div>
     </div>
+
+
     {{-- open modal button --}}
     <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">

@@ -49,6 +49,7 @@ class UserController extends Controller
         }
     }
 
+
     public function editUser($user_id)
     {
         $user = User::find($user_id);
@@ -97,6 +98,7 @@ class UserController extends Controller
             'status'=>200
         ]);
     }
+
 
     
 }
