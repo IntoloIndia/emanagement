@@ -66,6 +66,8 @@
             </div>
         </div>
     </div>
+
+
     {{-- open modal button --}}
     <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -78,7 +80,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Admins</h3>
+                    <h3 class="card-title">Users</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">

@@ -50,6 +50,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(CategoryController::class)->group(function () {
         Route::get('admin/category', 'index');
+        Route::post('admin/save-category', 'saveCategory');
+
         // Route::post('/orders', 'store');
     });
 

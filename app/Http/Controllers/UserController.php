@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         // return view('employee');
         $validator = Validator::make($req->all(),[
-            'user_role' => 'required|max:191',
+            'role_id' => 'required|max:191',
             'name'=>'required|max:191',
             'email'=>'required|max:191',
             'password'=>'required|max:191',
@@ -34,7 +34,7 @@ class UserController extends Controller
             ]);
         }else{
             $model = new User;
-            $model->user_role = $req->input('user_role');
+            $model->role_id = $req->input('role_id');
             $model->name = $req->input('name');
             $model->email = $req->input('email');
             $model->password = $req->input('password');

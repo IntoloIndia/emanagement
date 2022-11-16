@@ -8,18 +8,18 @@
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/fontawesome-free/css/all.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/tempusdominus-bootstrap-4.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/icheck-bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/jqvmap.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/adminlte.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/OverlayScrollbars.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/summernote-bs4.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/fontawesome-free/css/all.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/tempusdominus-bootstrap-4.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/icheck-bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/jqvmap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/adminlte.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/OverlayScrollbars.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/daterangepicker.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/summernote-bs4.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/style.css') }}" />
 
-        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('public/assets/js/jquery.min.js') }}"></script>
 
         <style>
             .sidebar .nav-link p{
@@ -65,23 +65,23 @@
         </div>
     </body>
     
-    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery-ui.min.js') }}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
     
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/Chart.min.js') }}"></script>
-    <script src="{{ asset('assets/js/sparkline.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.vmap.usa.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.knob.min.js') }}"></script>
-    <script src="{{ asset('assets/js/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/js/daterangepicker.js') }}"></script>
-    <script src="{{ asset('assets/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.overlayScrollbars.min.js') }}"></script>
-    <script src="{{ asset('assets/js/adminlte.js') }}"></script>
+    <script src="{{ asset('public/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/Chart.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/sparkline.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery.vmap.usa.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery.knob.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('public/assets/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/adminlte.js') }}"></script>
     {{-- <script src="{{ asset('assets/user/js/demo.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('public/assets/js/dashboard.js') }}"></script>
 </html>
