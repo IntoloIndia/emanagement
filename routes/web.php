@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\UserController;
 use App\MyApp;
 /*
 |--------------------------------------------------------------------------
@@ -74,14 +75,18 @@ Route::group(['middleware'=>'billing_auth'], function(){
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
+Route::get('/users', [UserController::class, 'index']);
+Route::post('/save-user', [UserController::class, 'saveUser']);
+
+
 
 Route::get('/items', function () {
     return view('items');
 });
 
-Route::get('/users', function () {
-    return view('users');
-});
+// Route::get('/users', function () {
+//     return view('users');
+// });
 
 
 
