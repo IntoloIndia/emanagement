@@ -283,6 +283,18 @@
                 }
             });
         }
+        function deleteAdmin(admin_id){
+            $.ajax({
+                type: "get",
+                url: "delete-admin/"+admin_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        window.location.reload();
+                    }
+                }
+            });
+        }
 
 
 
