@@ -11,7 +11,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel"> sub-category</h5>
+          <h5 class="modal-title" id="staticBackdropLabel"> Sub category</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -23,11 +23,11 @@
                   {{-- <div class="row"> --}}
                     <div class="row mt-1">
                       <div class="col-md-4">
-                          <label for="select_category" class="form-label">select category</label>
+                          <label for="select_category" class="form-label">Category</label>
                       </div>
                       <div class="col-md-8">
                         <select class="form-select form-select-sm" aria-label="Default select example" name="category_id" id="category_id">
-                          <option selected>Other</option>
+                          {{-- <option selected>Other</option> --}}
                           @foreach ($allCategory as $list)
                           <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
                           @endforeach
@@ -37,7 +37,7 @@
 
                   <div class="row mt-1">
                       <div class="col-md-4">
-                          <label for="sub categoryName" class="form-label">sub Category</label>
+                          <label for="sub categoryName" class="form-label">Sub category</label>
                       </div>
                       <div class="col-md-8">
                           <input type="text" name="sub_category" id="sub_category" placeholder="subcategory" class="form-control form-control-sm">
@@ -45,7 +45,7 @@
                   </div>
                   <div class="row mt-1">
                     <div class="col-md-4">
-                        <label for="image" class="form-label">image</label>
+                        <label for="image" class="form-label">Image</label>
                     </div>
                     <div class="col-md-8">
                         <input type="file" name="sub_category_img" id="sub_category_img" class="form-control form-control-sm">
@@ -102,26 +102,10 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4 col-md-12 col-sm-12">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-6">
-            <b> Sub Category</b>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
+    <div class="col-lg-6 col-md-12 col-sm-12">
         <div class="card">
           <div class="card-header">
-            <div class="row">
-              <div class="col-6">
-                <b>Category</b>
-              </div>
-              <div class="col-6">
-                <button class="btn btn-primary btn-sm float-right"> <i class="fas fa-plus"></i> Add</button>
-              </div>
-            </div>
+                <b>Sub category</b>
           </div>
           <div class="card-body">
             <div class="table-responsive" style="max-height: 200px">
@@ -131,7 +115,7 @@
               <th scope="col">Sno</th>
               <th scope="col">Image</th>
               <th scope="col">Category</th>
-              <th scope="col">Subcategory</th>
+              <th scope="col">Sub category</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -158,11 +142,9 @@
         </div>
           </div>
         </div>
-        
-      </div>
     </div>
-  </div>
-    
+    {{-- secound div start --}}
+        
 </div>
 
 

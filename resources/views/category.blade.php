@@ -145,19 +145,22 @@
 </div>
 
 {{-- end category modal  --}}
+<div class="row">
+  <div class="col-12">
+    <button type="button" id="addCategory" class="btn btn-primary float-right btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+  </div>
+</div>
 
 <div class="row">
-  <div class="col-lg-6 col-md-12 col-sm-12">
+  <div class="col-lg-4 col-md-12 col-sm-12">
     <div class="card">
       <div class="card-header">
-        <div class="row">
-          <div class="col-6">
+        {{-- <div class="row">
+          <div class="col-6"> --}}
             <b>Category</b>
-          </div>
-          <div class="col-6">
-            <button type="button" id="addCategory" class="btn btn-primary float-right btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
-          </div>
-        </div>
+          {{-- </div> --}}
+          
+        {{-- </div> --}}
       </div>
       <div class="card-body">
         <table class="table">

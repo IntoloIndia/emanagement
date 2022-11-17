@@ -10,12 +10,14 @@ use Validator;
 class SubCategoryController extends Controller
 {
     public function index(){
-        // $category_name = 
+        // $category_name = Category::join('sub_categories','categories.id','=','sub_categories.category_id')
+        // ->select('categories.category','sub_categories.sub_category','sub_categories.sub_category_img')->get();
         $allCategory = Category::all();
         $allSubCategory = SubCategory::all();
         return view('subcategory',[
             'allCategory' => $allCategory,
-            'allSubCategory' =>$allSubCategory
+            'allSubCategory' =>$allSubCategory,
+            // 'category_name' =>$category_name
         ]);
     } 
     
