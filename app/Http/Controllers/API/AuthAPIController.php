@@ -12,7 +12,6 @@ use App\Models\User;
 class AuthAPIController extends Controller
 {
     //
-
     public function getAdmin(Request $req){
         $admin = Admin::all();
         return response()->json([
@@ -31,7 +30,13 @@ class AuthAPIController extends Controller
         {
             if(Hash::check($req->input('password'),$result->password))
             {
-                
+                // $data = [
+                //     'status'=>200,
+                //     'login_id'=>$result->id,
+                //     'login_name'=>$result->name,
+                //     'login_role'=>$result->role_id,
+                //     'message'=>'Login successfully'
+                // ];
                 return response()->json([
                     'status'=>200,
                     'login_id'=>$result->id,
@@ -63,7 +68,13 @@ class AuthAPIController extends Controller
         {
             if(Hash::check($req->input('password'),$result->password))
             {
-                
+                // $data = [
+                //     'status'=>200,
+                //     'login_id'=>$result->id,
+                //     'login_name'=>$result->name,
+                //     'login_role'=>$result->role_id,
+                //     'message'=>'Login successfully'
+                // ];
                 return response()->json([
                     'status'=>200,
                     'login_id'=>$result->id,
