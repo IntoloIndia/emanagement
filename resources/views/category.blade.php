@@ -40,6 +40,12 @@
                     <div class="col-md-8">
                         <input type="file" name="category_img" id="category_img" class="form-control form-control-sm">
                     </div>
+                    <div class="row mt-1"></div>
+                      <div class="col-md-4"></div>
+                    <div class="col-md-8">
+                      {{-- <img src="/storage/app/public/" alt="no image" class="hide" srcset="" id="category_img_update"> --}}
+                      <input type="text" name="category_img" id="category_img_update" class="hide form-control form-control-sm">
+                  </div>
                 </div>
               </div>
                {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}} 
@@ -116,6 +122,30 @@
   </div>
 
   {{-- end sub category modal  --}}
+
+  {{-- delete category modal  --}}
+
+  <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5>Are you sure?</h5>
+                        <button type="button" id="yesdeleteCategoryBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    <hr>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- end category modal  --}}
+
 <div class="row">
   <div class="col-lg-6 col-md-12 col-sm-12">
     <div class="card">
@@ -125,9 +155,7 @@
             <b>Category</b>
           </div>
           <div class="col-6">
-            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#categoryModal">
-              <i class="fas fa-plus"></i> Add 
-            </button>
+            <button type="button" id="addCategory" class="btn btn-primary float-right btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
           </div>
         </div>
       </div>
@@ -148,7 +176,9 @@
             @foreach ($allCategory as $list)
                 <tr>
                   <td>{{++$count}}</td>
-                  <td><img src="{{asset('/storage/app/public/'.$list->category_img)}}" alt="image not found" srcset="" width="35" height="35"></td>
+                  <td>
+                    <a href="{{asset('/storage/app/public/'.$list->category_img)}}" target="_blank">
+                    <img src="{{asset('/storage/app/public/'.$list->category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td>
                   <td>{{$list->category}}</td>
                   <td>
                     <button type="button" class="btn btn-info btn-sm editCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
@@ -162,84 +192,7 @@
     </div>
   </div>
   {{-- sub category div start// --}}
-  <div class="col-lg-6 col-md-12 col-sm-12">
-    <div class="card" style="height: 85vh">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-6">
-            <b> Sub Category</b>
-          </div>
-          <div class="col-6">
-            <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#subCateoryModal">
-              <i class="fas fa-plus"></i> Add 
-            </button>
-            
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card">
-          <div class="card-header">
-            <div class="row">
-              <div class="col-6">
-                <b>Category</b>
-              </div>
-              <div class="col-6">
-                <button class="btn btn-primary btn-sm float-right"> <i class="fas fa-plus"></i> Add</button>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive" style="max-height: 200px">
-           <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Sno</th>
-              <th scope="col">Image</th>
-              <th scope="col">Subcategory </th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>1</td>
-            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
-            <td>name</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-primary btn-sm">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td><img src="assets/img/avatars/1.png" class="img-fluid" alt="" srcset="" width="35"></td>
-            <td>name</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-primary btn-sm">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td><img src="assets/img/avatars/7.png" class="img-fluid" alt="" srcset="" width="35"></td>
-            <td>Mans</td>
-            <td>
-              {{-- <i class="fa-solid fa-pen-to-square"></i> --}}
-              {{-- <i class="bi bi-pencil-square"></i> --}}
-              {{-- <i class="bi bi-trash"></i> --}}
-              <button class="btn btn-primary btn-sm">Edit</button>
-              <button class="btn btn-primary btn-sm">Delete</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        </div>
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
+
   {{-- sub category div end  --}}
 </div>
 @endsection
@@ -249,7 +202,7 @@
 {{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
 <script>
     $(document).ready(function () {
-            $(document).on('click','#addAdmin', function (e) {
+            $(document).on('click','#addCategory', function (e) {
                 e.preventDefault();
                 $('#categoryModal').modal('show');
                 $('#category_err').html('');
@@ -257,6 +210,8 @@
                 $("#categoryForm").trigger("reset"); 
                 $('#saveCategoryBtn').removeClass('hide');
                 $('#updateCategoryBtn').addClass('hide');
+                $('#category_img_update').addClass('hide');
+                
             });
 
             $(document).on('click','#saveCategoryBtn', function (e) {
@@ -265,7 +220,36 @@
                 saveCategory();
                 
             });
-    }) 
+
+             $(document).on('click','.editCategoryBtn', function (e) {
+                e.preventDefault();
+                const category_id = $(this).val();
+                // alert(category_id);
+                editCategory(category_id);
+            });
+
+            $(document).on('click','#updateCategoryBtn', function (e) {
+                e.preventDefault();
+                const category_id = $(this).val();
+                updateCategoey(category_id);
+                // alert(category_id);
+            });
+
+            $(document).on('click','.deleteCategoryBtn', function (e) {
+                e.preventDefault();
+                const category_id = $(this).val();
+                $('#deleteCategoryModal').modal('show');
+                $('#yesdeleteCategoryBtn').val(category_id);
+            });
+
+            $(document).on('click','#yesdeleteCategoryBtn', function (e) {
+                e.preventDefault();
+                const category_id = $(this).val();
+                deleteCategory(category_id);
+            });
+
+       }) 
+    
     
     function saveCategory() {
             $.ajaxSetup({
@@ -296,6 +280,81 @@
                     } else {
                         $('#category_err').html('');
                         $('#categoryModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
+        function editCategory(category_id){
+            $.ajax({
+                type: "get",
+                url: "edit-category/"+category_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#categoryModal').modal('show');
+                        $('#category_err').html('');
+                        $('#category_err').removeClass('alert alert-danger');
+                        $("#categoryForm").trigger( "reset" ); 
+                        $('#saveCategoryBtn').addClass('hide');
+                        $('#updateCategoryBtn').removeClass('hide');
+                        $('#category_img_update').removeClass('hide');
+
+                        $('#category').val(response.category.category);
+                        $('#category_img_update').val(response.category.category_img);
+                        $('#updateCategoryBtn').val(response.category.id);
+                    }
+                }
+            });
+        }
+
+        function updateCategoey(category_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#categoryForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-category/"+category_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#category_err').html('');
+                        $('#category_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#category_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#category_err').html('');
+                        $('#categoryModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
+
+        // delete  category 
+        function deleteCategory(category_id){
+            $.ajax({
+                type: "get",
+                url: "delete-category/"+category_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
                         window.location.reload();
                     }
                 }
