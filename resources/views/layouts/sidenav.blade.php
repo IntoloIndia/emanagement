@@ -59,7 +59,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="sub-category" class="nav-link">
+                <a href="subcategory" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Sub Category </p>
                 </a>
             </li>
