@@ -35,7 +35,7 @@
                 <li class="nav-item menu-open">
                     <a href="user" class="nav-link "><i class="nav-icon fas fa-users"></i><p>User</p></a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>Navigation<i class="fas fa-angle-left right"></i><span class="badge badge-info right">6</span></p>
@@ -47,12 +47,12 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             @endif
             <li class="nav-item menu-open">
                 <a href="billing" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Billing</p></a>
             </li>
-            <li class="nav-header text-dark">Product</li>
+            <li class="nav-header text-dark">Manage & Utilities</li>
             <li class="nav-item">
                 <a href="category" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
@@ -64,12 +64,12 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="size" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Size</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="color" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Color</p>
                 </a>
             </li>
@@ -77,7 +77,7 @@
         
 
 
-            <li class="nav-header text-dark">Stock</li>
+            <li class="nav-header text-dark">Stock Management</li>
             <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
