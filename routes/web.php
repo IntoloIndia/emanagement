@@ -38,6 +38,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
 
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
+    Route::get('admin/billing', [BillingController::class, 'index']);
 
     Route::controller(AdminController::class)->group(function () {
         Route::get('admin/admin','index');
@@ -82,6 +83,21 @@ Route::group(['middleware'=>'billing_auth'], function(){
     });
 
     Route::get('billing', [BillingController::class, 'index']);
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('category', 'index');
+        // Route::post('/orders', 'store');
+    });
+
+    Route::controller(SizeController::class)->group(function () {
+        Route::get('size', 'index');
+        Route::post('save-size', 'saveSize');
+    });
+
+    Route::controller(ColorController::class)->group(function () {
+        Route::get('color', 'index');
+        Route::post('save-color', 'saveColor');
+    });
 
 
     Route::get('logout', [AuthController::class, 'logout']);
