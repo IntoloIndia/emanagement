@@ -10,6 +10,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SubCategoryController;
+
 use App\MyApp;
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +61,21 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(CategoryController::class)->group(function () {
         Route::get('admin/category', 'index');
         Route::post('admin/save-category', 'saveCategory');
+        Route::get('admin/edit-category/{category_id}', 'editCategory');
+        Route::post('admin/update-category/{category_id}', 'updateCategory');
+        Route::get('admin/delete-category/{category_id}', 'deleteCategory');
+        
 
         // Route::post('/orders', 'store');
+    });
+
+    Route::controller(SubCategoryController::class)->group(function () {
+        Route::get('admin/subcategory', 'index');
+        Route::post('admin/save-sub-category', 'saveSubCategory');
+        Route::get('admin/edit-sub-category/{sub_category_id}', 'editSubCategory');
+        Route::post('admin/update-sub-category/{sub_category_id}', 'updateSubCategory');
+        Route::get('admin/delete-sub-category/{sub_category_id}', 'deleteSubCategory');
+        
     });
 
     Route::controller(SizeController::class)->group(function () {
@@ -110,6 +125,11 @@ Route::group(['middleware'=>'billing_auth'], function(){
 Route::get('/items', function () {
     return view('items');
 });
+
+
+// Route::get('/subcategory', function () {
+//     return view('subcategory');
+// });
 
 
 
