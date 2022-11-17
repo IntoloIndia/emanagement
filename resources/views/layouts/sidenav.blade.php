@@ -1,5 +1,5 @@
 <a href="index3.html" class="brand-link">
-    <span class="brand-text text-dark">I-MAN</span>
+    <span class="brand-text text-light">I-MAN</span>
 </a>
 
 <div class="sidebar">
@@ -29,10 +29,10 @@
                 <li class="nav-item menu-open">
                     <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Dashboard</p></a>
                 </li>
-                <li class="nav-item menu-open">
+                <li class="nav-item ">
                     <a href="admin" class="nav-link "><i class="nav-icon fas fa-users-cog"></i><p>Admin</p></a>
                 </li>
-                <li class="nav-item menu-open">
+                <li class="nav-item ">
                     <a href="user" class="nav-link "><i class="nav-icon fas fa-users"></i><p>User</p></a>
                 </li>
                 {{-- <li class="nav-item">
@@ -49,10 +49,10 @@
                     </ul>
                 </li> --}}
             @endif
-            <li class="nav-item menu-open">
+            <li class="nav-item ">
                 <a href="billing" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Billing</p></a>
             </li>
-            <li class="nav-header text-dark">Manage & Utilities</li>
+            <li class="nav-header text-light">Manage & Utilities</li>
             <li class="nav-item">
                 <a href="category" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
