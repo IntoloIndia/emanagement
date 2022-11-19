@@ -95,13 +95,14 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0" style="height: 350px;">
+                <div class="card-body table-responsive p-0" style="height: 400px;">
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
                                 <th>SN</th>
                                 <th>Role</th>
                                 <th>Name</th>
+                                <th>Code</th>
                                 <th>Email</th>
                                 <th>Action</th>
                             </tr>
@@ -114,6 +115,7 @@
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
                                     <td>{{($list->role_id ) }}</td>
                                     <td>{{$list->name}}</td>
+                                    <td>S1</td>
                                     <td>{{$list->email}}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>

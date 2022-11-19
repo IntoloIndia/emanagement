@@ -77,7 +77,7 @@
         
 
 
-            <li class="nav-header text-dark">Stock Management</li>
+            <li class="nav-header text-light">Stock Management</li>
             <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
