@@ -133,6 +133,22 @@ class SubCategoryController extends Controller
     
     }
 
+    public function getSubCategoryByCategory($category_id){
+
+        $data = SubCategory::where(['category_id'=>$category_id])->get(['id' , 'category_id', 'sub_category']);
+
+        $html = "";
+        $html .= "<option selected disabled >Sub Category</option>";
+        foreach($data as $list)
+        {
+            $html.= "<option value='" . $list->id . "'>" . $list->sub_category . "</option>";
+        }
+        return response()->json([
+            'status'=> 200,
+            'html'=> $html,
+        ]);
+    }
+
 }
 
 

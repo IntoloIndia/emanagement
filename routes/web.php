@@ -76,6 +76,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-sub-category/{sub_category_id}', 'editSubCategory');
         Route::post('admin/update-sub-category/{sub_category_id}', 'updateSubCategory');
         Route::get('admin/delete-sub-category/{sub_category_id}', 'deleteSubCategory');
+
+        Route::get('admin/get-sub-category-by-category/{category_id}', 'getSubCategoryByCategory');
         
     });
 
