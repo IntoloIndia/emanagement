@@ -5,9 +5,7 @@
 <div class="row">
     <div class="col-12">
         <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Add items
-    </button>
+    
   
   <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -80,6 +78,13 @@
         </div>
  </div>
 </div>
+
+<div class="row ">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+        <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+    </div>
+</div>
+
 @endsection
 
 @section('script')

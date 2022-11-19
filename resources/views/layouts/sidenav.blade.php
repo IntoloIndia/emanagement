@@ -64,30 +64,27 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="size" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Size</p>
+                <a href="size-color" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Size & Color</p>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="color" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Color</p>
                 </a>
-            </li>
-
-        
-
+            </li> --}}
 
             <li class="nav-header text-light">Stock Management</li>
-            <!-- <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Manage Category </p>
-                </a>
-            </li> -->
+                <li class="nav-item">
+                    <a href="product" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Product</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Stock</p>
+                    </a>
+                </li>
         </ul>
     </nav>
 
