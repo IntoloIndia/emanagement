@@ -44,7 +44,7 @@
                       <div class="col-md-4"></div>
                     <div class="col-md-8">
                       {{-- <img src="/storage/app/public/" alt="no image" class="hide" srcset="" id="category_img_update"> --}}
-                      <input type="text" name="category_img" id="category_img_update" class="hide form-control form-control-sm">
+                      {{-- <input type="text" name="category_img" id="category_img_update" class="hide form-control form-control-sm"> --}}
                   </div>
                 </div>
               </div>
@@ -145,7 +145,7 @@
 </div>
 
 {{-- end category modal  --}}
-<div class="row">
+<div class="row mb-2">
   <div class="col-12">
     <button type="button" id="addCategory" class="btn btn-primary float-right btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
   </div>
@@ -213,7 +213,7 @@
                 $("#categoryForm").trigger("reset"); 
                 $('#saveCategoryBtn').removeClass('hide');
                 $('#updateCategoryBtn').addClass('hide');
-                $('#category_img_update').addClass('hide');
+                // $('#category_img_update').addClass('hide');
                 
             });
 
@@ -303,10 +303,10 @@
                         $("#categoryForm").trigger( "reset" ); 
                         $('#saveCategoryBtn').addClass('hide');
                         $('#updateCategoryBtn').removeClass('hide');
-                        $('#category_img_update').removeClass('hide');
+                        // $('#category_img_update').removeClass('hide');
 
                         $('#category').val(response.category.category);
-                        $('#category_img_update').val(response.category.category_img);
+                        // $('#category_img_update').val(response.category.category_img);
                         $('#updateCategoryBtn').val(response.category.id);
                     }
                 }

@@ -1,12 +1,12 @@
 <?php
     use Illuminate\Support\facades\DB;
-    // use App\Models\Item;
+    use App\Models\SubCategory;
     // use App\Models\Order;
 
-    // function categoryItems($category_id){
-    //     $category_item = Item::where(['category_id'=>$category_id])->get();
-    //     return $category_item; 
-    // }
+    function subCategoryItems($category_id){
+        $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
+        return $subCategory_item; 
+    }
 
     // function invoiceNo(){
     //     $orders_count = Order::count();

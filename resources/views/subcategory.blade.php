@@ -28,7 +28,7 @@
                       <div class="col-md-8">
                         <select class="form-select form-select-sm" aria-label="Default select example" name="category_id" id="category_id">
                           {{-- <option selected>Other</option> --}}
-                          @foreach ($allCategory as $list)
+                          @foreach ($Categories as $list)
                           <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
                           @endforeach
                         </select>
@@ -53,7 +53,7 @@
                     <div class="row mt-1"></div>
                         <div class="col-md-4"></div>
                         <div class="col-md-8">
-                            <input type="text" name="sub_category_img_update" id="sub_category_img_update" class="hide form-control form-control-sm">
+                            {{-- <input type="text" name="sub_category_img_update" id="sub_category_img_update" class="hide form-control form-control-sm"> --}}
                         </div>
                 </div>
               </div>
@@ -101,11 +101,11 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-6 col-md-12 col-sm-12">
+{{-- <div class="row"> --}}
+    {{-- <div class="col-lg-4 col-md-12 col-sm-12">
         <div class="card">
           <div class="card-header">
-                <b>Sub category</b>
+                <b>{{ucwords($list->category)}}</b>
           </div>
           <div class="card-body">
             <div class="table-responsive" style="max-height: 200px">
@@ -123,13 +123,13 @@
               $count =0;
           @endphp
           <tbody>
-          @foreach ($allSubCategory as $list)
+          @foreach ($SubCategories as $list)
               <tr>
                 <td>{{++$count}}</td>
                 <td>
                     <a href="{{asset('/storage/app/public/'.$list->sub_category_img)}}" target="_blank">
                     <img src="{{asset('/storage/app/public/'.$list->sub_category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td>
-                    <td>{{ucwords($list->category_id)}}</td>
+                    <td>{{ucwords($list->category)}}</td>
                     <td>{{ucwords($list->sub_category)}}</td>
                   <td>
                     <button type="button" class="btn btn-info btn-sm editsubCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
@@ -142,11 +142,61 @@
         </div>
           </div>
         </div>
-    </div>
+    </div> --}}
+
+
     {{-- secound div start --}}
         
-</div>
+{{-- </div> --}}
 
+
+<div class="row">
+    @foreach ($SubCategories as $categories)
+        
+        <div class="col-sm-6 col-md-4 mt-1">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"> <b>{{ucwords($categories->category)}}</b></h3>
+                </div>
+                <div class="card-body table-responsive p-0" style="height: 250px;">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Image</th>
+                                <th>Sub category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $category_items = subCategoryItems($categories->category_id);   
+                            {{$count =0;}}
+                        @endphp
+                        <tbody>
+                        @foreach ($category_items as $list)
+                            <tr>
+                              <td>{{++$count}}</td>
+                              <td>
+                                  {{-- <a href="{{asset('/storage/app/public/'.$list->sub_category_img)}}" target="_blank"> --}}
+                                  <img src="{{asset('/storage/app/public/'.$list->sub_category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></td>
+                                  <td>{{ucwords($list->sub_category)}}</td>
+                                <td>
+                                  <button type="button" class="btn btn-info btn-sm editsubCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                                  <button type="button" class="btn btn-danger btn-sm deletesubCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                              </td>
+                            </tr>
+                        @endforeach
+                        </tbody>                   
+                     </table>
+                </div>
+
+            </div>
+        </div>
+
+    @endforeach
+
+</div>
 
 
 @endsection
@@ -162,7 +212,7 @@
                 $("#subcategoryForm").trigger("reset"); 
                 $('#savesubCategoryBtn').removeClass('hide');
                 $('#updatesubCategoryBtn').addClass('hide');
-                $('#sub_category_img_update').addClass('hide');
+                // $('#sub_category_img_update').addClass('hide');
                 
             });
 
@@ -251,11 +301,11 @@
                         $("#subcategoryForm").trigger( "reset" ); 
                         $('#savesubCategoryBtn').addClass('hide');
                         $('#updatesubCategoryBtn').removeClass('hide');
-                        $('#sub_category_img_update').removeClass('hide');
+                        // $('#sub_category_img_update').removeClass('hide');
 
                         $('#category_id').val(response.sub_category.category_id);
                         $('#sub_category').val(response.sub_category.sub_category);
-                        $('#sub_category_img_update').val(response.sub_category.sub_category_img);
+                        // $('#sub_category_img_update').val(response.sub_category.sub_category_img);
                         $('#updatesubCategoryBtn').val(response.sub_category.id);
                     }
                 }

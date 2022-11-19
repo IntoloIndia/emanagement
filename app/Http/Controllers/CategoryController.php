@@ -20,8 +20,10 @@ class CategoryController extends Controller
     {
         // return view('employee');
         $validator = Validator::make($req->all(),[
-            "category" => 'required|max:191',
-            'category_img' => 'required|max:191'
+            "category" => 'required|unique:categories,category,'.$req->input('category'),
+            'category_img' => 'required|max:191',
+
+            
         ]);
 
         if($validator->fails())
@@ -72,7 +74,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($req->all(),[
             "category" => 'required|max:191',
-            'category_img' => 'required|max:191',
+            // 'category_img' => 'required|max:191',
             // 'category' => 'required|unique:categories,category,'.$category_id,
             // $item_name = 'required|unique:items,item_name,'.$item_id;
 
@@ -85,21 +87,21 @@ class CategoryController extends Controller
             ]);
         }else{
             $model = Category::find($category_id);
-            $model->category = $req->input('category');
+            // $model->category = $req->input('category');
             // $model->category_img = $req->input('category_img');
             
-            // $model->category_name = strtolower($req->input('category_name'));
-            // if ($req->hasFile('category_img')){
-            //     if($req->input('category_id') > 0)
-            //     {   
+            $model->category = $req->input('category');
+            if ($req->hasFile('category_img')){
+                if($req->input('category') > 0)
+                {   
                     $CategoryImage = public_path('storage/').$model->category_img;
                     if(file_exists($CategoryImage)){
                         @unlink($CategoryImage); 
                     }
-            //     }
+                }
                 $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');
             
-            
+            }
             if($model->save()){
                 return response()->json([
                     'status'=>200,
@@ -107,6 +109,7 @@ class CategoryController extends Controller
             }
         }
     }
+
 
     public function deleteCategory($category_id)
     {

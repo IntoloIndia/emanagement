@@ -10,14 +10,18 @@ use Validator;
 class SubCategoryController extends Controller
 {
     public function index(){
-        // $category_name = Category::join('sub_categories','categories.id','=','sub_categories.category_id')
-        // ->select('categories.category','sub_categories.sub_category','sub_categories.sub_category_img')->get();
-        $allCategory = Category::all();
-        $allSubCategory = SubCategory::all();
+
+         $Categories = Category::all();
+        $SubCategories = SubCategory::join('categories','categories.id','=','sub_categories.category_id')
+                ->select('sub_categories.category_id','categories.category')
+                    ->groupBy('sub_categories.category_id','categories.category')
+                    ->get();
+            // ->get(['sub_categories.*','categories.category']);
+            // print_r($SubCategories);
+
         return view('subcategory',[
-            'allCategory' => $allCategory,
-            'allSubCategory' =>$allSubCategory,
-            // 'category_name' =>$category_name
+            'SubCategories' => $SubCategories,
+            'Categories' => $Categories,
         ]);
     } 
     
@@ -26,7 +30,7 @@ class SubCategoryController extends Controller
         // return view('employee');
         $validator = Validator::make($req->all(),[
             "category_id" => 'required|max:191',
-            "sub_category" => 'required|max:191',
+            "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
             'sub_category_img' => 'required|max:191'
         ]);
 
@@ -81,7 +85,7 @@ class SubCategoryController extends Controller
         $validator = Validator::make($req->all(),[
             "category_id" => 'required|max:191',
             "sub_category" => 'required|max:191',
-            'sub_category_img' => 'required|max:191',
+            // 'sub_category_img' => 'required|max:191',
             // 'category' => 'required|unique:categories,category,'.$category_id,
             // $item_name = 'required|unique:items,item_name,'.$item_id;
 
@@ -94,21 +98,22 @@ class SubCategoryController extends Controller
             ]);
         }else{
             $model = SubCategory::find($sub_category_id);
-            $model->sub_category = $req->input('sub_category');
+            $model->category_id = $req->input('category_id');
             // $model->category_img = $req->input('category_img');
             
-            // $model->category_name = strtolower($req->input('category_name'));
-            // if ($req->hasFile('category_img')){
-            //     if($req->input('category_id') > 0)
-            //     {   
+            $model->sub_category = $req->input('sub_category');
+            if ($req->hasFile('sub_category_img')){
+                if($req->input('sub_category') > 0)
+                {   
                     $subCategoryImage = public_path('storage/').$model->sub_category_img;
                     if(file_exists($subCategoryImage)){
                         @unlink($subCategoryImage); 
                     }
-            //     }
+                }
+
                 $model->sub_category_img = $req->file('sub_category_img')->store('image/category'. $req->input('sub_category_img'),'public');
             
-            
+            }
             if($model->save()){
                 return response()->json([
                     'status'=>200,
