@@ -75,13 +75,64 @@
     </div>
 </div>
 
-
-
-
-
 <div class="row ">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
         <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Products</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0" style="height: 450px;">
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Category</th>
+                            <th>Sub Category</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{$count = "";}}
+                        {{-- @foreach ($admins as $list)
+                            <tr>
+                                <td>{{++$count}}</td>
+                                <td>{{($list->role_id == MyApp::ADMINISTRATOR) ? "Administrator" : "Billing" }}</td>
+                                <td>{{ucwords($list->name)}}</td>
+                                <td>{{$list->email}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm editAdminBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm deleteAdminBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach --}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </div>
 </div>
 
