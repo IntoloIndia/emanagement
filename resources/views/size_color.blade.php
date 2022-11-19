@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
+@section('style')
+<style>
+  #colorinput{
+    border: none;
+  }
+</style>
+@endsection;
 
 @section('content')
 
@@ -74,6 +81,50 @@
 
 {{-- color modal end  --}}
 
+{{-- delete  modal  --}}
+
+<div class="modal fade" id="deleteSizeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <center>
+                  <h5>Are you sure?</h5>
+                      <button type="button" id="yesDeleteSizeBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                      <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                  <hr>
+              </center>
+          </div>
+      </div>
+  </div>
+</div>
+{{-- end delete modal  --}}
+
+{{-- delete start  modal  --}}
+
+<div class="modal fade" id="deleteColorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <center>
+                  <h5>Are you sure?</h5>
+                      <button type="button" id="yesDeleteColorBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                      <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                  <hr>
+              </center>
+          </div>
+      </div>
+  </div>
+</div>
+{{-- end delete modal  --}}
+
 
 <div class="row">
 <div class="col-lg-4 col-md-4 col-sm-12">
@@ -108,9 +159,10 @@
                 <tr>
                   <td>{{++$count}}</td>
                   <td>{{$list->size}}</td>
-                  <td><Button class="btn btn-info btn-sm" id="updateSize">edit</Button>
-                    <Button class="btn btn-danger btn-sm">Delete</Button>
-                    </td> 
+                  <td>
+                    <button type="button" class="btn btn-info btn-sm editSizeBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm deleteSizeBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                </td> 
                 </tr>
                 @endforeach
               </tbody> 
@@ -142,6 +194,7 @@
                 <tr>
                   <th scope="col">Sno</th>
                   <th scope="col">Color</th>
+                  <th scope="col">Color</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -153,10 +206,12 @@
                 <tr>
                   <td>{{++$count}}</td>
                   <td>{{$list->color}}</td>
+                  <td> <input type="text" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput">
+                  </td>
                   <td>
-                    <i class="fas fa-pen" style="width:30px;color:blue" id="updateBtn"></i>
-                    <i class=" fa fa-trash" style="width:30px;color:red"></i>
-                     </td> 
+                    <button type="button" class="btn btn-info btn-sm editColorBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm deleteColorBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                </td> 
                 </tr>
                 @endforeach
               </tbody>
@@ -190,30 +245,34 @@
                 saveSize();
             });
             
-            // $(document).on('click','.editSizeBtn', function (e) {
-            //     e.preventDefault();
-            //     const size_id = $(this).val();
-            //     editSize(size_id);
-            // });
+            $(document).on('click','.editSizeBtn', function (e) {
+                e.preventDefault();
+                const size_id = $(this).val();
+                // alert(size_id);
+                editSize(size_id);
+            });
 
-            // $(document).on('click','#updateSizeBtn', function (e) {
-            //     e.preventDefault();
-            //     const size_id = $(this).val();
-            //     updateSize(size_id);
-            // });
+            $(document).on('click','#updateSizeBtn', function (e) {
+                e.preventDefault();
+                const size_id = $(this).val();
+                // alert(size_id);
+                updateSize(size_id);
+            });
             
-            // $(document).on('click','.deleteSizeBtn', function (e) {
-            //     e.preventDefault();
-            //     const size_id = $(this).val();
-            //     $('#deleteSizeModal').modal('show');
-            //     $('#yesDeleteSizeBtn').val(size_id);
-            // });
+            $(document).on('click','.deleteSizeBtn', function (e) {
+                e.preventDefault();
+                const size_id = $(this).val();
+                $('#deleteSizeModal').modal('show');
+                $('#yesDeleteSizeBtn').val(size_id);
+            });
 
-            // $(document).on('click','#yesDeleteSizeBtn', function (e) {
-            //     e.preventDefault();
-            //     const size_id = $(this).val();
-            //     deleteSize(size_id);
-            // });
+
+            $(document).on('click','#yesDeleteSizeBtn', function (e) {
+                e.preventDefault();
+                const size_id = $(this).val();
+                // alert(size_id)
+                deleteSize(size_id);
+            });
 
             //color
             $(document).on('click','#addColor', function (e) {
@@ -230,6 +289,33 @@
                 e.preventDefault();
                 saveColor();
             });
+
+            $(document).on('click','.editColorBtn', function (e) {
+                e.preventDefault();
+                const color_id = $(this).val();
+                editColor(color_id);
+            });
+
+            $(document).on('click','#updateColorBtn', function (e) {
+                e.preventDefault();
+                const color_id = $(this).val();
+                updateColor(color_id);
+            });
+
+            $(document).on('click','.deleteColorBtn', function (e) {
+                e.preventDefault();
+                const color_id = $(this).val();
+                $('#deleteColorModal').modal('show');
+                $('#yesDeleteColorBtn').val(color_id);
+            });
+
+            $(document).on('click','#yesDeleteColorBtn', function (e) {
+                e.preventDefault();
+                const color_id = $(this).val();
+                // alert(size_id)
+                deleteColor(color_id);
+            });
+
 
 
         });
@@ -269,6 +355,76 @@
             });
         }
 
+        function editSize(size_id){
+            $.ajax({
+                type: "get",
+                url: "edit-size/"+size_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#sizeModal').modal('show');
+                        $('#size_err').html('');
+                        $('#size_err').removeClass('alert alert-danger');
+                        $("#sizeForm").trigger( "reset" ); 
+                        $('#saveSizeBtn').addClass('hide');
+                        $('#updateSizeBtn').removeClass('hide');
+                        $('#size').val(response.size.size);
+                        // $('#password').val(response.user.password);
+
+                        $('#updateSizeBtn').val(response.size.id);
+                    }
+                }
+            });
+        }
+
+        function updateSize(size_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#sizeForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-size/"+size_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#size_err').html('');
+                        $('#size_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#size_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#size_err').html('');
+                        $('#sizeModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+        
+        function deleteSize(size_id){
+            $.ajax({
+                type: "get",
+                url: "delete-size/"+size_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
         // save color code start
         function saveColor() {
             $.ajaxSetup({
@@ -299,6 +455,76 @@
                     } else {
                         $('#color_err').html('');
                         $('#colorModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+        function editColor(color_id){
+            $.ajax({
+                type: "get",
+                url: "edit-color/"+color_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#colorModal').modal('show');
+                        $('#color_err').html('');
+                        $('#color_err').removeClass('alert alert-danger');
+                        $("#colorForm").trigger( "reset" ); 
+                        $('#saveColorBtn').addClass('hide');
+                        $('#updateColorBtn').removeClass('hide');
+                        $('#color').val(response.color.color);
+
+                        $('#updateColorBtn').val(response.color.id);
+                    }
+                }
+            });
+        }
+
+        function updateColor(color_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#colorForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-color/"+color_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    if(response.status === 400)
+                    {
+                        $('#color_err').html('');
+                        $('#color_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#color_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#color_err').html('');
+                        $('#colorModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
+        function deleteColor(color_id){
+            $.ajax({
+                type: "get",
+                url: "delete-color/"+color_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
                         window.location.reload();
                     }
                 }
