@@ -85,8 +85,16 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/size-color', 'index');
         //size
         Route::post('admin/save-size', 'saveSize');
+        Route::get('admin/edit-size/{size_id}', 'editSize');
+        Route::post('admin/update-size/{size_id}', 'updateSize'); 
+        Route::get('admin/delete-size/{size_id}', 'deleteSize');
+
         //color
         Route::post('admin/save-color', 'saveColor');
+        Route::get('admin/edit-color/{color_id}', 'editColor');
+        Route::post('admin/update-color/{color_id}', 'updateColor'); 
+        Route::get('admin/delete-color/{color_id}', 'deleteColor');
+
     });
 
     // Route::controller(ColorController::class)->group(function () {
@@ -96,6 +104,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(ProductController::class)->group(function () {
         Route::get('admin/product', 'index');
+        Route::post('admin/save-product', 'saveProduct');
+
     });
     
     
@@ -116,12 +126,14 @@ Route::group(['middleware'=>'billing_auth'], function(){
         // Route::post('/orders', 'store');
     });
 
-    Route::controller(SizeColorController::class)->group(function () {
-        Route::get('admin/size-color', 'index');
-        //size
-        Route::post('admin/save-size', 'saveSize');
-        //color
-        Route::post('admin/save-color', 'saveColor');
+    Route::controller(SizeController::class)->group(function () {
+        Route::get('size', 'index');
+        Route::post('save-size', 'saveSize');
+    });
+
+    Route::controller(ColorController::class)->group(function () {
+        Route::get('color', 'index');
+        Route::post('save-color', 'saveColor');
     });
 
 
