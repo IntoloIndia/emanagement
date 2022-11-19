@@ -18,8 +18,8 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> 
-          <p>New Orders</p> 
+          <h3>250496</h3> 
+          <p>Sales</p> 
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
@@ -31,8 +31,8 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3>
-          <p>New Orders</p>
+          <h3>678</h3>
+          <p>Stock</p>
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
@@ -44,8 +44,8 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> 
-          <p>New Orders</p>
+          <h3>1600</h3> 
+          <p>Customers</p>
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
@@ -57,8 +57,8 @@
     <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
-          <h3>150</h3> 
-          <p>New Orders</p>
+          <h3>15</h3> 
+          <p>Employee</p>
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
@@ -67,6 +67,92 @@
       </div>
     </div>
   </div>
+
+
+  <div class="row">
+    <div class="col-md-6">
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">Users</h3>
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0" style="height: 350px;">
+                <table class="table table-head-fixed text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>SN</th>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Date</th>
+                      <th>Sales By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Jeans</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>T-Shirt</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Shirt</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Jeans</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Jeans</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Jeans</td>
+                      <td>5</td>
+                      <td>19-11-2022</td>
+                      <td>S1</td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+  
 
   <div class="row">
     <section class="col-lg-7 connectedSortable">
@@ -501,31 +587,6 @@
 
     </section>
   </div>
-
-
-  <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 @endsection
