@@ -15,7 +15,7 @@
 
 <div class="row ">
 
-    <div class="col-lg-3 col-6">
+    {{-- <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
           <h3>250496</h3> 
@@ -65,8 +65,9 @@
         </div>
         <a href="#" class="small-box-footer bg-gray color-palette">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
-    </div>
-  </div>
+    </div> --}}
+
+</div>
 
 
   <div class="row">
@@ -74,7 +75,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h3 class="card-title">Users</h3>
+                <h3 class="card-title">Sales</h3>
 
                 <div class="card-tools">
                     <div class="input-group input-group-sm" style="width: 250px;">
@@ -95,53 +96,53 @@
                     <tr>
                       <th>SN</th>
                       <th>Product</th>
-                      <th>Qty</th>
                       <th>Date</th>
                       <th>Sales By</th>
+                      <th>Qty</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>1</td>
                       <td>Jeans</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>55</td>
                     </tr>
                     <tr>
                       <td>1</td>
                       <td>T-Shirt</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>5</td>
                     </tr>
                     <tr>
                       <td>1</td>
                       <td>Shirt</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>5</td>
                     </tr>
                     <tr>
                       <td>1</td>
                       <td>Jeans</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>5</td>
                     </tr>
                     <tr>
                       <td>1</td>
                       <td>Jeans</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>5</td>
                     </tr>
                     <tr>
                       <td>1</td>
                       <td>Jeans</td>
-                      <td>5</td>
                       <td>19-11-2022</td>
                       <td>S1</td>
+                      <td>5</td>
                     </tr>
                     
                   </tbody>

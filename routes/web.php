@@ -114,14 +114,12 @@ Route::group(['middleware'=>'billing_auth'], function(){
         // Route::post('/orders', 'store');
     });
 
-    Route::controller(SizeController::class)->group(function () {
-        Route::get('size', 'index');
-        Route::post('save-size', 'saveSize');
-    });
-
-    Route::controller(ColorController::class)->group(function () {
-        Route::get('color', 'index');
-        Route::post('save-color', 'saveColor');
+    Route::controller(SizeColorController::class)->group(function () {
+        Route::get('admin/size-color', 'index');
+        //size
+        Route::post('admin/save-size', 'saveSize');
+        //color
+        Route::post('admin/save-color', 'saveColor');
     });
 
 
