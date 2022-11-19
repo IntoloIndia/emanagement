@@ -84,4 +84,6 @@
     <script src="{{ asset('public/assets/js/adminlte.js') }}"></script>
     {{-- <script src="{{ asset('assets/user/js/demo.js') }}"></script> --}}
     <script src="{{ asset('public/assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('public/assets/js/master.js') }}" ></script>
+
 </html>
