@@ -104,6 +104,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(ProductController::class)->group(function () {
         Route::get('admin/product', 'index');
+        Route::post('admin/save-product', 'saveProduct');
+
     });
     
     

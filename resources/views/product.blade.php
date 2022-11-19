@@ -47,17 +47,17 @@
                             <div class="col-md-4">
                                 <select id="size_id" name="size_id" class="form-select form-select-sm">
                                     <option selected disabled >Size</option>
-                                    {{-- @foreach ($roles as $list)
-                                        <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
-                                    @endforeach --}}
+                                    @foreach ($sizes as $list)
+                                        <option value="{{$list->id}}">{{ucwords($list->size)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <select id="color_id" name="color_id" class="form-select form-select-sm">
                                     <option selected disabled >Choose...</option>
-                                    {{-- @foreach ($roles as $list)
-                                        <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
-                                    @endforeach --}}
+                                    @foreach ($colors as $list)
+                                        <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -103,6 +103,8 @@
 
             $(document).on('click','#saveProductBtn', function (e) {
                 e.preventDefault();
+                // let productCode = Math.floor((Math.random() * 1000000) + 1);
+                // alert(productCode);
                 saveProduct();
             });
 
@@ -140,6 +142,41 @@
 
 
         });
+
+        function saveProduct() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#productForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "save-product",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status === 400) {
+                        $('#producat_err').html('');
+                        $('#producat_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) {
+                            $('#producat_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                        });
+
+                    } else {
+                        $('#producat_err').html('');
+                        $('#productModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
 
         
     </script>
