@@ -10,21 +10,21 @@
         <h5 class="modal-title" id="staticBackdropLabel">Size color</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form id="sizeForm">
       <div class="modal-body">
-        <form id="sizeForm">
           <div class="size_err"></div>
               <div class="mb-3">
                 <label for="size" class="form-label">Size</label>
                 <input type="text" name="size" class="form-control" id="size"placeholder="size" >
-              </div>
-              
+            </div>
+          
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" id="sizeBtn">save</button>
           <button type="submit" class="btn btn-primary" id="updateSizeBtn">update</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>

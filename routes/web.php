@@ -69,7 +69,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
 
     Route::controller(SubCategoryController::class)->group(function () {
-        Route::get('admin/subcategory', 'index');
+        Route::get('admin/sub-category', 'index');
         Route::post('admin/save-sub-category', 'saveSubCategory');
         Route::get('admin/edit-sub-category/{sub_category_id}', 'editSubCategory');
         Route::post('admin/update-sub-category/{sub_category_id}', 'updateSubCategory');
