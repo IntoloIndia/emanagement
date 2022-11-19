@@ -23,20 +23,20 @@
 
         <style>
             .sidebar .nav-link p{
-                color:black;
+                color:rgb(252, 249, 249);
             }
             .nav-sidebar>.nav-item .nav-icon {
-                color:black;
+                color:rgb(252, 252, 252);
             }
         </style>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
 
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top">
+            <nav class="main-header navbar navbar-expand navbar-dark navbar-dark fixed-top">
                 @include('layouts.header')
             </nav>
-            <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #f4f6f9; ">
+            <aside class="main-sidebar sidebar-dark-primary elevation-4" >
                 @include('layouts.sidenav')
             </aside>
 

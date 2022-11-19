@@ -7,10 +7,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\ColorController;
+use App\Http\Controllers\SizeColorController;
+// use App\Http\Controllers\ColorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\ProductController;
 
 use App\MyApp;
 /*
@@ -40,6 +41,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
 
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
+    Route::get('admin/billing', [BillingController::class, 'index']);
 
     Route::controller(AdminController::class)->group(function () {
         Route::get('admin/admin','index');
@@ -77,14 +79,21 @@ Route::group(['middleware'=>'admin_auth'], function(){
         
     });
 
-    Route::controller(SizeController::class)->group(function () {
-        Route::get('admin/size', 'index');
+    Route::controller(SizeColorController::class)->group(function () {
+        Route::get('admin/size-color', 'index');
+        //size
         Route::post('admin/save-size', 'saveSize');
+        //color
+        Route::post('admin/save-color', 'saveColor');
     });
 
-    Route::controller(ColorController::class)->group(function () {
-        Route::get('admin/color', 'index');
-        Route::post('admin/save-color', 'saveColor');
+    // Route::controller(ColorController::class)->group(function () {
+    //     Route::get('admin/color', 'index');
+    //     Route::post('admin/save-color', 'saveColor');
+    // });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('admin/product', 'index');
     });
     
     
@@ -100,15 +109,27 @@ Route::group(['middleware'=>'billing_auth'], function(){
 
     Route::get('billing', [BillingController::class, 'index']);
 
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('category', 'index');
+        // Route::post('/orders', 'store');
+    });
+
+    Route::controller(SizeController::class)->group(function () {
+        Route::get('size', 'index');
+        Route::post('save-size', 'saveSize');
+    });
+
+    Route::controller(ColorController::class)->group(function () {
+        Route::get('color', 'index');
+        Route::post('save-color', 'saveColor');
+    });
+
 
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
 
 
-Route::get('/items', function () {
-    return view('items');
-});
 
 
 // Route::get('/subcategory', function () {

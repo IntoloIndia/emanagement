@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\API\AuthAPIController;
 use App\Http\Controllers\AdminController;
+
+use App\Http\Controllers\API\AuthAPIController;
+use App\Http\Controllers\API\UserAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +28,6 @@ Route::get('/admin', [AuthAPIController::class, 'getAdmin']);
 Route::post('/admin-login', [AuthAPIController::class, 'adminLogin']);
 Route::post('/user-login', [AuthAPIController::class, 'userLogin']);
 
+Route::get('/users', [UserAPIController::class, 'getUsers']);
 
 Route::get('/admin', [AdminController::class, 'index']);

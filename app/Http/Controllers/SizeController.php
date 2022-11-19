@@ -14,9 +14,7 @@ class SizeController extends Controller
         return view('size',[
             'allSize'=>$allSize,
             'allColor'=>$allColor,
-
-        
-    ]);
+        ]);
     }
 
     function saveSize(Request $req)
