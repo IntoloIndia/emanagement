@@ -109,11 +109,11 @@
                         </thead>
                         <tbody>
                             {{$count = "";}}
-                            @foreach ($allUser as $list)
+                            @foreach ($Users as $list)
                                 <tr>
                                     <td>{{++$count}}</td>
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
-                                    <td>{{($list->role_id ) }}</td>
+                                    <td>{{($list->role ) }}</td>
                                     <td>{{$list->name}}</td>
                                     <td>S1</td>
                                     <td>{{$list->email}}</td>
