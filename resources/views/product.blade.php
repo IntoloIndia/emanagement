@@ -43,6 +43,11 @@
                             </div>
                         </div>
 
+                        <div>
+                            <input type="radio" id="radio01" name="radio" style="color:red;"/>
+                            <label for="radio01"><span></span>Radio Button 1</label>
+                          </div>
+
                         <div class="row mt-2">
                             <div class="col-md-4">
                                 <select id="size_id" name="size_id" class="form-select form-select-sm">
@@ -56,7 +61,7 @@
                                 <select id="color_id" name="color_id" class="form-select form-select-sm">
                                     <option selected disabled >Choose...</option>
                                     @foreach ($colors as $list)
-                                        <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
+                                        <option value="{{$list->id}}">  {{ucwords($list->color)}}</option>
                                     @endforeach
                                 </select>
                             </div>
