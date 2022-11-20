@@ -50,6 +50,11 @@
                             </div>
                         </div>
 
+                        <div>
+                            <input type="radio" id="radio01" name="radio" style="color:red;"/>
+                            <label for="radio01"><span></span>Radio Button 1</label>
+                          </div>
+
                         <div class="row mt-2">
                             <div class="col-md-4">
                                 <select id="size_id" name="size_id" class="form-select form-select-sm">
@@ -114,6 +119,46 @@
 </div>
 
 <div class="row">
+    {{-- <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Products</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0" style="height: 450px;">
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Category</th>
+                            <th>Sub Category</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> --}}
+
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
@@ -314,7 +359,11 @@
                         $('#saveProductBtn').addClass('hide');
                         $('#updateProductBtn').removeClass('hide');
                         $('#category_id').val(response.product.category_id);
-                        $('#sub_category_id').val(response.product.sub_category_id);
+
+                        $('#sub_category_id').html("");
+                        $('#sub_category_id').append(response.html);
+
+                        // $('#sub_category_id').val(response.product.sub_category_id);
                         $('#product_name').val(response.product.product);
                         $('#price').val(response.product.price);
                         $('#size_id').val(response.product.size);
