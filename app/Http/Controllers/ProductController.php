@@ -21,7 +21,7 @@ class ProductController extends Controller
         $colors = Color::all();
         // $product_code = rand(0000000001,9999999999);
         // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+        // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40);
         // return $barcode;
         $products = Product::Join('categories','categories.id','=','products.category_id')
                     ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
@@ -61,7 +61,7 @@ class ProductController extends Controller
 
             $product_code = rand(0000000001,9999999999);
             $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40);
             // $product_code = (rand(00000001,99999999));
 
             $model = new Product;
@@ -72,6 +72,7 @@ class ProductController extends Controller
             $model->price = $req->input('price');
             $model->size = $req->input('size_id');
             $model->color = $req->input('color_id');
+            $model->barcode = $barcode;
            
             if($model->save()){
                 return response()->json([   
