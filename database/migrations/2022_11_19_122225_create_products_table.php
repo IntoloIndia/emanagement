@@ -16,18 +16,18 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('product_code')->nullable();
-            $table->string('category_id')->nullable();
-            $table->string('sub_category_id')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('sub_category_id')->nullable();
             $table->string('product')->nullable();
             $table->integer('qty')->nullable();
             $table->string('price')->nullable();
-            $table->string('size_id')->nullable();
-            $table->string('color_id')->nullable();
+            $table->integer('size_id')->default(0);
+            $table->integer('color_id')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
-            $table->number('sell')->default(0);
-            $table->number('sell_by')->default(0);
-            $table->number('status')->default(0);
+            $table->integer('sell')->default(0);
+            $table->integer('sell_by')->default(0);
+            $table->integer('status')->default(0);
             $table->text('barcode')->nullable();
             $table->timestamps();
         });
