@@ -26,7 +26,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <select id="category_id" name="category_id" class="form-select form-select-sm">
+                                <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
                                     <option selected disabled >Category</option>
                                     @foreach ($categories as $list)
                                     <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
@@ -42,8 +42,11 @@
                         </div>
 
                         <div class="row mt-2">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="qty">
                             </div>
                             <div class="col-md-4">
                                 <input type="text" name="price" id="price" class="form-control form-control-sm" placeholder="Price">
@@ -68,9 +71,10 @@
                                 </select>
                             </div>
                             <div class="col-md-2 mt-1">
-                                <input type="text" id="color_name" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput">
+                                {{-- <input type="text" id="color_name" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput"> --}}
                              </div>
                         </div>
+                        
                         
                     </div>
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
@@ -167,6 +171,7 @@
                             <th scope="col">Sno</th>
                             <th scope="col">Code</th>
                             <th scope="col">Product</th>
+                            <th scope="col">Qty</th>
                             <th scope="col">Category</th>
                             <th scope="col">Sub category</th>
                             <th scope="col">Price</th>
@@ -184,12 +189,13 @@
                                 <td>{{++$count}}</td>
                                 <td>{{$list->product_code}}</td>
                                 <td>{{ucwords($list->product)}}</td>
-                                <td>{{$list->category}}</td>
-                                <td>{{$list->sub_category}}</td>
-                                <td>{{$list->price}}</td>
+                                <td>{{$list->qty}}</td>
+                                <td>{{ucwords($list->category)}}</td>
+                                <td>{{ucwords($list->sub_category)}}</td>
+                                <td>{{$list->price}}Rs</td>
                                 <td>{{$list->size}}</td>
                                  <td>
-                                 <input type="text" id="color_name" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput">
+                                 <input type="text" id="color_name" disabled style="width:30px;background-color:{{$list->color}};" id="colorinput">
 
                                 </td> 
                                 {{-- <td>{{$list->color}}</td> --}}
@@ -360,9 +366,10 @@
 
                         // $('#sub_category_id').val(response.product.sub_category_id);
                         $('#product_name').val(response.product.product);
+                        $('#qty').val(response.product.qty);
                         $('#price').val(response.product.price);
-                        $('#size_id').val(response.product.size);
-                        $('#color_id').val(response.product.color);
+                        $('#size_id').val(response.product.size_id);
+                        $('#color_id').val(response.product.color_id);
                         // $('#password').val(response.user.password);
 
                         $('#updateProductBtn').val(response.product.id);

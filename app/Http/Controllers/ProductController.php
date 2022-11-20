@@ -25,8 +25,8 @@ class ProductController extends Controller
         // return $barcode;
         $products = Product::Join('categories','categories.id','=','products.category_id')
                     ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
-                    ->join('sizes','sizes.id','=','products.size')
-                    ->join('colors','colors.id','=','products.color')
+                    ->join('sizes','sizes.id','=','products.size_id')
+                    ->join('colors','colors.id','=','products.color_id')
                     ->get(['products.*','categories.category',
                         'sub_categories.sub_category',
                         'sizes.size',
@@ -46,6 +46,7 @@ class ProductController extends Controller
             'category_id' => 'required|max:191',
             'sub_category_id'=>'required|max:191',
             'product_name'=>'required|max:191',
+            'qty'=>'required|max:191',
             'price'=>'required|max:191',
             'size_id'=>'required|max:191',
             'color_id'=>'required|max:191',
@@ -61,7 +62,7 @@ class ProductController extends Controller
 
             $product_code = rand(0000000001,9999999999);
             $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40);
+            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
             // $product_code = (rand(00000001,99999999));
 
             $model = new Product;
@@ -69,10 +70,10 @@ class ProductController extends Controller
             $model->category_id = $req->input('category_id');
             $model->sub_category_id = $req->input('sub_category_id');
             $model->product = $req->input('product_name');
+            $model->qty = $req->input('qty');
             $model->price = $req->input('price');
             $model->size = $req->input('size_id');
             $model->color = $req->input('color_id');
-            $model->barcode = $barcode;
            
             if($model->save()){
                 return response()->json([   
@@ -84,9 +85,7 @@ class ProductController extends Controller
 
     
     public function editProduct($product_id)
-    
     {
-        // alert($product_id);
         $product = Product::find($product_id);
 
         $sub_category = SubCategory::where(['category_id'=>$product->category_id])->get();
@@ -113,12 +112,13 @@ class ProductController extends Controller
     public function updateProduct(Request $req, $product_id)
     {
         $validator = Validator::make($req->all(),[
-            // 'category_id' => 'required|max:191',
-            // 'sub_category_id'=>'required|max:191',
-            // 'product_name'=>'required|max:191',
-            // 'price'=>'required|max:191',
-            // 'size_id'=>'required|max:191',
-            // 'color_id'=>'required|max:191',
+            'category_id' => 'required|max:191',
+            'sub_category_id'=>'required|max:191',
+            'product_name'=>'required|max:191',
+            'price'=>'required|max:191',
+            'size_id'=>'required|max:191',
+            'color_id'=>'required|max:191',
+            'qty'=>'required|max:191',
         ]);
 
         if($validator->fails())
@@ -133,9 +133,11 @@ class ProductController extends Controller
             $model->category_id = $req->input('category_id');
             $model->sub_category_id = $req->input('sub_category_id');
             $model->product = $req->input('product_name');
+            $model->qty = $req->input('qty');
             $model->price = $req->input('price');
-            $model->size = $req->input('size_id');
-            $model->color = $req->input('color_id');
+            $model->size_id = $req->input('size_id');
+            $model->color_id = $req->input('color_id');
+            $model->date = date('Y-m-d');
            
             
             if($model->save()){

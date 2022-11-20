@@ -24,5 +24,7 @@ class MyApp {
     
     const READY_MADE = 6;
 
+    const STATUS = 0;
+
 
 }
