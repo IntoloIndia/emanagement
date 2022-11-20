@@ -21,8 +21,8 @@ class CreateProductsTable extends Migration
             $table->string('product')->nullable();
             $table->integer('qty')->nullable();
             $table->string('price')->nullable();
-            $table->integer('size_id')->nullable();
-            $table->integer('color_id')->nullable();
+            $table->integer('size_id')->default(0);
+            $table->integer('color_id')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->integer('sell')->default(0);
