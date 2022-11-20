@@ -12,10 +12,12 @@ class UserController extends Controller
 {
     public function index(){
         $roles = Role::all();
-        $allUser = User::all();
+        $Users = User::join('roles','roles.id','=','users.role_id')->
+                    get(['users.*','roles.role']);
+        // $Users = User::all();
         return view('users',[
             'roles' => $roles,
-            'allUser' =>$allUser
+            'Users' =>$Users
         ]);
     }
 
