@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Size;
 use App\Models\Color;
 use Validator;
+use Picqer;
 
 class ProductController extends Controller
 {
@@ -42,6 +43,12 @@ class ProductController extends Controller
                 'errors'=>$validator->messages("plz  all field required"),
             ]);
         }else{
+
+            $product_code = rand(0000000001,9999999999);
+            $generate = new Picqer\Barcode\BarcodeGeneratorHTML();
+            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+            return $barcode;
+            
             $model = new Product;
             $model->category_id = $req->input('category_id');
             $model->sub_category_id = $req->input('sub_category_id');
