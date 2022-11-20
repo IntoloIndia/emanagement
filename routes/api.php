@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\AuthAPIController;
 use App\Http\Controllers\API\UserAPIController;
 use App\Http\Controllers\API\MasterAPIController;
+use App\Http\Controllers\API\ProductAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,11 @@ Route::get('/users', [UserAPIController::class, 'getUsers']);
 Route::controller(MasterAPIController::class)->group(function () {
     Route::get('get-category', 'getCategory');
     Route::get('get-sub-category/{category_id}', 'getSubCategory');
+});
+
+Route::controller(ProductAPIController::class)->group(function () {
+    Route::get('get-product', 'getProduct');
+    // Route::get('get-sub-category/{category_id}', 'getSubCategory');
 });
 
 Route::get('/admin', [AdminController::class, 'index']);

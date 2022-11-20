@@ -27,5 +27,5 @@ class MasterAPIController extends Controller
         ]); 
     }
 
-
+    
 }
