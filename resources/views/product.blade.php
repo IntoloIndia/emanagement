@@ -359,7 +359,11 @@
                         $('#saveProductBtn').addClass('hide');
                         $('#updateProductBtn').removeClass('hide');
                         $('#category_id').val(response.product.category_id);
-                        $('#sub_category_id').val(response.product.sub_category_id);
+
+                        $('#sub_category_id').html("");
+                        $('#sub_category_id').append(response.html);
+
+                        // $('#sub_category_id').val(response.product.sub_category_id);
                         $('#product_name').val(response.product.product);
                         $('#price').val(response.product.price);
                         $('#size_id').val(response.product.size);
