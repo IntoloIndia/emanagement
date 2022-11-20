@@ -73,9 +73,7 @@ class ProductController extends Controller
 
     
     public function editProduct($product_id)
-    
     {
-        // alert($product_id);
         $product = Product::find($product_id);
         return response()->json([
             'status'=>200,

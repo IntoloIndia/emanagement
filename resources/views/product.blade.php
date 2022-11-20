@@ -26,7 +26,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <select id="category_id" name="category_id" class="form-select form-select-sm">
+                                <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
                                     <option selected disabled >Category</option>
                                     @foreach ($categories as $list)
                                     <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
