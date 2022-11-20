@@ -19,9 +19,15 @@ class CreateProductsTable extends Migration
             $table->string('category_id')->nullable();
             $table->string('sub_category_id')->nullable();
             $table->string('product')->nullable();
+            $table->integer('qty')->nullable();
             $table->string('price')->nullable();
-            $table->string('size')->nullable();
-            $table->string('color')->nullable();
+            $table->string('size_id')->nullable();
+            $table->string('color_id')->nullable();
+            $table->date('date')->nullable();
+            $table->string('time')->nullable();
+            $table->number('sell')->default(0);
+            $table->number('sell_by')->default(0);
+            $table->number('status')->default(0);
             $table->text('barcode')->nullable();
             $table->timestamps();
         });
