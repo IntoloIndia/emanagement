@@ -18,6 +18,10 @@ class ProductController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
+        // $product_code = rand(0000000001,9999999999);
+        // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+        // return $barcode;
         return view('product',[
             "categories"=>$categories,
             'sizes' => $sizes,
@@ -45,10 +49,10 @@ class ProductController extends Controller
         }else{
 
             $product_code = rand(0000000001,9999999999);
-            $generate = new Picqer\Barcode\BarcodeGeneratorHTML();
+            $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
             $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
             return $barcode;
-            
+
             $model = new Product;
             $model->category_id = $req->input('category_id');
             $model->sub_category_id = $req->input('sub_category_id');
