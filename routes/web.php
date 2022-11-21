@@ -8,10 +8,10 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeColorController;
-// use App\Http\Controllers\ColorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ManageStockController;
 
 use App\MyApp;
 /*
@@ -97,11 +97,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
-    // Route::controller(ColorController::class)->group(function () {
-    //     Route::get('admin/color', 'index');
-    //     Route::post('admin/save-color', 'saveColor');
-    // });
-
     Route::controller(ProductController::class)->group(function () {
         Route::get('admin/product', 'index');
         Route::post('admin/save-product', 'saveProduct');
@@ -111,6 +106,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
     
+    Route::controller(ManageStockController::class)->group(function () {
+        Route::get('admin/manage-stock', 'index');
+    });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
 });
@@ -129,17 +127,22 @@ Route::group(['middleware'=>'billing_auth'], function(){
         // Route::post('/orders', 'store');
     });
 
-    Route::controller(SizeController::class)->group(function () {
-        Route::get('size', 'index');
+    Route::controller(SizeColorController::class)->group(function () {
+        Route::get('size-color', 'index');
+        //size
         Route::post('save-size', 'saveSize');
-    });
+        Route::get('edit-size/{size_id}', 'editSize');
+        Route::post('update-size/{size_id}', 'updateSize'); 
+        Route::get('delete-size/{size_id}', 'deleteSize');
 
-    Route::controller(ColorController::class)->group(function () {
-        Route::get('color', 'index');
+        //color
         Route::post('save-color', 'saveColor');
+        Route::get('edit-color/{color_id}', 'editColor');
+        Route::post('update-color/{color_id}', 'updateColor'); 
+        Route::get('delete-color/{color_id}', 'deleteColor');
     });
 
-
+    
     Route::get('logout', [AuthController::class, 'logout']);
 });
 

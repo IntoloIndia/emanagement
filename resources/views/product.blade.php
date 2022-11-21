@@ -45,10 +45,10 @@
                             <div class="col-md-6">
                                 <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
                             </div>
-                            <div class="col-md-2">
-                                <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="qty">
+                            <div class="col-md-3">
+                                <input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="qty">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <input type="text" name="price" id="price" class="form-control form-control-sm" placeholder="Price">
                             </div>
                         </div>
@@ -113,7 +113,7 @@
 
 <div class="row mb-3 ">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-        <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+        <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Add</button>
     </div>
 </div>
 
@@ -192,10 +192,10 @@
                                 <td>{{$list->qty}}</td>
                                 <td>{{ucwords($list->category)}}</td>
                                 <td>{{ucwords($list->sub_category)}}</td>
-                                <td>{{$list->price}}Rs</td>
+                                <td>{{$list->price}} </td>
                                 <td>{{$list->size}}</td>
                                  <td>
-                                 <input type="text" id="color_name" disabled style="width:30px;background-color:{{$list->color}};" id="colorinput">
+                                 <input type="text" id="color_name" disabled style="width:20px; height:20px; background-color:{{$list->color}};" id="colorinput">
 
                                 </td> 
                                 {{-- <td>{{$list->color}}</td> --}}

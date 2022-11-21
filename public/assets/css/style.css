@@ -55,7 +55,7 @@ tbody tr #count_item:first-child:before
 }
 
 .card-header {
-  padding: 10px 10px;
+  padding: 8px 10px;
   background-color: #EAEDED;
 }
 
@@ -111,6 +111,11 @@ tbody tr #count_item:first-child:before
 .cursor-pointer{
   cursor: pointer;
 }
+
+/* .form-control, .form-select {
+  margin-bottom: 0px;
+  padding: 4px 5px;
+} */
 
 .accordion-button {
   position: relative;
