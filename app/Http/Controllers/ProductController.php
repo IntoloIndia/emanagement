@@ -24,14 +24,14 @@ class ProductController extends Controller
         // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40);
         // return $barcode;
         $products = Product::Join('categories','categories.id','=','products.category_id')
-                    ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
-                    ->join('sizes','sizes.id','=','products.size_id')
-                    ->join('colors','colors.id','=','products.color_id')
-                    ->get(['products.*','categories.category',
-                        'sub_categories.sub_category',
-                        'sizes.size',
-                        'colors.color'
-                    ]);
+                ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
+                ->join('sizes','sizes.id','=','products.size_id')
+                ->join('colors','colors.id','=','products.color_id')
+                ->get(['products.*','categories.category',
+                    'sub_categories.sub_category',
+                    'sizes.size',
+                    'colors.color'
+                ]);
         return view('product',[
             "categories"=>$categories,
             'sizes' => $sizes,
@@ -60,7 +60,7 @@ class ProductController extends Controller
             ]);
         }else{
 
-            $product_code = rand(0000000001,9999999999);
+            $product_code = rand(0000000001,9999999999); 
             $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
             $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
             // $product_code = (rand(00000001,99999999));
@@ -72,8 +72,8 @@ class ProductController extends Controller
             $model->product = $req->input('product_name');
             $model->qty = $req->input('qty');
             $model->price = $req->input('price');
-            $model->size = $req->input('size_id');
-            $model->color = $req->input('color_id');
+            $model->size_id = $req->input('size_id');
+            $model->color_id = $req->input('color_id');
            
             if($model->save()){
                 return response()->json([   
@@ -99,7 +99,6 @@ class ProductController extends Controller
                 $html .= "<option value='".$list->id."'>".ucwords($list->sub_category)."</option>";
             }
         }
-
 
         return response()->json([
             'status'=>200,
@@ -139,7 +138,6 @@ class ProductController extends Controller
             $model->color_id = $req->input('color_id');
             $model->date = date('Y-m-d');
            
-            
             if($model->save()){
                 return response()->json([
                     'status'=>200,

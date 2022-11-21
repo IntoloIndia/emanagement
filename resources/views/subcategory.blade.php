@@ -22,17 +22,17 @@
                   <div id="subcategory_err"></div>
                   {{-- <div class="row"> --}}
                     <div class="row mt-1">
-                      <div class="col-md-4">
-                          <label for="select_category" class="form-label">Category</label>
-                      </div>
-                      <div class="col-md-8">
-                        <select class="form-select form-select-sm" aria-label="Default select example" name="category_id" id="category_id">
-                          {{-- <option selected>Other</option> --}}
-                          @foreach ($Categories as $list)
-                          <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
-                          @endforeach
-                        </select>
-                      </div>
+                        <div class="col-md-4">
+                            <label for="select_category" class="form-label">Category</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-select form-select-sm" aria-label="Default select example" name="category_id" id="category_id">
+                                <option selected>Choose...</option>
+                                @foreach ($Categories as $list)
+                                    <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                   </div>
 
                   <div class="row mt-1">
