@@ -15,6 +15,32 @@
 
 <div class="row ">
 
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h4>Congratulations John!</h4>
+                <p class="card-text">Best seller of the month.</p>
+                <a href="#" class="btn btn-info">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 >Statistics</h4>
+                <p class="card-text">Total 48.5% growth this month</p>
+
+                <div class="row">
+                    <div class="col-md-3">Sales</div>
+                    <div class="col-md-3">Customers</div>
+                    <div class="col-md-3">Products</div>
+                    <div class="col-md-3">Revenue</div>
+                </div>
+                <a href="#" class="btn btn-info">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+
     {{-- <div class="col-lg-3 col-6">
       <div class="small-box ">
         <div class="inner">
@@ -71,11 +97,11 @@
 
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
 
             <div class="card-header">
-                <h3 class="card-title">Sales</h3>
+                <h4 class="card-title">Today Sales</h4>
 
                 <div class="card-tools">
                     <div class="input-group input-group-sm" style="width: 250px;">
@@ -96,54 +122,21 @@
                     <tr>
                       <th>SN</th>
                       <th>Product</th>
-                      <th>Date</th>
                       <th>Sales By</th>
                       <th>Qty</th>
+                      <th>Date</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Jeans</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>55</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>T-Shirt</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>5</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Shirt</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>5</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jeans</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>5</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jeans</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>5</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jeans</td>
-                      <td>19-11-2022</td>
-                      <td>S1</td>
-                      <td>5</td>
-                    </tr>
+                    @foreach ($sales as $key => $list)
+                      <tr>
+                        <td>{{++$key}}</td>
+                        <td>{{ucwords($list->product)}}</td>
+                        <td>S1</td>
+                        <td><span class="badge bg-success">{{$list->qty}}</span></td>
+                        <td>19-11-2022</td>
+                      </tr>
+                    @endforeach
                     
                   </tbody>
                 </table>
@@ -151,6 +144,52 @@
 
         </div>
     </div>
+
+    <div class="col-md-4">
+        <div class="card">
+
+            <div class="card-header">
+                <h4 class="card-title">Stock</h4>
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0" style="height: 350px;">
+                <table class="table table-head-fixed text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>SN</th>
+                      <th>Category</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($sales as $key => $list)
+                      <tr>
+                        <td>{{++$key}}</td>
+                        <td>{{ucwords($list->product)}}</td>
+                        <td><span class="badge bg-success">{{$list->qty}}</span></td>
+                      </tr>
+                    @endforeach
+                    
+                  </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
 </div>
 
   
