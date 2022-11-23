@@ -25,7 +25,13 @@
                                     <select id="role_id" name="role_id" class="form-select form-select-sm">
                                         <option selected disabled >Choose...</option>
                                         @foreach ($roles as $list)
-                                            <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
+                                            @if ($list->id != MyApp::ADMINISTRATOR)
+                                                @if ($list->id == MyApp::OTHER)
+                                                    <option selected value="{{$list->id}}">{{ucwords($list->role)}}</option>
+                                                @else
+                                                    <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
+                                                @endif
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -35,7 +41,15 @@
                                     <label for="adminName" class="form-label">Name</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" name="name" id="name" class="form-control form-control-sm">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" name="name" id="name" class="form-control form-control-sm">
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="code" id="code" class="form-control form-control-sm" placeholder="User code">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-1">
@@ -113,9 +127,9 @@
                                 <tr>
                                     <td>{{++$count}}</td>
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
-                                    <td>{{($list->role ) }}</td>
-                                    <td>{{$list->name}}</td>
-                                    <td>S1</td>
+                                    <td>{{ucwords($list->role)}}</td>
+                                    <td>{{ucwords($list->name)}}</td>
+                                    <td>{{ucwords($list->code)}}</td>
                                     <td>{{$list->email}}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
@@ -253,6 +267,7 @@
                         $('#updateUserBtn').removeClass('hide');
                         $('#role_id').val(response.user.role_id);
                         $('#name').val(response.user.name);
+                        $('#code').val(response.user.code);
                         $('#email').val(response.user.email);
                         // $('#password').val(response.user.password);
 

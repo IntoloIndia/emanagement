@@ -8,12 +8,15 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeColorController;
-// use App\Http\Controllers\ColorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
+<<<<<<< HEAD
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\BusinessDetailsController;
+=======
+use App\Http\Controllers\ManageStockController;
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
 
 use App\MyApp;
 /*
@@ -127,11 +130,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
-    // Route::controller(ColorController::class)->group(function () {
-    //     Route::get('admin/color', 'index');
-    //     Route::post('admin/save-color', 'saveColor');
-    // });
-
     Route::controller(ProductController::class)->group(function () {
         Route::get('admin/product', 'index');
         Route::post('admin/save-product', 'saveProduct');
@@ -141,6 +139,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
     
+    Route::controller(ManageStockController::class)->group(function () {
+        Route::get('admin/manage-stock', 'index');
+    });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
 });
@@ -159,6 +160,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
 //         // Route::post('/orders', 'store');
 //     });
 
+<<<<<<< HEAD
 //     Route::controller(SizeController::class)->group(function () {
 //         Route::get('size', 'index');
 //         Route::post('save-size', 'saveSize');
@@ -172,6 +174,26 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
 //     Route::get('logout', [AuthController::class, 'logout']);
 // });
+=======
+    Route::controller(SizeColorController::class)->group(function () {
+        Route::get('size-color', 'index');
+        //size
+        Route::post('save-size', 'saveSize');
+        Route::get('edit-size/{size_id}', 'editSize');
+        Route::post('update-size/{size_id}', 'updateSize'); 
+        Route::get('delete-size/{size_id}', 'deleteSize');
+
+        //color
+        Route::post('save-color', 'saveColor');
+        Route::get('edit-color/{color_id}', 'editColor');
+        Route::post('update-color/{color_id}', 'updateColor'); 
+        Route::get('delete-color/{color_id}', 'deleteColor');
+    });
+
+    
+    Route::get('logout', [AuthController::class, 'logout']);
+});
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
 
 
 

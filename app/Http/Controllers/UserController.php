@@ -26,6 +26,7 @@ class UserController extends Controller
         $validator = Validator::make($req->all(),[
             'role_id' => 'required|max:191',
             'name'=>'required|max:191',
+            'code'=>'required|max:191',
             'email'=>'required|max:191',
             'password'=>'required|max:191',
         ]);
@@ -39,6 +40,7 @@ class UserController extends Controller
         }else{
             $model = new User;
             $model->role_id = $req->input('role_id');
+            $model->code = $req->input('code');
             $model->name = $req->input('name');
             $model->email = $req->input('email');
             $model->password = Hash::make($req->input('password')); 
@@ -66,6 +68,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($req->all(),[
             'role_id' => 'required|max:191',
+            'code' => 'required|max:191',
             'name' => 'required|max:191',
             'email' => 'required|unique:users,email,'.$user_id,
         ]);
@@ -78,6 +81,7 @@ class UserController extends Controller
         }else{
             $model = User::find($user_id);
             $model->role_id = $req->input('role_id');
+            $model->code = $req->input('code');
             $model->name = $req->input('name');
             $model->email = $req->input('email');
             if($req->input('password') !=""){

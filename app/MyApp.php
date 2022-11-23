@@ -6,6 +6,7 @@ class MyApp {
 
     const ADMINISTRATOR = 1;
     const BILLING = 2;
+    const OTHER = 3;
 
     const ACTIVE = 1;
     const INACTIVE = 0;
