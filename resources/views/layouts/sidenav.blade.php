@@ -85,6 +85,17 @@
                         <i class="fas fa-angle-right nav-icon"></i><p>Stock</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="customer" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Customer</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="business_details" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
+                    </a>
+                </li>
         </ul>
     </nav>
 

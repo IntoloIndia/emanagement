@@ -11,7 +11,12 @@ use App\Http\Controllers\SizeColorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
+<<<<<<< HEAD
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\BusinessDetailsController;
+=======
 use App\Http\Controllers\ManageStockController;
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
 
 use App\MyApp;
 /*
@@ -41,7 +46,35 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
 
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
-    Route::get('admin/billing', [BillingController::class, 'index']);
+    // Route::get('admin/billing', [BillingController::class, 'index']);
+
+    Route::controller(BillingController::class)->group(function () {
+        Route::get('admin/billing','index');
+        Route::post('admin/save-order', 'saveOrder');
+        Route::get('admin/get-item-price/{product_id}', 'getItemPrice');
+
+        Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+        
+    });
+
+    // business details 
+
+    Route::controller(BusinessDetailsController::class)->group(function () {
+        Route::get('admin/business_details','index');
+        Route::post('admin/save-company-details','saveCompanyDetail');
+        Route::get('admin/edit-company-details/{company_id}','editCompanyDetails');
+        Route::post('admin/update-company-details/{company_id}','updateCompanyDetails');
+        Route::get('admin/delete-company-details/{company_id}','deleteCompanyDetail');
+
+
+        
+    });
+
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('admin/customer','index');
+        Route::post('admin/save-order-customer', 'saveOrderCustomer');
+        
+    });
 
     Route::controller(AdminController::class)->group(function () {
         Route::get('admin/admin','index');
@@ -114,19 +147,34 @@ Route::group(['middleware'=>'admin_auth'], function(){
 });
 
 //billing
-Route::group(['middleware'=>'billing_auth'], function(){
+// Route::group(['middleware'=>'billing_auth'], function(){
 
-    Route::fallback(function () {
-        return view('404');
-    });
+//     Route::fallback(function () {
+//         return view('404');
+//     });
 
-    Route::get('billing', [BillingController::class, 'index']);
+//     // Route::get('billing', [BillingController::class, 'index']);
 
-    Route::controller(CategoryController::class)->group(function () {
-        Route::get('category', 'index');
-        // Route::post('/orders', 'store');
-    });
+//     Route::controller(CategoryController::class)->group(function () {
+//         Route::get('category', 'index');
+//         // Route::post('/orders', 'store');
+//     });
 
+<<<<<<< HEAD
+//     Route::controller(SizeController::class)->group(function () {
+//         Route::get('size', 'index');
+//         Route::post('save-size', 'saveSize');
+//     });
+
+//     Route::controller(ColorController::class)->group(function () {
+//         Route::get('color', 'index');
+//         Route::post('save-color', 'saveColor');
+//     });
+
+
+//     Route::get('logout', [AuthController::class, 'logout']);
+// });
+=======
     Route::controller(SizeColorController::class)->group(function () {
         Route::get('size-color', 'index');
         //size
@@ -145,6 +193,7 @@ Route::group(['middleware'=>'billing_auth'], function(){
     
     Route::get('logout', [AuthController::class, 'logout']);
 });
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
 
 
 

@@ -60,9 +60,15 @@ class ProductController extends Controller
             ]);
         }else{
 
+<<<<<<< HEAD
+            $product_code = rand(0000000001,9999999999);
+            // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+=======
             $product_code = rand(0000000001,9999999999); 
             $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
             $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
             // $product_code = (rand(00000001,99999999));
 
             $model = new Product;
@@ -74,6 +80,12 @@ class ProductController extends Controller
             $model->price = $req->input('price');
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
+<<<<<<< HEAD
+            $model->date = date('Y-m-d');
+            $model->time = date('g:i A');
+
+=======
+>>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
            
             if($model->save()){
                 return response()->json([   
@@ -137,6 +149,8 @@ class ProductController extends Controller
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
             $model->date = date('Y-m-d');
+            $model->time = date('g:i A');
+
            
             if($model->save()){
                 return response()->json([
