@@ -15,6 +15,16 @@ class CreateBillingsTable extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
+            $table->integer('customer_id')->nullable();
+            $table->integer('product_code')->nullable();
+            $table->integer('product_id')->nullable();
+            $table->integer('qty')->nullable();
+            $table->integer('size_id')->nullable();
+            $table->string('price')->nullable();
+            $table->float('amount')->nullable();
+            $table->date('date')->nullable();
+            $table->string('time')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
