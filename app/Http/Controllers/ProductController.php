@@ -23,10 +23,7 @@ class ProductController extends Controller
         // // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
         // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
         // // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 40);
-
         // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
-
-
         // return $barcode;
         $products = Product::Join('categories','categories.id','=','products.category_id')
                 ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
@@ -65,14 +62,15 @@ class ProductController extends Controller
             ]);
         }else{
 
-            $product_code = rand(0000000001,9999999999); 
 
+            $product_code = rand(0000000001,9999999999);
             // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
 
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
             $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 1, 40)) ;
+
 
             $model = new Product;
             $model->product_code = $product_code;
@@ -84,6 +82,8 @@ class ProductController extends Controller
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
             $model->barcode = $barcode;
+            $model->date = date('Y-m-d');
+            $model->time = date('g:i A');
            
             if($model->save()){
                 return response()->json([   
@@ -154,6 +154,7 @@ class ProductController extends Controller
             $model->color_id = $req->input('color_id');
             $model->date = date('Y-m-d');
             $model->barcode = $barcode;
+            $model->time = date('g:i A');
 
             if($model->save()){
                 return response()->json([

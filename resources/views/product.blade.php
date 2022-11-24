@@ -326,7 +326,7 @@
             $(document).on('click','.deleteProductBtn', function (e) {
                 e.preventDefault();
                 const product_id = $(this).val();
-                alert(product_id);
+                // alert(product_id);
                 $('#deleteProductModal').modal('show');
                 $('#yesDeleteProductBtn').val(product_id);
             });
