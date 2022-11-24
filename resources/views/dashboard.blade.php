@@ -15,7 +15,7 @@
 
 <div class="row ">
 
-    <div class="col-sm-4">
+    {{-- <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
                 <h4>Congratulations John!</h4>
@@ -39,7 +39,7 @@
                 <a href="#" class="btn btn-info">Go somewhere</a>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- <div class="col-lg-3 col-6">
       <div class="small-box ">
@@ -96,7 +96,7 @@
 </div>
 
 
-  <div class="row">
+  {{-- <div class="row">
     <div class="col-md-8">
         <div class="card">
 
@@ -190,7 +190,7 @@
     </div>
 
 
-</div>
+  </div> --}}
 
   
 

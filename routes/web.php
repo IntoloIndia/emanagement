@@ -104,6 +104,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-product/{product_id}', 'updateProduct');
         Route::get('admin/delete-product/{product_id}', 'deleteProduct');
 
+        Route::get('admin/barcode', 'getBarcode');
+
     });
     
     Route::controller(ManageStockController::class)->group(function () {

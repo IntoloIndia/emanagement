@@ -212,37 +212,66 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-md-3">
         <div class="card">
             <div class="card-header">
-                <b>Stock</b>
+                <b>Products Barcode</b>
             </div>
-            <div class="card-body">
-                <div class="responsiv-table">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Sno</th>
-                            <th scope="col">Product</th>
-                            <th scope="col">Qty</th>
-                            {{-- <th scope="col">Handle</th> --}}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Jeens</td>
-                            <td>10</td>
-                            {{-- <td>@mdo</td> --}}
-                          </tr>
-                          
-                        </tbody>
-                      </table>
-                </div>  
+            <div class="card-body" id="barcode_body">
+                <div class="row">
+                    @foreach ($products as $list)
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img src="{{$list->barcode}}"><br/>
+                                <span><b>{{$list->product_code}}</b></span> <br/>
+                                <span>  <b>Size -</b>  {{strtoupper($list->size)}} , <b>Rs -</b> {{$list->price}}</span> 
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div> 
             </div>
+            {{-- <div class="col-md-12 mb-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <button type="button" id="printBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Print</button>
+                </div>
+            </div> --}}
         </div>
     </div>
 </div>
+
+<div class="col-md-12 mb-1">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+        <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Open</button>
+    </div>
+</div>
+
+<section>
+    <div id="newcontent">
+        <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" id="show_barcode_body">
+                    
+                  </div>
+                  <div class="modal-footer">
+                      <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                        <button type="button" id="printBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Print</button>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</section>
 
 @endsection
 
@@ -307,6 +336,27 @@
                 const product_id = $(this).val();
                 // alert(product_id)
                 deleteProduct(product_id);
+            });
+
+
+            $(document).on('click','#openBtn', function (e) {
+                e.preventDefault();
+                // $('#generateInvoiceModal').modal('show');
+                var modal_data = $('#barcode_body').html();
+                $('#show_barcode_body').append(modal_data);
+                $('#generateInvoiceModal').modal('show');
+                
+                // $('#product_err').html('');
+                // $('#product_err').removeClass('alert alert-danger');
+                // $("#productForm").trigger("reset"); 
+                // $('#saveProductBtn').removeClass('hide');
+                // $('#updateProductBtn').addClass('hide');
+            });
+
+            $(document).on('click','#printBtn', function (e) {
+                e.preventDefault();
+                // const product_id = $(this).val();
+                printBarcode();
             });
 
 
@@ -413,7 +463,6 @@
             });
         }
 
-
         function deleteProduct(product_id){
             $.ajax({
                 type: "get",
@@ -428,6 +477,17 @@
             });
         }
 
+        function printBarcode(){
+            const section = $("section");
+            // const modalBody = $("#invoiceModalPrint").detach();
+            const modalBody = $("#generateInvoiceModal").detach();
+
+            section.empty();
+            section.append(modalBody);
+            window.print();
+            
+            window.location.reload();
+        }
         
     </script>
 @endsection
