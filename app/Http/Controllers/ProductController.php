@@ -194,9 +194,101 @@ class ProductController extends Controller
                     'sizes.size',
                     'colors.color'
                 ]);
-        return view('barcode',[
-            'products' => $products
-        ]);
+
+
+                $html = "";
+                $html .="<div class='modal-dialog modal-sm'>";
+                    $html .="<div class='modal-content'>";
+                        $html .="<div class='modal-header'>";
+                            $html .="<h5 class='modal-title' id='staticBackdropLabel'>Invoice</h5>";
+                            $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                        $html .="</div>";
+        
+                            $html .="<div class='modal-body-wrapper'>";
+        
+        
+                                $html .="<div class='modal-body' id='show_barcode_body'>";
+            
+                                    $html .="<div class='row text-center'>";
+                                        $html .="<h5><b>Shivhare Hotel</b></h5>";
+                                        $html .="<small>Dhuma</small>";
+                                    $html .="</div>";
+                                    $html .="<hr>";
+                                    foreach ($products as $key => $list) {
+                                        $html .="<div class='row' style='page-break-after: always;'>";
+                                            $html .="<div class='col-md-6'>";
+                                                $html .="<span>Bill No : <small>1</small></span><br>";
+                                                $html .="<span>Payment : <small>2</small></span> ";
+                                                $html .="</div>";
+                                                $html .="<div class='col-md-6 '>";
+                                                // $html .="<span class='float-end'>Date : <small>3</small></span><br>";
+                                                // $html .="<span class='float-end'>Time : <small>4</small></span> ";
+                                                $html .="<img src='".asset('public/assets/barcodes/barcode.gif')."' > ";
+                                            $html .="</div>";
+                                        $html .="</div>";
+                                        $html .="<hr>";
+                                    }
+                                    // $html .="<div class='row'>";
+                                    //     $html .="<table class='table table-striped'>";
+                                    //         $html .="<thead>";
+                                    //             $html .="<tr>";
+                                    //                 $html .="<th>#</th>";
+                                    //                 $html .="<th>Item Name</th>";
+                                    //                 $html .="<th>Rate</th>";
+                                                    
+                                    //             $html .="</tr>";
+                                    //         $html .="</thead>";
+                                    //         $html .="<tbody>";
+                                    //         foreach ($products as $key => $list) {
+                                    //             $html .="<tr>";
+                                    //                 $html .="<td>".++$key."</td>";
+                                    //                 // $html .="<td>".ucwords($list->item_name)."</td>";
+                                    //                 // $html .="<td>".$list->price."</td>";
+                                    //                 // $html .="<td>".$list->qty."</td>";
+                                    //                 // $html .="<td>".$list->amount."</td>";
+                                    //             $html .="</tr>";
+                                    //         }
+                                                
+                                    //         $html .="</tbody>";
+                                    //         $html .="<tfoot>";
+                                    //             $html .="<tr>";
+                                    //                 $html .="<td colspan='2'></td>";
+                                    //                 $html .="<td><b>Total :</b></td>";
+                                    //                 // $html .="<td>".$key."</td>";
+                                    //                 // $html .="<td>".$order->total_amount."</td>";
+                                    //             $html .="</tr>";
+                                    //         $html .="</tfoot>";
+                                    //     $html .="</table>";
+                                    // $html .="</div>";
+
+                                    // $html .="<hr>";
+
+                                    // $html .="<div class='row text-center'>";
+                                    //     $html .="<h6><b>Thank You Have a Nice Day </b></h6>";
+                                    //     $html .="<small>Visit Again !</small>";
+                                    // $html .="</div>";
+            
+                                $html .="</div>";
+            
+        
+                            $html .="</div>";
+        
+                            $html .="<div class='modal-footer'>";
+                                $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
+                                $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id=''>Print</button>";
+                            $html .="</div>";
+        
+                    $html .="</div>";
+                $html .="</div>";
+
+            return response()->json([
+                'status'=>200,
+                'html'=>$html
+            ]);
+
+        // return view('barcode',[
+        //     'products' => $products
+        // ]);
     }
 
 }
