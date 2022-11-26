@@ -54,7 +54,7 @@
 
     </div>
 
-    <body onload="document.pos.barcode.focus();">
+    {{-- <body onload="document.pos.barcode.focus();">
         <form action="">
         <div class="row">
             <h1>bardcode</h1>
@@ -67,9 +67,9 @@
             {{++$count}}
         </div>
         <button onclick="add()">call </button>
-    </form>
+        </form>
         
-    </body>
+    </body> --}}
 
 @endsection
 

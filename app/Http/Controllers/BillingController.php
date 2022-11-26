@@ -16,10 +16,16 @@ class BillingController extends Controller
     {
         $products = Product::all();
         $sizes = Size::all();
-        // $customers_billing = Billing::all();
-        $customers_billing = Billing::join('products','products.id','=','billings.product_id')
-                    ->get(['billings.*','products.product']);
-        return view('billing',[
+        $customers_billing = Customer::all();
+        // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
+        // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
+        // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
+                        // ->groupBy('customers.customer_name')
+                    // ->get(['customers.*','billings.amount','billings.qty']);
+                    // ->get(['customers.*','billings.amount','billings.qty']);
+                    // print_r($customers_billing);
+                    
+        return view('billing',[ 
             'products'=> $products,
             'sizes' => $sizes,
             'customers_billing' => $customers_billing
@@ -92,7 +98,7 @@ class BillingController extends Controller
 
     public function getItemPrice($product_code)
     {
-        $product = Product::where(['product_code'=>$product_code])->get();
+        $product = Product::where(['product_code'=>$product_code])->first();
         // print_r($product);
         // $product = Product::find($product_code);
                         
@@ -102,15 +108,17 @@ class BillingController extends Controller
 
     }
 
+
+
     public function generateInvoice($customer_id)
     {
         
 
                  $order =Customer::find($customer_id);
         
-                $order_items =Billing::join('products','products.id','=','billings.product_id')
-                        // ->where('customers.customer_id',$order->id)
-                            ->get(['billings.*','products.product']); 
+                $order_items =Billing::join('customers','customers.id','=','billings.customer_id')
+                        ->where('billings.customer_id',$order->id)
+                            ->get(['billings.*',]); 
                             
                     //  print_r($order_items);     
                     // print_r($order_items);    
@@ -127,7 +135,7 @@ class BillingController extends Controller
         $html .="<div class='modal-dialog modal-sm'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'>Invoice</h5>";
+                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$order->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
 
@@ -138,7 +146,7 @@ class BillingController extends Controller
 
                         $html .="<div class='row text-center'>";
                             $html .="<h5><b>Mangaldeep </b></h5>";
-                            // $html .="<small>Jabalpur</small>";
+                            $html .="<small>Jabalpur</small>";
                         $html .="</div>";
                         $html .="<hr>";
 
@@ -148,8 +156,8 @@ class BillingController extends Controller
                                 // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
                             $html .="</div>";
                             $html .="<div class='col-md-6 '>";
-                                // $html .="<span class='float-end'>Date : <small>".date('d/M/Y', strtotime($order->order_date))."</small></span><br>";
-                                // $html .="<span class='float-end'>Time : <small>".$order->order_time."</small></span> ";
+                                $html .="<span class='float-end'>Date : <small>".date('d/M/Y', strtotime($order->date))."</small></span><br>";
+                                $html .="<span class='float-end'>Time : <small>".$order->time."</small></span> ";
                             $html .="</div>";
                         $html .="</div>";
                         $html .="<hr>";
@@ -169,7 +177,7 @@ class BillingController extends Controller
                                 foreach ($order_items as $key => $list) {
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
-                                        $html .="<td>".ucwords($list->product)."</td>";
+                                        $html .="<td>".ucwords($list->product_id)."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->amount."</td>";
@@ -181,8 +189,8 @@ class BillingController extends Controller
                                     $html .="<tr>";
                                         $html .="<td colspan='2'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        // $html .="<td>".$key."</td>";
-                                        // $html .="<td>".$order->total_amount."</td>";
+                                        $html .="<td>".$key."</td>";
+                                        $html .="<td>".$order->total_amount."</td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -200,7 +208,7 @@ class BillingController extends Controller
 
                 $html .="<div class='modal-footer'>";
                     $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
-                    // $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
                 $html .="</div>";
 
             $html .="</div>";

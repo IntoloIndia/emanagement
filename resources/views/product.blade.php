@@ -5,6 +5,26 @@
   #colorinput{
     border: none;
   }
+
+  /* @media print {
+  h2 { 
+    page-break-before: always;
+  } */
+
+/* @media print {
+    @page {
+        size: 300in 200in ;
+    }
+} */
+
+@media print {
+  .page > span {
+    font-size: 44px;
+  }
+  
+}
+
+
   
 </style>
 @endsection
@@ -119,46 +139,7 @@
 </div>
 
 <div class="row">
-    {{-- <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Products</h3>
-                <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body table-responsive p-0" style="height: 450px;">
-                <table class="table table-head-fixed text-nowrap">
-                    <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Category</th>
-                            <th>Sub Category</th>
-                            <th>Product Code</th>
-                            <th>Product Name</th>
-                            <th>Price</th>
-                            <th>Size</th>
-                            <th>Color</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> --}}
-
+   
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
@@ -226,21 +207,35 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body" id="barcode_body">
-                <div class="row">
-                        @foreach ($products as $list)
-                            <div class="col-md-12" >
-                                <div class="card">
-                                    {{-- <div class="card-body" style="transform:rotate(90deg); " > --}}
-                                    <div class="card-body">
-                                        <img src="{{$list->barcode}}" style=" height:40px;"><br/>
-                                        <span><b>{{$list->product_code}}</b></span> <br/>
-                                        <span>  {{strtoupper($list->size)}} / {{$list->price}}</span> 
+            <div class="card-body page" id="barcode_body" >
+                    @foreach ($products as $list)
+                        {{-- <div class="card text-center" style='page-break-after: always; '> --}}
+                        <div class="card " >
+                            <div class="card-body"style="margin-bottom: 80px; margin-top:80px; ">
+
+                                <div class="row" >
+                                    <h1 class="tect-center" style="font-size: 70px; ">MANGALDEEP CLOTHS LLP</h1>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-6">
+                                        <h1 style="font-size: 70px; ">Prod : {{$list->product_code}}</h1> <br/>
+                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
+                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
+                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
+                                    </div>
+                                    <div class="col-md-6" >
+                                        {{-- <img src="{{$list->barcode}}" ><br/> --}}
+                                        <img src="{{asset('public/assets/barcodes/barcode.gif')}}" style="width: 100%; height:100%;">
                                     </div>
                                 </div>
+
+                                    {{-- <img src="{{$list->barcode}}" ><br/>
+                                    <span><b>{{$list->product_code}}</b></span> <br/>
+                                    <span> {{strtoupper($list->size)}} / {{$list->price}}</span>  --}}
                             </div>
-                        @endforeach
-                </div> 
+                        </div>
+                        {{-- </div> --}}
+                    @endforeach
             </div>
             {{-- <div class="col-md-12 mb-1">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -249,18 +244,45 @@
             </div> --}}
         </div>
     </div>
+
+
 </div>
+
+
+{{-- <div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <div class="header-title"> <a href="#" class="btn btn-info btn-sm" onclick="printDiv('printableArea')" >
+                <i class="fa fa-print"></i>
+                Print
+            </a>
+        </div>
+        <div class="panel-body" id="printableArea">
+            @foreach($products as $product)
+            <div class="col-md-2" style="padding: 10px; border: 1px solid #adadad; " align="center">
+                <p>{{$product->name}}</p>
+                <?php echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($product->code, "c128A",1,33,array(1,1,1), true) . '"   />'; ?>
+                <br>
+                <small style="font-size: 8px !important;"><b>{{$product->code}}</b></small>
+                <p style="line-height: 12px !important; font-size: 8px !important;">
+                    <b>Price: {{$product->sale_price}} </b>
+                </p>
+            </div>
+            @endforeach     
+        </div>
+    </div>
+</div> --}}
 
 <section>
     <div id="newcontent">
         <div class="modal fade" id="generateBarcodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Barcodes</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="show_barcode_body">
+                    <div class="modal-body" id="show_barcode_body" style=''>
                         
                     </div>
                     <div class="modal-footer">
@@ -340,18 +362,16 @@
 
             $(document).on('click','#openBtn', function (e) {
                 e.preventDefault();
-                // $('#generateInvoiceModal').modal('show');
+
                 var modal_data = $('#barcode_body').html();
-                // $('#show_barcode_body').html('');
+                $('#show_barcode_body').html('');
                 $('#show_barcode_body').append(modal_data);
                 $('#generateBarcodeModal').modal('show');
                 
-                // $('#product_err').html('');
-                // $('#product_err').removeClass('alert alert-danger');
-                // $("#productForm").trigger("reset"); 
-                // $('#saveProductBtn').removeClass('hide');
-                // $('#updateProductBtn').addClass('hide');
+                // getBarcode();
             });
+
+
 
             $(document).on('click','#printBtn', function (e) {
                 e.preventDefault();
@@ -361,6 +381,29 @@
 
 
         });
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+        function getBarcode() {
+            $.ajax({
+                type: "get",
+                url: "barcode",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.status == 200) {
+                        $('#generateBarcodeModal').html(response.html);
+                        $('#generateBarcodeModal').modal('show');
+                    }
+                }
+            });
+        }
 
         function saveProduct() {
             $.ajaxSetup({
@@ -478,12 +521,13 @@
         }
 
         function printBarcode(){
-
             var backup = document.body.innerHTML;
             var div_content = document.getElementById("show_barcode_body").innerHTML;
             document.body.innerHTML = div_content;
             window.print();
             document.body.innerHTML = backup;
+
+            
 
             // const section = $("section");
             // // const modalBody = $("#show_barcode_body").detach();

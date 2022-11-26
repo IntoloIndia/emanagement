@@ -39,6 +39,7 @@
                                 <b>Items</b>
                             </div>
                             <div class="col-6 d-flex justify-content-end">
+                                {{-- <input type="text" id="addItemBtn"> --}}
                                 <button class="btn btn-primary btn-sm " id="addItemBtn"> Add item</button>
                             </div>
                         </div>
@@ -51,8 +52,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Sno</th>
-                                        <th scope="col">Item</th>
                                         <th scope="col">Code</th>
+                                        <th scope="col">Item</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">Price</th>
@@ -141,10 +142,10 @@
                     <thead>
                         <tr>
                             <th scope="col">Sno</th>
-                            <th scope="col">Item</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Mobile</th>
+                            {{-- <th scope="col">Amount</th> --}}
+                            <th scope="col">Print</th>
                             </tr>
                     </thead>
                     <tbody id="item_list">
@@ -154,15 +155,15 @@
                         @foreach ($customers_billing as $item)
                         <tr>
                             <td>{{++$count}}</td>
-                            <td>{{$item->product}}</td>
-                            <td>{{$item->qty}}</td>
-                            <td>{{$item->amount}}</td>
+                            <td>{{ucwords($item->customer_name)}}</td>
+                            <td>{{$item->mobile_no}}</td>
+                            {{-- <td>{{$item->amount}}</td> --}}
 
                             <td>
                                 {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
-                                <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button>
+                                {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
                                 <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
-                                <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button>
+                                {{-- <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button> --}}
                                 
                             </td>
                             
@@ -184,16 +185,23 @@
             <td id="count_item"></td>
             
             <td style="width: 200px;">
-                <select name="product_id[]"  id="product_id" class=" form-select form-select-sm item">
-                    <option selected disabled>Choose..</option>
+                <input type="text" name="product_code[]"  id="product_code" class="form-control form-control-sm product_code">
+            </td>
+
+            <td style="width: 200px;">
+                {{-- <select name="product_id[]"  id="product_id" class=" form-select form-select-sm product_id">
+                    <option selected>Choose..</option>
                     @foreach ($products as $item)
                         <option value="{{$item->id}}">{{ucwords($item->product)}}</option>
                     @endforeach
-                </select>
+                </select> --}}
+                <input type="text" readonly name="product[]" id="product" class="form-control form-control-sm product" >
+                
+                <input type="hidden" name="product_id[]"  id="product_id" class="product_id">
+                
+
             </td>
-            <td style="width: 200px;">
-                <input type="text" name="product_code[]"   id="product_code" class="form-control form-control-sm product_code">
-            </td>
+           
             <td style="width: 100px;">
                 <input type="text" name="qty[]" id="qty" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
@@ -227,33 +235,11 @@
     </div>
 </section>
 
-<div class="row">
-    <div class="col-6">
-        {{-- <form action=""> --}}
-        <input type="text" class="form-control" name="barcoder" id="barcoder">
-    </div>
-    <div class="col-6">
-       <button onclick="getData();">clickme</button>
-    </div>
-    <p id="demo"></p>
-{{-- </form> --}}
-    
-</div>
+
     @endsection
 
 
 @section('script')
-{{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
-
-<script>
-
-function getData(e) {
-    let data = document.getElementById("barcoder").value;
-    alert(data);
-    document.getElementById("demo").innerHTML = data;
-}
-</script>
-
 
 <script>
         $(document).ready(function () {
@@ -312,9 +298,10 @@ function getData(e) {
                     dataType: "json",
                     success: function (response) {
                         console.log(response);
-                        $(object).parent().parent().find(".price").val(response.product[0].price);
-                        // $(object).parent().parent().find(".item").val(response.product[].item);
-                        $(object).parent().parent().find(".size_id").val(response.product[0].size_id);
+                        $(object).parent().parent().find(".price").val(response.product.price);
+                        $(object).parent().parent().find(".product").val(response.product.product);
+                        $(object).parent().parent().find(".product_id").val(response.product.id);
+                        $(object).parent().parent().find(".size_id").val(response.product.size_id);
                         calculateAmount(object)
                     }
                 });
@@ -326,6 +313,10 @@ function getData(e) {
                 calculateAmount($(this));
             });
 
+            $(document).on('click','#product_id', function () {
+                var pro_id = $(this).val();
+                alert(pro_id);
+            });
             // $(document).on('keyup','#given_amount', function () {
             //     returnAmount();
             // });
@@ -335,10 +326,10 @@ function getData(e) {
             //     validateForm();
             // });
 
-            // $(document).on('click','.orderDetailBtn', function () {
-            //     const order_id = $(this).val();
-            //     orderDetail(order_id);
-            // });
+            $(document).on('click','.orderDetailBtn', function () {
+                const order_id = $(this).val();
+                orderDetail(order_id);
+            });
             
             // $(document).on('click','.editOrderBtn', function (e) {
             //     e.preventDefault();
