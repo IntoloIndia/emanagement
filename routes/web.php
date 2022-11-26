@@ -48,7 +48,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(BillingController::class)->group(function () {
         Route::get('admin/billing','index');
         Route::post('admin/save-order', 'saveOrder');
-        Route::get('admin/get-item-price/{product_id}', 'getItemPrice');
+        Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
 
         Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
         

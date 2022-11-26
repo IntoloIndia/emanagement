@@ -118,6 +118,7 @@
                                 <th>Name</th>
                                 <th>Code</th>
                                 <th>Email</th>
+                                <th>QR</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -131,6 +132,7 @@
                                     <td>{{ucwords($list->name)}}</td>
                                     <td>{{ucwords($list->code)}}</td>
                                     <td>{{$list->email}}</td>
+                                    <td><img src="{{$list->qrcode}}" width="40px" height="40px"><br/></td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm deleteUserBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
@@ -234,7 +236,6 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    // console.log(response);
                     if (response.status === 400) {
                         $('#user_err').html('');
                         $('#user_err').addClass('alert alert-danger');

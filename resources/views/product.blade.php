@@ -5,8 +5,9 @@
   #colorinput{
     border: none;
   }
+  
 </style>
-@endsection;
+@endsection
 
 @section('content')
 
@@ -181,7 +182,7 @@
                           </tr>
                         </thead>
                         @php
-                        $count=0;
+                            $count=0;
                         @endphp
                         <tbody>
                           @foreach ($products as $list)
@@ -215,21 +216,30 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-header">
-                <b>Products Barcode</b>
+                <div class="row">
+                    <div class="col-md-6"><b>Barcodes</b></div>
+                    <div class="col-md-6">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                            {{-- <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Preview</button> --}}
+                            <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Preview</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body" id="barcode_body">
                 <div class="row">
-                    @foreach ($products as $list)
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <img src="{{$list->barcode}}"><br/>
-                                <span><b>{{$list->product_code}}</b></span> <br/>
-                                <span>  <b>Size -</b>  {{strtoupper($list->size)}} , <b>Rs -</b> {{$list->price}}</span> 
+                        @foreach ($products as $list)
+                            <div class="col-md-12" >
+                                <div class="card">
+                                    {{-- <div class="card-body" style="transform:rotate(90deg); " > --}}
+                                    <div class="card-body">
+                                        <img src="{{$list->barcode}}" style=" height:40px;"><br/>
+                                        <span><b>{{$list->product_code}}</b></span> <br/>
+                                        <span>  {{strtoupper($list->size)}} / {{$list->price}}</span> 
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    @endforeach
+                        @endforeach
                 </div> 
             </div>
             {{-- <div class="col-md-12 mb-1">
@@ -241,34 +251,23 @@
     </div>
 </div>
 
-<div class="col-md-12 mb-1">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-        <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Open</button>
-    </div>
-</div>
-
 <section>
     <div id="newcontent">
-        <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            
-            <div class="modal-dialog">
+        <div class="modal fade" id="generateBarcodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body" id="show_barcode_body">
-                    
-                  </div>
-                  <div class="modal-footer">
-                      <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Barcodes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="show_barcode_body">
+                        
+                    </div>
+                    <div class="modal-footer">
                         <button type="button" id="printBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Print</button>
                     </div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
                 </div>
-              </div>
+            </div>
         </div>
     </div>
 </section>
@@ -343,8 +342,9 @@
                 e.preventDefault();
                 // $('#generateInvoiceModal').modal('show');
                 var modal_data = $('#barcode_body').html();
+                // $('#show_barcode_body').html('');
                 $('#show_barcode_body').append(modal_data);
-                $('#generateInvoiceModal').modal('show');
+                $('#generateBarcodeModal').modal('show');
                 
                 // $('#product_err').html('');
                 // $('#product_err').removeClass('alert alert-danger');
@@ -478,14 +478,31 @@
         }
 
         function printBarcode(){
-            const section = $("section");
-            // const modalBody = $("#invoiceModalPrint").detach();
-            const modalBody = $("#generateInvoiceModal").detach();
 
-            section.empty();
-            section.append(modalBody);
+            var backup = document.body.innerHTML;
+            var div_content = document.getElementById("show_barcode_body").innerHTML;
+            document.body.innerHTML = div_content;
             window.print();
-            
+            document.body.innerHTML = backup;
+
+            // const section = $("section");
+            // // const modalBody = $("#show_barcode_body").detach();
+            // const modalBody = document.getElementById("barcode_body").innerHTML;
+
+            // section.empty();
+            // section.append(modalBody);
+            // window.print();
+            // window.location.reload();
+
+
+            // var print_div = document.getElementById("show_barcode_body");
+            // // var print_div = document.getElementById("barcode_body");
+            // var print_area = window.open();
+            // print_area.document.write(print_div.innerHTML);
+            // print_area.document.close();
+            // print_area.focus();
+            // print_area.print();
+          
             window.location.reload();
         }
         

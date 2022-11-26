@@ -54,9 +54,34 @@
 
     </div>
 
+    <body onload="document.pos.barcode.focus();">
+        <form action="">
+        <div class="row">
+            <h1>bardcode</h1>
+            <div class="col-12">
+                <input type="text" class="form-control" name="bard_code" id="bard_code">
+                @php
+                    $count= 0;
+                @endphp
+            </div>
+            {{++$count}}
+        </div>
+        <button onclick="add()">call </button>
+    </form>
+        
+    </body>
+
 @endsection
 
 @section('script')
+<script>
 
+    function add() {
+        var image = document.getElementById('bard_code').value;
+        alert(image);
+        
+    }
+
+</script>
 @endsection
 

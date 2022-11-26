@@ -18,4 +18,11 @@ class UserAPIController extends Controller
             'user_count'=>$users->count()
         ]); 
     }
+    public function getUser(Request $req, $user_id){
+        $user = User::find($user_id);
+        return response()->json([
+            'status'=>200,
+            'data'=>$user,
+        ]); 
+    }
 }

@@ -10,6 +10,9 @@ use App\Models\Size;
 use App\Models\Color;
 use Validator;
 use Picqer;
+use DNS1D;
+use DNS2D;
+use QrCode;
 
 class ProductController extends Controller
 {
@@ -19,6 +22,11 @@ class ProductController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
+
+        //  DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
+
+        // $barcode = 'data:image/png;base64,' . DNS2D::getBarcodePNG('4', 'PDF417')  ;
+        // return $barcode;
         // $product_code = rand(0000000001,9999999999);
         // // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
         // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
@@ -63,13 +71,13 @@ class ProductController extends Controller
         }else{
 
 
-            $product_code = rand(0000000001,9999999999);
+            $product_code = rand(000001,999999);
             // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
 
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 1, 40)) ;
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
 
 
             $model = new Product;
@@ -137,10 +145,12 @@ class ProductController extends Controller
                 'errors'=>$validator->messages(),
             ]);
         }else{
-            $product_code = rand(0000000001,9999999999);
+            $product_code = rand(000001,999999);
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 1, 40)) ;
+
+            
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
 
 
             $model =  Product::find($product_id);
