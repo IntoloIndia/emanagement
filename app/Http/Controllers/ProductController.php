@@ -10,6 +10,9 @@ use App\Models\Size;
 use App\Models\Color;
 use Validator;
 use Picqer;
+use DNS1D;
+use DNS2D;
+use QrCode;
 
 class ProductController extends Controller
 {
@@ -19,9 +22,16 @@ class ProductController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
+
+        //  DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
+
+        // $barcode = 'data:image/png;base64,' . DNS2D::getBarcodePNG('4', 'PDF417')  ;
+        // return $barcode;
         // $product_code = rand(0000000001,9999999999);
-        // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40);
+        // // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
+        // // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 40);
+        // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
         // return $barcode;
         $products = Product::Join('categories','categories.id','=','products.category_id')
                 ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
@@ -60,16 +70,15 @@ class ProductController extends Controller
             ]);
         }else{
 
-<<<<<<< HEAD
-            $product_code = rand(0000000001,9999999999);
+
+            $product_code = rand(000001,999999);
             // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
-=======
-            $product_code = rand(0000000001,9999999999); 
-            $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-            $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 60);
->>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
-            // $product_code = (rand(00000001,99999999));
+            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
+
+            $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+            // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
+
 
             $model = new Product;
             $model->product_code = $product_code;
@@ -80,12 +89,9 @@ class ProductController extends Controller
             $model->price = $req->input('price');
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
-<<<<<<< HEAD
+            $model->barcode = $barcode;
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
-
-=======
->>>>>>> 42abccd2fb762907d6c56fdab90c70b01774b0a1
            
             if($model->save()){
                 return response()->json([   
@@ -139,8 +145,16 @@ class ProductController extends Controller
                 'errors'=>$validator->messages(),
             ]);
         }else{
+            $product_code = rand(000001,999999);
+            $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
+
+            
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
+
+
             $model =  Product::find($product_id);
-            // $model->product_code = $product_code;
+            $model->product_code = $product_code;
             $model->category_id = $req->input('category_id');
             $model->sub_category_id = $req->input('sub_category_id');
             $model->product = $req->input('product_name');
@@ -149,9 +163,9 @@ class ProductController extends Controller
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
             $model->date = date('Y-m-d');
+            $model->barcode = $barcode;
             $model->time = date('g:i A');
 
-           
             if($model->save()){
                 return response()->json([
                     'status'=>200,
@@ -166,6 +180,22 @@ class ProductController extends Controller
         $delete_product->delete();
         return response()->json([
             'status'=>200
+        ]);
+    }
+
+    public function getBarcode()
+    {
+        $products = Product::Join('categories','categories.id','=','products.category_id')
+                ->join('sub_categories','sub_categories.id','=','products.sub_category_id')
+                ->join('sizes','sizes.id','=','products.size_id')
+                ->join('colors','colors.id','=','products.color_id')
+                ->get(['products.*','categories.category',
+                    'sub_categories.sub_category',
+                    'sizes.size',
+                    'colors.color'
+                ]);
+        return view('barcode',[
+            'products' => $products
         ]);
     }
 

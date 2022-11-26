@@ -56,7 +56,12 @@ tbody tr #count_item:first-child:before
 
 .card-header {
   padding: 8px 10px;
-  background-color: #EAEDED;
+  /* background-color: #EAEDED; */
+  background-color: #ffffff;
+}
+
+.card-title{
+  font-weight: bold;
 }
 
 .card-body{

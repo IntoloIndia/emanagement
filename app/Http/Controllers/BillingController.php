@@ -90,10 +90,11 @@ class BillingController extends Controller
     }
             
 
-    public function getItemPrice($product_id)
+    public function getItemPrice($product_code)
     {
-        // $product = Product::where(['id'=>$product_id])->first('price','product_code');
-        $product = Product::find($product_id);
+        $product = Product::where(['product_code'=>$product_code])->get();
+        // print_r($product);
+        // $product = Product::find($product_code);
                         
         return response()->json([
             'product'=>$product

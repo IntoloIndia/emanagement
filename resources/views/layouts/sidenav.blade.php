@@ -81,6 +81,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="barcode" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="manage-stock" class="nav-link">
                         <i class="fas fa-angle-right nav-icon"></i><p>Stock</p>
                     </a>
@@ -92,7 +97,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="business_details" class="nav-link">
+                    <a href="business-details" class="nav-link">
                         <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
                     </a>
                 </li>

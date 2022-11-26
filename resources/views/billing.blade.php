@@ -192,7 +192,7 @@
                 </select>
             </td>
             <td style="width: 200px;">
-                <input type="text" name="product_code[]"  readonly id="product_code" class="form-control form-control-sm product_code">
+                <input type="text" name="product_code[]"   id="product_code" class="form-control form-control-sm product_code">
             </td>
             <td style="width: 100px;">
                 <input type="text" name="qty[]" id="qty" value="1" class="form-control form-control-sm qty" min="1" value="0">
@@ -226,11 +226,34 @@
         </div>
     </div>
 </section>
+
+<div class="row">
+    <div class="col-6">
+        {{-- <form action=""> --}}
+        <input type="text" class="form-control" name="barcoder" id="barcoder">
+    </div>
+    <div class="col-6">
+       <button onclick="getData();">clickme</button>
+    </div>
+    <p id="demo"></p>
+{{-- </form> --}}
+    
+</div>
     @endsection
 
 
 @section('script')
 {{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
+
+<script>
+
+function getData(e) {
+    let data = document.getElementById("barcoder").value;
+    alert(data);
+    document.getElementById("demo").innerHTML = data;
+}
+</script>
+
 
 <script>
         $(document).ready(function () {
@@ -279,24 +302,25 @@
             });
 
             
-            $(document).on('change','.item', function () {
-                const product_id = $(this).val();
+            $(document).on('change','.product_code', function () {
+                const product_code = $(this).val();
                 // alert("call")
                 var object = $(this);
                 $.ajax({
                     type: "get",
-                    url: "get-item-price/"+product_id,
+                    url: "get-item-price/"+product_code,
                     dataType: "json",
                     success: function (response) {
-                        // console.log(response);
-                        $(object).parent().parent().find(".price").val(response.product.price);
-                        $(object).parent().parent().find(".product_code").val(response.product.product_code);
-                        $(object).parent().parent().find(".size_id").val(response.product.size_id);
+                        console.log(response);
+                        $(object).parent().parent().find(".price").val(response.product[0].price);
+                        // $(object).parent().parent().find(".item").val(response.product[].item);
+                        $(object).parent().parent().find(".size_id").val(response.product[0].size_id);
                         calculateAmount(object)
                     }
                 });
                 
             });
+            
             
             $(document).on('keyup','.qty', function () {
                 calculateAmount($(this));
@@ -491,6 +515,9 @@
         }
     });
 }
+
+
+
            
     </script>
 
