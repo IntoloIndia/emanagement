@@ -1,9 +1,13 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 @section('style')
+
+<link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" />
 <style>
+
   #colorinput{
     border: none;
+    background-color": "yellow";
   }
 
   /* @media print {
@@ -17,11 +21,9 @@
     }
 } */
 
-@media print {
-  .page > span {
-    font-size: 44px;
-  }
-  
+.barcode{
+    length:100%;
+    width:100%;
 }
 
 
@@ -83,16 +85,16 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <select id="color_id" name="color_id" class="form-select form-select-sm">
+                            <div class="col-md-5">
+                                <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
                                     <option selected disabled >Choose...</option>
                                     @foreach ($colors as $list)
                                     <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 mt-1">
-                                {{-- <input type="text" id="color_name" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput"> --}}
+                            <div class="col-md-3 mt-1">
+                                <input type="text" id="color_name" class="color_name"   disabled style="width:100px" id="colorinput">
                              </div>
                         </div>
                         
@@ -177,7 +179,7 @@
                                 <td>{{$list->price}} </td>
                                 <td>{{$list->size}}</td>
                                  <td>
-                                 <input type="text" id="color_name" disabled style="width:20px; height:20px; background-color:{{$list->color}};" id="colorinput">
+                                 <input type="text"  disabled style="width:20px; height:20px; background-color:{{$list->color}};" id="colorinput">
 
                                 </td> 
                                 {{-- <td>{{$list->color}}</td> --}}
@@ -208,34 +210,41 @@
                 </div>
             </div>
             <div class="card-body page" id="barcode_body" >
-                    @foreach ($products as $list)
-                        {{-- <div class="card text-center" style='page-break-after: always; '> --}}
-                        <div class="card " >
-                            <div class="card-body"style="margin-bottom: 80px; margin-top:80px; ">
+                @foreach ($products as $list)
+                    {{-- <div class="card text-center" style='page-break-after: always; '> --}}
+                    <div class="card" >
+                        <div class="card-body pt-5">
 
-                                <div class="row" >
-                                    <h1 class="tect-center" style="font-size: 70px; ">MANGALDEEP CLOTHS LLP</h1>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-6">
-                                        <h1 style="font-size: 70px; ">Prod : {{$list->product_code}}</h1> <br/>
-                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
-                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
-                                        <h1 style="font-size: 70px; ">Sec : {{$list->product_code}}</h1> <br/>
-                                    </div>
-                                    <div class="col-md-6" >
-                                        {{-- <img src="{{$list->barcode}}" ><br/> --}}
-                                        <img src="{{asset('public/assets/barcodes/barcode.gif')}}" style="width: 100%; height:100%;">
-                                    </div>
-                                </div>
-
-                                    {{-- <img src="{{$list->barcode}}" ><br/>
-                                    <span><b>{{$list->product_code}}</b></span> <br/>
-                                    <span> {{strtoupper($list->size)}} / {{$list->price}}</span>  --}}
+                            <div class="row mb-2">
+                                <span class="tect-center business_title text-center"><b>MANGALDEEP CLOTHS LLP</b></span>
                             </div>
+                            <div class="row" >
+                                <div class="col-md-7">
+                                    <span class="product_detail" >Prod : Jeans</span> <br/>
+                                    <span class="product_detail" >Sec : Super Slim (DD) J</span> <br/>
+                                    <span class="product_detail" >Sty : MFT-28457-P</span> <br/>
+                                    <span class="product_detail" >Clr : 134-Blue Black</span> <br/>
+                                    <span class="product_detail" >Size : 34</span> <br/>
+                                    <span class="product_detail" >MRP : 1250</span> <br/>
+                                </div>
+                                <div class="col-md-5">
+                                    <img src="{{$list->barcode}}" class="barcode_image barcode" ><br/>
+                                    {{-- <img src="{{asset('public/assets/barcodes/barcode.gif')}}" class="img-thumbnail " > --}}
+                                    <span class="product_detail"><b>{{$list->product_code}}</b></span> <br/>
+                                </div>
+                            </div>
+                            <hr style="color:black">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="product_detail" ><b>Mktd By :</b> Abc Marketing Pvt Ltd</span> <br/>
+                                    <span class="product_detail" ><b>Plot No :</b> 84 Central Road Shashtri Nagar Bhopal 482007</span> <br/>
+                                </div>
+                            </div>
+                                
                         </div>
-                        {{-- </div> --}}
-                    @endforeach
+                    </div>
+                    {{-- </div> --}}
+                @endforeach
             </div>
             {{-- <div class="col-md-12 mb-1">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -276,16 +285,17 @@
 <section>
     <div id="newcontent">
         <div class="modal fade" id="generateBarcodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Barcodes</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="show_barcode_body" style=''>
+                    <div class="modal-body" id="show_barcode_body" >
                         
                     </div>
                     <div class="modal-footer">
+                        <img src="" class=" " ><br/>
                         <button type="button" id="printBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Print</button>
                     </div>
                 </div>
@@ -298,6 +308,7 @@
 
 @section('script')
     {{-- //   <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         $(document).ready(function () {
             $(document).on('click','#addProduct', function (e) {
@@ -323,12 +334,28 @@
                 getSubCategoryByCategory(category_id);
                 
             });
-            // $(document).on('change','#color_name', function (e) {
-            //     e.preventDefault();
-            //     const category_id = $(this).val();
-            //     getSubCategoryByCategory(category_id);
+
+            $(document).on('change','.color_code', function (e) {
+                e.preventDefault();
+                const color_code = $(this).val();
+                // const color = $(this).val();
+                // alert(color);
+                var object = $(this);
+                $.ajax({
+                    type: "get",
+                    url: "get-color_code/"+ color_code,
+                    dataType: "json",
+                    success: function (response) {
+                        // console.log(response);
+                        $(object).parent().parent().find(".color_name").val(response.color.color);
+                        // $(object).parent().parent().find("#color_name").val(response.color.color).css("background-color".color.color);
+            
+                    }
+                });
                 
-            // });
+            
+                
+            });
             
             $(document).on('click','.editProductBtn', function (e) {
                 e.preventDefault();
@@ -376,7 +403,27 @@
             $(document).on('click','#printBtn', function (e) {
                 e.preventDefault();
                 // const product_id = $(this).val();
-                printBarcode();
+
+                // $(".business_title").css({"font-size":"60px"});
+                // $(".product_detail").css({"font-size":"40px"});
+                // $(".barcode_image").css({"height":"250px", "width":"400px"});
+
+                const png_target = document.getElementById('show_barcode_body');
+
+                html2canvas(png_target).then( (canvas)=>{
+                    const base64image = canvas.toDataURL('image/png');
+
+                    var anchor = document.createElement('a');
+                    anchor.setAttribute("href", base64image);
+                    anchor.setAttribute("download", "my-image.png");
+                    alert(base64image);
+                })
+
+                // const canvas = document.getElementById('show_barcode_body');
+                // const img    = canvas.toDataURL('image/png');
+                // document.getElementById('existing-image-id').src = img
+
+                // printBarcode();
             });
 
 
@@ -388,6 +435,7 @@
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+
         }
 
         function getBarcode() {
@@ -526,6 +574,10 @@
             document.body.innerHTML = div_content;
             window.print();
             document.body.innerHTML = backup;
+
+
+
+        
 
             
 

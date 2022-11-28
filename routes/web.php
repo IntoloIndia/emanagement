@@ -14,6 +14,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\BusinessDetailsController;
 use App\Http\Controllers\ManageStockController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CountryStateCityController;
 
 use App\MyApp;
 /*
@@ -65,10 +68,33 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
+    Route::controller(CountryStateCityController::class)->group(function () {
+        Route::get('admin/country-state-city','index');
+
+        Route::post('admin/manage-country', 'manageCountry');
+        Route::get('admin/edit-country/{country_id}', 'editCountry');
+        Route::get('admin/delete-country/{country_id}', 'deleteCountry');
+
+        Route::post('admin/manage-state', 'manageState');
+        Route::get('admin/edit-state/{state_id}', 'editState');
+        Route::get('admin/delete-state/{state_id}', 'deleteState');
+
+    });
+
     Route::controller(CustomerController::class)->group(function () {
         Route::get('admin/customer','index');
         Route::post('admin/save-order-customer', 'saveOrderCustomer');
         
+    });
+
+    // supplier 
+
+    Route::controller(SupplierController::class)->group(function () {
+        Route::get('admin/supplier','index');
+        Route::post('admin/save-supplier-order', 'saveSupplier');
+        Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
+
+
     });
 
     Route::controller(AdminController::class)->group(function () {
@@ -133,11 +159,21 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-product/{product_id}', 'deleteProduct');
 
         Route::get('admin/barcode', 'getBarcode');
+        Route::get('admin/get-color_code/{color_code}','getcolorcode');
+
 
     });
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
+    });
+
+    Route::controller(DepartmentController::class)->group(function () {
+        Route::get('admin/department', 'index');
+        Route::post('admin/save-department', 'saveDepartment');
+        Route::get('admin/edit-department/{department_id}', 'editDepartment');
+        Route::post('admin/update-department/{department_id}', 'updateDepartment');
+        Route::get('admin/delete-department/{department_id}', 'deleteDepartment');
     });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);

@@ -54,6 +54,16 @@
             </li>
             <li class="nav-header text-light">Manage & Utilities</li>
             <li class="nav-item">
+                <a href="country-state-city" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Country State City </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="department" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Department </p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="category" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
                 </a>
@@ -99,6 +109,11 @@
                 <li class="nav-item">
                     <a href="business-details" class="nav-link">
                         <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="supplier" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
                     </a>
                 </li>
         </ul>

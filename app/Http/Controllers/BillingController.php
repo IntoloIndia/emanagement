@@ -53,15 +53,16 @@ class BillingController extends Controller
             $model = new Customer;
             $model->customer_name = $req->input('customer_name');
             $model->mobile_no = $req->input('mobile_no');
+            $model->total_amount = $req->input('total_amount');
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
- 
             $product_id = $req->input('product_id');
             $product_code = $req->input('product_code');
             $price = $req->input('price');
             $qty = $req->input('qty');
             $size_id = $req->input('size_id');
             $amount = $req->input('amount');
+            
             
 
             if($model->save()){
@@ -77,8 +78,8 @@ class BillingController extends Controller
                     $item->product_code = $product_code[$key];
                     $item->price = $price[$key];
                     $item->qty = $qty[$key];
-                    $item->amount = $amount[$key];
                     $item->size_id = $size_id[$key];
+                    $item->amount = $amount[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
  
@@ -116,9 +117,11 @@ class BillingController extends Controller
 
                  $order =Customer::find($customer_id);
         
-                $order_items =Billing::join('customers','customers.id','=','billings.customer_id')
+                $order_items =Billing::join('customers','customers.id','=','billings.customer_id')->
+                                    join('products','products.id','=','billings.product_id')
+
                         ->where('billings.customer_id',$order->id)
-                            ->get(['billings.*',]); 
+                            ->get(['billings.*','customers.total_amount','products.product']); 
                             
                     //  print_r($order_items);     
                     // print_r($order_items);    
@@ -135,7 +138,7 @@ class BillingController extends Controller
         $html .="<div class='modal-dialog modal-sm'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$order->customer_name</b></h5>";
+                    // $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$order->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
 
@@ -153,6 +156,8 @@ class BillingController extends Controller
                         $html .="<div class='row'>";
                             $html .="<div class='col-md-6'>";
                                 // $html .="<span>Bill No : <small>".$order->invoice_no."</small></span><br>";
+                                $html .="<span>customer name : <small>".$order->customer_name."</small></span><br>";
+                                $html .="<span>mobile_no : <small>".$order->mobile_no."</small></span><br>";
                                 // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
                             $html .="</div>";
                             $html .="<div class='col-md-6 '>";
@@ -177,7 +182,7 @@ class BillingController extends Controller
                                 foreach ($order_items as $key => $list) {
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
-                                        $html .="<td>".ucwords($list->product_id)."</td>";
+                                        $html .="<td>".ucwords($list->product)."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->amount."</td>";
@@ -197,7 +202,7 @@ class BillingController extends Controller
                         $html .="</div>";
                         $html .="<hr>";
                         $html .="<div class='row text-center'>";
-                            $html .="<h6><b>Thank You Have a Nice Day </b></h6>";
+                            $html .="<h6><b>Thank  Have a Nice Day </b></h6>";
                             $html .="<small>Visit Again !</small>";
                         $html .="</div>";
 

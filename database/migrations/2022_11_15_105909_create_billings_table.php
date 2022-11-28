@@ -22,7 +22,6 @@ class CreateBillingsTable extends Migration
             $table->integer('size_id')->nullable();
             $table->string('price')->nullable();
             $table->float('amount')->nullable();
-            $table->float('total_amount')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->integer('status')->default(0);

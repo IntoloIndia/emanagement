@@ -36,6 +36,19 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="adminRole" class="form-label">Department</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="role_id" name="role_id" class="form-select form-select-sm">
+                                        <option selected disabled >Choose...</option>
+                                        {{-- @foreach ($deparment as $list)
+                                                    <option selected value="{{$list->id}}">{{ucwords($list->deparment)}}</option>
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row mt-1">
                                 <div class="col-md-4">
                                     <label for="adminName" class="form-label">Name</label>
@@ -94,7 +107,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Users</h3>
+                    <h3 class="card-title">Team</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
