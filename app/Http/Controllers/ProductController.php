@@ -77,7 +77,7 @@ class ProductController extends Controller
 
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
 
 
             $model = new Product;
@@ -150,7 +150,7 @@ class ProductController extends Controller
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
 
             
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 2, 40)) ;
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
 
 
             $model =  Product::find($product_id);
@@ -289,6 +289,18 @@ class ProductController extends Controller
         // return view('barcode',[
         //     'products' => $products
         // ]);
+    }
+
+    public function getcolorcode($color_code)
+    {
+        // $color = Color::where(['color_code'=>$color_code])->first('color');
+        // print_r($product);
+        $color = Color::find($color_code);
+                        
+        return response()->json([
+            'color'=>$color
+        ]);
+
     }
 
 }

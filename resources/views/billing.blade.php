@@ -22,13 +22,13 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="moblie_no" class="form-label" >moblie no</label>
-                            <input type="number"  class="form-control" name="mobile_no" id="moblie_no" placeholder="Enter mobile number" min="1">
+                            <input type="number"  class="form-control" name="mobile_no" required id="moblie_no" placeholder="Enter mobile number" min="1">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text"  class="form-control" id="customer_name" name="customer_name" placeholder="Enter name">
+                            <input type="text"  class="form-control" id="customer_name" required name="customer_name" placeholder="Enter name">
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 {{-- <input type="text" id="addItemBtn"> --}}
-                                <button class="btn btn-primary btn-sm " id="addItemBtn"> Add item</button>
+                                <button class="btn btn-primary btn-sm "  id="addItemBtn"> Add item</button>
                             </div>
                         </div>
                     </div>
@@ -95,8 +95,8 @@
 
                     </div>
                 </div>
-                <button class="btn btn-primary btn-sm float-right" id="saveOrderBtn">save</button>
-                {{-- <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
+                {{-- <button class="btn btn-primary btn-sm float-right" id="saveOrderBtn">save</button> --}}
+                <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
                 <hr>
                 <div class="row">
                     <div class="col-md-2">
@@ -118,8 +118,8 @@
                     </div>
 
                 </div>
-             --}}
-            </div>
+             
+            </div> 
         </form>
         </div>
     </div>
@@ -128,7 +128,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <b>Customer name</b>
+                        <b>Customer bills</b>
                     </div>
                     <div class="col-md-6">
                         <b class="float-right">Date</b><br/>
@@ -144,7 +144,7 @@
                             <th scope="col">Sno</th>
                             <th scope="col">Name</th>
                             <th scope="col">Mobile</th>
-                            {{-- <th scope="col">Amount</th> --}}
+                            <th scope="col">Amount</th>
                             <th scope="col">Print</th>
                             </tr>
                     </thead>
@@ -157,7 +157,7 @@
                             <td>{{++$count}}</td>
                             <td>{{ucwords($item->customer_name)}}</td>
                             <td>{{$item->mobile_no}}</td>
-                            {{-- <td>{{$item->amount}}</td> --}}
+                            <td>{{$item->total_amount}}</td>
 
                             <td>
                                 {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
@@ -185,7 +185,7 @@
             <td id="count_item"></td>
             
             <td style="width: 200px;">
-                <input type="text" name="product_code[]"  id="product_code" class="form-control form-control-sm product_code">
+                <input type="text" name="product_code[]" id="product_code" class="form-control form-control-sm product_code">
             </td>
 
             <td style="width: 200px;">
@@ -195,19 +195,16 @@
                         <option value="{{$item->id}}">{{ucwords($item->product)}}</option>
                     @endforeach
                 </select> --}}
-                <input type="text" readonly name="product[]" id="product" class="form-control form-control-sm product" >
-                
-                <input type="hidden" name="product_id[]"  id="product_id" class="product_id">
-                
-
+                <input type="text" readonly name="product[]" class="form-control form-control-sm product" >
+                <input type="hidden" name="product_id[]" class="product_id">
             </td>
            
             <td style="width: 100px;">
-                <input type="text" name="qty[]" id="qty" value="1" class="form-control form-control-sm qty" min="1" value="0">
+                <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
             <td style="width: 100px;">
                 {{-- <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id"> --}}
-                <select name="size_id[]" id="size_id"   class=" form-select form-select-sm size_id">
+                <select name="size_id[]" class=" form-select form-select-sm size_id">
                     <option selected disabled></option>
                     @foreach ($sizes as $item)
                         <option  value="{{$item->id}}">{{ucwords($item->size)}}</option>
@@ -215,10 +212,10 @@
                 </select>
             </td>
             <td style="width: 100px;">
-                <input type="text" name="price[]" id="price" class="form-control form-control-sm price" readonly>
+                <input type="text" name="price[]" class="form-control form-control-sm price" readonly>
             </td>
             <td style="width: 150px;">
-                <input type="text" name="amount[]" id="amount" class="form-control form-control-sm amount"readonly >
+                <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
             </td>
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -242,11 +239,13 @@
 @section('script')
 
 <script>
-        $(document).ready(function () {
-            $(document).on('click','#addItemBtn', function (e) {
-                e.preventDefault();
-                addItem();
-                
+    
+    $(document).ready(function () {
+        
+        $(document).on('click','#addItemBtn', function (e) {
+            e.preventDefault();
+            addItem();
+            // $(".product_code").focus();
             });
 
             $(document).on('click','#saveOrderBtn', function (e) {
@@ -313,23 +312,23 @@
                 calculateAmount($(this));
             });
 
-            $(document).on('click','#product_id', function () {
-                var pro_id = $(this).val();
-                alert(pro_id);
-            });
-            // $(document).on('keyup','#given_amount', function () {
-            //     returnAmount();
+            // $(document).on('click','#product_id', function () {
+            //     var pro_id = $(this).val();
+            //     alert(pro_id);
             // });
-
-            // $(document).on('click','#saveOrderBtn', function (e) {
-            //     e.preventDefault();
-            //     validateForm();
-            // });
-
-            $(document).on('click','.orderDetailBtn', function () {
-                const order_id = $(this).val();
-                orderDetail(order_id);
+            $(document).on('keyup','#given_amount', function () {
+                returnAmount();
             });
+
+            $(document).on('click','#saveOrderBtn', function (e) {
+                e.preventDefault();
+                validateForm();
+            });
+
+            // $(document).on('click','.orderDetailBtn', function () {
+            //     const order_id = $(this).val();
+            //     orderDetail(order_id);
+            // });
             
             // $(document).on('click','.editOrderBtn', function (e) {
             //     e.preventDefault();
@@ -370,11 +369,11 @@
 
         });
 
-        
-
         function addItem() {
+            $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
             $("#item_list tr").find(".item").chosen();
+            
         }
 
         function calculateAmount(object){

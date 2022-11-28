@@ -1,0 +1,12 @@
+/* print.css */
+
+/* target all pages */
+
+@media print {
+
+    @page {
+        margin: 200cm;
+      }
+}
+  
+  
