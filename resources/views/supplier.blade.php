@@ -19,7 +19,7 @@
                         <div id="supplier_err"></div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="text" name="supplier_name" id="name" class="form-control-sm form-control" placeholder="Name">
+                                    <input type="text" name="supplier_name" id="supplier_name" class="form-control-sm form-control" placeholder="Name">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" name="mobile_no" id="mobile_no" class="form-control-sm form-control" placeholder="Mobile no">
@@ -48,18 +48,19 @@
                             <div class="row mt-2">
                                 <div class="col-6">
                                     <select name="state_id" id="state_id" class="form-select form-select-sm" >
-                                        <option selected>State..</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        <option selected disabled>State..</option>
+                                       @foreach ($allStates as $item)
+                                        <option value="{{$item->id}}">{{$item->state}}</option>
+                                           
+                                       @endforeach
                                       </select>
                                 </div>
                                 <div class="col-6">
                                     <select name="city_id" id="city_id" class="form-select form-select-sm">
                                         <option selected>City</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                       @foreach($allCity as $item)
+                                           <option value="{{$item->id}}">{{$item->city}}</option>
+                                       @endforeach
                                       </select>
                                 </div>
                             </div>
@@ -154,11 +155,11 @@
                                     <td>{{$list->mobile_no}}</td>
                                     <td>{{ucwords($list->address)}}</td>
                                     <td>{{$list->gst_no}}</td>
-                                    <td>{{$list->country}}</td>
+                                    <td>{{$list->country_id}}</td>
                                     <td>{{$list->state_id}}</td>
                                     <td>{{$list->city_id}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-info btn-sm editSupplierBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -190,6 +191,21 @@
                 e.preventDefault();
                 // alert("call")
                 saveSupplier()
+            });
+
+            $(document).on('click','.editSupplierBtn', function (e) {
+                e.preventDefault();
+                const supplier_id = $(this).val();
+                // alert(supplier_id);
+                editSupplier(supplier_id);
+            });
+
+
+            $(document).on('click','#updateSupplierBtn', function (e) {
+                e.preventDefault();
+                const supplier_id = $(this).val();
+                // alert(supplier_id);
+                updateSupplier(supplier_id);
             });
 
             $(document).on('click','.deleteSupplierBtn', function (e) {
@@ -241,6 +257,72 @@
                 }
             });
         }
+
+        function editSupplier(supplier_id){
+            $.ajax({
+                type: "get",
+                url: "edit-supplier-order/"+supplier_id,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        $('#supplierModal').modal('show');
+                        $('#supplier_err').html('');
+                        $('#supplier_err').removeClass('alert alert-danger');
+                        $("#supplierForm").trigger( "reset" ); 
+                        $('#saveSupplierBtn').addClass('hide');
+                        $('#updateSupplierBtn').removeClass('hide');
+                        $('#supplier_name').val(response.supplier.supplier_name);
+                        $('#mobile_no').val(response.supplier.mobile_no);
+                        $('#address').val(response.supplier.address);
+                        $('#gst_no').val(response.supplier.gst_no);
+                        $('#country_id').val(response.supplier.country_id);
+                        $('#state_id').val(response.supplier.state_id);
+                        $('#city_id').val(response.supplier.city_id);
+                        
+
+                        $('#updateSupplierBtn').val(response.supplier.id);
+                    }
+                }
+            });
+        }
+
+        function updateSupplier(supplier_id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#supplierForm")[0]);
+            $.ajax({
+                type: "post",
+                url: "update-supplier-order/"+supplier_id,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false, 
+                processData: false, 
+                success: function (response) {
+                    console.log(response);
+                    if(response.status === 400)
+                    {
+                        $('#supplier_err').html('');
+                        $('#supplier_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) { 
+                            $('#supplier_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                        });
+
+                    }else{
+                        $('#supplier_err').html('');
+                        $('#supplierModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+
 
         function deleteSupplier(supplier_id){
             $.ajax({

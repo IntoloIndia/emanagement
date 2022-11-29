@@ -99,11 +99,7 @@
               @foreach ($departments as $list)
                   <tr>
                     <td>{{++$count}}</td>
-                    <td>{{$list->department}}</td>
-                    {{-- <td>
-                      <a href="{{asset('/storage/app/public/'.$list->department_img)}}" target="_blank">
-                       <img src="{{asset('/storage/app/public/'.$list->category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td> --}}
-                     {{-- <td>{{$list->department}}</td>--}} 
+                    <td>{{$list->department}}</td> 
                     <td> 
                       <button type="button" class="btn btn-info btn-sm editDepartmentBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                      <button type="button" class="btn btn-danger btn-sm deleteDepartmentBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> 

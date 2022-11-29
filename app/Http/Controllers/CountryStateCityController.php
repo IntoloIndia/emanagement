@@ -90,12 +90,12 @@ class CountryStateCityController extends Controller
 
     public function manageState(Request $req)
     {
-        if($req->input('state_id') > 0)
+        if($req->input('update_state_id') > 0)
         {
             $country_id = 'required|max:191';
-            $state = 'required|unique:states,state,'.$req->input('state');
-            $state_short = 'required|unique:states,state_short,'.$req->input('state_short');
-            $model = State::find($req->input('state_id'));
+            $state = 'required|unique:states,state,'.$req->input('update_state_id');
+            $state_short = 'required|unique:states,state_short,'.$req->input('update_state_id');
+            $model = State::find($req->input('update_state_id'));
         }else{
             $country_id = 'required|max:191';
             $state = 'required|unique:states,state,'.$req->input('state');
@@ -126,6 +126,114 @@ class CountryStateCityController extends Controller
             }
 
         }
+    }
+
+    public function editState($state_id)
+    {
+        $state = State::find($state_id);
+        return response()->json([
+            'status'=>200,
+            'state'=>$state,
+        ]);
+    }
+
+    public function deleteState($state_id)
+    {
+        $model = State::find($state_id);
+        $model->delete();
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
+
+    public function getStateByCountry($country_id)
+    {
+        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
+
+        $html = "";
+        $html .= "<option selected disabled >Select...</option>";
+        foreach($data as $list)
+        {
+            $html.= "<option value='" . $list->id . "'>" . $list->state . "</option>";
+        }
+        return response()->json([
+            'status'=> 200,
+            'html'=> $html,
+        ]);
+    }
+
+    public function manageCity(Request $req)
+    {
+        if($req->input('city_id') > 0)
+        {
+            $country_id = 'required|max:191';
+            $state_id = 'required|max:191';
+            $city = 'required|unique:cities,city,'.$req->input('city_id');
+            $city_short = 'required|unique:cities,city_short,'.$req->input('city_id');
+            $model = City::find($req->input('city_id'));
+        }else{
+            $country_id = 'required|max:191';
+            $state_id = 'required|max:191';
+            $city = 'required|unique:cities,city,'.$req->input('city');
+            $city_short = 'required|unique:cities,city_short,'.$req->input('city_short');
+            $model = new City ;
+        }
+
+        $validator = Validator::make($req->all(),[
+            'country_id' => $country_id,
+            'state_id' => $state_id,
+            'city' => $city,
+            'city_short' => $city_short
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+            $model->country_id = $req->input('country_id');
+            $model->state_id = $req->input('state_id');
+            $model->city = strtolower($req->input('city'));
+            $model->city_short = strtolower($req->input('city_short'));
+
+            if($model->save()){
+                return response()->json([
+                    'status'=>200,
+                ]);
+            }
+
+        }
+    }
+
+    public function editCity($city_id)
+    {
+        $city = City::find($city_id);
+        $states = State::where(['country_id' => $city->country_id])->get();
+
+        $html = "";
+        foreach ($states as $key => $state) {
+            if($city->state_id == $state->id){
+                $html .= "<option value='".$state->id."' selected>" . $state->state  . "</option>" ;
+            }else{
+                $html .= "<option value='".$state->id."'>" . $state->state  . "</option>";
+            }
+        }
+
+        return response()->json([
+            'status'=>200,
+            'city'=>$city,
+            'states'=>$html
+        ]);
+    }
+
+    public function deleteCity($city_id)
+    {
+        $model = City::find($city_id);
+        $model->delete();
+        return response()->json([
+            'status'=>200,
+        ]);
     }
 
 

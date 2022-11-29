@@ -17,6 +17,8 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('customer_name')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->integer('birthday_date')->nullable();
+            $table->integer('month_id')->nullable();
             $table->float('total_amount')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();

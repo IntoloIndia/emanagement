@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title', 'Dashboard')
+@section('page_title', 'Purchase Entry')
 @section('style')
 
 <link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" />
@@ -34,18 +34,18 @@
 @section('content')
 
 {{-- product modal --}}
-<div class="modal fade" id="productModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="purchaseEntryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="productForm">
+                <form id="purchaseEntryForm">
                     @csrf
                     <div class="modal-body">
-                        <div id="product_err"></div>
+                        <div id="purchase_entry_err"></div>
 
                         <div class="row">
                             <div class="col-md-6">
@@ -170,7 +170,7 @@
     </div>
     <div class="col-10">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-            <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Add</button>
+            <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
         </div>
     </div>
     
@@ -181,7 +181,7 @@
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <b>Products</b>
+                <b>Purchase</b>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -212,7 +212,7 @@
                                 <td>{{$list->qty}}</td>
                                 <td>{{ucwords($list->category)}}</td>
                                 <td>{{ucwords($list->sub_category)}}</td>
-                                <td>{{$list->price}} </td>
+                                <td>{{$list->sales_price}} </td>
                                 <td>{{$list->size}}</td>
                                  <td>
                                  <input type="text"  disabled style="width:20px; height:20px; background-color:{{$list->color}};" id="colorinput">
@@ -344,20 +344,21 @@
 @endsection
 
 @section('script')
-{{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script> 
 
     {{-- <script src="./plugin/sweetalert/sweetalert.min.js"></script>  --}}
-    <script src="{{asset('webcam.min.js')}}"></script>
+    {{-- <script src="./plugin/webcamjs/webcam.min.js"></script> --}}
 
-   
-   {{-- <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> --}}
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-webcam/1.0.0/jquery.webcam.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-webcam/1.0.0/jquery.webcam.js" integrity="sha512-lysvyJ94uzauzL9hQducBhYf/29hFjZ5Zmt4lkQcUW3OzkmoW9VHTRkSmcAKkixahw96tZmUgQgE/JZtV+0cgw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-webcam/1.0.0/jquery.webcam.min.js.map"></script> --}}
+    {{-- //   <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <script>
-$(document).ready(function() {
+         $(document).ready(function() {
     Webcam.set({
         width: 320,
         height: 240,
@@ -475,12 +476,12 @@ function take_snapshot()
     </script>
     <script>
         $(document).ready(function () {
-            $(document).on('click','#addProduct', function (e) {
+            $(document).on('click','#purchaseEntry', function (e) {
                 e.preventDefault();
-                $('#productModal').modal('show');
-                $('#product_err').html('');
-                $('#product_err').removeClass('alert alert-danger');
-                $("#productForm").trigger("reset"); 
+                $('#purchaseEntryModal').modal('show');
+                $('#purchase_entry_err').html('');
+                $('#purchase_entry_err').removeClass('alert alert-danger');
+                $("#purchaseEntryForm").trigger("reset"); 
                 $('#saveProductBtn').removeClass('hide');
                 $('#updateProductBtn').addClass('hide');
             });

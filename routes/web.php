@@ -10,13 +10,14 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeColorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubCategoryController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseEntryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\BusinessDetailsController;
 use App\Http\Controllers\ManageStockController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CountryStateCityController;
+use App\Http\Controllers\SalesInvoiceController;
 
 use App\MyApp;
 /*
@@ -48,14 +49,14 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('admin/dashboard', [DashboardController::class, 'index']);
     // Route::get('admin/billing', [BillingController::class, 'index']);
 
-    Route::controller(BillingController::class)->group(function () {
-        Route::get('admin/billing','index');
-        Route::post('admin/save-order', 'saveOrder');
-        Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
+    // Route::controller(BillingController::class)->group(function () {
+    //     Route::get('admin/billing','index');
+    //     Route::post('admin/save-order', 'saveOrder');
+    //     Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
 
-        Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+    //     Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
         
-    });
+    // });
 
     // business details 
 
@@ -79,6 +80,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-state/{state_id}', 'editState');
         Route::get('admin/delete-state/{state_id}', 'deleteState');
 
+        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
+
+        Route::post('admin/manage-city', 'manageCity');
+        Route::get('admin/edit-city/{city_id}', 'editCity');
+        Route::get('admin/delete-city/{city_id}', 'deleteCity');
+
     });
 
     Route::controller(CustomerController::class)->group(function () {
@@ -92,7 +99,22 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(SupplierController::class)->group(function () {
         Route::get('admin/supplier','index');
         Route::post('admin/save-supplier-order', 'saveSupplier');
+        Route::get('admin/edit-supplier-order/{supplier_id}', 'editSupplier');
+        Route::post('admin/update-supplier-order/{supplier_id}', 'updateSupplier');
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
+
+
+    });
+
+     // sales invoice 
+
+     Route::controller(SalesInvoiceController::class)->group(function () {
+        Route::get('admin/sales_invoice','index');
+        Route::post('admin/save-order', 'saveOrder');
+        Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
+        Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+        
+       
 
 
     });
@@ -151,8 +173,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
-    Route::controller(ProductController::class)->group(function () {
-        Route::get('admin/product', 'index');
+    Route::controller(PurchaseEntryController::class)->group(function () {
+        Route::get('admin/purchase-entry', 'index');
         Route::post('admin/save-product', 'saveProduct');
         Route::get('admin/edit-product/{product_id}', 'editProduct');
         Route::post('admin/update-product/{product_id}', 'updateProduct');
