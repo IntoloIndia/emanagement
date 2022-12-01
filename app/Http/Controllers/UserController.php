@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Department;
 use Validator;
 use DNS2D;
 use QrCode;
@@ -14,19 +15,24 @@ class UserController extends Controller
 {
     public function index(){
         $roles = Role::all();
-        $Users = User::join('roles','roles.id','=','users.role_id')->
-                    get(['users.*','roles.role']);
+        $department = Department::all();                     
+        $Users = User::join('roles','roles.id','=','users.role_id')
+                       ->join('departments','departments.id','=','users.department_id')
+                       ->get(['users.*','roles.role','departments.department']);
         // $Users = User::all();
         return view('users',[
             'roles' => $roles,
-            'Users' =>$Users
+            'Users' =>$Users,
+            'department' => $department,
         ]);
     }
+
 
     function saveUser(Request $req)
     {
         $validator = Validator::make($req->all(),[
             'role_id' => 'required|max:191',
+            'department_id' => 'required|max:191',
             'name'=>'required|max:191',
             'code'=>'required|max:191',
             'email'=>'required|max:191',
@@ -42,6 +48,7 @@ class UserController extends Controller
         }else{
             $model = new User;
             $model->role_id = $req->input('role_id');
+            $model->department_id = $req->input('department_id');
             $model->code = $req->input('code');
             $model->name = $req->input('name');
             $model->email = $req->input('email');
@@ -77,6 +84,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($req->all(),[
             'role_id' => 'required|max:191',
+            'department_id' => 'required|max:191',
             'code' => 'required|max:191',
             'name' => 'required|max:191',
             'email' => 'required|unique:users,email,'.$user_id,
@@ -91,6 +99,7 @@ class UserController extends Controller
             $qrcode = 'data:image/png;base64,' . DNS2D::getBarcodePNG($user_id, 'QRCODE')  ;
             $model = User::find($user_id);
             $model->role_id = $req->input('role_id');
+            $model->department_id = $req->input('department_id');
             $model->code = $req->input('code');
             $model->name = $req->input('name');
             $model->email = $req->input('email');

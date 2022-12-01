@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title', 'Dashboard')
+@section('page_title', 'Purchase Entry')
 @section('style')
 
 <link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" />
@@ -25,30 +25,49 @@
     length:100%;
     width:100%;
 }
-
-
-  
+ 
 </style>
 @endsection
 
 @section('content')
 
 {{-- product modal --}}
-<div class="modal fade" id="productModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
+<div class="modal fade" id="purchaseEntryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="productForm">
+                <form id="purchaseEntryForm">
                     @csrf
                     <div class="modal-body">
-                        <div id="product_err"></div>
+                        <div id="purchase_entry_err"></div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                    <option selected disabled >Supplier</option>
+                                    @foreach ($suppliers as $list)
+                                        <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly >
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN code">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            
+                            <div class="col-md-3">
                                 <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
                                     <option selected disabled >Category</option>
                                     @foreach ($categories as $list)
@@ -56,28 +75,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm">
                                     <option selected disabled >Sub Category</option>
-
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
                             </div>
-                            <div class="col-md-3">
-                                <input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="qty">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="price" id="price" class="form-control form-control-sm" placeholder="Price">
+                            <div class="col-md-2">
+                                <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty" min="1" value="1">
                             </div>
                         </div>
-
-                        <div class="row mt-2">
-                            <div class="col-md-4">
+                       
+                        <div class="row mt-3">
+                            <div class="col-md-2">
                                 <select id="size_id" name="size_id" class="form-select form-select-sm">
                                     <option selected disabled >Size</option>
                                     @foreach ($sizes as $list)
@@ -85,19 +97,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
-                                    <option selected disabled >Choose...</option>
+                                    <option selected disabled >Color..</option>
                                     @foreach ($colors as $list)
                                     <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3 mt-1">
-                                <input type="text" id="color_name" class="color_name"   disabled style="width:100px" id="colorinput">
-                             </div>
+                            <div class="col-md-3">
+                                <input type="text" name="purchase_price"  id="purchase_price" class="form-control form-control-sm" placeholder="Purchase price">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text"  name="sales_price" id="sales_price" class="form-control form-control-sm" placeholder="Sales price">
+                            </div>
                         </div>
-                        
                         
                     </div>
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
@@ -134,46 +148,15 @@
 
 {{-- camera modal start --}}
 <!--Modal-->
-<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Capture Photo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <div id="my_camera" class="d-block mx-auto rounded overflow-hidden"></div>
-                </div>
-                <div id="results" class="d-none"></div>
-                <form method="post" id="photoForm">
-                    <input type="hidden" id="photoStore" name="photoStore" value="">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning mx-auto text-white" id="takephoto">Capture Photo</button>
-                <button type="button" class="btn btn-warning mx-auto text-white d-none" id="retakephoto">Retake</button>
-                <button type="submit" class="btn btn-warning mx-auto text-white d-none" id="uploadphoto" form="photoForm">Upload</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 {{-- camera modal end --}}
 
 <div class="row mb-3 ">
-    <div class="col-2">
-        <button class="btn btn-warning btn-sm text-white" id="accesscamera" data-toggle="modal" data-target="#photoModal">
-            Capture Photo
-        </button>
-    </div>
-    <div class="col-10">
+    <div class="col-12">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-            <button type="button" id="addProduct" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Add</button>
+            <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
         </div>
     </div>
-    
 </div>
 
 <div class="row">
@@ -181,20 +164,22 @@
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <b>Products</b>
+                <b>Purchase</b>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
+                <div class="table-responsive p-0" style="height: 600px;">
+                    <table class="table table-head-fixed text-nowrap">
                         <thead>
                           <tr>
                             <th scope="col">Sno</th>
                             <th scope="col">Code</th>
-                            <th scope="col">Product</th>
-                            <th scope="col">Qty</th>
+                            <th scope="col">Supplier</th>
                             <th scope="col">Category</th>
                             <th scope="col">Sub category</th>
-                            <th scope="col">Price</th>
+                            <th scope="col">Product</th>
+                            {{-- <th scope="col">Qty</th> --}}
+                            <th scope="col">Purchaes Price</th>
+                            <th scope="col">Sales Price</th>
                             <th scope="col">Size</th>
                             <th scope="col">Color</th>
                             <th scope="col">Action</th>
@@ -208,17 +193,15 @@
                               <tr>
                                 <td>{{++$count}}</td>
                                 <td>{{$list->product_code}}</td>
-                                <td>{{ucwords($list->product)}}</td>
-                                <td>{{$list->qty}}</td>
+                                <td>{{ucwords($list->supplier_name)}}</td>
                                 <td>{{ucwords($list->category)}}</td>
                                 <td>{{ucwords($list->sub_category)}}</td>
-                                <td>{{$list->price}} </td>
+                                <td>{{ucwords($list->product)}}</td>
+                                {{-- <td>{{$list->qty}}</td> --}}
+                                <td>{{$list->purchase_price}} </td>
+                                <td>{{$list->sales_price}} </td>
                                 <td>{{$list->size}}</td>
-                                 <td>
-                                 <input type="text"  disabled style="width:20px; height:20px; background-color:{{$list->color}};" id="colorinput">
-
-                                </td> 
-                                {{-- <td>{{$list->color}}</td> --}}
+                                <td><input type="text"  disabled style="width:15px; height:15px; background-color:{{$list->color}};" id="colorinput"></td> 
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm editProductBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                     <button type="button" class="btn btn-danger btn-sm deleteProductBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
@@ -233,14 +216,13 @@
         </div>
     </div>
     
-    <div class="col-md-3">
-        <div class="card">
+    <div class="col-md-3 ">
+        <div class="card hide">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6"><b>Barcodes</b></div>
                     <div class="col-md-6">
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                            {{-- <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Preview</button> --}}
                             <button type="button" id="openBtn" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-print"></i> Preview</button>
                         </div>
                     </div>
@@ -344,143 +326,20 @@
 @endsection
 
 @section('script')
-{{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+      
+<script>
+    $(document).ready(function () {
 
-    {{-- <script src="./plugin/sweetalert/sweetalert.min.js"></script>  --}}
-    <script src="{{asset('webcam.min.js')}}"></script>
-
-   
-   {{-- <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> --}}
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-webcam/1.0.0/jquery.webcam.min.js"></script>
-    <script>
-$(document).ready(function() {
-    Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-
-    $('#accesscamera').on('click', function() {
-        Webcam.reset();
-        Webcam.on('error', function() {
-            $('#photoModal').modal('hide');
-            swal({
-                title: 'Warning',
-                text: 'Please give permission to access your webcam',
-                icon: 'warning'
-            });
-        });
-        Webcam.attach('#my_camera');
-    });
-
-    $('#takephoto').on('click', take_snapshot);
-
-    $('#retakephoto').on('click', function() {
-        $('#my_camera').addClass('d-block');
-        $('#my_camera').removeClass('d-none');
-
-        $('#results').addClass('d-none');
-
-        $('#takephoto').addClass('d-block');
-        $('#takephoto').removeClass('d-none');
-
-        $('#retakephoto').addClass('d-none');
-        $('#retakephoto').removeClass('d-block');
-
-        $('#uploadphoto').addClass('d-none');
-        $('#uploadphoto').removeClass('d-block');
-    });
-
-    $('#photoForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'photoUpload.php',
-            type: 'POST',
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                if(data == 'success') {
-                    Webcam.reset();
-
-                    $('#my_camera').addClass('d-block');
-                    $('#my_camera').removeClass('d-none');
-
-                    $('#results').addClass('d-none');
-
-                    $('#takephoto').addClass('d-block');
-                    $('#takephoto').removeClass('d-none');
-
-                    $('#retakephoto').addClass('d-none');
-                    $('#retakephoto').removeClass('d-block');
-
-                    $('#uploadphoto').addClass('d-none');
-                    $('#uploadphoto').removeClass('d-block');
-
-                    $('#photoModal').modal('hide');
-
-                    swal({
-                        title: 'Success',
-                        text: 'Photo uploaded successfully',
-                        icon: 'success',
-                        buttons: false,
-                        closeOnClickOutside: false,
-                        closeOnEsc: false,
-                        timer: 2000
-                    })
-                }
-                else {
-                    swal({
-                        title: 'Error',
-                        text: 'Something went wrong',
-                        icon: 'error'
-                    })
-                }
-            }
-        })
-    })
-})
-
-function take_snapshot()
-{
-    //take snapshot and get image data
-    Webcam.snap(function(data_uri) {
-        //display result image
-        $('#results').html('<img src="' + data_uri + '" class="d-block mx-auto rounded"/>');
-
-        var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/, '');
-        $('#photoStore').val(raw_image_data);
-    });
-
-    $('#my_camera').removeClass('d-block');
-    $('#my_camera').addClass('d-none');
-
-    $('#results').removeClass('d-none');
-
-    $('#takephoto').removeClass('d-block');
-    $('#takephoto').addClass('d-none');
-
-    $('#retakephoto').removeClass('d-none');
-    $('#retakephoto').addClass('d-block');
-
-    $('#uploadphoto').removeClass('d-none');
-    $('#uploadphoto').addClass('d-block');
-}
-
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(document).on('click','#addProduct', function (e) {
+            $(document).on('click','#purchaseEntry', function (e) {
                 e.preventDefault();
-                $('#productModal').modal('show');
-                $('#product_err').html('');
-                $('#product_err').removeClass('alert alert-danger');
-                $("#productForm").trigger("reset"); 
+                $('#purchaseEntryModal').modal('show');
+                $('#purchase_entry_err').html('');
+                $('#purchase_entry_err').removeClass('alert alert-danger');
+                $("#purchaseEntryForm").trigger("reset"); 
                 $('#saveProductBtn').removeClass('hide');
                 $('#updateProductBtn').addClass('hide');
             });
@@ -516,8 +375,6 @@ function take_snapshot()
             
                     }
                 });
-                
-            
                 
             });
             
@@ -562,6 +419,10 @@ function take_snapshot()
                 // getBarcode();
             });
 
+            // $(document).on('click','#cameraButton', function (e) {
+            //     e.preventDefault();
+            //     alert("call");
+            // });
 
 
             $(document).on('click','#printBtn', function (e) {
@@ -594,6 +455,20 @@ function take_snapshot()
 
         });
 
+        function supplierDetail(supplier_id) {
+            $.ajax({
+                type: "get",
+                url: "supplier-detail/"+supplier_id,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                       $('#gst_no').val(response.supplier.gst_no) ;
+                    }
+                }
+            });
+        }
+
         function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;
             var originalContents = document.body.innerHTML;
@@ -625,7 +500,7 @@ function take_snapshot()
                 }
             });
 
-            var formData = new FormData($("#productForm")[0]);
+            var formData = new FormData($("#purchaseEntryForm")[0]);
             $.ajax({
                 type: "post",
                 url: "save-product",
@@ -659,24 +534,31 @@ function take_snapshot()
                 dataType: "json",
                 success: function (response) {
                     if(response.status == 200){
-                        $('#productModal').modal('show');
+                        $('#purchaseEntryModal').modal('show');
                         $('#product_err').html('');
                         $('#product_err').removeClass('alert alert-danger');
-                        $("#productForm").trigger( "reset" ); 
+                        $("#purchaseEntryForm").trigger( "reset" ); 
                         $('#saveProductBtn').addClass('hide');
                         $('#updateProductBtn').removeClass('hide');
-                        $('#category_id').val(response.product.category_id);
 
+                        $('#supplier_id').val(response.product.supplier_id);
+                        $('#gst_no').val(response.product.gst_no);
+                        $('#hsn_code').val(response.product.hsn_code);
+                        $('#bill_no').val(response.product.bill_no);
+
+                        $('#category_id').val(response.product.category_id);
                         $('#sub_category_id').html("");
                         $('#sub_category_id').append(response.html);
-
-                        // $('#sub_category_id').val(response.product.sub_category_id);
                         $('#product_name').val(response.product.product);
-                        $('#qty').val(response.product.qty);
-                        $('#price').val(response.product.price);
+
+
+                        $('#qty').val(response.product.qty);//
+
                         $('#size_id').val(response.product.size_id);
                         $('#color_id').val(response.product.color_id);
-                        // $('#password').val(response.user.password);
+                        $('#purchase_price').val(response.product.purchase_price);
+                        $('#sales_price').val(response.product.sales_price);
+
 
                         $('#updateProductBtn').val(response.product.id);
                     }
@@ -691,7 +573,7 @@ function take_snapshot()
                 }
             });
 
-            var formData = new FormData($("#productForm")[0]);
+            var formData = new FormData($("#purchaseEntryForm")[0]);
             $.ajax({
                 type: "post",
                 url: "update-product/"+product_id,
@@ -712,7 +594,7 @@ function take_snapshot()
 
                     }else{
                         $('#product_err').html('');
-                        $('#productModal').modal('hide');
+                        $('#purchaseEntryModal').modal('hide');
                         window.location.reload();
                     }
                 }
@@ -768,4 +650,5 @@ function take_snapshot()
         }
         
     </script>
+    
 @endsection

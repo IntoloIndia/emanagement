@@ -9,7 +9,7 @@
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Team</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -41,11 +41,11 @@
                                     <label for="adminRole" class="form-label">Department</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <select id="role_id" name="role_id" class="form-select form-select-sm">
-                                        <option selected disabled >Choose...</option>
-                                        {{-- @foreach ($deparment as $list)
-                                                    <option selected value="{{$list->id}}">{{ucwords($list->deparment)}}</option>
-                                        @endforeach --}}
+                                    <select id="department_id" name="department_id" class="form-select form-select-sm">
+                                        <option selected>Choose...</option>
+                                        @foreach ($department as $list)
+                                        <option value="{{$list->id}}">{{$list->department}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -128,6 +128,7 @@
                             <tr>
                                 <th>SN</th>
                                 <th>Role</th>
+                                <th>Dept</th>
                                 <th>Name</th>
                                 <th>Code</th>
                                 <th>Email</th>
@@ -138,10 +139,12 @@
                         <tbody>
                             {{$count = "";}}
                             @foreach ($Users as $list)
+                            
                                 <tr>
                                     <td>{{++$count}}</td>
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
                                     <td>{{ucwords($list->role)}}</td>
+                                    <td>{{ucwords($list->department)}}</td>
                                     <td>{{ucwords($list->name)}}</td>
                                     <td>{{ucwords($list->code)}}</td>
                                     <td>{{$list->email}}</td>
@@ -249,6 +252,7 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
+
                     if (response.status === 400) {
                         $('#user_err').html('');
                         $('#user_err').addClass('alert alert-danger');
@@ -280,6 +284,7 @@
                         $('#saveUserBtn').addClass('hide');
                         $('#updateUserBtn').removeClass('hide');
                         $('#role_id').val(response.user.role_id);
+                        $('#department_id').val(response.user.department_id);
                         $('#name').val(response.user.name);
                         $('#code').val(response.user.code);
                         $('#email').val(response.user.email);

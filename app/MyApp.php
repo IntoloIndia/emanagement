@@ -27,5 +27,14 @@ class MyApp {
 
     const STATUS = 0;
 
+    const INDIA = 1;
+    
+    const COUNTRY = 1;
+    const STATE = 2;
+    const CITY = 3;
+
+    const SOLD = 1;
+    const RETURN = 2;
+
 
 }
