@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0" style="height: 350px;">
+                <div class="card-body table-responsive p-0" style="height: 450px;">
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>

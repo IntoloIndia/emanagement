@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Size;
 use App\Models\Color;
+use App\Models\Supplier;
 use Validator;
 use Picqer;
 use DNS1D;
@@ -23,6 +24,7 @@ class PurchaseEntryController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
+        $suppliers = Supplier::all();
 
         //  DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
 
@@ -34,11 +36,14 @@ class PurchaseEntryController extends Controller
         // // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 40);
         // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
         // return $barcode;
-        $products = PurchaseEntry::Join('categories','categories.id','=','purchase_entries.category_id')
+        $products = PurchaseEntry::Join('suppliers','suppliers.id','=','purchase_entries.supplier_id')
+                ->Join('categories','categories.id','=','purchase_entries.category_id')
                 ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
                 ->join('sizes','sizes.id','=','purchase_entries.size_id')
                 ->join('colors','colors.id','=','purchase_entries.color_id')
-                ->get(['purchase_entries.*','categories.category',
+                ->get(['purchase_entries.*',
+                    'suppliers.supplier_name',
+                    'categories.category',
                     'sub_categories.sub_category',
                     'sizes.size',
                     'colors.color'
@@ -47,7 +52,8 @@ class PurchaseEntryController extends Controller
             "categories"=>$categories,
             'sizes' => $sizes,
             'colors'=> $colors,
-            'products' => $products
+            'products' => $products,
+            'suppliers' => $suppliers
         ]);
     }
 
@@ -55,10 +61,15 @@ class PurchaseEntryController extends Controller
     {
         $validator = Validator::make($req->all(),[
             'category_id' => 'required|max:191',
+            'supplier_id' => 'required|max:191',
             'sub_category_id'=>'required|max:191',
             'product_name'=>'required|max:191',
             'qty'=>'required|max:191',
-            'price'=>'required|max:191',
+            'purchase_price'=>'required|max:191',
+            'sales_price'=>'required|max:191',
+            'bill_no'=>'required|max:191',
+            'gst_no'=>'required|max:191',
+            'hsn_code'=>'required|max:191',
             'size_id'=>'required|max:191',
             'color_id'=>'required|max:191',
         ]);
@@ -71,33 +82,40 @@ class PurchaseEntryController extends Controller
             ]);
         }else{
 
-            $product_code = rand(000001,999999);
-            // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
+            $qty = $req->input('qty');
+            for ($i=0; $i < $qty; $i++) 
+            { 
+                $product_code = rand(000001,999999);
+                // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+                // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
 
-            $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-            // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-
-
-            $model = new PurchaseEntry;
-            $model->product_code = $product_code;
-            $model->category_id = $req->input('category_id');
-            $model->sub_category_id = $req->input('sub_category_id');
-            $model->product = $req->input('product_name');
-            $model->qty = $req->input('qty');
-            $model->sales_price = $req->input('price');
-            $model->size_id = $req->input('size_id');
-            $model->color_id = $req->input('color_id');
-            $model->barcode = $barcode;
-            $model->date = date('Y-m-d');
-            $model->time = date('g:i A');
-           
-            if($model->save()){
-                return response()->json([   
-                    'status'=>200
-                ]);
+                $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+                // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
+                $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+                
+                $model = new PurchaseEntry;
+                $model->product_code = $product_code;
+                $model->category_id = $req->input('category_id');
+                $model->supplier_id = $req->input('supplier_id');
+                $model->sub_category_id = $req->input('sub_category_id');
+                $model->product = $req->input('product_name');
+                $model->qty = 1;
+                $model->sales_price = $req->input('sales_price');
+                $model->purchase_price = $req->input('purchase_price');
+                $model->gst_no = $req->input('gst_no');
+                $model->hsn_code = $req->input('hsn_code');
+                $model->bill_no = $req->input('bill_no');
+                $model->size_id = $req->input('size_id');
+                $model->color_id = $req->input('color_id');
+                $model->barcode = $barcode;
+                $model->date = date('Y-m-d');
+                $model->time = date('g:i A');
+                $model->save();
             }
+
+            return response()->json([   
+                'status'=>200
+            ]);
         }
     }
 
@@ -105,7 +123,6 @@ class PurchaseEntryController extends Controller
     public function editProduct($product_id)
     {
         $product = PurchaseEntry::find($product_id);
-
         $sub_category = SubCategory::where(['category_id'=>$product->category_id])->get();
 
         $html = "";
@@ -132,7 +149,7 @@ class PurchaseEntryController extends Controller
             'category_id' => 'required|max:191',
             'sub_category_id'=>'required|max:191',
             'product_name'=>'required|max:191',
-            'price'=>'required|max:191',
+            // 'price'=>'required|max:191',
             'size_id'=>'required|max:191',
             'color_id'=>'required|max:191',
             'qty'=>'required|max:191',
@@ -148,22 +165,25 @@ class PurchaseEntryController extends Controller
             $product_code = rand(000001,999999);
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
-
-            
             $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
 
 
             $model =  PurchaseEntry::find($product_id);
             $model->product_code = $product_code;
             $model->category_id = $req->input('category_id');
+            $model->supplier_id = $req->input('supplier_id');
             $model->sub_category_id = $req->input('sub_category_id');
             $model->product = $req->input('product_name');
-            $model->qty = $req->input('qty');
-            $model->sales_price = $req->input('price');
+            // $model->qty = $req->input('qty');
+            $model->sales_price = $req->input('sales_price');
+            $model->purchase_price = $req->input('purchase_price');
+            $model->gst_no = $req->input('gst_no');
+            $model->hsn_code = $req->input('hsn_code');
+            $model->bill_no = $req->input('bill_no');
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
-            $model->date = date('Y-m-d');
             $model->barcode = $barcode;
+            $model->date = date('Y-m-d');
             $model->time = date('g:i A');
 
             if($model->save()){

@@ -18,6 +18,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CountryStateCityController;
 use App\Http\Controllers\SalesInvoiceController;
+use App\Http\Controllers\ExcalProductDataController;
 
 use App\MyApp;
 /*
@@ -81,6 +82,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-state/{state_id}', 'deleteState');
 
         Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
+        
+        // Route::get('admin/get-state-by-city/{state_id}', 'getStateByCity');
 
         Route::post('admin/manage-city', 'manageCity');
         Route::get('admin/edit-city/{city_id}', 'editCity');
@@ -94,6 +97,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
         
     });
 
+    Route::controller(ExcalProductDataController::class)->group(function () {
+        Route::get('admin/excel_data','index');
+        // Route::post('admin/save-order-customer', 'saveOrderCustomer');
+        
+    });
+
     // supplier 
 
     Route::controller(SupplierController::class)->group(function () {
@@ -102,6 +111,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-supplier-order/{supplier_id}', 'editSupplier');
         Route::post('admin/update-supplier-order/{supplier_id}', 'updateSupplier');
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
+        Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
+        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
+        Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
 
 
     });

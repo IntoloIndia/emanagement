@@ -23,6 +23,9 @@ class CreatePurchaseEntriesTable extends Migration
             $table->integer('qty')->nullable();
             $table->string('purchase_price')->nullable();
             $table->string('sales_price')->nullable();
+            $table->string('bill_no')->nullable();
+            $table->string('gst_no')->nullable();
+            $table->string('hsn_code')->nullable();
             $table->integer('size_id')->default(0);
             $table->integer('color_id')->default(0);
             $table->date('date')->nullable();

@@ -1,11 +1,19 @@
 <?php
     use Illuminate\Support\facades\DB;
-    use App\Models\SubCategory;
     // use App\Models\Order;
+    use App\Models\SubCategory;
+    use App\Models\PurchaseEntry;
 
     function subCategoryItems($category_id){
         $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
         return $subCategory_item; 
+    }
+
+    function updateProductStatus($product_id){
+        $purchase = PurchaseEntry::find($product_id);
+        $purchase->status = MyApp::SOLD;
+        $purchase->save();
+        return 200; 
     }
 
     // function invoiceNo(){

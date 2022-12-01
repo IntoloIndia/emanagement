@@ -142,6 +142,11 @@
                         <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="excel_data" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
+                    </a>
+                </li>
                 
         </ul>
     </nav>

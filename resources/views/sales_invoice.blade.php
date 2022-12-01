@@ -83,13 +83,26 @@
                     </div>
                     <div class="card-footer ">
                         <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4"></div>
-                            <div class="col-md-2 text-end">
-                                <b>Total Amt :</b>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3 text-end">
+                                {{-- <b>Total Amt :</b><br/> --}}
+                                <b>GROSS AMOUNT :</b><br/>
+                                <b>LESS DISCOUNT :</b><br/>
+                                <b>ADD SGST :</b><br/>
+                                <b>ADD CGST :</b><br/>
+                                <b> OTHER ADJ  :</b><br/>
+                                <b>R/OFF AMT :</b><br/>
+                                <b>G.TOTAL  :</b><br/>
                             </div>
                             <div class="col-md-2 text-center">
-                                <span id="item_total_amount"></span>
+                                <span id="item_gross_amount"></span><br/>
+                                <span id="item_less_amount"></span><br/>
+                                <span id="item_add_sgst"></span><br/>
+                                <span id="item_add_cgst"></span><br/>
+                                <span id="item_other_adj"></span><br/>
+                                <span id="item_Roff_amt"></span><br/>
+                                <span id="item_total_amount"></span><br/>
                             </div>
                         </div>
                         <div class="row mt-1 hide" id="given_return_amount" >
@@ -188,7 +201,35 @@
             </div>
             
         </div>
+
+
+        <div class="card">
+            <div class="card-body page" id="barcode_body" >
+                @foreach ($products as $list)
+                    <div class="card" >
+                        <div class="card-body pt-5">
+                            <div class="row mb-2">
+                                <span class="tect-center business_title text-center"><b>MANGALDEEP CLOTHS LLP</b></span>
+                            </div>
+                            <div class="row" >
+                               
+                                <div class="col-md-5">
+                                    <img src="{{$list->barcode}}" class="barcode_image barcode" ><br/>
+                                    {{-- <img src="{{asset('public/assets/barcodes/barcode.gif')}}" class="img-thumbnail " > --}}
+                                    <span class="product_detail"><b>{{$list->product_code}}</b></span> <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            
+        </div>
+
     </div>
+
+    
+
    </div>
 
    <table class="hide">
@@ -215,20 +256,20 @@
                 <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
             <td style="width: 100px;">
-                {{-- <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id"> --}}
-                <select name="size_id[]" class=" form-select form-select-sm size_id">
+                <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id">
+                {{-- <select name="size_id[]" class=" form-select form-select-sm size_id">
                     <option selected disabled></option>
                     @foreach ($sizes as $item)
                         <option  value="{{$item->id}}">{{ucwords($item->size)}}</option>
                     @endforeach
-                </select>
+                </select> --}}
             </td>
             <td style="width: 100px;">
                 <input type="text" name="price[]" class="form-control form-control-sm price" readonly>
             </td>
-            <td style="width: 150px;">
-                <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
-            </td>
+             <td style="width: 150px;">
+                 <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
+            </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
             </td>
@@ -309,7 +350,7 @@
                     dataType: "json",
                     success: function (response) {
                         console.log(response);
-                        $(object).parent().parent().find(".price").val(response.product.price);
+                        $(object).parent().parent().find(".price").val(response.product.sales_price);
                         $(object).parent().parent().find(".product").val(response.product.product);
                         $(object).parent().parent().find(".product_id").val(response.product.id);
                         $(object).parent().parent().find(".size_id").val(response.product.size_id);
@@ -384,7 +425,7 @@
         function addItem() {
             $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
-            $("#item_list tr").find(".item").chosen();
+            // $("#item_list tr").find(".item").chosen();
             
         }
 
@@ -470,7 +511,6 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    // console.log(response);
                     if (response.status === 400) {
                         $('#order_err').html('');
                         $('#order_err').addClass('alert alert-danger');
@@ -525,3 +565,10 @@
 
 @endsection
 
+                                {{-- $html .="<span class='float-end'>GROSS AMOUNT:</span><br>";
+                                $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
+                                $html .="<span class='float-end'>ADD CGST :</span> <br>";
+                                $html .="<span class='float-end'>ADD SGST : </span><br>";
+                                $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
+                                $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
+                                $html .="<span class='float-end'>G.TOTAL : </span><br>"; --}}
