@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Color;
+use App\Models\Size;
 
 class MasterAPIController extends Controller
 {
@@ -24,6 +26,22 @@ class MasterAPIController extends Controller
         $sub_categories = SubCategory::where(['category_id'=>$category_id])->get();
         return response()->json([
             'data'=>$sub_categories,
+        ]); 
+    }
+
+    public function getColor()
+    {
+        $colors = Color::all();
+        return response()->json([
+            'data'=>$colors,
+        ]); 
+    }
+
+    public function getSize()
+    {
+        $sizes = Size::all();
+        return response()->json([
+            'data'=>$sizes,
         ]); 
     }
 

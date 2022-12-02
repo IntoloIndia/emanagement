@@ -18,7 +18,6 @@ class ManageStockController extends Controller
         $sub_categories = SubCategory::all();
         // $reserve = PurchaseEntry::all()->groupBy('category_id')->count();
 
-
         $category_qty = array();
         foreach ($categories as $key => $list) {
             $count = PurchaseEntry::where(['category_id'=> $list->id])->get()->count();
@@ -39,12 +38,12 @@ class ManageStockController extends Controller
             ]);
         }
 
-        // $count = PurchaseEntry::where(['sub_category_id'=> $list->id])->get()->count();
-
+        $stock = PurchaseEntry::where(['status'=> MyApp::AVAILABLE])->get();
         return view('manage_stock', [
             'categories'=>$categories,
             'category_qty'=>$category_qty,
-            'sub_category_qty'=>$sub_category_qty
+            'sub_category_qty'=>$sub_category_qty,
+            'stock'=>$stock
         ]);
     }
 }

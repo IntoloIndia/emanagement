@@ -232,18 +232,18 @@
 
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-3 col-lg-4 col-xl-4">
+                        <div class="col-md-4 col-lg-5 col-xl-6">
                             <h3 class="card-title">States</h3>
                         </div>
-                        <div class=" col-md-6 col-lg-6 col-xl-5">
+                        <div class=" col-md-5 col-lg-5 col-xl-4">
                             <select id="country_id" name="country_id" class="form-select form-select-sm">
-                                <option selected disabled>Choose...</option>
+                                <option selected disabled>Country...</option>
                                 @foreach ($countries as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->country}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3 col-lg-2 col-xl-3">
+                        <div class="col-md-3 col-lg-2 col-xl-2">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
                                 <button type="button" id="addState" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Add</button>
                             </div>
@@ -296,7 +296,7 @@
                         </div>
                         <div class=" col-md-3 ">
                             <select name="country_id" class="form-select form-select-sm">
-                                <option selected disabled>Choose...</option>
+                                <option selected disabled>Country...</option>
                                 {{-- @foreach ($countries as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->country}}</option>
                                 @endforeach --}}
@@ -304,7 +304,7 @@
                         </div>
                         <div class=" col-md-3 ">
                             <select  name="country_id" class="form-select form-select-sm">
-                                <option selected disabled>Choose...</option>
+                                <option selected disabled>State...</option>
                                 {{-- @foreach ($countries as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->country}}</option>
                                 @endforeach --}}

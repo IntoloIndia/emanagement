@@ -33,6 +33,7 @@ class MyApp {
     const STATE = 2;
     const CITY = 3;
 
+    const AVAILABLE = 0;
     const SOLD = 1;
     const RETURN = 2;
 

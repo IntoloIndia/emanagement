@@ -36,7 +36,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry Voucher</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -44,75 +44,88 @@
                     @csrf
                     <div class="modal-body">
                         <div id="purchase_entry_err"></div>
-
                         <div class="row">
-                            <div class="col-md-4">
-                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
-                                    <option selected disabled >Supplier</option>
-                                    @foreach ($suppliers as $list)
-                                        <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly >
-                            </div>
-                            <div class="col-md-2">
-                                <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN code">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
-                            </div>
-                        </div>
 
-                        <div class="row mt-3">
-                            
-                            <div class="col-md-3">
-                                <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
-                                    <option selected disabled >Category</option>
-                                    @foreach ($categories as $list)
-                                    <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                            <option selected disabled >Supplier</option>
+                                            @foreach ($suppliers as $list)
+                                                <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN code" readonly disabled>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                    </div>
+                                </div>
+        
+                                <div class="row mt-3">
+                                    
+                                    <div class="col-md-3">
+                                        <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
+                                            <option selected disabled >Category</option>
+                                            @foreach ($categories as $list)
+                                            <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm">
+                                            <option selected disabled >Sub Category</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty" min="1" value="1">
+                                    </div>
+                                </div>
+                               
+                                <div class="row mt-3">
+                                    <div class="col-md-2">
+                                        <select id="size_id" name="size_id" class="form-select form-select-sm">
+                                            <option selected disabled >Size</option>
+                                            @foreach ($sizes as $list)
+                                                <option value="{{$list->id}}">{{ucwords($list->size)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
+                                            <option selected disabled >Color..</option>
+                                            @foreach ($colors as $list)
+                                            <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" name="purchase_price"  id="purchase_price" class="form-control form-control-sm" placeholder="Purchase price">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text"  name="sales_price" id="sales_price" class="form-control form-control-sm" placeholder="Sales price">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-3">
-                                <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm">
-                                    <option selected disabled >Sub Category</option>
-                                </select>
+                                <div id="take_photo">
+                                    <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/image.png')}}" />
+                                </div>                                
+                                <input type="hidden" name="product_image" id="product_image">
+                                <div class="d-grid gap-2 mt-2">
+                                    <button class="btn btn-primary btn-sm" id="captureLivePhotoBtn" type="button">Live Camera</button>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
-                            </div>
-                            <div class="col-md-2">
-                                <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty" min="1" value="1">
-                            </div>
+
                         </div>
-                       
-                        <div class="row mt-3">
-                            <div class="col-md-2">
-                                <select id="size_id" name="size_id" class="form-select form-select-sm">
-                                    <option selected disabled >Size</option>
-                                    @foreach ($sizes as $list)
-                                        <option value="{{$list->id}}">{{ucwords($list->size)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
-                                    <option selected disabled >Color..</option>
-                                    @foreach ($colors as $list)
-                                    <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="purchase_price"  id="purchase_price" class="form-control form-control-sm" placeholder="Purchase price">
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text"  name="sales_price" id="sales_price" class="form-control form-control-sm" placeholder="Sales price">
-                            </div>
-                        </div>
-                        
                     </div>
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                     <div class="modal-footer">
@@ -146,8 +159,27 @@
     </div>
 </div>
 
+
+
 {{-- camera modal start --}}
 <!--Modal-->
+
+<div class="modal fade" id="captureLivePhotoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Take Live Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="my_camera" class="card pre_capture_frame" ></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm float-end" onClick="takePhoto()">Take</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {{-- camera modal end --}}
 
@@ -323,16 +355,43 @@
     </div>
 </section>
 
+
 @endsection
 
 @section('script')
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-      
 <script>
+
+   
+	
+	
+
+	// function saveSnap(){
+	//     var base64data = $("#product_image").val();
+    //     alert(base64data);
+    //     $.ajax({
+    //         type: "POST",
+    //         dataType: "json",
+    //         url: "capture_image_upload.php",
+    //         data: {image: base64data},
+    //         success: function(data) { 
+    //             alert(data);
+    //         }
+    //     });
+    // }
+
+
+
+
     $(document).ready(function () {
+
+            Webcam.set({
+                width: 450,
+                height: 287,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });	 
+            Webcam.attach( '#my_camera' );
 
             $(document).on('click','#purchaseEntry', function (e) {
                 e.preventDefault();
@@ -343,6 +402,13 @@
                 $('#saveProductBtn').removeClass('hide');
                 $('#updateProductBtn').addClass('hide');
             });
+
+            
+            $(document).on('click','#captureLivePhotoBtn', function (e) {
+                e.preventDefault();
+                $('#captureLivePhotoModal').modal('show');
+            });
+
 
             $(document).on('click','#saveProductBtn', function (e) {
                 e.preventDefault();
@@ -455,6 +521,15 @@
 
         });
 
+        function takePhoto() {
+            Webcam.snap( function(data_uri) {
+                document.getElementById('take_photo').innerHTML = 
+                '<img class="card-img-top img-thumbnail after_capture_frame" src="'+data_uri+'"/>';
+                $("#product_image").val(data_uri);
+            });	 
+            $('#captureLivePhotoModal').modal('hide');
+        }
+
         function supplierDetail(supplier_id) {
             $.ajax({
                 type: "get",
@@ -464,6 +539,7 @@
                     console.log(response);
                     if (response.status == 200) {
                        $('#gst_no').val(response.supplier.gst_no) ;
+                       $('#hsn_code').val(response.supplier.hsn_code) ;
                     }
                 }
             });

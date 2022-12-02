@@ -30,18 +30,21 @@ Route::get('/admin', [AuthAPIController::class, 'getAdmin']);
 Route::post('/admin-login', [AuthAPIController::class, 'adminLogin']);
 Route::post('/user-login', [AuthAPIController::class, 'userLogin']);
 
-
 Route::controller(UserAPIController::class)->group(function () {
     Route::get('users', 'getUsers');
     Route::get('user/{user_id}', 'getUser');
 });
+
 Route::controller(MasterAPIController::class)->group(function () {
     Route::get('get-category', 'getCategory');
     Route::get('get-sub-category/{category_id}', 'getSubCategory');
+    Route::get('get-color', 'getColor');
+    Route::get('get-size', 'getSize');
 });
 
 Route::controller(ProductAPIController::class)->group(function () {
-    Route::get('get-product', 'getProduct');
+    Route::get('available-stock', 'availableStock');
+    Route::get('sales-invoice', 'salesInvoice');
     // Route::get('get-sub-category/{category_id}', 'getSubCategory');
 });
 
