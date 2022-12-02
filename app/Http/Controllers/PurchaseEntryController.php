@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PurchaseEntry;
+use App\Models\ProductImage;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Size;
@@ -68,8 +69,8 @@ class PurchaseEntryController extends Controller
             'purchase_price'=>'required|max:191',
             'sales_price'=>'required|max:191',
             'bill_no'=>'required|max:191',
-            'gst_no'=>'required|max:191',
-            'hsn_code'=>'required|max:191',
+            // 'gst_no'=>'required|max:191',
+            // 'hsn_code'=>'required|max:191',
             'size_id'=>'required|max:191',
             'color_id'=>'required|max:191',
         ]);
@@ -102,15 +103,21 @@ class PurchaseEntryController extends Controller
                 $model->qty = 1;
                 $model->sales_price = $req->input('sales_price');
                 $model->purchase_price = $req->input('purchase_price');
-                $model->gst_no = $req->input('gst_no');
-                $model->hsn_code = $req->input('hsn_code');
+                // $model->gst_no = $req->input('gst_no');
+                // $model->hsn_code = $req->input('hsn_code');
                 $model->bill_no = $req->input('bill_no');
                 $model->size_id = $req->input('size_id');
                 $model->color_id = $req->input('color_id');
                 $model->barcode = $barcode;
                 $model->date = date('Y-m-d');
                 $model->time = date('g:i A');
-                $model->save();
+                // $model->save();
+                if ($model->save()) {
+                    $imageModal = new ProductImage;
+                    $imageModal->product_id = $model->id;
+                    $imageModal->product_image = $req->input('product_image');
+                    $imageModal->save();
+                }
             }
 
             return response()->json([   
@@ -177,8 +184,8 @@ class PurchaseEntryController extends Controller
             // $model->qty = $req->input('qty');
             $model->sales_price = $req->input('sales_price');
             $model->purchase_price = $req->input('purchase_price');
-            $model->gst_no = $req->input('gst_no');
-            $model->hsn_code = $req->input('hsn_code');
+            // $model->gst_no = $req->input('gst_no');
+            // $model->hsn_code = $req->input('hsn_code');
             $model->bill_no = $req->input('bill_no');
             $model->size_id = $req->input('size_id');
             $model->color_id = $req->input('color_id');
@@ -187,6 +194,12 @@ class PurchaseEntryController extends Controller
             $model->time = date('g:i A');
 
             if($model->save()){
+
+                $imageModal = ProductImage::find($product_id);
+                $imageModal->product_id = $model->id;
+                $imageModal->product_image = $req->input('product_image');
+                $imageModal->save();
+
                 return response()->json([
                     'status'=>200,
                 ]);

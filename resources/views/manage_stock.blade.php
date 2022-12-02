@@ -133,15 +133,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Jeans</td>
-                                    <td>XL</td>
-                                    <td>Red</td>
-                                    <td>10</td>
-                                    {{-- <td>@mdo</td> --}}
-                                </tr>
-                              
+                                @foreach ($stock as $key => $list)
+                                    <tr>
+                                        <th scope="row">{{++$key}}</th>
+                                        <td>{{ ucwords($list->product) }}</td>
+                                        <td>{{ strtoupper($list->size_id) }}</td>
+                                        <td>{{ $list->color_id }}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>  

@@ -19,7 +19,9 @@
         <link rel="stylesheet" href="{{ asset('public/assets/css/summernote-bs4.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/style.css') }}" />
 
+        
         <script src="{{ asset('public/assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('public/assets/js/webcam.js') }}"></script>
 
         <style>
             .sidebar .nav-link p{
@@ -83,7 +85,14 @@
     <script src="{{ asset('public/assets/js/jquery.overlayScrollbars.min.js') }}"></script>
     <script src="{{ asset('public/assets/js/adminlte.js') }}"></script>
     {{-- <script src="{{ asset('assets/user/js/demo.js') }}"></script> --}}
+    
     <script src="{{ asset('public/assets/js/dashboard.js') }}"></script>
     <script src="{{ asset('public/assets/js/master.js') }}" ></script>
+
+
+
+    
+    
+{{-- <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> --}}
 
 </html>
