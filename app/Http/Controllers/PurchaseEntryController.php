@@ -16,6 +16,11 @@ use DNS1D;
 use DNS2D;
 use QrCode;
 
+use App\Imports\ImportProduct;
+use App\Exports\ExportProduct;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class PurchaseEntryController extends Controller
 {
@@ -40,14 +45,10 @@ class PurchaseEntryController extends Controller
         $products = PurchaseEntry::Join('suppliers','suppliers.id','=','purchase_entries.supplier_id')
                 ->Join('categories','categories.id','=','purchase_entries.category_id')
                 ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
-                ->join('sizes','sizes.id','=','purchase_entries.size_id')
-                ->join('colors','colors.id','=','purchase_entries.color_id')
                 ->get(['purchase_entries.*',
                     'suppliers.supplier_name',
                     'categories.category',
                     'sub_categories.sub_category',
-                    'sizes.size',
-                    'colors.color'
                 ]);
         return view('purchase_entry',[
             "categories"=>$categories,
@@ -71,8 +72,8 @@ class PurchaseEntryController extends Controller
             'bill_no'=>'required|max:191',
             // 'gst_no'=>'required|max:191',
             // 'hsn_code'=>'required|max:191',
-            'size_id'=>'required|max:191',
-            'color_id'=>'required|max:191',
+            'size'=>'required|max:191',
+            'color'=>'required|max:191',
         ]);
 
         if($validator->fails())
@@ -106,8 +107,8 @@ class PurchaseEntryController extends Controller
                 // $model->gst_no = $req->input('gst_no');
                 // $model->hsn_code = $req->input('hsn_code');
                 $model->bill_no = $req->input('bill_no');
-                $model->size_id = $req->input('size_id');
-                $model->color_id = $req->input('color_id');
+                $model->size = $req->input('size');
+                $model->color = $req->input('color');
                 $model->barcode = $barcode;
                 $model->date = date('Y-m-d');
                 $model->time = date('g:i A');
@@ -157,8 +158,8 @@ class PurchaseEntryController extends Controller
             'sub_category_id'=>'required|max:191',
             'product_name'=>'required|max:191',
             // 'price'=>'required|max:191',
-            'size_id'=>'required|max:191',
-            'color_id'=>'required|max:191',
+            'size'=>'required|max:191',
+            'color'=>'required|max:191',
             'qty'=>'required|max:191',
         ]);
 
@@ -187,8 +188,8 @@ class PurchaseEntryController extends Controller
             // $model->gst_no = $req->input('gst_no');
             // $model->hsn_code = $req->input('hsn_code');
             $model->bill_no = $req->input('bill_no');
-            $model->size_id = $req->input('size_id');
-            $model->color_id = $req->input('color_id');
+            $model->size = $req->input('size');
+            $model->color = $req->input('color');
             $model->barcode = $barcode;
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
@@ -334,6 +335,15 @@ class PurchaseEntryController extends Controller
             'color'=>$color
         ]);
 
+    }
+
+    public function importProduct(){
+        return Excel::download(new ExportProduct,'Purchase_entry.xlsx');
+    }
+
+    public function exportProduct(){
+        Excel::import(new ImportProduct,request()->file('file'));
+        return back();
     }
 
 }

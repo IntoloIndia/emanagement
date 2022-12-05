@@ -14,4 +14,10 @@ class PurchaseEntry extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $fillable = ['supplier_id','product_code',
+    'category_id','sub_category_id',
+    'product','qty','purchase_price','sales_price',
+    'gst_no','bill_no','hsn_code','size_id','color_id'
+];
 }

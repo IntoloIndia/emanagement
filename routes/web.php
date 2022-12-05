@@ -19,6 +19,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CountryStateCityController;
 use App\Http\Controllers\SalesInvoiceController;
 use App\Http\Controllers\ExcalProductDataController;
+use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\StyleNoController;
 
 use App\MyApp;
 /*
@@ -97,10 +99,18 @@ Route::group(['middleware'=>'admin_auth'], function(){
         
     });
 
+
+    // discount route 
+    Route::controller(DiscountController::class)->group(function () {
+        Route::get('admin/discount','index');
+          
+    });
+
     Route::controller(ExcalProductDataController::class)->group(function () {
         Route::get('admin/excel_data','index');
-        // Route::post('admin/save-order-customer', 'saveOrderCustomer');
-        
+        Route::get('admin/import-data-product','import');
+        Route::post('admin/export-excel-data-product','export');
+          
     });
 
     // supplier 
@@ -115,8 +125,17 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
         Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
 
+        Route::get('admin/get-city-short/{city_id}', 'getCityShortName');
+
 
     });
+
+    Route::controller(StyleNoController::class)->group(function () {
+        Route::get('admin/style-no','index');
+        Route::post('admin/save-style-no','manageStyleNo');
+        
+    });
+    
 
      // sales invoice 
 
@@ -124,10 +143,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/sales_invoice','index');
         Route::post('admin/save-order', 'saveOrder');
         Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
+        Route::get('admin/get-customer-data/{customer_id}', 'getCumosterData');
         Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
         
-       
-
 
     });
 
@@ -195,6 +213,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/barcode', 'getBarcode');
         Route::get('admin/get-color_code/{color_code}','getcolorcode');
 
+        // excel file route 
+
+        Route::get('admin/import-data','importProduct');
+        Route::post('admin/export-excel-data','exportProduct');
+
 
     });
     
@@ -208,6 +231,14 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-department/{department_id}', 'editDepartment');
         Route::post('admin/update-department/{department_id}', 'updateDepartment');
         Route::get('admin/delete-department/{department_id}', 'deleteDepartment');
+    });
+
+    Route::controller(DiscountController::class)->group(function () {
+        Route::get('admin/discountt', 'index');
+        Route::post('admin/save-discount', 'saveDiscount');
+        Route::get('admin/edit-discount/{discount_id}', 'editDiscount');
+        Route::post('admin/update-discount/{discount_id}', 'updateDiscount');
+        Route::get('admin/delete-discount/{discount_id}', 'deleteDiscount');
     });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
@@ -248,17 +279,6 @@ Route::group(['middleware'=>'billing_auth'], function(){
     
 
     
-
-
-
-
-
-
-// Route::get('/subcategory', function () {
-//     return view('subcategory');
-// });
-
-
 
 
 

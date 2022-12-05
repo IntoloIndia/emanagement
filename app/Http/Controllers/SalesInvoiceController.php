@@ -9,6 +9,7 @@ use App\Models\Size;
 use App\Models\SalesInvoice;
 use App\Models\Customer;
 use App\Models\Month;
+use App\Models\City;
 use Validator;
 
 class SalesInvoiceController extends Controller
@@ -18,6 +19,7 @@ class SalesInvoiceController extends Controller
         $sizes = Size::all();
         $customers_billing = Customer::all();
         $months = Month::all();
+        $cities = City::all();
         // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
         // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
         // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
@@ -31,6 +33,7 @@ class SalesInvoiceController extends Controller
             'sizes' => $sizes,
             'customers_billing' => $customers_billing,
             'months' => $months,
+            'cities' => $cities,
         ]);
         
     }
@@ -40,9 +43,12 @@ class SalesInvoiceController extends Controller
         // return $req;
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required|max:191',
-            'mobile_no'=>'required|max:191',
+            'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
+            'states'=>'required|max:191',
+            // 'city_id'=>'required|max:191',
+            // 'gst_no'=>'required|max:191',
 
         ]);
 
@@ -58,6 +64,9 @@ class SalesInvoiceController extends Controller
             $model->mobile_no = $req->input('mobile_no');
             $model->birthday_date = $req->input('birthday_date');
             $model->month_id = $req->input('month_id');
+            $model->states = $req->input('states');
+            $model->city_id = $req->input('city_id');
+            $model->gst_no = $req->input('gst_no');
             $model->total_amount = $req->input('total_amount');
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
@@ -66,7 +75,7 @@ class SalesInvoiceController extends Controller
             $product_code = $req->input('product_code');
             $price = $req->input('price');
             $qty = $req->input('qty');
-            $size_id = $req->input('size_id');
+            $size = $req->input('size');
             $amount = $req->input('amount');
             
             
@@ -84,7 +93,7 @@ class SalesInvoiceController extends Controller
                     $item->product_code = $product_code[$key];
                     $item->price = $price[$key];
                     $item->qty = $qty[$key];
-                    $item->size_id = $size_id[$key];
+                    $item->size = $size[$key];
                     $item->amount = $amount[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
@@ -113,6 +122,17 @@ class SalesInvoiceController extends Controller
                         
         return response()->json([
             'product'=>$product
+        ]);
+
+    }
+    public function getCumosterData($customer_id)
+    {
+        // $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
+        // print_r($product);
+        $customersData = Customer::find($customer_id);
+                        
+        return response()->json([
+            'customersData'=>$customersData
         ]);
 
     }

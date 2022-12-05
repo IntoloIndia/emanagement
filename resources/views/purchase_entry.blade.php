@@ -29,6 +29,21 @@
 </style>
 @endsection
 
+@section('content-header')
+    <div class="content-header">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="m-0"><b>Purchase Invoice</b></h3>
+            </div>
+            <div class="col-sm-6">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('content')
 
 {{-- product modal --}}
@@ -36,74 +51,173 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry Voucher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="purchaseEntryForm">
+                <form id="purchaseEntryForm" action="{{url('admin/export-excel-data')}}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">
-                        <div id="purchase_entry_err"></div>
-                        <div class="row">
+                    <div id="purchase_entry_err"></div>
+                        {{-- <div class="row">
+                            <div class="col-md-6">
+                                <input type="file"name="file" id="file" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary btn-sm">save product</button>
+                                <a href="{{url('admin/import-data')}}">Excel download file</a>
+                            </div>
+                        </div> --}}
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+
+                                <div class="card">
+                                    <div class="card-header"><b>Supplier</b></div>
+                                    <div class="card-body">
+                                        
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                                                <option selected disabled >Supplier</option>                                          
+                                                                @foreach ($suppliers as $list)
+                                                                    <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <textarea class="form-control" id="supplier_address"  placeholder="Address....." disabled readonly></textarea>
+                                                </div>
+    
+                                                {{-- <div class="col-md-4">
+                                                    <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                                        <option selected disabled >Supplier</option>                                          
+                                                        @foreach ($suppliers as $list)
+                                                            <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                                </div> --}}
+                                            </div>
+    
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    {{-- <div class="card-header"><b>Product Details</b></div> --}}
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="row">
+                                                    <div class="col-md-4 input-group">
+                                                        <select id="category_id" name="category_id" class="form-select " onchange="getSubCategoryByCategory(this.value);">
+                                                            <option selected disabled >Category</option>
+                                                            @foreach ($categories as $list)
+                                                                <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <button type="button" id="purchaseEntry" class="btn btn-flat btn-sm " style="background-color: #D5DBDB;"><i class="fas fa-plus"></i> </button>
+                                                    </div>
+                    
+                                                    <div class="col-md-4 input-group">
+                                                        <select id="sub_category_id" name="sub_category_id" class="form-select ">
+                                                            <option selected disabled >Sub Category</option>
+                                                        </select>
+                                                        <button type="button" id="purchaseEntry" class="btn btn-flat btn-sm " style="background-color: #D5DBDB;"><i class="fas fa-plus"></i> </button>
+                                                    </div>
+
+                                                    <div class="col-md-4 input-group">
+                                                        <select id="category_id" name="category_id" class="form-select " onchange="getSubCategoryByCategory(this.value);">
+                                                            <option selected disabled >Style No</option>
+                                                            {{-- @foreach ($categories as $list)
+                                                                <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
+                                                            @endforeach --}}
+                                                        </select>
+                                                        <button type="button" id="purchaseEntry" class="btn btn-flat btn-sm " style="background-color: #D5DBDB;"><i class="fas fa-plus"></i> </button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <b>Product</b>
+                                                </div>
+                                                <div class="col-6 d-flex justify-content-end">
+                                                    <button class="btn btn-primary btn-sm"  id="addItemBtn"> Add New</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body" >
+                                           <div class="row" id="item_list">
+
+                                           </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+
+                        {{-- <div class="row mt-2">
 
                             <div class="col-md-9">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
-                                            <option selected disabled >Supplier</option>
-                                            @foreach ($suppliers as $list)
-                                                <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN code" readonly disabled>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
-                                    </div>
-                                </div>
-        
-                                <div class="row mt-3">
-                                    
-                                    <div class="col-md-3">
-                                        <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
-                                            <option selected disabled >Category</option>
-                                            @foreach ($categories as $list)
-                                            <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm">
-                                            <option selected disabled >Sub Category</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty" min="1" value="1">
-                                    </div>
-                                </div>
                                
                                 <div class="row mt-3">
                                     <div class="col-md-2">
-                                        <select id="size_id" name="size_id" class="form-select form-select-sm">
+                                        <select id="size" name="size" class="form-select form-select-sm">
                                             <option selected disabled >Size</option>
                                             @foreach ($sizes as $list)
-                                                <option value="{{$list->id}}">{{ucwords($list->size)}}</option>
+                                                <option value="{{$list->size}}">{{strtoupper($list->size)}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
+                                        <select id="color" name="color" class="form-select form-select-sm color_code">
                                             <option selected disabled >Color..</option>
                                             @foreach ($colors as $list)
-                                            <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
+                                            <option value="{{$list->color}}">{{ucwords($list->color)}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -125,8 +239,8 @@
                                 </div>
                             </div>
 
-                        </div>
-                    </div>
+                        </div> --}}
+
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -159,8 +273,6 @@
     </div>
 </div>
 
-
-
 {{-- camera modal start --}}
 <!--Modal-->
 
@@ -183,13 +295,13 @@
 
 {{-- camera modal end --}}
 
-<div class="row mb-3 ">
+{{-- <div class="row mb-3 ">
     <div class="col-12">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
             <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="row">
    
@@ -308,6 +420,91 @@
 
 </div>
 
+<div class="hide">
+    <div class="row" id="item_row">
+
+        <div class="col-md-3">
+            <select id="color" name="color" class="form-select form-select-sm color_code">
+                <option selected disabled >Color..</option>
+                @foreach ($colors as $list)
+                <option value="{{$list->color}}">{{ucwords($list->color)}}</option>
+                @endforeach
+            </select>
+            <div id="take_photo">
+                {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/image.png')}}" style="width: 60px; height:60px;" /> --}}
+            </div>                                
+            <input type="hidden" name="product_image" id="product_image">
+            <div class="d-grid gap-2 mt-2">
+                <button class="btn btn-primary btn-sm" id="captureLivePhotoBtn" type="button">Live Camera</button>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+
+            <div class="row ">
+                <div class="card">
+                    {{-- <div class="card-header"><b>Size</b></div> --}}
+                    <div class="card-body ">
+                        <div class="row">
+                            
+                            <div class="col-md-12 table-responsive p-0">
+                                <table class="table table-head-fixed text-nowrap">
+                                    <tbody>
+                                        <tr>
+                                            <th>Size</th>
+                                            <td>XS</td>
+                                            <td>S</td>
+                                            <td>M</td>
+                                            <td>L</td>
+                                            <td>XL</td>
+                                            <td>XXL</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Qty</th>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            <td><input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <th>MRP</th>
+                                            <td>1999</td>
+                                            <td>1999</td>
+                                            <td>2199</td>
+                                            <td>2199</td>
+                                            <td>2199</td>
+                                            <td>2199</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Price</th>
+                                            <td>1499</td>
+                                            <td>1499</td>
+                                            <td>1599</td>
+                                            <td>1599</td>
+                                            <td>1599</td>
+                                            <td>1599</td>
+                                        </tr>
+                                        </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
+        </div>
+
+    </div>
+</div>
+
 
 {{-- <div class="row">
     <div class="col-12">
@@ -401,6 +598,12 @@
                 $("#purchaseEntryForm").trigger("reset"); 
                 $('#saveProductBtn').removeClass('hide');
                 $('#updateProductBtn').addClass('hide');
+            });
+
+            $(document).on('click','#addItemBtn', function (e) {
+                e.preventDefault();
+                addItem();
+                // $(".product_code").focus();
             });
 
             
@@ -521,6 +724,13 @@
 
         });
 
+        function addItem() {
+            // $(".product_code").focus();
+            $('#item_list').append($('#item_row').html());
+            // $("#item_list tr").find(".item").chosen();
+            
+        }
+
         function takePhoto() {
             Webcam.snap( function(data_uri) {
                 document.getElementById('take_photo').innerHTML = 
@@ -539,7 +749,8 @@
                     console.log(response);
                     if (response.status == 200) {
                        $('#gst_no').val(response.supplier.gst_no) ;
-                       $('#hsn_code').val(response.supplier.hsn_code) ;
+                       $('#supplier_code').val(response.supplier.supplier_code) ;
+                       $('#supplier_address').val(response.supplier.address) ;
                     }
                 }
             });
@@ -630,8 +841,8 @@
 
                         $('#qty').val(response.product.qty);//
 
-                        $('#size_id').val(response.product.size_id);
-                        $('#color_id').val(response.product.color_id);
+                        $('#size').val(response.product.size);
+                        $('#color').val(response.product.color);
                         $('#purchase_price').val(response.product.purchase_price);
                         $('#sales_price').val(response.product.sales_price);
 

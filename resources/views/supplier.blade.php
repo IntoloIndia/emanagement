@@ -37,7 +37,7 @@
                                     <input type="text" name="gst_no" id="gst_no" class="form-control-sm form-control" placeholder="GST IN">
                                 </div>
                                 <div class="col-6">
-                                   <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN Code">
+                                   <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="supplier code">
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -150,10 +150,11 @@
                                 <th>Name</th>
                                 <th>Mobile no</th>
                                 <th>GST IN</th>
-                                <th>HSN Code</th>
+                                <th >Supplier code</th>
                                 <th>Country</th>
                                 <th>State</th>
                                 <th>City</th>
+                                {{-- <th>City short</th> --}}
                                 <th>Address</th>
                                 <th>Action</th>
                             </tr>
@@ -168,10 +169,11 @@
                                     <td>{{ucwords($list->supplier_name)}}</td>
                                     <td>{{$list->mobile_no}}</td>
                                     <td>{{$list->gst_no}}</td>
-                                    <td>{{$list->hsn_code}}</td>
+                                    <td>{{$list->supplier_code}}</td>
                                     <td>{{ucwords($list->country)}}</td>
                                     <td>{{ucwords($list->state)}}</td>
                                     <td>{{ucwords($list->city)}}</td>
+                                   
                                     <td>{{ucwords($list->address)}}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editSupplierBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
@@ -250,7 +252,23 @@
                 getCityByState(state_id);
             });
 
+            $(document).on('change','#city_id', function (e) {
+                // e.preventDefault();
+                const city_id = $(this).val();
+                var object = $(this);
+                $.ajax({
+                    type: "get",
+                    url: "get-city-short/"+city_id,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        // $(object).parent().parent().find(".city_name_short").val(response.product.sales_price);
+                    }
+            });
+
         });
+
+    })
 
         function saveSupplier() {
             $.ajaxSetup({
@@ -303,7 +321,7 @@
                         $('#mobile_no').val(response.supplier.mobile_no);
                         $('#address').val(response.supplier.address);
                         $('#gst_no').val(response.supplier.gst_no);
-                        $('#hsn_code').val(response.supplier.hsn_code);
+                        $('#supplier_code').val(response.supplier.supplier_code);
                         $('#country_id').val(response.supplier.country_id);
 
                         $('#state_id').html("");

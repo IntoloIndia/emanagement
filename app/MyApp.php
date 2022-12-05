@@ -37,5 +37,8 @@ class MyApp {
     const SOLD = 1;
     const RETURN = 2;
 
+    const WITH_IN_STATE = 1;
+    const INTER_STATE = 2;
+
 
 }

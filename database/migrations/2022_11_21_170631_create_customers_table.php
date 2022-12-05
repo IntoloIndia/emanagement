@@ -19,6 +19,9 @@ class CreateCustomersTable extends Migration
             $table->string('mobile_no')->nullable();
             $table->integer('birthday_date')->nullable();
             $table->integer('month_id')->nullable();
+            $table->string('states')->nullable();
+            $table->string('gst_no')->default(0);
+            $table->integer('city_id')->default(0);
             $table->float('total_amount')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();

@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="{{ asset('public/assets/css/icheck-bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/jqvmap.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/adminlte.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('public/assets/css/chosen.min.css')}}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/OverlayScrollbars.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/daterangepicker.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/summernote-bs4.min.css') }}" />
@@ -46,6 +47,7 @@
                 <div class="content-wrapper">
                     <section class="content pt-3">
                         @yield('style')
+                        @yield('content-header')
                         @yield('content')
                         @yield('script')
                     </section>
@@ -73,6 +75,7 @@
     </script>
     
     <script src="{{ asset('public/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('public/assets/js/chosen.jquery.min.js')}}"></script>
     <script src="{{ asset('public/assets/js/Chart.min.js') }}"></script>
     <script src="{{ asset('public/assets/js/sparkline.js') }}"></script>
     <script src="{{ asset('public/assets/js/jquery.vmap.min.js') }}"></script>

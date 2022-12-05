@@ -5,8 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Discount extends Model
 {
     use HasFactory;
-    protected $fillable =['customer_name','mobile_no','birthday_date','month_id','total_amount'];
+    protected $table = "discounts";
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

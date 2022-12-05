@@ -45,6 +45,7 @@ Route::controller(MasterAPIController::class)->group(function () {
 Route::controller(ProductAPIController::class)->group(function () {
     Route::get('available-stock', 'availableStock');
     Route::get('sales-invoice', 'salesInvoice');
+    Route::get('filter-available-stock/{category_id}', 'filterAvailableStock');
     // Route::get('get-sub-category/{category_id}', 'getSubCategory');
 });
 

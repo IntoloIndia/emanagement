@@ -18,11 +18,23 @@ class ProductAPIController extends Controller
     public function availableStock()
     {
         $products = PurchaseEntry::join('categories', 'purchase_entries.category_id','=','categories.id')
-                ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
-                ->join('sizes','purchase_entries.size_id','=','sizes.id')
-                ->join('colors','purchase_entries.color_id','=','colors.id')
-                ->where('purchase_entries.status', MyApp::AVAILABLE)
-                ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price','categories.category', 'sub_categories.sub_category', 'sizes.size', 'colors.color']);
+            ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+            ->where('purchase_entries.status', MyApp::AVAILABLE)
+            ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price', 'purchase_entries.size', 'purchase_entries.color','categories.category', 'sub_categories.sub_category']);
+
+        return response()->json([
+            'data'=>$products,
+            'count'=>$products->count(),
+        ]); 
+    }
+
+    public function filterAvailableStock($category_id)
+    {
+        $products = PurchaseEntry::join('categories', 'purchase_entries.category_id','=','categories.id')
+            ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+            ->where('purchase_entries.category_id', $category_id)
+            ->where('purchase_entries.status', MyApp::AVAILABLE)
+            ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price','purchase_entries.size', 'purchase_entries.color','categories.category', 'sub_categories.sub_category']);
 
         return response()->json([
             'data'=>$products,
