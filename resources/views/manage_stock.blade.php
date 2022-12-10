@@ -64,11 +64,11 @@
                                 <th scope="col">Qty</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
 
                             {{$count = "";}}
                                 @foreach ($sub_category_qty as $item)
-                                    <tr>
+                                    <tr class="row_filter" category-id="{{$item['category_id']}}">
                                         <th scope="row">{{++$count}}</th>
                                         <td>{{ucwords($item['sub_category'])}}</td>
                                         <td>{{$item['count']}}</td>
@@ -125,21 +125,27 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Sno</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Sub Category</th>
+                                    <th scope="col">Supplier</th>
                                     <th scope="col">Product</th>
                                     <th scope="col">Size</th>
                                     <th scope="col">Color</th>
-                                    <th scope="col">Qty</th>
                                     {{-- <th scope="col">Handle</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($stock as $key => $list)
                                     <tr>
-                                        <th scope="row">{{++$key}}</th>
-                                        <td>{{ ucwords($list->product) }}</td>
-                                        <td>{{ strtoupper($list->size_id) }}</td>
-                                        <td>{{ $list->color_id }}</td>
+                                        <td scope="row">{{++$key}}</td>
                                         <td></td>
+                                        <td></td>
+                                        <td>{{ ucwords($list->supplier_name)}}</td>
+                                        <td>{{ ucwords($list->product) }}</td>
+                                        <td>{{ strtoupper($list->size) }}</td>
+                                        <td > 
+                                            <div style="width:15px; height:15px; background-color:{{$list->color}};"></div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -157,7 +163,41 @@
     <script>
 
         $(document).ready(function () {
+            $(document).on('change','#category_id', function (e) {
+                e.preventDefault();
+                const category_id = $(this).val();
 
+                var row = $('.row_filter');
+                row.hide()
+                row.each(function(i, el) {
+                    if($(el).attr('category-id') == category_id) {
+                        $(el).show();
+                    }
+                })
+
+                // $(".iform_row_filter ").each(function () {
+                //     if ($(this).text().toLowerCase().search(value) > -1) {
+                //         $(this).show();
+                //     } else {
+                //         $(this).hide();
+                //     }
+                // });
+                // getSubCategoryByCategory(category_id);
+
+                // $(".filter").change(function() {
+                //     var filterValue = $(this).val();
+                //     var row = $('.row'); 
+                    
+                //     row.hide()
+                //     row.each(function(i, el) {
+                //         if($(el).attr('data-type') == filterValue) {
+                //             $(el).show();
+                //         }
+                //     })
+                    
+                // });
+                
+            });
         });
 
     </script>

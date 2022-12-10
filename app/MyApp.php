@@ -18,6 +18,8 @@ class MyApp {
 
     const ONLINE = 1;
     const CASH = 2;
+    const CARD = 3;
+    const CREDIT = 4;
 
     const KG = 1;
     const LITER = 2;
@@ -36,6 +38,10 @@ class MyApp {
     const AVAILABLE = 0;
     const SOLD = 1;
     const RETURN = 2;
+
+    const WITH_IN_STATE = 1;
+    const INTER_STATE = 2;
+    const THOUSAND = 1000;
 
 
 }

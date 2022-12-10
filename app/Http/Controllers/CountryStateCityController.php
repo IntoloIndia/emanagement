@@ -146,22 +146,6 @@ class CountryStateCityController extends Controller
         ]);
     }
 
-    public function getStateByCountry($country_id)
-    {
-        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
-
-        $html = "";
-        $html .= "<option selected disabled >Select...</option>";
-        foreach($data as $list)
-        {
-            $html.= "<option value='" . $list->id . "'>" . $list->state . "</option>";
-        }
-        return response()->json([
-            'status'=> 200,
-            'html'=> $html,
-        ]);
-    }
-
     public function manageCity(Request $req)
     {
         if($req->input('city_id') > 0)
@@ -233,6 +217,38 @@ class CountryStateCityController extends Controller
         $model->delete();
         return response()->json([
             'status'=>200,
+        ]);
+    }
+
+    public function getStateByCountry($country_id)
+    {
+        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
+
+        $html = "";
+        $html .= "<option selected disabled >State</option>";
+        foreach($data as $list)
+        {
+            $html.= "<option value='" . $list->id . "'>" . ucwords($list->state) . "</option>";
+        }
+        return response()->json([
+            'status'=> 200,
+            'html'=> $html,
+        ]);
+    }
+
+    public function getCityByState($state_id)
+    {
+        $data = City::where(['state_id'=>$state_id])->get(['id', 'city',]);
+
+        $html = "";
+        $html .= "<option selected disabled >City</option>";
+        foreach($data as $list)
+        {
+            $html.= "<option value='" . $list->id . "'>" . ucwords($list->city) . "</option>";
+        }
+        return response()->json([
+            'status'=> 200,
+            'html'=> $html,
         ]);
     }
 

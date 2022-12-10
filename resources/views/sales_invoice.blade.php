@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-8 col-md-12 col-sm-12">
+    <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <b>Billing</b>
@@ -15,26 +15,26 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text"  class="form-control" id="customer_name" required name="customer_name" placeholder="Enter name">
+                            <label for="moblie_no" class="form-label" >Moblie no</label>
+                            <input type="number"  class="form-control form-control-sm" name="mobile_no" required id="moblie_no" placeholder="Enter mobile number">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="moblie_no" class="form-label" >moblie no</label>
-                            <input type="number"  class="form-control" name="mobile_no" required id="moblie_no" placeholder="Enter mobile number" min="1">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
                             <div class="col-6">
-                                <label for="moblie_no" class="form-label" >Date</label>
-                                <input type="number"  class="form-control form-control" name="birthday_date" id="birthday_date" required id="days" min="1">
+                                <label for="moblie_no" class="form-label" >Birth Date</label>
+                                <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1">
                             </div>
                             <div class="col-6">
                                 <label for="moblie_no" class="form-label" >Months</label>
-                                <select class="form-select " name="month_id" id="month_id">
-                                    <option selected>months...</option>
+                                <select class="form-select form-select-sm" name="month_id" id="month_id">
+                                    <option selected>Select...</option>
                                     @foreach ($months as $item)
                                         <option value="{{$item->id}}">{{$item->month}}</option>
                                     @endforeach
@@ -42,8 +42,38 @@
                             </div>
                         </div>
                     </div>
-                   
                 </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                                <div class="form-check">
+                                <input class="form-check-input" type="radio" name="states" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                            </div>
+                        </div>  
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="states" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                  Inter State
+                                </label>
+                              </div>
+                        </div>
+                       
+                        <div class="col-md-3">
+                            <select name="city_id" id="city_id" class="form-select form-select-sm hide" >
+                                <option selected disabled>City</option>
+                               @foreach($cities as $item)
+                                   <option value="{{$item->id}}">{{$item->city}}</option>
+                               @endforeach
+                              </select>
+                        </div>
+                        <div class="col-md-3">
+                            {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
+                            <input type="text" name="gst_no" id="gst_no" placeholder="GST IN" class="form-control form-control-sm hide">
+                        </div>
+                    </div>
+                   
+                {{-- </div> --}}
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
@@ -65,11 +95,13 @@
                                     <tr>
                                         <th scope="col">Sno</th>
                                         <th scope="col">Code</th>
-                                        <th scope="col">Item</th>
+                                        <th scope="col">category</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
                                         <th scope="col">Amount</th>
+                                        <th scope="col">SGST%</th>
+                                        <th scope="col">CGST%</th>
                                         <th scope="col">Delete</th>
 
                                     </tr>
@@ -127,15 +159,21 @@
                     <div class="col-md-2">
                         <span>Payment :</span>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
+                        </div>
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-2"></div>
                     <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
@@ -148,7 +186,7 @@
         </form>
         </div>
     </div>
-    <div class="col-lg-4 col-md-12 col-sm-12">
+    <div class="col-lg-3 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -156,8 +194,8 @@
                         <b>Invoice</b>
                     </div>
                     <div class="col-md-6">
-                        <b class="float-right">Date</b><br/>
-                        <b class="float-right">time</b>
+                        {{-- <b class="float-right">Date</b><br/>
+                        <b class="float-right">time</b> --}}
                     </div>
                 </div>
             </div>
@@ -195,6 +233,9 @@
                         </tr>
                         @endforeach 
                     </tbody>
+                    <tfoot>
+                        
+                    </tfoot>
                 </table>  
                 </div>
                 {{-- <button class="orderInvoiceBtn" >print</button> --}}
@@ -203,7 +244,7 @@
         </div>
 
 
-        <div class="card">
+        <div class="card hide">
             <div class="card-body page" id="barcode_body" >
                 @foreach ($products as $list)
                     <div class="card" >
@@ -256,7 +297,9 @@
                 <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
             <td style="width: 100px;">
-                <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id">
+                <input type="text" readonly name="size[]" class="form-control form-control-sm size">
+                <input type="hidden" name="size_id[]" class="size_id">
+                {{-- <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id"> --}}
                 {{-- <select name="size_id[]" class=" form-select form-select-sm size_id">
                     <option selected disabled></option>
                     @foreach ($sizes as $item)
@@ -269,6 +312,12 @@
             </td>
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
+            </td> 
+             <td style="width: 150px;">
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst" >
+            </td> 
+             <td style="width: 150px;">
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst" >
             </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -349,16 +398,51 @@
                     url: "get-item-price/"+product_code,
                     dataType: "json",
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
                         $(object).parent().parent().find(".price").val(response.product.sales_price);
                         $(object).parent().parent().find(".product").val(response.product.product);
                         $(object).parent().parent().find(".product_id").val(response.product.id);
-                        $(object).parent().parent().find(".size_id").val(response.product.size_id);
+                        $(object).parent().parent().find(".size").val(response.product.size);
+                        $(object).parent().parent().find(".size_id").val(response.product.size.id);
                         calculateAmount(object)
                     }
                 });
                 
+                
             });
+
+            $(document).on('click','#with_in_state', function (e) {
+                $('#gst_no').addClass('hide');
+                $('#city_id').addClass('hide');
+                
+            });
+
+            $(document).on('click','#inter_state', function (e) {
+                $('#gst_no').removeClass('hide');
+                $('#city_id').removeClass('hide');
+                
+            });
+
+            // $(document).keypress('#mobile_no', function () {
+            //     const customer_id = $(this).val();
+            //     // alert(customer_id);
+            //     var object = $(this);
+            //     $.ajax({
+            //         type: "get",
+            //         url: "get-customer-data/"+customer_id,
+            //         dataType: "json",
+            //         success: function (response) {
+            //             console.log(response);
+            //             // $(object).parent().parent().find(".price").val(response.product.sales_price);
+            //             // $(object).parent().parent().find(".product").val(response.product.product);
+            //             // $(object).parent().parent().find(".product_id").val(response.product.id);
+            //             // $(object).parent().parent().find(".size").val(response.product.size);
+            //             // $(object).parent().parent().find(".size_id").val(response.product.size.id);
+            //         }
+            //      });
+                
+                
+            // });
             
             
             $(document).on('keyup','.qty', function () {
@@ -425,21 +509,29 @@
         function addItem() {
             $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
-            // $("#item_list tr").find(".item").chosen();
+            $("#item_list tr").find(".item").chosen();
             
         }
 
         function calculateAmount(object){
             var total_amount = 0;
+            var sgst = 0;
+            var cgst = 0;
             var price = parseFloat($(object).parent().parent().find(".price").val());
             var qty = parseFloat($(object).parent().parent().find(".qty").val());
+            var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
+            var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
 
             if(qty == "" || isNaN(qty))
             {
                 qty = 0;   
             }
 
+            // var amount = parseFloat(price * qty);
             var amount = parseFloat(price * qty);
+            // if(amount>1000){
+            //    console.log((amount*2.50/100)+amount);
+            // }
             $(object).parent().parent().find(".amount").val(amount);
             calculateTotalAmount();
         }

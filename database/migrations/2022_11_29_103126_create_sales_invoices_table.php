@@ -19,7 +19,7 @@ class CreateSalesInvoicesTable extends Migration
             $table->integer('product_code')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('qty')->nullable();
-            $table->integer('size_id')->nullable();
+            $table->string('size')->nullable();
             $table->string('price')->nullable();
             $table->float('amount')->nullable();
             $table->date('date')->nullable();

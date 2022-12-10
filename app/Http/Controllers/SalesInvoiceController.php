@@ -9,6 +9,7 @@ use App\Models\Size;
 use App\Models\SalesInvoice;
 use App\Models\Customer;
 use App\Models\Month;
+use App\Models\City;
 use Validator;
 
 class SalesInvoiceController extends Controller
@@ -18,6 +19,8 @@ class SalesInvoiceController extends Controller
         $sizes = Size::all();
         $customers_billing = Customer::all();
         $months = Month::all();
+        $cities = City::all();
+        // $allSales = SalesInvoice::all();
         // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
         // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
         // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
@@ -25,12 +28,17 @@ class SalesInvoiceController extends Controller
                     // ->get(['customers.*','billings.amount','billings.qty']);
                     // ->get(['customers.*','billings.amount','billings.qty']);
                     // print_r($customers_billing);
+
+            // print_r($allSales); 
+            // print_r("<per>");   
                     
         return view('sales_invoice',[ 
             'products'=> $products,
             'sizes' => $sizes,
             'customers_billing' => $customers_billing,
             'months' => $months,
+            'cities' => $cities,
+            // 'allSales' => $allSales,
         ]);
         
     }
@@ -40,9 +48,12 @@ class SalesInvoiceController extends Controller
         // return $req;
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required|max:191',
-            'mobile_no'=>'required|max:191',
+            'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
+            'states'=>'required|max:191',
+            // 'city_id'=>'required|max:191',
+            // 'gst_no'=>'required|max:191',
 
         ]);
 
@@ -58,6 +69,9 @@ class SalesInvoiceController extends Controller
             $model->mobile_no = $req->input('mobile_no');
             $model->birthday_date = $req->input('birthday_date');
             $model->month_id = $req->input('month_id');
+            $model->states = $req->input('states');
+            $model->city_id = $req->input('city_id');
+            $model->gst_no = $req->input('gst_no');
             $model->total_amount = $req->input('total_amount');
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
@@ -66,7 +80,7 @@ class SalesInvoiceController extends Controller
             $product_code = $req->input('product_code');
             $price = $req->input('price');
             $qty = $req->input('qty');
-            $size_id = $req->input('size_id');
+            $size = $req->input('size');
             $amount = $req->input('amount');
             
             
@@ -84,13 +98,13 @@ class SalesInvoiceController extends Controller
                     $item->product_code = $product_code[$key];
                     $item->price = $price[$key];
                     $item->qty = $qty[$key];
-                    $item->size_id = $size_id[$key];
+                    $item->size = $size[$key];
                     $item->amount = $amount[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();
                     if ($item->save()) {
-                        updateProductStatus($product_id[$key]);
+                        // updateProductStatus($product_id[$key]);
                     }
 
                 } 
@@ -116,6 +130,17 @@ class SalesInvoiceController extends Controller
         ]);
 
     }
+    // public function getCumosterData($customer_id)
+    // {
+    //     // $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
+    //     // print_r($product);
+    //     $customersData = Customer::find($customer_id);
+                        
+    //     return response()->json([
+    //         'customersData'=>$customersData
+    //     ]);
+
+    // }
 
     public function generateInvoice($customer_id)
     {
@@ -124,14 +149,16 @@ class SalesInvoiceController extends Controller
                  $order =Customer::find($customer_id);
         
                 $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
-                                    join('products','products.id','=','sales_invoices.product_id')->
-                                    join('sizes','sizes.id','=','sales_invoices.size_id')
+                                    join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
+                                    // join('sizes','sizes.id','=','sales_invoices.size_id')
                                     // join('colors','colors.id','=','sales_invoices.color_id')
 
                                     ->where('sales_invoices.customer_id',$order->id)
-                            ->get(['sales_invoices.*','customers.total_amount','products.product','sizes.size',]); 
+                            ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+
                             
-                    //  print_r($order_items);     
+                    //  print_r($order_items);
+                    // dd($order_items);  
                     // print_r($order_items);    
         //         ->get(['order_items.*','items.item_name','items.price' ]);
 
@@ -222,6 +249,7 @@ class SalesInvoiceController extends Controller
                                 $html .="</thead>";
                                 $html .="<tbody>";
                                 foreach ($order_items as $key => $list) {
+                                    // dd($list);
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
                                         $html .="<td>".ucwords($list->product)."</td>";
@@ -243,8 +271,8 @@ class SalesInvoiceController extends Controller
                                     $html .="<tr>";
                                     $html .="<td colspan='2'></td>";
                                     $html .="<td>".$key."</td>";
-                                        $html .="<td colspan='5'></td>";
-                                        // $html .="<td><b>Total :</b></td>";
+                                        $html .="<td colspan='4'></td>";
+                                        $html .="<td><b>Total :</b></td>";
                                         $html .="<td>".$order->total_amount."</td>";
                                         $html .="<td>".$order->total_amount."</td>";
                                         $html .="<td>".$order->total_amount."</td>";

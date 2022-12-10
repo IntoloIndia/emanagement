@@ -5,128 +5,230 @@
 <link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" />
 <style>
 
+.form-control, .form-select {
+    margin-bottom: 2px;
+    padding: 1px 5px;
+}
+
+.chosen-container{
+    width: 100%;
+}
+
   #colorinput{
     border: none;
     background-color": "yellow";
   }
 
-  /* @media print {
-  h2 { 
-    page-break-before: always;
-  } */
-
-/* @media print {
-    @page {
-        size: 300in 200in ;
-    }
-} */
-
 .barcode{
     length:100%;
     width:100%;
 }
+
+.popover-content {
+  height: 180px;  
+  width: 200px;  
+}
+
+/* textarea.popover-textarea {
+   border: 0px;   
+   margin: 0px; 
+   width: 100%;
+   height: 100%;
+   padding: 0px;  
+   box-shadow: none;
+}
+
+.popover-footer {
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  background-color: #F7F7F7;
+  border-bottom: 1px solid #EBEBEB;
+  border-radius: 5px 5px 0 0;
+}
+
+a {
+    padding: 0px 20px 20px 20px;
+    float: left;
+    vertical-align: middle;
+    width: 100px;
+    margin: 5px;
+}  */
+
+
  
 </style>
+@endsection
+
+@section('content-header')
+    <div class="content-header">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="m-0"><b>Purchase Invoice</b></h3>
+            </div>
+            <div class="col-sm-6">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
 
 {{-- product modal --}}
 <div class="modal fade" id="purchaseEntryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry Voucher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Purchase Entry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="purchaseEntryForm">
+                <form id="purchaseEntryForm" action="{{url('admin/export-excel-data')}}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">
-                        <div id="purchase_entry_err"></div>
-                        <div class="row">
-
-                            <div class="col-md-9">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
-                                            <option selected disabled >Supplier</option>
-                                            @foreach ($suppliers as $list)
-                                                <option value="{{$list->id}}"> {{ucwords($list->supplier_name)}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="text" name="hsn_code" id="hsn_code" class="form-control form-control-sm" placeholder="HSN code" readonly disabled>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
-                                    </div>
-                                </div>
-        
-                                <div class="row mt-3">
-                                    
-                                    <div class="col-md-3">
-                                        <select id="category_id" name="category_id" class="form-select form-select-sm" onchange="getSubCategoryByCategory(this.value);">
-                                            <option selected disabled >Category</option>
-                                            @foreach ($categories as $list)
-                                            <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm">
-                                            <option selected disabled >Sub Category</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="product_name" id="product_name" class="form-control form-control-sm" placeholder="Product Name">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="number" name="qty" id="qty" class="form-control form-control-sm" placeholder="Qty" min="1" value="1">
-                                    </div>
-                                </div>
-                               
-                                <div class="row mt-3">
-                                    <div class="col-md-2">
-                                        <select id="size_id" name="size_id" class="form-select form-select-sm">
-                                            <option selected disabled >Size</option>
-                                            @foreach ($sizes as $list)
-                                                <option value="{{$list->id}}">{{ucwords($list->size)}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select id="color_id" name="color_id" class="form-select form-select-sm color_code">
-                                            <option selected disabled >Color..</option>
-                                            @foreach ($colors as $list)
-                                            <option value="{{$list->id}}">{{ucwords($list->color)}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="purchase_price"  id="purchase_price" class="form-control form-control-sm" placeholder="Purchase price">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  name="sales_price" id="sales_price" class="form-control form-control-sm" placeholder="Sales price">
-                                    </div>
-                                </div>
+                    <div id="purchase_entry_err"></div>
+                        {{-- <div class="row">
+                            <div class="col-md-6">
+                                <input type="file"name="file" id="file" class="form-control form-control-sm">
                             </div>
-                            <div class="col-md-3">
-                                <div id="take_photo">
-                                    <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/image.png')}}" />
-                                </div>                                
-                                <input type="hidden" name="product_image" id="product_image">
-                                <div class="d-grid gap-2 mt-2">
-                                    <button class="btn btn-primary btn-sm" id="captureLivePhotoBtn" type="button">Live Camera</button>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary btn-sm">save product</button>
+                                <a href="{{url('admin/import-data')}}">Excel download file</a>
+                            </div>
+                        </div> --}}
+
+
+
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+
+                                <div class="card">
+                                    <div class="card-header"><b>Supplier</b></div>
+                                    <div class="card-body">
+                                        
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                                                <option selected disabled value="0">Supplier</option>                                          
+                                                                @foreach ($suppliers as $list)
+                                                                    <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <textarea class="form-control" id="supplier_address"  placeholder="Address....." disabled readonly></textarea>
+                                                </div>
+    
+                                            </div>
+    
+                                    </div>
                                 </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    {{-- <div class="card-header"><b>Product Details</b></div> --}}
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="input-group">
+                                                            <select id="category_id" name="category_id" class="form-select select_chosen" onchange="getSubCategoryByCategory(this.value);">
+                                                                <option selected disabled value="0">Category</option>
+                                                                @foreach ($categories as $list)
+                                                                    <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                    
+                                                    <div class="col-md-4">
+                                                        <div class="input-group">
+                                                            <select id="sub_category_id" name="sub_category_id" class="form-select select_chosen">
+                                                                <option selected disabled >Sub Category</option>
+                                                            </select>
+                                                            <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                     
+                                                        <div class="input-group">
+                                                            <select id="style_no" name="style_no" class="form-select select_chosen">
+                                                                <option selected disabled >Style No</option>
+                                                            </select>
+                                                            <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                            </span>
+                                                        </div>
+                                                    
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <b>Product</b>
+                                                </div>
+                                                <div class="col-6 d-flex justify-content-end">
+                                                    <button class="btn btn-primary btn-sm"  id="addItemBtn"> Add New</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body" >
+                                           <div class="row item_list" id="item_list">
+                                                
+                                           </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
                             </div>
 
                         </div>
-                    </div>
+
+                        
+
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -159,8 +261,6 @@
     </div>
 </div>
 
-
-
 {{-- camera modal start --}}
 <!--Modal-->
 
@@ -183,13 +283,13 @@
 
 {{-- camera modal end --}}
 
-<div class="row mb-3 ">
+{{-- <div class="row mb-3 ">
     <div class="col-12">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
             <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="row">
    
@@ -308,6 +408,173 @@
 
 </div>
 
+<div class="hide">
+    <div id="item_row">
+        <div class="row">
+
+            <div class="col-md-3">
+                <select id="color" name="color" class="form-select form-select-sm color_code">
+                    <option selected disabled >Color..</option>
+                    @foreach ($colors as $list)
+                    <option value="{{$list->color}}">{{ucwords($list->color)}}</option>
+                    @endforeach
+                </select>
+                <div id="take_photo" class="take_photo">
+                    <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/user-img.jpg')}}" style="width: 60px; height:60px;" />
+                </div>                                
+                <input type="hidden" name="product_image" id="product_image" class="product_image">
+                <div class="d-grid gap-2 mt-2">
+                    <button class="btn btn-primary btn-sm captureLivePhotoBtn" type="button">Live Camera</button>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+    
+                <div class="row ">
+                    <div class="card">
+                        {{-- <div class="card-header"><b>Size</b></div> --}}
+                        <div class="card-body ">
+                            <div class="row">
+                                
+                                <div class="col-md-12 table-responsive p-0">
+                                    <table class="table table-head-fixed text-nowrap">
+                                        <tbody>
+                                            <tr>
+                                                <th>Size</th>
+                                                <td>XS</td>
+                                                <td>S</td>
+                                                <td>M</td>
+                                                <td>L</td>
+                                                <td>XL</td>
+                                                <td>XXL</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Qty</th>
+                                                <td><input type="text" name="xs_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                <td><input type="text" name="s_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                <td><input type="text" name="m_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                <td><input type="text" name="l_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                <td><input type="text" name="xl_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                <td><input type="text" name="xxl_qty[]" class="form-control form-control-sm" placeholder="Qty"></td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <th>Price</th>
+                                                <td><input type="text" rel="popover" name="xs_price[]" class="form-control form-control-sm xs_price example-popover" placeholder="Price" value="0" ></td>
+                                                <td><input type="text" rel="popover" name="s_price[]" class="form-control form-control-sm s_price" placeholder="Price" value="0" ></td>
+                                                <td><input type="text" rel="popover" name="m_price[]" class="form-control form-control-sm m_price" placeholder="Price" value="0" ></td>
+                                                <td><input type="text" rel="popover" name="l_price[]" class="form-control form-control-sm l_price" placeholder="Price" value="0" ></td>
+                                                <td><input type="text" rel="popover" name="xl_price[]" class="form-control form-control-sm xl_price" placeholder="Price" value="0" ></td>
+                                                <td>
+                                                    <input type="text" rel="popover" name="xxl_price[]" class="form-control form-control-sm xxl_price" placeholder="Price" value="0" >
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>MRP</th>
+                                                <td><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2699"></td>
+                                                <td >
+                                                    <input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2699">
+                                                </td>
+                                                <td ><input type="text" name="" id="" class="form-control form-control-sm " placeholder="Price" value="2699"></td>
+                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
+                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
+                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
+                                            </tr>
+                                            
+                                            </tbody>
+                                    </table>
+
+                                    <div class="mypopover-content hide">
+                                        <div class="card card-body" >
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <small  ><b>SGST</b> </small>
+                                                    <input type="text" name="" class="form-control form-control-sm sgst" placeholder="SGST" >
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small  ><b>CGST</b> </small>
+                                                    <input type="text" name="" class="form-control form-control-sm cgst" placeholder="CGST">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small ><b>IGST</b> </small>
+                                                    <input type="text" name="" id="" class="form-control form-control-sm igst" placeholder="IGST">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+    
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
+            </div>
+            <hr>
+        </div>
+    </div>
+   
+</div>
+
+
+{{-- <div class="hide">
+    <div id="mypopover-content">
+      <p>This is the custom popover html content that should be inserted into my example popover</p>
+      <button type="button" class="btn btn-primary">and the button as well</button>
+    </div>
+</div> --}}
+
+
+
+
+<div class="modal fade" id="showGstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Gst Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row mt-2">
+                <input type="hidden" name="state_type" id="state_type" value="">
+                <div class="col-md-6">
+                    <label for="stateName" class="form-label">Price</label>
+                    <input type="text" name="base_amount" id="base_amount" class="form-control form-control-sm" placeholder="Base Amount">
+                </div>
+                <div class="col-md-6">
+                    <label for="stateName" class="form-label">Purchase Amount</label>
+                    <input type="text" name="purchase_amount" id="purchase_amount" class="form-control form-control-sm" placeholder="Purchase Amount" readonly>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="stateShort" class="form-label">SGST <span id="sgst_percent"></span></label>
+                    <input type="text" name="" id="sgst" class="form-control form-control-sm" placeholder="SGST">
+                </div>
+                <div class="col-md-4">
+                    <label for="stateShort" class="form-label">CGST <span id="cgst_percent"></span></label>
+                    <input type="text" name="" id="cgst" class="form-control form-control-sm" placeholder="CGST">
+                </div>
+                <div class="col-md-4">
+                    <label for="stateShort" class="form-label">IGST <span id="igst_percent"></span></label>
+                    <input type="text" name="" id="igst" class="form-control form-control-sm" placeholder="IGST">
+                </div>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" id="ok" class="btn btn-primary btn-sm">Ok</button>
+            </div>
+            
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
 
 {{-- <div class="row">
     <div class="col-12">
@@ -333,13 +600,15 @@
     </div>
 </div> --}}
 
+
+
 <section>
     <div id="newcontent">
         <div class="modal fade" id="generateBarcodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Barcodes</h5>
+                        <h5 class="modal-title" >Barcodes</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="show_barcode_body" >
@@ -385,6 +654,8 @@
 
     $(document).ready(function () {
 
+        $(".select_chosen").chosen({ width: '80%' });
+
             Webcam.set({
                 width: 450,
                 height: 287,
@@ -399,12 +670,67 @@
                 $('#purchase_entry_err').html('');
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
+                $("#supplier_id").chosen({ width: '100%' });
+            
                 $('#saveProductBtn').removeClass('hide');
                 $('#updateProductBtn').addClass('hide');
             });
 
+            $(document).on('click','#addItemBtn', function (e) {
+                e.preventDefault();
+
+                // var supplier_id = $('#supplier_id').find("option:selected").attr('state-type');;
+                var supplier_id = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_id').find("option:selected").val();
+                var bill_no = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#bill_no').val();
+                var category_id = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#category_id').find("option:selected").val();
+                var sub_category_id = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#sub_category_id').find("option:selected").val();
+                var style_no = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#style_no').find("option:selected").val();
+
+                if (supplier_id == 0) {
+                    alert('Please select first supplier.');
+                    return false;
+                }
+
+                if (bill_no == 0) {
+                    alert('Please enter bill no.');
+                    return false;
+                }
+
+                if (category_id == 0) {
+                    alert('Please select first category.');
+                    return false;
+                }
+
+                if (sub_category_id == 0) {
+                    alert('Please select first sub category.');
+                    return false;
+                }
+
+                if (style_no == 0) {
+                    alert('Please select first style no.');
+                    return false;
+                }
+
+                addItem();
+
+                // $(".product_code").focus();
+            });
+
+            $(document).on("click",".delete_item", function(){
+
+                // if($("#item_list tr").length == 1)
+                // {
+                //     alert("Order must have at least 1 item.");
+                //     return false;
+                // }
+                $(this).parent().parent().remove();
+            });
+
             
-            $(document).on('click','#captureLivePhotoBtn', function (e) {
+
+
+            
+            $(document).on('click','.captureLivePhotoBtn', function (e) {
                 e.preventDefault();
                 $('#captureLivePhotoModal').modal('show');
             });
@@ -485,11 +811,6 @@
                 // getBarcode();
             });
 
-            // $(document).on('click','#cameraButton', function (e) {
-            //     e.preventDefault();
-            //     alert("call");
-            // });
-
 
             $(document).on('click','#printBtn', function (e) {
                 e.preventDefault();
@@ -516,10 +837,121 @@
 
                 // printBarcode();
             });
+            
+            $(document).on("focusin","[rel=popover]", function(e){
+                var price = parseFloat($(this).val());
+
+                calculateGst( $(this), price );
+                // $(".mypopover-content").show(); 
+                $(this).parent().parent().parent().parent().parent().find('.mypopover-content').show();
+                
+
+            });
+            $(document).on("focusout","[rel=popover]", function(e){
+                // $(".mypopover-content").hide(); 
+                $(this).parent().parent().parent().parent().parent().find('.mypopover-content').hide();
+
+            });
+
+            $(document).on('keyup','.xs_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+
+            $(document).on('keyup','.s_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+
+            $(document).on('keyup','.m_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+            $(document).on('keyup','.l_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+            $(document).on('keyup','.xl_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+            $(document).on('keyup','.xxl_price', function () {
+                var price = parseFloat($(this).val());
+                calculateGst( $(this), price );
+            });
+
+            // $(document).on("click",".price", function(e){
+                // e.preventDefault();
+
+                // var content = document.getElementById('mypopover-content');
+                // $('body').popover({
+                //     selector: '[rel=popover]',
+                //     trigger: 'click',
+                //     content : content,
+                //     placement: "bottom",
+                //     html: true
+                // })
+
+            // });
+
+            // $(document).on('keyup','#base_amount', function () {
+            //     calculateGst($(this));
+            // });
 
            
 
         });
+
+        function calculateGst(object, price) {
+            var state_type = $('#supplier_id').find("option:selected").attr('state-type');
+            // var base_amount = parseFloat($("#base_amount").val());
+            // var price = parseFloat($(object).parent().parent().find(".xs_price").val());
+            var price = price;
+            var purchase_amount = 0;
+            var sgst = 0;
+            var cgst = 0;
+            var igst = 0;
+
+
+            if (price < '{{MyApp::THOUSAND}}') {
+                purchase_amount = parseFloat(price / 1.05);
+            }else{
+                purchase_amount = parseFloat(price / 1.12);
+            }
+
+            if (state_type == '{{MyApp::WITH_IN_STATE}}') {
+                if (price < '{{MyApp::THOUSAND}}') {
+                    sgst = parseFloat(purchase_amount * 2.5 / 100);
+                    cgst = parseFloat(purchase_amount * 2.5 / 100);
+                }else{
+                    sgst = parseFloat(purchase_amount * 6 / 100) ;
+                    cgst = parseFloat(purchase_amount * 6 / 100) ;
+                }
+            }else{
+                if (price < '{{MyApp::THOUSAND}}') {
+                    igst = parseFloat(purchase_amount * 5 / 100) ;
+                }else{
+                    igst = parseFloat(purchase_amount * 12 / 100) ;
+                }
+            }
+
+            // $(object).parent().parent().parent().parent().parent().find('.mypopover-content').find('.sgst').css("border", "10px red solid");
+            $(object).parent().parent().parent().parent().parent().find('.mypopover-content').find('.sgst').val(sgst.toFixed(2));
+            $(object).parent().parent().parent().parent().parent().find('.mypopover-content').find('.cgst').val(cgst.toFixed(2));
+            $(object).parent().parent().parent().parent().parent().find('.mypopover-content').find('.igst').val(igst.toFixed(2));
+
+        }
+
+        function addItem() {
+            // $(".product_code").focus();
+            $('#item_list').append($('#item_row').html());
+            $("#item_list ").find(".item").chosen();
+
+            $('.item_list > .row').each(function(index){
+                console.log(index);
+            });
+            
+        }
 
         function takePhoto() {
             Webcam.snap( function(data_uri) {
@@ -536,10 +968,29 @@
                 url: "supplier-detail/"+supplier_id,
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.status == 200) {
                        $('#gst_no').val(response.supplier.gst_no) ;
-                       $('#hsn_code').val(response.supplier.hsn_code) ;
+                       $('#supplier_code').val(response.supplier.supplier_code) ;
+                       $('#supplier_address').val(response.supplier.address) ;
+                    //    $('#state_type').val(response.supplier.state_type) ;
+
+                       supplierStyleNo(response.supplier.id);
+                    }
+                }
+            });
+        }
+
+        function supplierStyleNo(supplier_id){
+            $.ajax({
+                type: "get",
+                url: "supplier-style-no/"+supplier_id,
+                dataType: "json",
+                success: function (response) {
+                    $('#style_no').empty();
+                    if (response.status == 200) {
+                        $('#style_no').append(response.html) ;
+                        $("#style_no").trigger("chosen:updated");
                     }
                 }
             });
@@ -630,8 +1081,8 @@
 
                         $('#qty').val(response.product.qty);//
 
-                        $('#size_id').val(response.product.size_id);
-                        $('#color_id').val(response.product.color_id);
+                        $('#size').val(response.product.size);
+                        $('#color').val(response.product.color);
                         $('#purchase_price').val(response.product.purchase_price);
                         $('#sales_price').val(response.product.sales_price);
 
@@ -698,11 +1149,6 @@
             window.print();
             document.body.innerHTML = backup;
 
-
-
-        
-
-            
 
             // const section = $("section");
             // // const modalBody = $("#show_barcode_body").detach();

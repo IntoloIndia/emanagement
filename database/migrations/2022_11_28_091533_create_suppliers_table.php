@@ -18,8 +18,9 @@ class CreateSuppliersTable extends Migration
             $table->string('supplier_name')->nullable();
             $table->string('mobile_no')->nullable();
             $table->string('address')->nullable();
+            $table->integer('state_type')->default(0);
             $table->string('gst_no')->nullable();
-            $table->string('hsn_code')->nullable();
+            $table->string('supplier_code')->nullable();
             $table->integer('country_id')->nullable();
             $table->integer('state_id')->nullable();
             $table->integer('city_id')->nullable();

@@ -251,7 +251,7 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0" >
+                <div class="card-body table-responsive p-0" style="height: 400px;">
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
@@ -275,7 +275,7 @@
                                         <td>{{strtoupper($item->state_short)}}</td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm editStateBtn" value="{{$item->id}}"><i class="fas fa-edit"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button>
+                                            {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -318,7 +318,7 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0" >
+                <div class="card-body table-responsive p-0" style="height: 550px;">
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>

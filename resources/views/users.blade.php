@@ -1,6 +1,21 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 
+@section('content-header')
+    <div class="content-header">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="m-0"><b>Team</b></h3>
+            </div>
+            <div class="col-sm-6">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <button type="button" id="addUser" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('content')
 
     {{-- Create User Modal --}}
@@ -9,7 +24,7 @@
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Team</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">New Team</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -96,14 +111,14 @@
 
 
     {{-- open modal button --}}
-    <div class="row ">
+    {{-- <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-            <button type="button" id="addUser" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
-        </div>
-    </div>
+        </div>            <button type="button" id="addUser" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+
+    </div> --}}
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
 
                 <div class="card-header">
@@ -128,7 +143,7 @@
                             <tr>
                                 <th>SN</th>
                                 <th>Role</th>
-                                <th>Dept</th>
+                                <th>Department</th>
                                 <th>Name</th>
                                 <th>Code</th>
                                 <th>Email</th>

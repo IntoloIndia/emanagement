@@ -146,6 +146,10 @@ tbody tr #count_item:first-child:before
   border: 0px;
 }
 
+.modal-footer {
+  padding: 5px 5px;
+}
+
 /* #token_no{
   padding: 2px 10px;
   box-shadow: 0px 0px 5px 0px;
