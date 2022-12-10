@@ -3,88 +3,59 @@
 
 @section('content')
 <div class="row">
-    <div class="col-6">
+    <div class="col-md-4">
         <div class="card">
+
             <div class="card-header">
-                <b>card</b>
+                <h3 class="card-title">Customer</h3>
             </div>
-            <div class="card-body">
-                <form id="orderCustomer">
-                    @csrf
-                    <div class="row">
-                        <div class="order_err"></div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Date</label>
-                                <input type="text" class="form-control" id="datepicker">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="moblie_no" class="form-label" >moblie no</label>
-                                <input type="text" class="form-control" name="mobile_no" id="moblie_no" placeholder="Enter mobile number" min="1">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text"  class="form-control" id="customer_name" name="customer_name" placeholder="Enter name">
-                            </div>
-                        </div>
+            <div class="card-body table-responsive p-0" style="height: 350px;">
+                <div class="col-md-12 mt-2">
+                    <select class="form-select form-select-sm" name="customer_id" id="customer_id" >
+                        <option selected="" disabled=""> Select name </option>
+                        @foreach ($customers as $item)
+                            <option value="{{$item->id}}">{{$item->mobile_no}}-{{$item->customer_name}}</option> 
+                        @endforeach
+                    </select>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 table-responsive" style="height: 200px;">
+                        <table class="table table-striped table-head-fixed" id="customer_list" >
+                            
+                        </table>    
                     </div>
-                    <button class="btn btn-primary btn-sm float-right" id="saveOrderCustomerBtn">save</button>
-                </form>
-            </div>
+                </div>
         </div>
     </div>
 </div>
-
 @endsection
 @section('script')
 <script>
-     $(document).ready(function () {
-            $(document).on('click','#saveOrderCustomerBtn', function (e) {
-                e.preventDefault();
-                saveOrderCustomer();
-            });
+    $(document).ready(function(){
+        $(document).on('change','#customer_id', function(e){
+            e.preventDefault();
+            var customer_id = $(this).val();
+            // alert(customer_id);
+            // $('#project_invoice').html("");
+            getProjects(customer_id);
+           
+        });
+    });
 
-        })  
-        
-        function saveOrderCustomer() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    function getProjects(customer_id) {
+        $.ajax({
+            type: "get",
+            url: `get-customer/${customer_id}`,
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 200){
+                    $('#customer_list').html("");
+                    $('#customer_list').append(response.html);
                 }
-            });
-
-            var formData = new FormData($("#orderCustomer")[0]);
-            $.ajax({
-                type: "post",
-                url: "save-order-customer",
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    console.log(response);
-                    if (response.status === 400) {
-                        $('#order_err').html('');
-                        $('#order_err').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) {
-                            $('#order_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                        });
-
-                    } else {
-                        $('#order_err').html('');
-                        // $('#productModal').modal('hide');
-                        window.location.reload();
-                    }
-                }
-            });
-        }
-
+            }
+        });
+    } 
 </script>
 
 @endsection

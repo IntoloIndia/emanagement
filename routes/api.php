@@ -45,8 +45,9 @@ Route::controller(MasterAPIController::class)->group(function () {
 Route::controller(ProductAPIController::class)->group(function () {
     Route::get('available-stock', 'availableStock');
     Route::get('sales-invoice', 'salesInvoice');
-    Route::get('filter-available-stock/{category_id}', 'filterAvailableStock');
-    // Route::get('get-sub-category/{category_id}', 'getSubCategory');
+    // Route::get('filter-available-stock/{category_id?}/{sub_category_id?}/{size?}/{color?}', 'filterAvailableStock');
+    Route::post('filter-available-stock', 'filterAvailableStock');
+    Route::post('filter-sales-invoice', 'filterSalesInvoice');
 });
 
 Route::get('/admin', [AdminController::class, 'index']);

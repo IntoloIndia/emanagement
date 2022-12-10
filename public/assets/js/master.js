@@ -8,7 +8,8 @@ function getSubCategoryByCategory(category_id) {
         success: function (response) {
             $('#sub_category_id').html("");
             if (response.status == 200) {
-                $('#sub_category_id').append(response.html);   
+                $('#sub_category_id').append(response.html); 
+                $("#sub_category_id").trigger("chosen:updated");  
             }
         }
     });
@@ -21,6 +22,7 @@ function getStateByCountry(country_id) {
         dataType: "json",
         success: function (response) {
             $('#state_id').html("");
+            $('#city_id').html("");
             if (response.status == 200) {
                 $('#state_id').append(response.html);   
             }

@@ -103,6 +103,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="style-no" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Style No</p>
+                </a>
+            </li>
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light">Sales Management</li>
             <hr style="margin: 0px; color:#ffffff;">
@@ -111,11 +116,16 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Sales invoice</p>
                 </a>
             </li>
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="customer" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Customer</p>
                 </a>
-            </li> --}}
+            </li>
+            <li class="nav-item">
+                <a href="alternative_voucher" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>alternative voucher</p>
+                </a>
+            </li>
             <li class="nav-item">      
                 <a href="" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
@@ -157,6 +167,7 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
                 </a>
             </li>
+            
                 
         </ul>
     </nav>

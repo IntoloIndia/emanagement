@@ -138,10 +138,10 @@ class SubCategoryController extends Controller
         $data = SubCategory::where(['category_id'=>$category_id])->get(['id' , 'category_id', 'sub_category']);
 
         $html = "";
-        $html .= "<option selected disabled >Sub Category</option>";
+        $html .= "<option selected disabled value='0'>Sub Category</option>";
         foreach($data as $list)
         {
-            $html.= "<option value='" . $list->id . "'>" . $list->sub_category . "</option>";
+            $html.= "<option value='" . $list->id . "'>" . ucwords($list->sub_category) . "</option>";
         }
         return response()->json([
             'status'=> 200,

@@ -27,23 +27,9 @@
                             </div>
 
                             <div class="row mt-2">
-                                <div class="col-12">
-                                    <textarea class="form-control" name="address" id="address" placeholder="Address....."></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <div class="col-6">
-                                    <input type="text" name="gst_no" id="gst_no" class="form-control-sm form-control" placeholder="GST IN">
-                                </div>
-                                <div class="col-6">
-                                   <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="supplier code">
-                                </div>
-                            </div>
-                            <div class="row mt-2">
                                 <div class="col-4">
                                     <select name="country_id" id="country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value)" >
-                                        <option selected>Country...</option>
+                                        <option selected>Country</option>
                                         @foreach ($allcountries as $item)
                                         <option value="{{$item->id}}">{{$item->country}}</option>
                                         @endforeach
@@ -61,22 +47,45 @@
                                 </div>
                                 <div class="col-4">
                                     <select name="state_id" id="state_id" class="form-select form-select-sm" onchange="getCityByState(this.value)">
-                                        <option selected disabled>State..</option>
-                                       {{-- @foreach ($allStates as $item)
-                                        <option value="{{$item->id}}">{{$item->state}}</option>
-                                           
-                                       @endforeach --}}
+                                        <option selected disabled>State</option>
                                       </select>
                                 </div>
                                 <div class="col-4">
                                     <select name="city_id" id="city_id" class="form-select form-select-sm">
                                         <option selected disabled>City</option>
-                                       {{-- @foreach($allCity as $item)
-                                           <option value="{{$item->id}}">{{$item->city}}</option>
-                                       @endforeach --}}
-                                      </select>
+                                    </select>
                                 </div>
                             </div>
+
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <textarea class="form-control" name="address" id="address" placeholder="Address....."></textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state">
+                                        <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                    </div>
+                                </div>  
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                        <label class="form-check-label" for="flexRadioDefault2">Inter State</label>
+                                      </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                   <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier code" readonly>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="gst_no" id="gst_no" class="form-control-sm form-control" placeholder="GSTIN">
+                                </div>
+                            </div>
+                            
 
                     {{-- </div> --}}
                     
@@ -147,10 +156,11 @@
                         <thead>
                             <tr>
                                 <th>SN</th>
+                                <th>State Type</th>
+                                <th>Supplier code</th>
                                 <th>Name</th>
                                 <th>Mobile no</th>
-                                <th>GST IN</th>
-                                <th >Supplier code</th>
+                                <th>GSTIN</th>
                                 <th>Country</th>
                                 <th>State</th>
                                 <th>City</th>
@@ -166,10 +176,11 @@
                             @foreach ($suppliers as $list)
                                 <tr>
                                     <td>{{++$count}}</td>
+                                    <td>{{($list->state_type == MyApp::WITH_IN_STATE) ? "Within State":"Inter State" }}</td>
+                                    <td>{{$list->supplier_code}}</td>
                                     <td>{{ucwords($list->supplier_name)}}</td>
                                     <td>{{$list->mobile_no}}</td>
                                     <td>{{$list->gst_no}}</td>
-                                    <td>{{$list->supplier_code}}</td>
                                     <td>{{ucwords($list->country)}}</td>
                                     <td>{{ucwords($list->state)}}</td>
                                     <td>{{ucwords($list->city)}}</td>
@@ -253,18 +264,28 @@
             });
 
             $(document).on('change','#city_id', function (e) {
-                // e.preventDefault();
-                const city_id = $(this).val();
-                var object = $(this);
-                $.ajax({
-                    type: "get",
-                    url: "get-city-short/"+city_id,
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response);
-                        // $(object).parent().parent().find(".city_name_short").val(response.product.sales_price);
-                    }
-            });
+                e.preventDefault();
+                var supplier_id = $('#updateSupplierBtn').val();
+                var supplier_latest_id = '{{$supplier_code}}';
+                if (supplier_id > 0) {
+                    supplier_latest_id = supplier_id;
+                } 
+                var city = $(this).find("option:selected").text();
+                var first_char = city.slice(0, 1).toUpperCase();
+                var last_char = city.slice(-1).toUpperCase();
+                var supplier_code = first_char + '0' + supplier_latest_id + last_char;
+                $('#supplier_code').val(supplier_code);
+                // const city_id = $(this).val();
+                // var object = $(this);
+                // $.ajax({
+                //     type: "get",
+                //     url: "get-city-short/"+city_id,
+                //     dataType: "json",
+                //     success: function (response) {
+                //         console.log(response);
+                //         // $(object).parent().parent().find(".city_name_short").val(response.product.sales_price);
+                //     }
+                // });
 
         });
 
@@ -320,6 +341,11 @@
                         $('#supplier_name').val(response.supplier.supplier_name);
                         $('#mobile_no').val(response.supplier.mobile_no);
                         $('#address').val(response.supplier.address);
+                        if(response.supplier.state_type==1){
+                            $('#with_in_state').prop('checked',true);
+                        }else{
+                            $('#inter_state').prop('checked',true);
+                        }
                         $('#gst_no').val(response.supplier.gst_no);
                         $('#supplier_code').val(response.supplier.supplier_code);
                         $('#country_id').val(response.supplier.country_id);
@@ -331,7 +357,6 @@
 
                         // $('#state_id').val(response.supplier.state_id);
                         $('#city_id').val(response.supplier.city_id);
-                        
 
                         $('#updateSupplierBtn').val(response.supplier.id);
                     }

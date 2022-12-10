@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Supplier;
+use App\Models\StyleNo;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
@@ -25,6 +26,7 @@ class SupplierController extends Controller
             'allcountries' => $allcountries,
             'allStates' => $allStates,
             'suppliers' => $suppliers,
+            'supplier_code'=>supplierCode(),
             'allCity' => $allCity,
         ]);
     }
@@ -57,6 +59,7 @@ class SupplierController extends Controller
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
             $model->address = $req->input('address');
+            $model->state_type = $req->input('state_type');
             $model->gst_no = strtoupper($req->input('gst_no'));
             $model->supplier_code = strtoupper($req->input('supplier_code'));
             $model->country_id = $req->input('country_id');
@@ -135,6 +138,7 @@ class SupplierController extends Controller
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
             $model->address = $req->input('address');
+            $model->state_type = $req->input('state_type');
             $model->gst_no = strtoupper($req->input('gst_no'));
             $model->supplier_code = strtoupper($req->input('supplier_code'));
             $model->country_id = $req->input('country_id');
@@ -172,37 +176,41 @@ class SupplierController extends Controller
         ]);
     }
 
-    public function getStateByCountry($country_id)
-    {
-        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
+    // public function getStateByCountry($country_id)
+    // {
+    //     $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
 
-        $html = "";
-        $html .= "<option selected disabled >Select...</option>";
-        foreach($data as $list)
-        {
-            $html.= "<option value='" . $list->id . "'>" . $list->state . "</option>";
-        }
-        return response()->json([
-            'status'=> 200,
-            'html'=> $html,
-        ]);
-    }
+    //     $html = "";
+    //     $html .= "<option selected disabled >Select...</option>";
+    //     foreach($data as $list)
+    //     {
+    //         $html.= "<option value='" . $list->id . "'>" . $list->state . "</option>";
+    //     }
+    //     return response()->json([
+    //         'status'=> 200,
+    //         'html'=> $html,
+    //     ]);
+    // }
 
-    public function getCityByState($state_id)
-    {
-        $data = City::where(['state_id'=>$state_id])->get(['id', 'city',]);
+    // public function getCityByState($state_id)
+    // {
+    //     $data = City::where(['state_id'=>$state_id])->get(['id', 'city',]);
 
-        $html = "";
-        $html .= "<option selected disabled >Select...</option>";
-        foreach($data as $list)
-        {
-            $html.= "<option value='" . $list->id . "'>" . $list->city . "</option>";
-        }
-        return response()->json([
-            'status'=> 200,
-            'html'=> $html,
-        ]);
-    }
+    //     $html = "";
+    //     $html .= "<option selected disabled >Select...</option>";
+    //     foreach($data as $list)
+    //     {
+    //         $html.= "<option value='" . $list->id . "'>" . $list->city . "</option>";
+    //     }
+    //     return response()->json([
+    //         'status'=> 200,
+    //         'html'=> $html,
+    //     ]);
+    // }
+
+    
+
+
     public function getCityShortName($city_id)
     {
         // $city_short_name = City::where(['city_id'=>$city_id])->first();

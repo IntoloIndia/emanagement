@@ -159,15 +159,21 @@
                     <div class="col-md-2">
                         <span>Payment :</span>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
+                        </div>
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-2"></div>
                     <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
@@ -227,6 +233,9 @@
                         </tr>
                         @endforeach 
                     </tbody>
+                    <tfoot>
+                        
+                    </tfoot>
                 </table>  
                 </div>
                 {{-- <button class="orderInvoiceBtn" >print</button> --}}
@@ -414,26 +423,26 @@
                 
             });
 
-            $(document).keypress('#mobile_no', function () {
-                const customer_id = $(this).val();
-                // alert(customer_id);
-                var object = $(this);
-                $.ajax({
-                    type: "get",
-                    url: "get-customer-data/"+customer_id,
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response);
-                        // $(object).parent().parent().find(".price").val(response.product.sales_price);
-                        // $(object).parent().parent().find(".product").val(response.product.product);
-                        // $(object).parent().parent().find(".product_id").val(response.product.id);
-                        // $(object).parent().parent().find(".size").val(response.product.size);
-                        // $(object).parent().parent().find(".size_id").val(response.product.size.id);
-                    }
-                 });
+            // $(document).keypress('#mobile_no', function () {
+            //     const customer_id = $(this).val();
+            //     // alert(customer_id);
+            //     var object = $(this);
+            //     $.ajax({
+            //         type: "get",
+            //         url: "get-customer-data/"+customer_id,
+            //         dataType: "json",
+            //         success: function (response) {
+            //             console.log(response);
+            //             // $(object).parent().parent().find(".price").val(response.product.sales_price);
+            //             // $(object).parent().parent().find(".product").val(response.product.product);
+            //             // $(object).parent().parent().find(".product_id").val(response.product.id);
+            //             // $(object).parent().parent().find(".size").val(response.product.size);
+            //             // $(object).parent().parent().find(".size_id").val(response.product.size.id);
+            //         }
+            //      });
                 
                 
-            });
+            // });
             
             
             $(document).on('keyup','.qty', function () {
@@ -500,7 +509,7 @@
         function addItem() {
             $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
-            // $("#item_list tr").find(".item").chosen();
+            $("#item_list tr").find(".item").chosen();
             
         }
 
@@ -605,7 +614,7 @@
                     } else {
                         $('#order_err').html('');
                         // $('#productModal').modal('hide');
-                        // window.location.reload();
+                        window.location.reload();
                     }
                 }
             });

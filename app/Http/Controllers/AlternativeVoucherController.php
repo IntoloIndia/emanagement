@@ -3,162 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
-use App\Models\PurchaseEntry;
-use App\Models\Size;
-use App\Models\SalesInvoice;
 use App\Models\Customer;
-use App\Models\Month;
-use App\Models\City;
+use App\Models\SalesInvoice;
+use App\Models\AlternativeVoucher;
+
 use Validator;
 
-class SalesInvoiceController extends Controller
+class AlternativeVoucherController extends Controller
 {
-    public function index(){
-        $products = PurchaseEntry::all();
-        $sizes = Size::all();
-        $customers_billing = Customer::all();
-        $months = Month::all();
-        $cities = City::all();
-        // $allSales = SalesInvoice::all();
-        // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
-        // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
-        // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
-                        // ->groupBy('customers.customer_name')
-                    // ->get(['customers.*','billings.amount','billings.qty']);
-                    // ->get(['customers.*','billings.amount','billings.qty']);
-                    // print_r($customers_billing);
+        public function index(){
+            $customers_billing = Customer::all();
+            // $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
+            //             join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
+            //             // ->where('sales_invoices.customer_id',$order->id)
+            //             ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
 
-            // print_r($allSales); 
-            // print_r("<per>");   
-                    
-        return view('sales_invoice',[ 
-            'products'=> $products,
-            'sizes' => $sizes,
-            'customers_billing' => $customers_billing,
-            'months' => $months,
-            'cities' => $cities,
-            // 'allSales' => $allSales,
-        ]);
-        
-    }
-
-     function saveOrder(Request $req)
-    {
-        // return $req;
-        $validator = Validator::make($req->all(),[
-            'customer_name'=>'required|max:191',
-            'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
-            'birthday_date'=>'required|max:191',
-            'month_id'=>'required|max:191',
-            'states'=>'required|max:191',
-            // 'city_id'=>'required|max:191',
-            // 'gst_no'=>'required|max:191',
-
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=>$validator->messages("plz  all field required"),
+            return view('alternative_voucher',[
+                'customers_billing' => $customers_billing,
+                // 'order_items' => $order_items,
             ]);
-        }else{
-            $model = new Customer;
-            $model->customer_name = $req->input('customer_name');
-            $model->mobile_no = $req->input('mobile_no');
-            $model->birthday_date = $req->input('birthday_date');
-            $model->month_id = $req->input('month_id');
-            $model->states = $req->input('states');
-            $model->city_id = $req->input('city_id');
-            $model->gst_no = $req->input('gst_no');
-            $model->total_amount = $req->input('total_amount');
-            $model->date = date('Y-m-d');
-            $model->time = date('g:i A');
+        }
 
-            $product_id = $req->input('product_id');
-            $product_code = $req->input('product_code');
-            $price = $req->input('price');
-            $qty = $req->input('qty');
-            $size = $req->input('size');
-            $amount = $req->input('amount');
-            
-            
-
-            if($model->save()){
-
-                foreach ($product_id as $key => $list) {
-                    
-                    // $categories = Customer::find($product_code[$key]);
-
-                    $item = new SalesInvoice;
-
-                    $item->customer_id = $model->id;
-                    $item->product_id = $product_id[$key];
-                    $item->product_code = $product_code[$key];
-                    $item->price = $price[$key];
-                    $item->qty = $qty[$key];
-                    $item->size = $size[$key];
-                    $item->amount = $amount[$key];
-                    $item->date = date('Y-m-d');
-                    $item->time = date('g:i A');
-                    $item->save();
-                    if ($item->save()) {
-                        // updateProductStatus($product_id[$key]);
-                    }
-
-                } 
-
-                return response()->json([   
-                    'status'=>200
-                    
-
+        function saveAlterationvoucher(Request $req)
+        {
+            // return view('employee');
+            $validator = Validator::make($req->all(),[
+                // 'product_id' => 'required|max:191'
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=>$validator->messages("plz fill size"),
                 ]);
+            }else{
+                $model = new AlternativeVoucher;
+                $model->checked = $req->input('checked');
+                // $model->customer_id = $req->input('customer_id');
+                // $model->product_id = $req->input('product_id');
+                // $model->bill_no = $req->input('bill_no');
+               
+                if($model->save()){
+                    return response()->json([   
+                        'status'=>200
+                    ]);
+                }
             }
         }
-    }
-            
 
-    public function getItemPrice($product_code)
-    {
-        $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
-        // print_r($product);
-        // $product = Product::find($product_code);
-                        
-        return response()->json([
-            'product'=>$product
-        ]);
-
-    }
-    // public function getCumosterData($customer_id)
-    // {
-    //     // $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
-    //     // print_r($product);
-    //     $customersData = Customer::find($customer_id);
-                        
-    //     return response()->json([
-    //         'customersData'=>$customersData
-    //     ]);
-
-    // }
-
-    public function generateInvoice($customer_id)
-    {
+        public function generateInvoicebill($customer_id)
         
-
+        {
+        
                  $order =Customer::find($customer_id);
-        
-                $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
-                                    join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
-                                    // join('sizes','sizes.id','=','sales_invoices.size_id')
-                                    // join('colors','colors.id','=','sales_invoices.color_id')
+                 $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
+                                join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
+                                // join('sizes','sizes.id','=','sales_invoices.size_id')
+                                // join('colors','colors.id','=','sales_invoices.color_id')
 
-                                    ->where('sales_invoices.customer_id',$order->id)
-                            ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+                                ->where('sales_invoices.customer_id',$order->id)
+                        ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+
 
                             
-                    //  print_r($order_items);
-                    // dd($order_items);  
+                    //  print_r($order_items);     
                     // print_r($order_items);    
         //         ->get(['order_items.*','items.item_name','items.price' ]);
 
@@ -181,7 +90,9 @@ class SalesInvoiceController extends Controller
 
 
                     $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
-
+                    $html .="<form id='alterationVoucherForm'>";
+                        // $html .= @csrf;
+                    $html .="<div class='alternativevoucher_err'></div>";
                         // $html .="<div class='row text-center'>";
                         //     $html .="<h5><b>Mangaldeep </b></h5>";
                         //     $html .="<small>Jabalpur</small>";
@@ -210,7 +121,7 @@ class SalesInvoiceController extends Controller
 
                         $html .="<div class='row '>";
                             $html .="<div class='col-md-6' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small>".$order->customer_name."</small></span><br>";
+                            $html .="<span>Customer name: <small name='customer_id'>".$order->customer_name."</small></span><br>";
                             $html .="<span>Location : <small>Jabalpur</small></span><br>";
                             $html .="<span>Mobile no : <small>".$order->mobile_no."</small></span><br>";
                             $html .="<span>State code  : <small>0761</small></span><br>";
@@ -234,6 +145,7 @@ class SalesInvoiceController extends Controller
                                 $html .="<thead>";
                                     $html .="<tr>";
                                         $html .="<th>#</th>";
+                                        $html .="<th>Check</th>";
                                         $html .="<th>Item Name</th>";
                                         $html .="<th>Qty</th>";
                                         $html .="<th>Size</th>";
@@ -249,10 +161,10 @@ class SalesInvoiceController extends Controller
                                 $html .="</thead>";
                                 $html .="<tbody>";
                                 foreach ($order_items as $key => $list) {
-                                    // dd($list);
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
-                                        $html .="<td>".ucwords($list->product)."</td>";
+                                        $html .="<td><div class='form-check text-center'><input class='form-check-input' type='checkbox' name='checked' id='checked' value='1'></label> </div></td>";
+                                        $html .="<td name='product_id'>".ucwords($list->product)."</td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->size."</td>";
                                         $html .="<td>".$list->color."</td>";
@@ -269,7 +181,7 @@ class SalesInvoiceController extends Controller
                                 $html .="</tbody>";
                                 $html .="<tfoot>";
                                     $html .="<tr>";
-                                    $html .="<td colspan='2'></td>";
+                                    $html .="<td colspan='3'></td>";
                                     $html .="<td>".$key."</td>";
                                         $html .="<td colspan='4'></td>";
                                         $html .="<td><b>Total :</b></td>";
@@ -326,9 +238,11 @@ class SalesInvoiceController extends Controller
              $html .="</div>";
 
                 $html .="<div class='modal-footer'>";
-                    $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
-                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+                    // $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
+                    // $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+                    $html .="<button type='button' id='saveAltertion' class='btn btn-success btn-sm'>save</button>";
                 $html .="</div>";
+                $html .="</form>";
 
             $html .="</div>";
         $html .="</div>";
@@ -337,8 +251,46 @@ class SalesInvoiceController extends Controller
             'status'=>200,
             'html'=>$html
         ]);
-  }   
+  } 
 
+  
+  public function getCustomerBillData($customer_id)
+  {
+      $customers = Customer::where(['id'=>$customer_id])->get();
+      
+      $html = "";
+
+      //$html .= "<table class='table table-striped'>";
+
+          $html .= "<thead>";
+              $html .= "<tr>";
+                  $html .= "<th>SN</th>";
+                  $html .= "<th>Customer name</th>";
+                  $html .= "<th>mobile no</th>";
+                  $html .= "<th>Action</th>";
+              $html .= "</tr>";
+          $html .= "</thead>";
+          $html .= "<tbody>";
+              foreach ($customers as $key => $list) {
+                  $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
+                      $html .= "<td>" . ++$key . "</td>";
+                      $html .= "<td>" . $list->customer_name ."</td>";
+                      $html .= "<td>" . $list->mobile_no ."</td>";
+                      $html .= "<td> 
+                     <button type='button' class='btn btn-info btn-sm orderInvoiceBtn mr-1'  value='".$list->id."'>bills</button>
+                     </td>";
+                  $html .= "</tr>";
+              }
+          $html .= "<tbody>";
+         
+
+      // $html .= "</table>";
+
+      return response()->json([
+          'status'=>200,
+          'customers'=>$customers,
+          'html'=>$html
+      ]);
+
+  }
 }
-
-

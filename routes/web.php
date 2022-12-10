@@ -21,6 +21,7 @@ use App\Http\Controllers\SalesInvoiceController;
 use App\Http\Controllers\ExcalProductDataController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StyleNoController;
+use App\Http\Controllers\AlternativeVoucherController;
 
 use App\MyApp;
 /*
@@ -81,21 +82,21 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
         Route::post('admin/manage-state', 'manageState');
         Route::get('admin/edit-state/{state_id}', 'editState');
-        Route::get('admin/delete-state/{state_id}', 'deleteState');
-
-        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
-        
-        // Route::get('admin/get-state-by-city/{state_id}', 'getStateByCity');
+        Route::get('admin/delete-state/{state_id}', 'deleteState');        
 
         Route::post('admin/manage-city', 'manageCity');
         Route::get('admin/edit-city/{city_id}', 'editCity');
         Route::get('admin/delete-city/{city_id}', 'deleteCity');
 
+        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
+        Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
+
     });
 
     Route::controller(CustomerController::class)->group(function () {
         Route::get('admin/customer','index');
-        Route::post('admin/save-order-customer', 'saveOrderCustomer');
+        Route::get('admin/get-customer/{customer_id}','getCustomerData');
+
         
     });
 
@@ -122,18 +123,19 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-supplier-order/{supplier_id}', 'updateSupplier');
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
         Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
-        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
-        Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
 
         Route::get('admin/get-city-short/{city_id}', 'getCityShortName');
-
-
     });
 
     Route::controller(StyleNoController::class)->group(function () {
         Route::get('admin/style-no','index');
+        Route::get('admin/style-no-by-supplier/{supplier_id}','styleNoBySupplier');
         Route::post('admin/save-style-no','manageStyleNo');
-        
+        Route::get('admin/supplier-style-no/{supplier_id}','supplierStyleNo');
+
+        Route::get('admin/edit-style-no/{style_id}','editStyleNo');
+        Route::get('admin/delete-style-no/{style_no_id}','deleteStyleNo');
+
     });
     
 
@@ -143,10 +145,22 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/sales_invoice','index');
         Route::post('admin/save-order', 'saveOrder');
         Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
-        Route::get('admin/get-customer-data/{customer_id}', 'getCumosterData');
+        // Route::get('admin/get-customer-data/{customer_id}', 'getCumosterData');
         Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
         
 
+    });
+
+    // alternative voucher 
+    
+    Route::controller(AlternativeVoucherController::class)->group(function () {
+        Route::get('admin/alternative_voucher','index');
+        Route::post('admin/save-alteration-voucher-order','saveAlterationvoucher');
+        Route::get('admin/generate-invoice-voucher/{customer_id}','generateInvoicebill');
+        // Route::get('admin/get-customer-data-bill/{customer_id}', 'getCumosterDataBills');
+        Route::get('admin/get-customers-bills/{customer_id}','getCustomerBillData');
+
+          
     });
 
     Route::controller(AdminController::class)->group(function () {
