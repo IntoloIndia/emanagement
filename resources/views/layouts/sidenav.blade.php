@@ -123,7 +123,7 @@
             </li>
             <li class="nav-item">
                 <a href="alternative_voucher" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>alternative voucher</p>
+                    <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
                 </a>
             </li>
             <li class="nav-item">      

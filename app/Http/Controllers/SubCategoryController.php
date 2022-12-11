@@ -11,7 +11,7 @@ class SubCategoryController extends Controller
 {
     public function index(){
 
-         $Categories = Category::all();
+        $Categories = Category::all();
         $SubCategories = SubCategory::join('categories','categories.id','=','sub_categories.category_id')
                 ->select('sub_categories.category_id','categories.category')
                     ->groupBy('sub_categories.category_id','categories.category')
@@ -21,7 +21,7 @@ class SubCategoryController extends Controller
 
         return view('subcategory',[
             'SubCategories' => $SubCategories,
-            'Categories' => $Categories,
+            'Categories' => $Categories
         ]);
     } 
     

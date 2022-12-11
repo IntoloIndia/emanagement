@@ -296,7 +296,6 @@
         // save alterration bill 
         $(document).on('click','#saveAltertion',function(e){
                 e.preventDefault();
-                 alert("save");
                  saveAlterationvoucher();
             });
 
@@ -304,14 +303,12 @@
                 e.preventDefault();
                 // $('#generateInvoiceModal').modal('show');
                 const customer_id = $(this).val();
-                alert(customer_id);
                 generateInvoicebill(customer_id);
             });
 
             $(document).on('click','#checked',function(e){
                 e.preventDefault(); 
                 const customer_id = $(this).val();
-                alert(customer_id);
 
             });    
 

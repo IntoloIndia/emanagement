@@ -17,13 +17,14 @@ class CreateSuppliersTable extends Migration
             $table->id();
             $table->string('supplier_name')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->integer('country_id')->default(0);
+            $table->integer('state_id')->default(0);
+            $table->integer('city_id')->default(0);
             $table->string('address')->nullable();
             $table->integer('state_type')->default(0);
-            $table->string('gst_no')->nullable();
+            $table->integer('payment_days')->default(0);
             $table->string('supplier_code')->nullable();
-            $table->integer('country_id')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('city_id')->nullable();
+            $table->string('gst_no')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->timestamps();

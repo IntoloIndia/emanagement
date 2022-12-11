@@ -26,7 +26,7 @@
                             <label for="select_category" class="form-label">Category</label>
                         </div>
                         <div class="col-md-8">
-                            <select class="form-select form-select-sm" aria-label="Default select example" name="category_id" id="category_id">
+                            <select class="form-select form-select-sm"  name="category_id" id="category_id">
                                 <option selected>Choose...</option>
                                 @foreach ($Categories as $list)
                                     <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
@@ -210,6 +210,7 @@
                 $('#subcategory_err').html('');
                 $('#subcategory_err').removeClass('alert alert-danger');
                 $("#subcategoryForm").trigger("reset"); 
+                // $("#category_id").chosen({ width: '100%' });
                 $('#savesubCategoryBtn').removeClass('hide');
                 $('#updatesubCategoryBtn').addClass('hide');
                 // $('#sub_category_img_update').addClass('hide');
@@ -253,39 +254,39 @@
     })
 
     function saveSubCategory() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-            var formData = new FormData($("#subcategoryForm")[0]);
-            $.ajax({
-                type: "post",
-                url: "save-sub-category",
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    // console.log(response);
-                    if (response.status === 400) {
-                        $('#subcategory_err').html('');
-                        $('#subcategory_err').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) {
-                            $('#subcategory_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                        });
+        var formData = new FormData($("#subcategoryForm")[0]);
+        $.ajax({
+            type: "post",
+            url: "save-sub-category",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                // console.log(response);
+                if (response.status === 400) {
+                    $('#subcategory_err').html('');
+                    $('#subcategory_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) {
+                        $('#subcategory_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                    });
 
-                    } else {
-                        $('#subcategory_err').html('');
-                        $('#subCategoryModal').modal('hide');
-                        window.location.reload();
-                    }
+                } else {
+                    $('#subcategory_err').html('');
+                    $('#subCategoryModal').modal('hide');
+                    window.location.reload();
                 }
-            });
-        }
+            }
+        });
+    }
 
        
         function editSubCategory(sub_category_id){
@@ -299,10 +300,10 @@
                         $('#subcategory_err').html('');
                         $('#subcategory_err').removeClass('alert alert-danger');
                         $("#subcategoryForm").trigger( "reset" ); 
+                        // $("#category_id").chosen({ width: '100%' }).addClass('hide');
                         $('#savesubCategoryBtn').addClass('hide');
                         $('#updatesubCategoryBtn').removeClass('hide');
                         // $('#sub_category_img_update').removeClass('hide');
-
                         $('#category_id').val(response.sub_category.category_id);
                         $('#sub_category').val(response.sub_category.sub_category);
                         // $('#sub_category_img_update').val(response.sub_category.sub_category_img);

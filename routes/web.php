@@ -22,6 +22,7 @@ use App\Http\Controllers\ExcalProductDataController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StyleNoController;
 use App\Http\Controllers\AlternativeVoucherController;
+use App\Http\Controllers\BrandController;
 
 use App\MyApp;
 /*
@@ -232,7 +233,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/import-data','importProduct');
         Route::post('admin/export-excel-data','exportProduct');
 
-
+        // category of purchase entry
+        Route::post('admin/save-category', 'saveCategory');
+        Route::post('admin/save-sub-category', 'saveSubCategory');
+        Route::post('admin/save-style-no','manageStyleNo');
     });
     
     Route::controller(ManageStockController::class)->group(function () {
@@ -253,6 +257,15 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-discount/{discount_id}', 'editDiscount');
         Route::post('admin/update-discount/{discount_id}', 'updateDiscount');
         Route::get('admin/delete-discount/{discount_id}', 'deleteDiscount');
+    });
+
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('admin/brand','index');
+        // Route::post('admin/save-brand','saveBrand');
+        // Route::get('admin/edit-brand/{brand_id}','editBrand');
+        // Route::post('admin/update-brand/{brand_id}','updateBrand');
+        // Route::get('admin/delete-brand/{brand_id}','deleteBrand');
+
     });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);

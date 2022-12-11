@@ -212,9 +212,7 @@
                 $('#category_err').removeClass('alert alert-danger');
                 $("#categoryForm").trigger("reset"); 
                 $('#saveCategoryBtn').removeClass('hide');
-                $('#updateCategoryBtn').addClass('hide');
-                // $('#category_img_update').addClass('hide');
-                
+                $('#updateCategoryBtn').addClass('hide');                
             });
 
             $(document).on('click','#saveCategoryBtn', function (e) {
