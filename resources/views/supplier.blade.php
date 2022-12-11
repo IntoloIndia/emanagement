@@ -30,20 +30,14 @@
                                 <div class="col-4">
                                     <select name="country_id" id="country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value)" >
                                         <option selected>Country</option>
-                                        @foreach ($allcountries as $item)
-                                        <option value="{{$item->id}}">{{$item->country}}</option>
-                                        @endforeach
-                                      </select>
-                                      {{-- <select name="country_id" id="city_country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value);">
-                                        <option selected disabled >Select...</option>
-                                        @foreach ($allcountries as $list)
+                                        @foreach ($countries as $list)
                                             @if ($list->id == MyApp::INDIA)
                                                 <option selected value="{{$list->id}}">{{$list->country}}</option>
                                             @else
                                                 <option  value="{{$list->id}}">{{$list->country}}</option>
                                             @endif
                                         @endforeach
-                                    </select> --}}
+                                    </select>
                                 </div>
                                 <div class="col-4">
                                     <select name="state_id" id="state_id" class="form-select form-select-sm" onchange="getCityByState(this.value)">
@@ -63,17 +57,20 @@
                                 </div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                         <div class="form-check">
                                         <input class="form-check-input" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state">
                                         <label class="form-check-label" for="flexRadioDefault1">With in State</label>
                                     </div>
                                 </div>  
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
                                         <label class="form-check-label" for="flexRadioDefault2">Inter State</label>
                                       </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="payment_days" id="payment_days" class="form-control-sm form-control" placeholder="Payment days">
                                 </div>
                             </div>
                             
@@ -82,7 +79,7 @@
                                    <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier code" readonly>
                                 </div>
                                 <div class="col-6">
-                                    <input type="text" name="gst_no" id="gst_no" class="form-control-sm form-control" placeholder="GSTIN">
+                                    <input type="text" name="gst_no" id="gst_no" class="form-control-sm form-control" placeholder="GST NO">
                                 </div>
                             </div>
                             
@@ -136,19 +133,34 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Supplier</h3>
-
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                    
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-xl-6">
+                            <h3 class="card-title">Supplier</h3>
+                        </div>
+                        <div class=" col-md-2 col-lg-2 col-xl-2">
+                            <select id="filter_city_id" class="form-select form-select-sm select_chosen">
+                                <option selected disabled>City</option>
+                                @foreach ($cities as $key => $list)
+                                    <option value="{{$list->id}}" >{{ucwords($list->city)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-xl-3">
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 200px;">
+                                    <input type="text" name="table_search" class="form-control float-right search" placeholder="Search">
+        
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 400px;">
@@ -160,7 +172,8 @@
                                 <th>Supplier code</th>
                                 <th>Name</th>
                                 <th>Mobile no</th>
-                                <th>GSTIN</th>
+                                <th>GST No</th>
+                                <th>Payment Days</th>
                                 <th>Country</th>
                                 <th>State</th>
                                 <th>City</th>
@@ -174,21 +187,21 @@
                         @endphp
                         <tbody>
                             @foreach ($suppliers as $list)
-                                <tr>
+                                <tr class="row_filter search_data" city-id="{{$list->city_id}}">
                                     <td>{{++$count}}</td>
                                     <td>{{($list->state_type == MyApp::WITH_IN_STATE) ? "Within State":"Inter State" }}</td>
-                                    <td>{{$list->supplier_code}}</td>
+                                    <td class="text-center">{{$list->supplier_code}}</td>
                                     <td>{{ucwords($list->supplier_name)}}</td>
                                     <td>{{$list->mobile_no}}</td>
                                     <td>{{$list->gst_no}}</td>
+                                    <td class="text-center">{{$list->payment_days}}</td>
                                     <td>{{ucwords($list->country)}}</td>
                                     <td>{{ucwords($list->state)}}</td>
                                     <td>{{ucwords($list->city)}}</td>
-                                   
                                     <td>{{ucwords($list->address)}}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editSupplierBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -205,6 +218,7 @@
 @section('script')
   <script>
         $(document).ready(function () {
+            $(".select_chosen").chosen({ width: '100%' });
             $(document).on('click','#addsuplier', function (e) {
                 e.preventDefault();
                 $('#supplierModal').modal('show');
@@ -213,6 +227,9 @@
                 $("#supplierForm").trigger("reset"); 
                 $('#saveSupplierBtn').removeClass('hide');
                 $('#updateSupplierBtn').addClass('hide');
+
+                const country_id = $('#country_id').val();
+                getStateByCountry(country_id);
             });
 
             $(document).on('click',"#saveSupplierBtn",function(e){
@@ -255,6 +272,25 @@
                 // alert(country_id);
                 getStateByCountry(country_id);
             });
+            
+            $(document).on('change','#filter_city_id', function (e) {
+                e.preventDefault();
+                const city_id = $(this).val();
+
+                var row = $('.row_filter');
+                row.hide()
+                row.each(function(i, el) {
+                    if($(el).attr('city-id') == city_id) {
+                        $(el).show();
+                    }
+                })
+            });
+
+            $(".search").on('keyup', function(){
+                var string = $(this).val().toLowerCase();
+
+                search(string);
+            });
 
             $(document).on('change','#state_id', function (e) {
                 e.preventDefault();
@@ -290,6 +326,18 @@
         });
 
     })
+
+        function search(string) 
+        {  
+            //var value = $('#assign_work_search').val().toLowerCase();
+            $(".search_data ").each(function () {
+                if ($(this).text().toLowerCase().search(string) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
 
         function saveSupplier() {
             $.ajaxSetup({
@@ -340,14 +388,6 @@
                         $('#updateSupplierBtn').removeClass('hide');
                         $('#supplier_name').val(response.supplier.supplier_name);
                         $('#mobile_no').val(response.supplier.mobile_no);
-                        $('#address').val(response.supplier.address);
-                        if(response.supplier.state_type==1){
-                            $('#with_in_state').prop('checked',true);
-                        }else{
-                            $('#inter_state').prop('checked',true);
-                        }
-                        $('#gst_no').val(response.supplier.gst_no);
-                        $('#supplier_code').val(response.supplier.supplier_code);
                         $('#country_id').val(response.supplier.country_id);
 
                         $('#state_id').html("");
@@ -357,6 +397,15 @@
 
                         // $('#state_id').val(response.supplier.state_id);
                         $('#city_id').val(response.supplier.city_id);
+                        $('#address').val(response.supplier.address);
+                        if(response.supplier.state_type==1){
+                            $('#with_in_state').prop('checked',true);
+                        }else{
+                            $('#inter_state').prop('checked',true);
+                        }
+                        $('#payment_days').val(response.supplier.payment_days);
+                        $('#supplier_code').val(response.supplier.supplier_code);
+                        $('#gst_no').val(response.supplier.gst_no);
 
                         $('#updateSupplierBtn').val(response.supplier.id);
                     }

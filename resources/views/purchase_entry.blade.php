@@ -1,3 +1,4 @@
+@extends('layouts.common_modal')
 @extends('layouts.app')
 @section('page_title', 'Purchase Entry')
 @section('style')
@@ -168,7 +169,7 @@ a {
                                                                 @endforeach
                                                             </select>
                                                             <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
-                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                                <i class="fas fa-plus cursor_pointer" id="categoryBtn"></i>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -179,7 +180,7 @@ a {
                                                                 <option selected disabled >Sub Category</option>
                                                             </select>
                                                             <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
-                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                                <i class="fas fa-plus cursor_pointer" id="subCategoryBtn"></i>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -191,7 +192,7 @@ a {
                                                                 <option selected disabled >Style No</option>
                                                             </select>
                                                             <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
-                                                                <i class="fas fa-plus cursor_pointer" ></i>
+                                                                <i class="fas fa-plus cursor_pointer" id="styleNoBtn"></i>
                                                             </span>
                                                         </div>
                                                     
@@ -460,28 +461,28 @@ a {
                                             </tr>
                                             <tr>
                                                 <th>Price</th>
-                                                <td><input type="text" rel="popover" name="xs_price[]" class="form-control form-control-sm xs_price example-popover" placeholder="Price" value="0" ></td>
-                                                <td><input type="text" rel="popover" name="s_price[]" class="form-control form-control-sm s_price" placeholder="Price" value="0" ></td>
-                                                <td><input type="text" rel="popover" name="m_price[]" class="form-control form-control-sm m_price" placeholder="Price" value="0" ></td>
-                                                <td><input type="text" rel="popover" name="l_price[]" class="form-control form-control-sm l_price" placeholder="Price" value="0" ></td>
-                                                <td><input type="text" rel="popover" name="xl_price[]" class="form-control form-control-sm xl_price" placeholder="Price" value="0" ></td>
+                                                <td><input type="text" rel="popover" name="xs_price[]" class="form-control form-control-sm xs_price example-popover" placeholder="Price" value="" ></td>
+                                                <td><input type="text" rel="popover" name="s_price[]" class="form-control form-control-sm s_price" placeholder="Price" value="" ></td>
+                                                <td><input type="text" rel="popover" name="m_price[]" class="form-control form-control-sm m_price" placeholder="Price" value="" ></td>
+                                                <td><input type="text" rel="popover" name="l_price[]" class="form-control form-control-sm l_price" placeholder="Price" value="" ></td>
+                                                <td><input type="text" rel="popover" name="xl_price[]" class="form-control form-control-sm xl_price" placeholder="Price" value="" ></td>
                                                 <td>
-                                                    <input type="text" rel="popover" name="xxl_price[]" class="form-control form-control-sm xxl_price" placeholder="Price" value="0" >
+                                                    <input type="text" rel="popover" name="xxl_price[]" class="form-control form-control-sm xxl_price" placeholder="Price" value="" >
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>MRP</th>
-                                                <td><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2699"></td>
+                                                <td><input type="text" name="xs_mrp[]" class="form-control form-control-sm xs_mrp" placeholder="MRP" value=""></td>
                                                 <td >
-                                                    <input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2699">
+                                                    <input type="text" name="s_mrp[]" class="form-control form-control-sm s_mrp" placeholder="MRP" value="">
                                                 </td>
-                                                <td ><input type="text" name="" id="" class="form-control form-control-sm " placeholder="Price" value="2699"></td>
-                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
-                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
-                                                <td ><input type="text" name="" id="" class="form-control form-control-sm" placeholder="Price" value="2799"></td>
+                                                <td ><input type="text" name="m_mrp[]" class="form-control form-control-sm m_mrp" placeholder="MRP" value=""></td>
+                                                <td ><input type="text" name="l_mrp[]" class="form-control form-control-sm l_mrp" placeholder="MRP" value=""></td>
+                                                <td ><input type="text" name="xl_mrp[]" class="form-control form-control-sm xl_mrp" placeholder="MRP" value=""></td>
+                                                <td ><input type="text" name="xxl_mrp[]" class="form-control form-control-sm xxl_mrp" placeholder="MRP" value=""></td>
                                             </tr>
                                             
-                                            </tbody>
+                                        </tbody>
                                     </table>
 
                                     <div class="mypopover-content hide">
@@ -691,25 +692,25 @@ a {
                     return false;
                 }
 
-                if (bill_no == 0) {
-                    alert('Please enter bill no.');
-                    return false;
-                }
+                // if (bill_no == 0) {
+                //     alert('Please enter bill no.');
+                //     return false;
+                // }
 
-                if (category_id == 0) {
-                    alert('Please select first category.');
-                    return false;
-                }
+                // if (category_id == 0) {
+                //     alert('Please select first category.');
+                //     return false;
+                // }
 
-                if (sub_category_id == 0) {
-                    alert('Please select first sub category.');
-                    return false;
-                }
+                // if (sub_category_id == 0) {
+                //     alert('Please select first sub category.');
+                //     return false;
+                // }
 
-                if (style_no == 0) {
-                    alert('Please select first style no.');
-                    return false;
-                }
+                // if (style_no == 0) {
+                //     alert('Please select first style no.');
+                //     return false;
+                // }
 
                 addItem();
 
@@ -879,6 +880,35 @@ a {
                 var price = parseFloat($(this).val());
                 calculateGst( $(this), price );
             });
+
+            $(document).on('click','#categoryBtn', function () {
+                $('#categoryModal').modal('show');
+            });
+            // save category of purchase entry
+            $(document).on('click','#saveCategoryBtn', function (e) {
+                e.preventDefault();
+                saveCategory();
+            });
+          
+            $(document).on('click','#subCategoryBtn', function () {
+                $('#subCategoryModal').modal('show');
+            });
+              // save sub category
+            $(document).on('click','#savesubCategoryBtn', function (e) {
+                e.preventDefault();
+                saveSubCategory();
+            });
+
+            $(document).on('click','#styleNoBtn', function () {
+                $('#styleNoModal').modal('show');
+            });
+            // save style no
+            $(document).on('click','#saveStyleNoBtn', function (e) {
+                e.preventDefault();
+                manageStyleNo();
+            });
+
+          
 
             // $(document).on("click",".price", function(e){
                 // e.preventDefault();
@@ -1170,6 +1200,117 @@ a {
           
             window.location.reload();
         }
+
+        // save category of purchase entry
+    function saveCategory() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var formData = new FormData($("#categoryForm")[0]);
+        $.ajax({
+            type: "post",
+            url: "save-category",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                // console.log(response);
+                if (response.status === 400) {
+                    $('#category_err').html('');
+                    $('#category_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) {
+                        $('#category_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                    });
+                } else {
+                    $('#category_err').html('');
+                    $('#categoryModal').modal('hide');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+// save subcategory of purchase entry
+    function saveSubCategory() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var formData = new FormData($("#subcategoryForm")[0]);
+        $.ajax({
+            type: "post",
+            url: "save-sub-category",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                // console.log(response);
+                if (response.status === 400) {
+                    $('#subcategory_err').html('');
+                    $('#subcategory_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) {
+                        $('#subcategory_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                    });
+                } else {
+                    $('#subcategory_err').html('');
+                    $('#subCategoryModal').modal('hide');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+// save style no
+    function manageStyleNo(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var formData = new FormData($("#styleNoForm")[0]);
+        $.ajax({
+            type: "post",
+            url: "save-style-no",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false, 
+            processData: false, 
+            success: function (response) {
+                   console.log(response);
+                if(response.status === 400)
+                {
+                    $('#style_no_err').html('');
+                    $('#style_no_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) { 
+                        $('#style_no_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                    });
+
+                }else{
+                    $('#style_no_err').html('');
+                    $('#styleNoModal').modal('hide');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+
+
+
+        
+    
         
     </script>
     

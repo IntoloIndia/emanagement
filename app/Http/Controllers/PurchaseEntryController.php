@@ -7,9 +7,11 @@ use App\Models\PurchaseEntry;
 use App\Models\ProductImage;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\StyleNo;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Supplier;
+
 use Validator;
 use Picqer;
 use DNS1D;
@@ -345,5 +347,104 @@ class PurchaseEntryController extends Controller
         Excel::import(new ImportProduct,request()->file('file'));
         return back();
     }
+
+    // save category of purchase entry
+    function saveCategory(Request $req)
+    {
+        // return view('employee');
+        $validator = Validator::make($req->all(),[
+            "category" => 'required|unique:categories,category,'.$req->input('category'),
+            'category_img' => 'required|max:191',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages("plz fill all field required"),
+            ]);
+        }else{
+            $model = new Category;
+            $model->category = $req->input('category');
+                    $CategoryImage = public_path('storage/').$model->category_img;
+                    if(file_exists($CategoryImage)){
+                        @unlink($CategoryImage); 
+                    }
+                $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');
+            if($model->save()){
+                return response()->json([   
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+
+    // save subcategory of purchase entry
+    function saveSubCategory(Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            "category_id" => 'required|max:191',
+            "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
+            'sub_category_img' => 'required|max:191'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages("plz fill all field required"),
+            ]);
+        }else{
+            $model = new SubCategory;
+            $model->category_id = $req->input('category_id');
+            $model->sub_category = $req->input('sub_category');
+                    $subCategoryImage = public_path('storage/').$model->subcategory_img;
+                    if(file_exists($subCategoryImage)){
+                        @unlink($subCategoryImage); 
+                    }
+                $model->sub_category_img = $req->file('sub_category_img')->store('image/subcategory'. $req->input('sub_category_img'),'public'); 
+            if($model->save()){
+                return response()->json([   
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+// save style no of purchase entry
+    public function manageStyleNo(Request $req)
+    {
+        if($req->input('style_id') > 0)
+        {
+            $supplier_id = 'required|max:191';
+            $style_no = 'required|unique:style_nos,style_no,'.$req->input('style_id');
+            $model = StyleNo::find($req->input('style_id'));
+        }else{
+            $supplier_id = 'required|max:191';
+            $style_no = 'required|unique:style_nos,style_no,'.$req->input('style_no');
+            $model = new  StyleNo;
+        }
+
+        $validator = Validator::make($req->all(),[
+            'supplier_id' => $supplier_id,
+            'style_no' => $style_no
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+            $model->supplier_id = $req->input('supplier_id');
+            $model->style_no = strtoupper($req->input('style_no'));
+
+            if($model->save()){
+                return response()->json([
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+
+    
 
 }

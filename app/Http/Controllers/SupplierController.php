@@ -13,9 +13,9 @@ use App\Models\City;
 class SupplierController extends Controller
 {
     public function index(){
-        $allcountries = Country::all();
-        $allStates = State::all();
-        $allCity = City::all();
+        $countries = Country::all();
+        // $states = State::all();
+        $cities = City::all();
         // $suppliers = Supplier::all();
         $suppliers = Supplier::join('countries','countries.id','=','suppliers.country_id')
                         ->join('states','states.id','=','suppliers.state_id')
@@ -23,11 +23,11 @@ class SupplierController extends Controller
                         ->select('suppliers.*','countries.country','states.state','cities.city','cities.city_short')->get();
                         // print_r($suppliers);
         return view('supplier',[
-            'allcountries' => $allcountries,
-            'allStates' => $allStates,
+            'countries' => $countries,
+            // 'states' => $states,
+            'cities' => $cities,
             'suppliers' => $suppliers,
             'supplier_code'=>supplierCode(),
-            'allCity' => $allCity,
         ]);
     }
 
@@ -43,6 +43,7 @@ class SupplierController extends Controller
             'country_id' => 'required|max:191',
             'state_id' => 'required|max:191',
             'city_id' => 'required|max:191',
+            'payment_days' => 'required|max:191',
             
         ]);
         if($validator->fails())
@@ -58,13 +59,14 @@ class SupplierController extends Controller
             // $model->supplier_code = strtoupper($supplier_code);
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
-            $model->address = $req->input('address');
-            $model->state_type = $req->input('state_type');
-            $model->gst_no = strtoupper($req->input('gst_no'));
-            $model->supplier_code = strtoupper($req->input('supplier_code'));
             $model->country_id = $req->input('country_id');
             $model->state_id = $req->input('state_id');
             $model->city_id = $req->input('city_id');
+            $model->address = $req->input('address');
+            $model->state_type = $req->input('state_type');
+            $model->payment_days = $req->input('payment_days');
+            $model->supplier_code = strtoupper($req->input('supplier_code'));
+            $model->gst_no = strtoupper($req->input('gst_no'));
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
            
@@ -126,6 +128,7 @@ class SupplierController extends Controller
             'country_id' => 'required|max:191',
             'state_id' => 'required|max:191',
             'city_id' => 'required|max:191',
+            'payment_days' => 'required|max:191',
         ]);
         if($validator->fails())
         {
@@ -137,13 +140,14 @@ class SupplierController extends Controller
             $model = Supplier::find($supplier_id);
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
-            $model->address = $req->input('address');
-            $model->state_type = $req->input('state_type');
-            $model->gst_no = strtoupper($req->input('gst_no'));
-            $model->supplier_code = strtoupper($req->input('supplier_code'));
             $model->country_id = $req->input('country_id');
             $model->state_id = $req->input('state_id');
             $model->city_id = $req->input('city_id');
+            $model->address = $req->input('address');
+            $model->state_type = $req->input('state_type');
+            $model->payment_days = $req->input('payment_days');
+            $model->supplier_code = strtoupper($req->input('supplier_code'));
+            $model->gst_no = strtoupper($req->input('gst_no'));
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
            

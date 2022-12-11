@@ -43,35 +43,49 @@
                         </div>
                     </div>
                 </div>
-                    <div class="row mb-2">
-                        <div class="col-md-3">
-                                <div class="form-check">
-                                <input class="form-check-input" type="radio" name="states" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
-                                <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                        <div class="form-check">
+                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                    </div>
+                                </div>  
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                          Inter State
+                                        </label>
+                                      </div>
+                                </div>
+                               
+                                
                             </div>
-                        </div>  
-                        <div class="col-md-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="states" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                  Inter State
-                                </label>
-                              </div>
                         </div>
-                       
-                        <div class="col-md-3">
-                            <select name="city_id" id="city_id" class="form-select form-select-sm hide" >
-                                <option selected disabled>City</option>
-                               @foreach($cities as $item)
-                                   <option value="{{$item->id}}">{{$item->city}}</option>
-                               @endforeach
-                              </select>
+
+                        <div class="col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <select name="city_id" id="city_id" class="form-select form-select-sm hide " >
+                                        <option selected disabled>City</option>
+                                       @foreach($cities as $item)
+                                           <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
+                                       @endforeach
+                                      </select>
+                                </div>
+                                <div class="col-md-6">
+                                    {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
+                                    <input type="text" name="gst_no" id="gst_no" placeholder="GST NO" class="form-control form-control-sm hide">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
-                            <input type="text" name="gst_no" id="gst_no" placeholder="GST IN" class="form-control form-control-sm hide">
-                        </div>
+
                     </div>
+
+                    
                    
                 {{-- </div> --}}
                 <div class="card">
@@ -95,15 +109,15 @@
                                     <tr>
                                         <th scope="col">Sno</th>
                                         <th scope="col">Code</th>
-                                        <th scope="col">category</th>
+                                        <th scope="col">Category</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
                                         <th scope="col">Amount</th>
-                                        <th scope="col">SGST%</th>
-                                        <th scope="col">CGST%</th>
+                                        <th scope="col" class="sgst_show_hide">SGST%</th>
+                                        <th scope="col" class="cgst_show_hide">CGST%</th>
+                                        <th scope="col" class="igst_show_hide hide">IGST%</th>
                                         <th scope="col">Delete</th>
-
                                     </tr>
                                 </thead>
                                 <tbody id="item_list">
@@ -121,17 +135,19 @@
                                 {{-- <b>Total Amt :</b><br/> --}}
                                 <b>GROSS AMOUNT :</b><br/>
                                 <b>LESS DISCOUNT :</b><br/>
-                                <b>ADD SGST :</b><br/>
-                                <b>ADD CGST :</b><br/>
-                                <b> OTHER ADJ  :</b><br/>
+                                <b>SGST AMOUNT :</b><br/>
+                                <b>CGST AMOUNT :</b><br/>
+                                <b>IGST AMOUNT :</b><br/>
+                                <b>OTHER ADJ  :</b><br/>
                                 <b>R/OFF AMT :</b><br/>
                                 <b>G.TOTAL  :</b><br/>
                             </div>
                             <div class="col-md-2 text-center">
                                 <span id="item_gross_amount"></span><br/>
                                 <span id="item_less_amount"></span><br/>
-                                <span id="item_add_sgst"></span><br/>
-                                <span id="item_add_cgst"></span><br/>
+                                <span id="item_add_sgst" ></span><br/>
+                                <span id="item_add_cgst" ></span><br/>
+                                <span id="item_add_igst" ></span><br/>
                                 <span id="item_other_adj"></span><br/>
                                 <span id="item_Roff_amt"></span><br/>
                                 <span id="item_total_amount"></span><br/>
@@ -293,19 +309,12 @@
                 <input type="hidden" name="product_id[]" class="product_id">
             </td>
            
-            <td style="width: 100px;">
+            <td style="width: 80px;">
                 <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
-            <td style="width: 100px;">
+            <td style="width: 80px;">
                 <input type="text" readonly name="size[]" class="form-control form-control-sm size">
                 <input type="hidden" name="size_id[]" class="size_id">
-                {{-- <input type="text"  value="{{ucwords($item->size)}}" name="size_id[]" id="size_id" readonly  class=" form-control form-control-sm size_id"> --}}
-                {{-- <select name="size_id[]" class=" form-select form-select-sm size_id">
-                    <option selected disabled></option>
-                    @foreach ($sizes as $item)
-                        <option  value="{{$item->id}}">{{ucwords($item->size)}}</option>
-                    @endforeach
-                </select> --}}
             </td>
             <td style="width: 100px;">
                 <input type="text" name="price[]" class="form-control form-control-sm price" readonly>
@@ -313,11 +322,14 @@
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
             </td> 
-             <td style="width: 150px;">
-                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst" >
+             <td style="width: 100px;" class="sgst_show_hide">
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " >
             </td> 
-             <td style="width: 150px;">
-                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst" >
+            <td style="width: 100px;" class="cgst_show_hide">
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " >
+            </td> 
+            <td style="width: 100px;" class="igst_show_hide hide">
+                 <input type="text" name="igst[]" class="form-control form-control-sm igst " >
             </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -343,10 +355,19 @@
 <script>
     
     $(document).ready(function () {
+
+        $(".select_chosen").chosen({ width: '100%' });
         
         $(document).on('click','#addItemBtn', function (e) {
             e.preventDefault();
-            addItem();
+
+            var state_type = $('input[name=state_type]:checked', '#orderForm').val();
+            if (state_type == '{{MyApp::WITH_IN_STATE}}') {
+                
+            }
+            // alert(state_type);
+
+                addItem();
             // $(".product_code").focus();
             });
 
@@ -414,12 +435,19 @@
             $(document).on('click','#with_in_state', function (e) {
                 $('#gst_no').addClass('hide');
                 $('#city_id').addClass('hide');
+                $('.sgst_show_hide').removeClass('hide');
+                $('.cgst_show_hide').removeClass('hide');
+                $('.igst_show_hide').addClass('hide');
                 
             });
 
             $(document).on('click','#inter_state', function (e) {
                 $('#gst_no').removeClass('hide');
                 $('#city_id').removeClass('hide');
+                $('.sgst_show_hide').addClass('hide');
+                $('.cgst_show_hide').addClass('hide');
+                $('.igst_show_hide').removeClass('hide');
+
                 
             });
 
