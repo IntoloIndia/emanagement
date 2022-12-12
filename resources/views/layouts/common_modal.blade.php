@@ -64,7 +64,7 @@
                         <div class="col-md-8">
                             <select class="form-select form-select-sm"  name="category_id" id="category_id">
                                 <option selected>Choose...</option>
-                                @foreach ($Categories as $list)
+                                @foreach ($categories as $list)
                                     <option value="{{$list->id}}">{{ucwords($list->category)}}</option>
                                 @endforeach
                             </select>
