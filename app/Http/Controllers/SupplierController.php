@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Supplier;
+use App\Models\Category;
 use App\Models\StyleNo;
 use App\Models\Country;
 use App\Models\State;
@@ -16,6 +17,7 @@ class SupplierController extends Controller
         $countries = Country::all();
         // $states = State::all();
         $cities = City::all();
+        $categories = Category::all();
         // $suppliers = Supplier::all();
         $suppliers = Supplier::join('countries','countries.id','=','suppliers.country_id')
                         ->join('states','states.id','=','suppliers.state_id')
@@ -24,8 +26,8 @@ class SupplierController extends Controller
                         // print_r($suppliers);
         return view('supplier',[
             'countries' => $countries,
-            // 'states' => $states,
             'cities' => $cities,
+            'categories' => $categories,
             'suppliers' => $suppliers,
             'supplier_code'=>supplierCode(),
         ]);

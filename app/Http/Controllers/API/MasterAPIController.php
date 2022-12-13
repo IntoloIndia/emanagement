@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Color;
 use App\Models\Size;
+use App\Models\Brand;
 
 class MasterAPIController extends Controller
 {
@@ -42,6 +43,13 @@ class MasterAPIController extends Controller
         $sizes = Size::all();
         return response()->json([
             'data'=>$sizes,
+        ]); 
+    }
+    public function getBrand()
+    {
+        $brands = Brand::all();
+        return response()->json([
+            'data'=>$brands,
         ]); 
     }
 

@@ -11,6 +11,7 @@ use App\Models\StyleNo;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Supplier;
+use App\Models\Brand;
 
 use Validator;
 use Picqer;
@@ -32,6 +33,7 @@ class PurchaseEntryController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
+        $brands = Brand::all();
         $suppliers = Supplier::all();
 
         //  DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
@@ -44,25 +46,30 @@ class PurchaseEntryController extends Controller
         // // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 40);
         // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
         // return $barcode;
-        $products = PurchaseEntry::Join('suppliers','suppliers.id','=','purchase_entries.supplier_id')
-                ->Join('categories','categories.id','=','purchase_entries.category_id')
-                ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
-                ->get(['purchase_entries.*',
-                    'suppliers.supplier_name',
-                    'categories.category',
-                    'sub_categories.sub_category',
-                ]);
+
+
+
+        // $products = PurchaseEntry::Join('suppliers','suppliers.id','=','purchase_entries.supplier_id')
+                // ->Join('categories','categories.id','=','purchase_entries.category_id')
+                // ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
+                // ->get(['purchase_entries.*',
+                //     'suppliers.supplier_name',
+                //     'categories.category',
+                //     'sub_categories.sub_category',
+                // ]);
         return view('purchase_entry',[
             "categories"=>$categories,
             'sizes' => $sizes,
             'colors'=> $colors,
-            'products' => $products,
+            'brands'=> $brands,
+            // 'products' => $products,
             'suppliers' => $suppliers
         ]);
     }
 
-    function saveProduct(Request $req)
+    function savePurchaseEntry(Request $req)
     {
+
         $validator = Validator::make($req->all(),[
             'category_id' => 'required|max:191',
             'supplier_id' => 'required|max:191',
@@ -72,8 +79,6 @@ class PurchaseEntryController extends Controller
             'purchase_price'=>'required|max:191',
             'sales_price'=>'required|max:191',
             'bill_no'=>'required|max:191',
-            // 'gst_no'=>'required|max:191',
-            // 'hsn_code'=>'required|max:191',
             'size'=>'required|max:191',
             'color'=>'required|max:191',
         ]);
@@ -86,15 +91,18 @@ class PurchaseEntryController extends Controller
             ]);
         }else{
 
+
+            $model = new PurchaseEntry;
+
+
+
             $qty = $req->input('qty');
             for ($i=0; $i < $qty; $i++) 
             { 
                 $product_code = rand(000001,999999);
-                // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-                // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
-
+               
                 $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-                // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
+               
                 $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
                 
                 $model = new PurchaseEntry;
@@ -106,15 +114,13 @@ class PurchaseEntryController extends Controller
                 $model->qty = 1;
                 $model->sales_price = $req->input('sales_price');
                 $model->purchase_price = $req->input('purchase_price');
-                // $model->gst_no = $req->input('gst_no');
-                // $model->hsn_code = $req->input('hsn_code');
                 $model->bill_no = $req->input('bill_no');
                 $model->size = $req->input('size');
                 $model->color = $req->input('color');
                 $model->barcode = $barcode;
                 $model->date = date('Y-m-d');
                 $model->time = date('g:i A');
-                // $model->save();
+
                 if ($model->save()) {
                     $imageModal = new ProductImage;
                     $imageModal->product_id = $model->id;
@@ -128,6 +134,74 @@ class PurchaseEntryController extends Controller
             ]);
         }
     }
+
+    // function saveProduct(Request $req)
+    // {
+
+    //     $validator = Validator::make($req->all(),[
+    //         'category_id' => 'required|max:191',
+    //         'supplier_id' => 'required|max:191',
+    //         'sub_category_id'=>'required|max:191',
+    //         'product_name'=>'required|max:191',
+    //         'qty'=>'required|max:191',
+    //         'purchase_price'=>'required|max:191',
+    //         'sales_price'=>'required|max:191',
+    //         'bill_no'=>'required|max:191',
+    //         'size'=>'required|max:191',
+    //         'color'=>'required|max:191',
+    //     ]);
+
+    //     if($validator->fails())
+    //     {
+    //         return response()->json([
+    //             'status'=>400,
+    //             'errors'=>$validator->messages(),
+    //         ]);
+    //     }else{
+
+    //         $qty = $req->input('qty');
+    //         for ($i=0; $i < $qty; $i++) 
+    //         { 
+    //             $product_code = rand(000001,999999);
+    //             //------------------------------------------------------
+    //             // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();//commented
+    //             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);//commented
+    //             //-----------------------------------------------
+    //             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+                
+    //             //------------------------------------------------------
+    //             // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';//commented
+    //             //------------------------------------------------------
+    //             $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+                
+    //             $model = new PurchaseEntry;
+    //             $model->product_code = $product_code;
+    //             $model->category_id = $req->input('category_id');
+    //             $model->supplier_id = $req->input('supplier_id');
+    //             $model->sub_category_id = $req->input('sub_category_id');
+    //             $model->product = $req->input('product_name');
+    //             $model->qty = 1;
+    //             $model->sales_price = $req->input('sales_price');
+    //             $model->purchase_price = $req->input('purchase_price');
+    //             $model->bill_no = $req->input('bill_no');
+    //             $model->size = $req->input('size');
+    //             $model->color = $req->input('color');
+    //             $model->barcode = $barcode;
+    //             $model->date = date('Y-m-d');
+    //             $model->time = date('g:i A');
+    //             if ($model->save()) {
+    //                 $imageModal = new ProductImage;
+    //                 $imageModal->product_id = $model->id;
+    //                 $imageModal->product_image = $req->input('product_image');
+    //                 $imageModal->save();
+    //             }
+    //         }
+
+    //         return response()->json([   
+    //             'status'=>200
+    //         ]);
+    //     }
+    // }
 
     
     public function editProduct($product_id)
@@ -443,6 +517,73 @@ class PurchaseEntryController extends Controller
                 ]);
             }
         }
+    }
+
+    function saveBrand(Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            'brand_name' => 'required|max:191',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages("plz fill all field required"),
+            ]);
+        }else{
+            $model = new Brand;
+            $model->brand_name = $req->input('brand_name');         
+            if($model->save()){
+                return response()->json([   
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+
+    public function editBrand($brand_id)
+    {
+        $brand = Brand::find($brand_id);
+        return response()->json([
+            'status'=>200,
+            'brand'=>$brand
+        ]);
+    }
+
+    public function updateBrand(Request $req, $brand_id)
+    {
+       
+
+        $validator = Validator::make($req->all(),[
+            'brand_name' => 'required|max:191',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+            $model = Brand::find($brand_id);
+            $model->brand_name = $req->input('brand_name'); 
+           
+            
+            if($model->save()){
+                return response()->json([
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+
+    public function deleteBrand($brand_id)
+    {
+        $delete_brand = Brand::find($brand_id);
+        $delete_brand->delete();
+        return response()->json([
+            'status'=>200
+        ]);
     }
 
     

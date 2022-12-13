@@ -150,7 +150,11 @@ tbody tr #count_item:first-child:before
   padding: 5px 5px;
 }
 
-/* #token_no{
-  padding: 2px 10px;
-  box-shadow: 0px 0px 5px 0px;
-} */
+.form-control, .form-select {
+  margin-bottom: 2px;
+  padding: 2px 5px;
+}
+.chosen-container{
+  width: 100%;
+}
+

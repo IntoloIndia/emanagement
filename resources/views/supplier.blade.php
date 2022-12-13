@@ -1,7 +1,10 @@
+
+
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 
 @section('content')
+    
    {{-- modal supplier  --}}
 
    <div class="modal fade" id="supplierModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -27,7 +30,7 @@
                             </div>
 
                             <div class="row mt-2">
-                                <div class="col-4">
+                                <div class="col-md-3">
                                     <select name="country_id" id="country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value)" >
                                         <option selected>Country</option>
                                         @foreach ($countries as $list)
@@ -39,15 +42,22 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-4">
-                                    <select name="state_id" id="state_id" class="form-select form-select-sm" onchange="getCityByState(this.value)">
-                                        <option selected disabled>State</option>
-                                      </select>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <select name="state_id" id="state_id" class="form-select form-select-sm state_chosen" onchange="getCityByState(this.value)">
+                                            <option selected disabled>State</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-4">
-                                    <select name="city_id" id="city_id" class="form-select form-select-sm">
-                                        <option selected disabled>City</option>
-                                    </select>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <select name="city_id" id="city_id" class="form-select form-select-sm select_chosen">
+                                            <option selected disabled>City</option>
+                                        </select>
+                                        <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                            <i class="fas fa-plus cursor_pointer" id="cityBtn"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -58,7 +68,7 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-4">
-                                        <div class="form-check">
+                                    <div class="form-check">
                                         <input class="form-check-input" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state">
                                         <label class="form-check-label" for="flexRadioDefault1">With in State</label>
                                     </div>
@@ -118,7 +128,6 @@
     </div>
 </div>
 
-
     {{-- open modal button --}}
     <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -127,6 +136,8 @@
     </div>
 
     {{-- end  --}}
+
+    @include('layouts.common_modal')
 
     <div class="row mt-2">
         <div class="col-md-12">
@@ -218,7 +229,10 @@
 @section('script')
   <script>
         $(document).ready(function () {
-            $(".select_chosen").chosen({ width: '100%' });
+
+            $(".state_chosen").chosen({ width: '100%' });
+            $(".select_chosen").chosen({ width: '80%' });
+
             $(document).on('click','#addsuplier', function (e) {
                 e.preventDefault();
                 $('#supplierModal').modal('show');
@@ -231,6 +245,13 @@
                 const country_id = $('#country_id').val();
                 getStateByCountry(country_id);
             });
+
+            // $(document).on('click','#cityBtn', function () {
+            //     const country_id = $('#city_country_id').val();
+            //     getStateByCountry(country_id);
+
+            //     $('#cityModal').modal('show');
+            // });
 
             $(document).on('click',"#saveSupplierBtn",function(e){
                 e.preventDefault();

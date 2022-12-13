@@ -10,6 +10,7 @@ use App\Models\SalesInvoice;
 use App\Models\Customer;
 use App\Models\Month;
 use App\Models\City;
+use App\Models\User;
 use Validator;
 
 class SalesInvoiceController extends Controller
@@ -20,6 +21,7 @@ class SalesInvoiceController extends Controller
         $customers_billing = Customer::all();
         $months = Month::all();
         $cities = City::all();
+        $users = User::all();
         // $allSales = SalesInvoice::all();
         // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
         // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
@@ -38,6 +40,7 @@ class SalesInvoiceController extends Controller
             'customers_billing' => $customers_billing,
             'months' => $months,
             'cities' => $cities,
+            'users' => $users
             // 'allSales' => $allSales,
         ]);
         
@@ -51,7 +54,7 @@ class SalesInvoiceController extends Controller
             'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
-            'states'=>'required|max:191',
+            'state_type'=>'required|max:191',
             // 'city_id'=>'required|max:191',
             // 'gst_no'=>'required|max:191',
 
@@ -69,7 +72,8 @@ class SalesInvoiceController extends Controller
             $model->mobile_no = $req->input('mobile_no');
             $model->birthday_date = $req->input('birthday_date');
             $model->month_id = $req->input('month_id');
-            $model->states = $req->input('states');
+            $model->state_type = $req->input('state_type');
+            $model->employee_id = $req->input('employee_id');
             $model->city_id = $req->input('city_id');
             $model->gst_no = $req->input('gst_no');
             $model->total_amount = $req->input('total_amount');
@@ -130,30 +134,30 @@ class SalesInvoiceController extends Controller
         ]);
 
     }
-    // public function getCumosterData($customer_id)
-    // {
-    //     // $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
-    //     // print_r($product);
-    //     $customersData = Customer::find($customer_id);
-                        
-    //     return response()->json([
-    //         'customersData'=>$customersData
-    //     ]);
+    public function getCumosterData($mobile_no)
+    {
+        $customersData = Customer::where(['mobile_no'=>$mobile_no])->first();
+        // $customersData = Customer::find($mobile_no);
+     
+        return response()->json([
+            'status'=>200,
+            'customersData'=>$customersData
+        ]);
 
-    // }
+    }
 
     public function generateInvoice($customer_id)
     {
         
 
-                 $order =Customer::find($customer_id);
+                 $get_cutomer_data =Customer::find($customer_id);
         
                 $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
                                     join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
                                     // join('sizes','sizes.id','=','sales_invoices.size_id')
                                     // join('colors','colors.id','=','sales_invoices.color_id')
 
-                                    ->where('sales_invoices.customer_id',$order->id)
+                                    ->where('sales_invoices.customer_id',$get_cutomer_data->id)
                             ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
 
                             
@@ -173,7 +177,7 @@ class SalesInvoiceController extends Controller
         $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$order->customer_name</b></h5>";
+                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$get_cutomer_data->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
 
@@ -210,9 +214,9 @@ class SalesInvoiceController extends Controller
 
                         $html .="<div class='row '>";
                             $html .="<div class='col-md-6' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small>".$order->customer_name."</small></span><br>";
+                            $html .="<span>Customer name: <small>".$get_cutomer_data->customer_name."</small></span><br>";
                             $html .="<span>Location : <small>Jabalpur</small></span><br>";
-                            $html .="<span>Mobile no : <small>".$order->mobile_no."</small></span><br>";
+                            $html .="<span>Mobile no : <small>".$get_cutomer_data->mobile_no."</small></span><br>";
                             $html .="<span>State code  : <small>0761</small></span><br>";
                             // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
                             $html .="</div>";
@@ -220,8 +224,8 @@ class SalesInvoiceController extends Controller
                             $html .="<span class=''>CASH :<br/> <small><b>10000</b></small></span> ";
                             $html .="</div>";
                             $html .="<div class='col-md-4' style='border:1px solid black'>";
-                            $html .="<span>Invoicen No : <small class='float-end'>".$order->invoice_no."</small></span><br>";
-                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($order->date))."</small></span><br>";
+                            $html .="<span>Invoicen No : <small class='float-end'>".$get_cutomer_data->invoice_no."</small></span><br>";
+                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($get_cutomer_data->date))."</small></span><br>";
                                 $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
                             $html .="</div>";
                         $html .="</div>";
@@ -273,10 +277,10 @@ class SalesInvoiceController extends Controller
                                     $html .="<td>".$key."</td>";
                                         $html .="<td colspan='4'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
+                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
+                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
+                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
+                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -301,13 +305,13 @@ class SalesInvoiceController extends Controller
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
 
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
 
                     $html .="</div>";
                     $html .="</div>";
@@ -327,7 +331,7 @@ class SalesInvoiceController extends Controller
 
                 $html .="<div class='modal-footer'>";
                     $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
-                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$get_cutomer_data->id."'>Print</button>";
                 $html .="</div>";
 
             $html .="</div>";

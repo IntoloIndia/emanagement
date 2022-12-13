@@ -26,7 +26,7 @@
 @endsection
 @section('content')
 {{-- <div class="row">
-    <h1>Alternative voucher</h1>
+    <h1>alteration voucher</h1>
     <div class="col-md-3">
         <input type="text" name="bill_no" id="bill_no" class="form-control form-control-sm" placeholder="bill no" >
        </div>
@@ -296,21 +296,23 @@
         // save alterration bill 
         $(document).on('click','#saveAltertion',function(e){
                 e.preventDefault();
-                 saveAlterationvoucher();
+
+                 saveAlterationVoucher();
             });
 
         $(document).on('click','.orderInvoiceBtn',function(e){
                 e.preventDefault();
                 // $('#generateInvoiceModal').modal('show');
                 const customer_id = $(this).val();
-                generateInvoicebill(customer_id);
+
+                generateAlerationVoucher(customer_id);
             });
 
-            $(document).on('click','#checked',function(e){
-                e.preventDefault(); 
-                const customer_id = $(this).val();
-
-            });    
+            // $(document).on('click','#checked_alt_voucher',function(e){
+            //     e.preventDefault(); 
+            //     const customer_id = $(this).val();
+                
+            // });    
 
     });
 
@@ -328,13 +330,13 @@
         });
     } 
 
-    function generateInvoicebill(customer_id) {
+    function generateAlerationVoucher(customer_id) {
          $.ajax({
         type: "get",
         url: "generate-invoice-voucher/"+customer_id,
         dataType: "json",
         success: function (response) {
-            //console.log(response);
+            console.log(response);
             if (response.status == 200) {
                 $('#generateInvoiceModal').html(response.html);
                 $('#generateInvoiceModal').modal('show');
@@ -347,39 +349,50 @@
 }
 
 
-function saveAlterationvoucher() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var formData = new FormData($("#alterationVoucherForm")[0]);
-            $.ajax({
-                type: "post",
-                url: "save-alteration-voucher-order",
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if (response.status === 400) {
-                        $('#alternativevoucher_err').html('');
-                        $('#alternativevoucher_err').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) {
-                            $('#alternativevoucher_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                        });
-
-                    } else {
-                         $('#alternativevoucher_err').html('');
-                        // $('#supplierModal').modal('hide');
-                        window.location.reload();
-                    }
-                }
-            });
+function saveAlterationVoucher() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    var customer_id = $('#customer_id').val();
+    var product_id = $('#product_id').val();
+    // alert(customer_id);
+    // alert(product_id);
+    var formData = {
+
+        'customer_id':customer_id,
+        'product_id':product_id
+        // bill_id:bill_id,
+        // checkbox:checkbox,
+    };
+    alert(JSON.stringify(formData));
+    $.ajax({
+        type: "post",
+        url: "save-alteration-voucher-order",
+        data: JSON.stringify(formData),
+        dataType: "json",
+        // cache: false,
+        // contentType: false,
+        // processData: false,
+        success: function (response) {
+            if (response.status === 400) {
+                $('#alterationvoucher_err').html('');
+                $('#alterationvoucher_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#alterationvoucher_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
+
+            } else {
+                    $('#alterationvoucher_err').html('');
+                // $('#supplierModal').modal('hide');
+                // window.location.reload();
+            }
+        }
+    });
+}
 
 </script>
 
