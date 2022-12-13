@@ -264,7 +264,7 @@
         function deleteDepartment(department_id){
             $.ajax({
                 type: "get",
-                url: "delete-department/"+department_id,
+                url: "delete-brand/"+department_id,
                 dataType: "json",
                 success: function (response) {
                     if(response.status == 200){

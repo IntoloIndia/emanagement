@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\SalesInvoice;
-use App\Models\AlternativeVoucher;
+use App\Models\AlterationVoucher;
 
 use Validator;
 
-class AlternativeVoucherController extends Controller
+class AlterationVoucherController extends Controller
 {
         public function index(){
             $customers_billing = Customer::all();
@@ -18,52 +18,54 @@ class AlternativeVoucherController extends Controller
             //             // ->where('sales_invoices.customer_id',$order->id)
             //             ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
 
-            return view('alternative_voucher',[
+            return view('alteration_voucher',[
                 'customers_billing' => $customers_billing,
                 // 'order_items' => $order_items,
             ]);
         }
 
-        function saveAlterationvoucher(Request $req)
+        function saveAlterationVoucher(Request $req)
         {
-            // return view('employee');
-            $validator = Validator::make($req->all(),[
-                // 'product_id' => 'required|max:191'
-            ]);
+           dd($req);
+            
+            
+            // $validator = Validator::make($req->all(),[
+            //     // 'product_id' => 'required|max:191'
+            // ]);
     
-            if($validator->fails())
-            {
-                return response()->json([
-                    'status'=>400,
-                    'errors'=>$validator->messages("plz fill size"),
-                ]);
-            }else{
-                $model = new AlternativeVoucher;
-                $model->checked = $req->input('checked');
-                // $model->customer_id = $req->input('customer_id');
-                // $model->product_id = $req->input('product_id');
-                // $model->bill_no = $req->input('bill_no');
+            // if($validator->fails())
+            // {
+            //     return response()->json([
+            //         'status'=>400,
+            //         'errors'=>$validator->messages("plz fill size"),
+            //     ]);
+            // }else{
+            //     $model = new AlterationVoucher;
+            //     $model->checked_alt_voucher = $req->input('checked_alt_voucher');
+            //     $model->customer_id = $req->input('customer_id');
+            //     $model->product_id = $req->input('product_id');
+            //     // $model->bill_no = $req->input('bill_no');
                
-                if($model->save()){
-                    return response()->json([   
-                        'status'=>200
-                    ]);
-                }
-            }
+            //     if($model->save()){
+            //         return response()->json([   
+            //             'status'=>200
+            //         ]);
+            //     }
+            // }
         }
 
-        public function generateInvoicebill($customer_id)
-        
+        public function generateAlerationVoucher($customer_id)
         {
         
-                 $order =Customer::find($customer_id);
+                 $customers =Customer::find($customer_id);
                  $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
                                 join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
+                                // ->join('')
                                 // join('sizes','sizes.id','=','sales_invoices.size_id')
                                 // join('colors','colors.id','=','sales_invoices.color_id')
 
-                                ->where('sales_invoices.customer_id',$order->id)
-                        ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+                                ->where('sales_invoices.customer_id',$customers->id)
+                        ->select(['sales_invoices.*','purchase_entries.product'])->get(); 
 
 
                             
@@ -82,7 +84,7 @@ class AlternativeVoucherController extends Controller
         $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$order->customer_name</b></h5>";
+                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$customers->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
 
@@ -92,7 +94,7 @@ class AlternativeVoucherController extends Controller
                     $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
                     $html .="<form id='alterationVoucherForm'>";
                         // $html .= @csrf;
-                    $html .="<div class='alternativevoucher_err'></div>";
+                    $html .="<div class='alterationvoucher_err'></div>";
                         // $html .="<div class='row text-center'>";
                         //     $html .="<h5><b>Mangaldeep </b></h5>";
                         //     $html .="<small>Jabalpur</small>";
@@ -121,9 +123,10 @@ class AlternativeVoucherController extends Controller
 
                         $html .="<div class='row '>";
                             $html .="<div class='col-md-6' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small name='customer_id'>".$order->customer_name."</small></span><br>";
+                            $html .="<span>Customer name: <small name='customer_id'>".$customers->customer_name."</small></span><br>";
+                            $html .="<input type='hidden' id='customer_id' value='".$customers->id."' class='form-control form-control-sm' >";
                             $html .="<span>Location : <small>Jabalpur</small></span><br>";
-                            $html .="<span>Mobile no : <small>".$order->mobile_no."</small></span><br>";
+                            $html .="<span>Mobile no : <small>".$customers->mobile_no."</small></span><br>";
                             $html .="<span>State code  : <small>0761</small></span><br>";
                             // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
                             $html .="</div>";
@@ -131,8 +134,8 @@ class AlternativeVoucherController extends Controller
                             $html .="<span class=''>CASH :<br/> <small><b>10000</b></small></span> ";
                             $html .="</div>";
                             $html .="<div class='col-md-4' style='border:1px solid black'>";
-                            $html .="<span>Invoicen No : <small class='float-end'>".$order->invoice_no."</small></span><br>";
-                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($order->date))."</small></span><br>";
+                            $html .="<span>Invoice No : <small class='float-end'>".$customers->invoice_no."</small></span><br>";
+                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($customers->date))."</small></span><br>";
                                 $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
                             $html .="</div>";
                         $html .="</div>";
@@ -163,8 +166,19 @@ class AlternativeVoucherController extends Controller
                                 foreach ($order_items as $key => $list) {
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
-                                        $html .="<td><div class='form-check text-center'><input class='form-check-input' type='checkbox' name='checked' id='checked' value='1'></label> </div></td>";
-                                        $html .="<td name='product_id'>".ucwords($list->product)."</td>";
+
+                                       
+                                        // <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        
+
+
+
+
+                                        $html .="<td><div class='form-check text-center'>
+                                            <input class='form-check-input' type='checkbox'  name='checked_alt_voucher' id='checked_alt_voucher' value='1'>
+                                        </div></td>";
+                                        $html .="<td>".ucwords($list->product)."</td>";
+                                        $html .="<td><input type='hidden' id='product_id' value='".$list->product_id."' class='form-control form-control-sm' ></td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->size."</td>";
                                         $html .="<td>".$list->color."</td>";
@@ -185,10 +199,10 @@ class AlternativeVoucherController extends Controller
                                     $html .="<td>".$key."</td>";
                                         $html .="<td colspan='4'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
-                                        $html .="<td>".$order->total_amount."</td>";
+                                        // $html .="<td>".$customers->total_amount."</td>";
+                                        // $html .="<td>".$customers->total_amount."</td>";
+                                        // $html .="<td>".$customers->total_amount."</td>";
+                                        // $html .="<td>".$customers->total_amount."</td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -213,13 +227,13 @@ class AlternativeVoucherController extends Controller
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
 
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$order->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
 
                     $html .="</div>";
                     $html .="</div>";
@@ -249,7 +263,8 @@ class AlternativeVoucherController extends Controller
 
         return response()->json([
             'status'=>200,
-            'html'=>$html
+            'html'=>$html,
+            ' $customers'=>$customers
         ]);
   } 
 

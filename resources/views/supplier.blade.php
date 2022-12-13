@@ -1,8 +1,10 @@
+
+
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 
 @section('content')
-    @include('layouts.common_modal')
+    
    {{-- modal supplier  --}}
 
    <div class="modal fade" id="supplierModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -126,7 +128,6 @@
     </div>
 </div>
 
-
     {{-- open modal button --}}
     <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
@@ -135,6 +136,8 @@
     </div>
 
     {{-- end  --}}
+
+    @include('layouts.common_modal')
 
     <div class="row mt-2">
         <div class="col-md-12">
@@ -242,6 +245,13 @@
                 const country_id = $('#country_id').val();
                 getStateByCountry(country_id);
             });
+
+            // $(document).on('click','#cityBtn', function () {
+            //     const country_id = $('#city_country_id').val();
+            //     getStateByCountry(country_id);
+
+            //     $('#cityModal').modal('show');
+            // });
 
             $(document).on('click',"#saveSupplierBtn",function(e){
                 e.preventDefault();

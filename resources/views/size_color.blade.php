@@ -64,7 +64,8 @@
                                 <label for="Color" class="form-label">Color</label>
                             </div>
                             <div class="col-md-8">
-                                <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
+                                {{-- <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color"> --}}
+                                <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
                             </div>
                         </div>
                     </div>
@@ -205,7 +206,7 @@
               @foreach($colors as $list)
                 <tr>
                   <td>{{++$count}}</td>
-                  <td>{{$list->color}}</td>
+                  <td>{{ucwords($list->color)}}</td>
                   <td> <input type="text" disabled style="width:50px;background-color:{{$list->color}};" id="colorinput">
                   </td>
                   <td>

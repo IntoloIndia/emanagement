@@ -1,4 +1,12 @@
 {{-- category modal of purchase entry --}}
+@php
+    use App\Models\Category;
+    use App\Models\Country;
+    $countries = Country::all();
+    $categories = Category::all();
+
+@endphp
+
 <div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -181,5 +189,65 @@
           </form>
       </div>
       </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cityModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">City</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cityForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div id="city_err"></div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-5">
+                                <label for="countryName" class="form-label">Country</label>
+                                <select name="country_id" id="city_country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value);">
+                                    <option selected disabled >Select...</option>
+                                    @foreach ($countries as $list)
+                                        @if ($list->id == MyApp::INDIA)
+                                            <option selected value="{{$list->id}}">{{$list->country}}</option>
+                                        @else
+                                            <option  value="{{$list->id}}">{{$list->country}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <label for="stateName" class="form-label">State</label>
+                                <select name="state_id" id="state_id" class="form-select form-select-sm">
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-8">
+                                <label for="cityName" class="form-label">City</label>
+                                <input type="text" name="city" id="city" class="form-control form-control-sm" placeholder="City name">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="cityShort" class="form-label">Short</label>
+                                <input type="text" name="city_short" id="city_short" class="form-control form-control-sm" placeholder="JBP">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="city_id" id="city_id" value="">
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="saveCityBtn" class="btn btn-primary btn-sm ">Save </button>
+                        <button type="button" id="updateCityBtn" class="btn btn-primary btn-sm hide">Update </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>

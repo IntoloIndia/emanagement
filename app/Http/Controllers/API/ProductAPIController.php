@@ -47,6 +47,9 @@ class ProductAPIController extends Controller
             if ($req->color != '') {
                 $products->where('purchase_entries.color', '=', $req->color);
             }
+            if ($req->brand != '') {
+                $products->where('purchase_entries.brand', '=', $req->brand);
+            }
 
             $data = $products->get();
 
@@ -103,6 +106,9 @@ class ProductAPIController extends Controller
             }
             if ($req->color != '') {
                 $sales->where('purchase_entries.color', '=', $req->color);
+            }
+            if ($req->brand != '') {
+                $products->where('purchase_entries.brand', '=', $req->brand);
             }
 
             $data = $sales->get();

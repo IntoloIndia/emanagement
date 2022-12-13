@@ -40,6 +40,7 @@ Route::controller(MasterAPIController::class)->group(function () {
     Route::get('get-sub-category/{category_id}', 'getSubCategory');
     Route::get('get-color', 'getColor');
     Route::get('get-size', 'getSize');
+    Route::get('get-brand', 'getBrand');
 });
 
 Route::controller(ProductAPIController::class)->group(function () {

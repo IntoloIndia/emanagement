@@ -16,7 +16,8 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="moblie_no" class="form-label" >Moblie no</label>
-                            <input type="number"  class="form-control form-control-sm" name="mobile_no" required id="moblie_no" placeholder="Enter mobile number">
+                            {{-- <input type="number"  class="form-control form-control-sm" name="mobile_no" min="10" max="10" value="" required id="moblie_no" placeholder="Enter mobile number"> --}}
+                            <input type="number"  class="form-control form-control-sm mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="Enter mobile number">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -47,13 +48,13 @@
 
                         <div class="col-md-6">
                             <div class="row mb-2">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-sm-6">
                                         <div class="form-check">
                                         <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">With in State</label>
                                     </div>
                                 </div>  
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-sm-6">
                                     <div class="form-check">
                                         <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
                                         <label class="form-check-label" for="flexRadioDefault2">
@@ -68,17 +69,25 @@
 
                         <div class="col-md-6">
                             <div class="row mb-2">
-                                <div class="col-md-6">
-                                    <select name="city_id" id="city_id" class="form-select form-select-sm hide " >
+                                <div class="col-md-4">
+                                    <select name="city_id" id="city_id" class="form-select" >
                                         <option selected disabled>City</option>
                                        @foreach($cities as $item)
                                            <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
                                        @endforeach
                                       </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
-                                    <input type="text" name="gst_no" id="gst_no" placeholder="GST NO" class="form-control form-control-sm hide">
+                                    <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="employee_id" id="employee_id" class="form-select" >
+                                        <option selected disabled>code</option>
+                                       @foreach($users as $item)
+                                           <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
+                                       @endforeach
+                                      </select>
                                 </div>
                             </div>
                         </div>
@@ -175,32 +184,51 @@
                     <div class="col-md-2">
                         <span>Payment :</span>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
                         </div>
                     </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
-                        <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
-                    </div>
-
+                    {{-- <div class="row"> --}}
+                        <div class="col-md-4"></div>
+                        <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
+                            <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
+                        </div>
+                    {{-- </div> --}}
                 </div>
+                   
+                   
+
+                {{-- </ div> --}}
              
             </div> 
         </form>
-        </div>
+    </div>
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12">
         <div class="card">
@@ -292,7 +320,14 @@
    <table class="hide">
     <tbody id="item_row">
         <tr>
-            <td id="count_item"></td>
+            <td id="count_item">
+                <div class="form-check">
+                    <input class="form-check-input float-right" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault"> 
+                      {{-- Default checkbox --}}
+                    </label> 
+                  </div>
+            </td>
             
             <td style="width: 200px;">
                 <input type="text" name="product_code[]" id="product_code" class="form-control form-control-sm product_code">
@@ -323,13 +358,13 @@
                  <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
             </td> 
              <td style="width: 100px;" class="sgst_show_hide">
-                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " >
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="10">
             </td> 
             <td style="width: 100px;" class="cgst_show_hide">
-                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " >
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="10" >
             </td> 
             <td style="width: 100px;" class="igst_show_hide hide">
-                 <input type="text" name="igst[]" class="form-control form-control-sm igst " >
+                 <input type="text" name="igst[]" class="form-control form-control-sm igst " value="10" >
             </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -368,6 +403,7 @@
             // alert(state_type);
 
                 addItem();
+                calculateGst();
             // $(".product_code").focus();
             });
 
@@ -412,29 +448,31 @@
             
             $(document).on('change','.product_code', function () {
                 const product_code = $(this).val();
-                // alert("call")
+
+                // if(product_code==product_code){
                 var object = $(this);
                 $.ajax({
                     type: "get",
                     url: "get-item-price/"+product_code,
                     dataType: "json",
                     success: function (response) {
-                        // console.log(response);
+                        console.log(response);
                         $(object).parent().parent().find(".price").val(response.product.sales_price);
                         $(object).parent().parent().find(".product").val(response.product.product);
                         $(object).parent().parent().find(".product_id").val(response.product.id);
                         $(object).parent().parent().find(".size").val(response.product.size);
                         $(object).parent().parent().find(".size_id").val(response.product.size.id);
+                        // $(object).parent().parent().find(".qty").val(response.product.qty+1);
                         calculateAmount(object)
                     }
                 });
-                
+            // }
                 
             });
 
             $(document).on('click','#with_in_state', function (e) {
-                $('#gst_no').addClass('hide');
-                $('#city_id').addClass('hide');
+                // $('#gst_no').addClass('hide');
+                // $('#city_id').addClass('hide');
                 $('.sgst_show_hide').removeClass('hide');
                 $('.cgst_show_hide').removeClass('hide');
                 $('.igst_show_hide').addClass('hide');
@@ -442,8 +480,8 @@
             });
 
             $(document).on('click','#inter_state', function (e) {
-                $('#gst_no').removeClass('hide');
-                $('#city_id').removeClass('hide');
+                // $('#gst_no').removeClass('hide');
+                // $('#city_id').removeClass('hide');
                 $('.sgst_show_hide').addClass('hide');
                 $('.cgst_show_hide').addClass('hide');
                 $('.igst_show_hide').removeClass('hide');
@@ -451,26 +489,55 @@
                 
             });
 
-            // $(document).keypress('#mobile_no', function () {
-            //     const customer_id = $(this).val();
-            //     // alert(customer_id);
-            //     var object = $(this);
-            //     $.ajax({
-            //         type: "get",
-            //         url: "get-customer-data/"+customer_id,
-            //         dataType: "json",
-            //         success: function (response) {
-            //             console.log(response);
-            //             // $(object).parent().parent().find(".price").val(response.product.sales_price);
-            //             // $(object).parent().parent().find(".product").val(response.product.product);
-            //             // $(object).parent().parent().find(".product_id").val(response.product.id);
-            //             // $(object).parent().parent().find(".size").val(response.product.size);
-            //             // $(object).parent().parent().find(".size_id").val(response.product.size.id);
-            //         }
-            //      });
+
+                // if(mobile_no==mobile_no){
+                //     alert(true);
+                // }
+            $(document).on('keyup','.mobile_no', function () {
+                const mobile_no = $(this).val();
+                
+                //digit count if
+                if( mobile_no.length == 10 ) {
+                    $.ajax({
+                        type: "get",
+                        url: "get-customer-data/"+mobile_no,
+                        dataType: "json",
+                        success: function(response) {
+                            console.log(response);
+
+                            if (response.status == 200) {
+
+                                $('#customer_name').val(response.customersData.customer_name);
+                                $('#birthday_date').val(response.customersData.birthday_date);
+                                $('#month_id').val(response.customersData.month_id);
+                                $('#city_id').val(response.customersData.city_id);
+                                $('#gst_no').val(response.customersData.gst_no);
+                                $('#employee_id').val(response.customersData.employee_id);
+                                if(response.customersData.state_type==1){
+                                    $('#with_in_state').prop('checked',true);
+                                }else{
+                                    $('#inter_state').prop('checked',true);
+                                }
+
+                            }
+                        }
+
+                    });
+                }else{
+                        $('#customer_name').val('');
+                        $('#birthday_date').val('');
+                        $('#month_id').val('');
+                        $('#city_id').val('');
+                        $('#gst_no').val('');
+                        $('#employee_id').val('');
+                        $('#with_in_state').prop('checked',false);
+                        $('#inter_state').prop('checked',false);
+                               
+                }
                 
                 
-            // });
+                
+            });
             
             
             $(document).on('keyup','.qty', function () {
@@ -541,6 +608,53 @@
             
         }
 
+        // gst funcation 
+
+        function calculateGst(object, price) {
+
+            if($("input[type='radio'].state_type").is(':checked')) {
+                var selected_value =  $("input[type='radio'].state_type:checked").val();
+                alert(selected_value);
+            
+                var price = price;
+                // var purchase_amount = 0;
+                amount = 0;
+                var sgst = 0;
+                var cgst = 0;
+                var igst = 0;
+
+
+            if (amount < '{{MyApp::THOUSAND}}') {
+                amount = parseFloat(amount / 1.05);
+                // alert(amount);
+            }else{
+                amount = parseFloat(price / 1.12);
+            }
+
+            if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
+                if (amount < '{{MyApp::THOUSAND}}') {
+                    sgst = parseFloat(amount * 2.5 / 100);
+                    cgst = parseFloat(amount * 2.5 / 100);
+                    alert(sgst)
+                    alert(cgst)
+                }else{
+                    sgst = parseFloat(amount * 6 / 100) ;
+                    cgst = parseFloat(amount * 6 / 100) ;
+                    alert(sgst)
+                    alert(cgst)
+                }
+            }else{
+                if (price < '{{MyApp::THOUSAND}}') {
+                    igst = parseFloat(purchase_amount * 5 / 100) ;
+                }else{
+                    igst = parseFloat(purchase_amount * 12 / 100) ;
+                }
+            }
+        }
+    }
+
+            // end gst funcation
+
         function calculateAmount(object){
             var total_amount = 0;
             var sgst = 0;
@@ -582,7 +696,6 @@
         function returnAmount(){
             const given_amount = parseFloat($('#given_amount').val());
             const total_amount = parseFloat($("#total_amount").val());
-
             const return_amount = parseFloat(given_amount - total_amount) ; 
             $("#return_amount").val(return_amount);
         }
@@ -684,11 +797,3 @@
     </script>
 
 @endsection
-
-                                {{-- $html .="<span class='float-end'>GROSS AMOUNT:</span><br>";
-                                $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
-                                $html .="<span class='float-end'>ADD CGST :</span> <br>";
-                                $html .="<span class='float-end'>ADD SGST : </span><br>";
-                                $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
-                                $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
-                                $html .="<span class='float-end'>G.TOTAL : </span><br>"; --}}
