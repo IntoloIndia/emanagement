@@ -126,6 +126,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
 
         Route::get('admin/get-city-short/{city_id}', 'getCityShortName');
+        Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
     });
 
     Route::controller(StyleNoController::class)->group(function () {

@@ -4,6 +4,8 @@
 @section('page_title', 'Dashboard')
 
 @section('content')
+
+
     
    {{-- modal supplier  --}}
 
@@ -44,9 +46,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group">
-                                        <select name="state_id" id="state_id" class="form-select form-select-sm state_chosen" onchange="getCityByState(this.value)">
-                                            <option selected disabled>State</option>
+                                        <select name="state_id" id="state_id" class="form-select form-select-sm">
+                                        
                                         </select>
+                                        {{-- <select name="state_id" id="state_id" class="form-select form-select-sm state_chosen" onchange="getCityByState(this.value)">
+                                            <option selected disabled>State</option>
+                                        </select> --}}
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -243,15 +248,23 @@
                 $('#updateSupplierBtn').addClass('hide');
 
                 const country_id = $('#country_id').val();
+                // const country_id = $('#city_country_id').val();
                 getStateByCountry(country_id);
             });
 
-            // $(document).on('click','#cityBtn', function () {
-            //     const country_id = $('#city_country_id').val();
-            //     getStateByCountry(country_id);
+            $(document).on('click','#cityBtn', function (e) {
+            e.preventDefault();
+            $('#cityModal').modal('show');
+            $('#city_err').html('');
+            $('#city_err').removeClass('alert alert-danger');
+            $("#cityForm").trigger( "reset"); 
+            $('#saveCityBtn').removeClass('hide');
+            $('#updateCityBtn').addClass('hide');
 
-            //     $('#cityModal').modal('show');
-            // });
+            const country_id = $('#city_country_id').val();
+            getStateByCountry(country_id);
+        });
+
 
             $(document).on('click',"#saveSupplierBtn",function(e){
                 e.preventDefault();
@@ -287,13 +300,21 @@
                 deleteSupplier(supplier_id);
             });
 
-            $(document).on('change','#country_id', function (e) {
-                e.preventDefault();
-                const country_id = $(this).val();
-                // alert(country_id);
-                getStateByCountry(country_id);
-            });
+            // $(document).on('change','#country_id', function (e) {
+            //     e.preventDefault();
+            //     const country_id = $(this).val();
+            //     // alert(country_id);
+            //     getStateByCountry(country_id);
+            // });
+
+            // $(document).on('change','#city_country_id', function (e) {
+            //     e.preventDefault();
+            //     const country_id = $(this).val();
+            //     // alert(country_id);
+            //     getStateByCountry(country_id);
+            // });
             
+
             $(document).on('change','#filter_city_id', function (e) {
                 e.preventDefault();
                 const city_id = $(this).val();

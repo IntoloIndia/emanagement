@@ -35,8 +35,10 @@ class BrandController extends Controller
             $model = new Brand;
             $model->brand_name = $req->input('brand_name');         
             if($model->save()){
+                $brands = Brand::all();
                 return response()->json([   
                     'status'=>200,
+                    'brands'=>$brands,
                 ]);
             }
         }
