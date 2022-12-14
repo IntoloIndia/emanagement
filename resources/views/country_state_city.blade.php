@@ -424,6 +424,7 @@
             $("#stateForm").trigger( "reset"); 
             $('#saveStateBtn').removeClass('hide');
             $('#updateStateBtn').addClass('hide');
+          
         });
 
         $(document).on('click','#saveStateBtn', function (e) {
@@ -471,6 +472,14 @@
             e.preventDefault();
             manageCity();
         });
+        // new
+        // $(document).on('change','#city_country_id', function (e) {
+        //     e.preventDefault();
+        //     const country_id = $(this).val();
+        //     // alert(country_id);
+        //     getStateByCountry(country_id);
+        // });
+       
 
         
 

@@ -15,7 +15,7 @@ class SupplierController extends Controller
 {
     public function index(){
         $countries = Country::all();
-        // $states = State::all();
+        $states = State::all();
         $cities = City::all();
         $categories = Category::all();
         // $suppliers = Supplier::all();
@@ -26,6 +26,7 @@ class SupplierController extends Controller
                         // print_r($suppliers);
         return view('supplier',[
             'countries' => $countries,
+            'states' => $states,
             'cities' => $cities,
             'categories' => $categories,
             'suppliers' => $suppliers,
@@ -182,21 +183,21 @@ class SupplierController extends Controller
         ]);
     }
 
-    // public function getStateByCountry($country_id)
-    // {
-    //     $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
+    public function getStateByCountry($country_id)
+    {
+        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
 
-    //     $html = "";
-    //     $html .= "<option selected disabled >Select...</option>";
-    //     foreach($data as $list)
-    //     {
-    //         $html.= "<option value='" . $list->id . "'>" . $list->state . "</option>";
-    //     }
-    //     return response()->json([
-    //         'status'=> 200,
-    //         'html'=> $html,
-    //     ]);
-    // }
+        $html = "";
+        $html .= "<option selected disabled >State</option>";
+        foreach($data as $list)
+        {
+            $html.= "<option value='" . $list->id . "'>" . ucwords($list->state) . "</option>";
+        }
+        return response()->json([
+            'status'=> 200,
+            'html'=> $html,
+        ]);
+    }
 
     // public function getCityByState($state_id)
     // {
@@ -229,6 +230,10 @@ class SupplierController extends Controller
         // ]);
 
     }
+
+
+  
+    
 
     
 }

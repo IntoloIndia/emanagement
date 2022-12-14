@@ -209,7 +209,7 @@ a {
                                                 <div class="row mt-2">
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <select id="style_no" name="style_no" class="form-select select_chosen_80">
+                                                            <select id="style_no_id" name="style_no_id" class="form-select select_chosen_80">
                                                                 <option selected disabled >Style No</option>
                                                             </select>
                                                             <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
@@ -340,12 +340,12 @@ a {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <th>Size</th>
-                                                                                    <td>XS</td>
-                                                                                    <td>S</td>
-                                                                                    <td>M</td>
-                                                                                    <td>L</td>
-                                                                                    <td>XL</td>
-                                                                                    <td>XXL</td>
+                                                                                    <td>XS <input type="hidden" name="xs_size" value="xs"></td>
+                                                                                    <td>S <input type="hidden" name="s_size" value="s"></td>
+                                                                                    <td>M <input type="hidden" name="m_size" value="m"></td>
+                                                                                    <td>L <input type="hidden" name="l_size" value="l"></td>
+                                                                                    <td>XL <input type="hidden" name="xl_size" value="xl"></td>
+                                                                                    <td>XXL <input type="hidden" name="xxl_size" value="xxl"></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th>Qty</th>
@@ -1276,6 +1276,11 @@ a {
                         $('#brand_err').html('');
                         $('#brandModal').modal('hide');
                         window.location.reload();
+                        // $.each(response.brands, function (key, list) {
+                        //     // $('#brand_id').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                        //     // $('#brand_id').append('<select >' + count++ + '. ' + err_value + '</select></br>');
+                        //     console.log(list.id);
+                        // });
                     }
                 }
             });
@@ -1528,10 +1533,10 @@ a {
                 url: "supplier-style-no/"+supplier_id,
                 dataType: "json",
                 success: function (response) {
-                    $('#style_no').empty();
+                    $('#style_no_id').empty();
                     if (response.status == 200) {
-                        $('#style_no').append(response.html) ;
-                        $("#style_no").trigger("chosen:updated");
+                        $('#style_no_id').append(response.html) ;
+                        $("#style_no_id").trigger("chosen:updated");
                     }
                 }
             });
@@ -1578,20 +1583,20 @@ a {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    // console.log(response);
-                    if (response.status === 400) {
-                        $('#purchase_entry_err').html('');
-                        $('#purchase_entry_err').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) {
-                            $('#purchase_entry_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                        });
+                    console.log(response);
+                    // if (response.status === 400) {
+                    //     $('#purchase_entry_err').html('');
+                    //     $('#purchase_entry_err').addClass('alert alert-danger');
+                    //     var count = 1;
+                    //     $.each(response.errors, function (key, err_value) {
+                    //         $('#purchase_entry_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                    //     });
 
-                    } else {
-                        $('#purchase_entry_err').html('');
-                        $('#productModal').modal('hide');
-                        window.location.reload();
-                    }
+                    // } else {
+                    //     $('#purchase_entry_err').html('');
+                    //     $('#productModal').modal('hide');
+                    //     window.location.reload();
+                    // }
                 }
             });
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PurchaseEntry;
+use App\Models\PurchaseEntryItem;
 use App\Models\ProductImage;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -57,6 +58,7 @@ class PurchaseEntryController extends Controller
                 //     'categories.category',
                 //     'sub_categories.sub_category',
                 // ]);
+
         return view('purchase_entry',[
             "categories"=>$categories,
             'sizes' => $sizes,
@@ -69,18 +71,12 @@ class PurchaseEntryController extends Controller
 
     function savePurchaseEntry(Request $req)
     {
-
         $validator = Validator::make($req->all(),[
-            'category_id' => 'required|max:191',
             'supplier_id' => 'required|max:191',
-            'sub_category_id'=>'required|max:191',
-            'product_name'=>'required|max:191',
-            'qty'=>'required|max:191',
-            'purchase_price'=>'required|max:191',
-            'sales_price'=>'required|max:191',
             'bill_no'=>'required|max:191',
-            'size'=>'required|max:191',
-            'color'=>'required|max:191',
+            // 'bill_no'=>'required|unique:purchase_entries,bill_no,'.$req->input('bill_no'),
+            'bill_date'=>'required|max:191',
+            'payment_days'=>'required|max:191',
         ]);
 
         if($validator->fails())
@@ -90,49 +86,164 @@ class PurchaseEntryController extends Controller
                 'errors'=>$validator->messages(),
             ]);
         }else{
+            $purchase_id = 0;
 
-
-            $model = new PurchaseEntry;
-
-
-
-            $qty = $req->input('qty');
-            for ($i=0; $i < $qty; $i++) 
-            { 
-                $product_code = rand(000001,999999);
-               
-                $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-               
-                $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-                
+            // $purchase_date = PurchaseEntry::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->exists();
+            $data = PurchaseEntry::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->first('id');
+            
+            if ($data == null) {
                 $model = new PurchaseEntry;
-                $model->product_code = $product_code;
-                $model->category_id = $req->input('category_id');
+                
                 $model->supplier_id = $req->input('supplier_id');
-                $model->sub_category_id = $req->input('sub_category_id');
-                $model->product = $req->input('product_name');
-                $model->qty = 1;
-                $model->sales_price = $req->input('sales_price');
-                $model->purchase_price = $req->input('purchase_price');
                 $model->bill_no = $req->input('bill_no');
-                $model->size = $req->input('size');
-                $model->color = $req->input('color');
-                $model->barcode = $barcode;
-                $model->date = date('Y-m-d');
+                $model->bill_date = $req->input('bill_date');
+                $model->payment_days = $req->input('payment_days');
                 $model->time = date('g:i A');
-
-                if ($model->save()) {
-                    $imageModal = new ProductImage;
-                    $imageModal->product_id = $model->id;
-                    $imageModal->product_image = $req->input('product_image');
-                    $imageModal->save();
-                }
+                $model->save();
+                
+                $purchase_id = $model->id;
+            }else{
+                $purchase_id = $data->id;
             }
 
+            $category_id = $req->input('category_id');
+            $sub_category_id = $req->input('sub_category_id');
+            $brand_id = $req->input('brand_id');
+            $style_no_id = $req->input('style_no_id');
+            $color = $req->input('color');
+
+            $xs_qty = $req->input('xs_qty');
+            $s_qty = $req->input('s_qty');
+            $m_qty = $req->input('m_qty');
+            $l_qty = $req->input('l_qty');
+            $xl_qty = $req->input('xl_qty');
+            $xxl_qty = $req->input('xxl_qty');
+
+            $xs_price = $req->input('xs_price');
+            $s_price = $req->input('s_price');
+            $m_price = $req->input('m_price');
+            $l_price = $req->input('l_price');
+            $xl_price = $req->input('xl_price');
+            $xxl_price = $req->input('xxl_price');
+
+            $xs_mrp = $req->input('xs_mrp');
+            $s_mrp = $req->input('s_mrp');
+            $m_mrp = $req->input('m_mrp');
+            $l_mrp = $req->input('l_mrp');
+            $xl_mrp = $req->input('xl_mrp');
+            $xxl_mrp = $req->input('xxl_mrp');
+
+            $qty = 0;
+            $size = "";
+            $price = 0;
+            $mrp = 0;
+            if ($xs_qty > 0) {
+                $qty = $xs_qty;
+                $size = 'xs';
+                $price = $xs_price;
+                $mrp = $xs_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+
+            if ($s_qty > 0) {
+                $qty = $s_qty;
+                $size = 's';
+                $price = $s_price;
+                $mrp = $s_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+
+            if ($m_qty > 0) {
+                $qty = $m_qty;
+                $size = 'm';
+                $price = $m_price;
+                $mrp = $m_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+
+            if ($l_qty > 0) {
+                $qty = $l_qty;
+                $size = 'l';
+                $price = $l_price;
+                $mrp = $l_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+
+            if ($xl_qty > 0) {
+                $qty = $xl_qty;
+                $size = 'xl';
+                $price = $xl_price;
+                $mrp = $xl_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+
+            if ($xxl_qty > 0) {
+                $qty = $xxl_qty;
+                $size = 'xxl';
+                $price = $xxl_price;
+                $mrp = $xxl_mrp;
+                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+            }
+            
+
+            // $qty = $req->input('qty');
+            // for ($i=0; $i < $qty; $i++) 
+            // { 
+            //     $product_code = rand(000001,999999);
+               
+            //     $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+               
+            //     $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+                
+            //     $model = new PurchaseEntry;
+            //     $model->product_code = $product_code;
+            //     $model->category_id = $req->input('category_id');
+            //     $model->supplier_id = $req->input('supplier_id');
+            //     $model->sub_category_id = $req->input('sub_category_id');
+            //     $model->product = $req->input('product_name');
+            //     $model->qty = 1;
+            //     $model->sales_price = $req->input('sales_price');
+            //     $model->purchase_price = $req->input('purchase_price');
+            //     $model->bill_no = $req->input('bill_no');
+            //     $model->size = $req->input('size');
+            //     $model->color = $req->input('color');
+            //     $model->barcode = $barcode;
+            //     $model->date = date('Y-m-d');
+            //     $model->time = date('g:i A');
+
+            //     if ($model->save()) {
+            //         $imageModal = new ProductImage;
+            //         $imageModal->product_id = $model->id;
+            //         $imageModal->product_image = $req->input('product_image');
+            //         $imageModal->save();
+            //     }
+            // }
+
             return response()->json([   
-                'status'=>200
+                'status'=>$result   
             ]);
         }
+    }
+
+    public function saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp){
+
+        for ($i=0; $i < $qty; $i++) 
+        { 
+            $purchase_item = new PurchaseEntryItem;
+            $purchase_item->purchase_entry_id = $purchase_id;
+            $purchase_item->category_id = $category_id;
+            $purchase_item->sub_category_id = $sub_category_id;
+            $purchase_item->brand_id = $brand_id;
+            $purchase_item->style_no_id = $style_no_id;
+            $purchase_item->color = $color;
+            $purchase_item->size = $size;
+            $purchase_item->price = $price;
+            $purchase_item->mrp = $mrp;
+            // $purchase_item->time = date('g:i A');
+            $purchase_item->save();
+        }
+
+        return 'ok';
     }
 
     // function saveProduct(Request $req)
@@ -250,7 +361,6 @@ class PurchaseEntryController extends Controller
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
             $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-
 
             $model =  PurchaseEntry::find($product_id);
             $model->product_code = $product_code;

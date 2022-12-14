@@ -108,6 +108,7 @@
                                 <button class="btn btn-primary btn-sm "  id="addItemBtn"> Add item</button>
                             </div>
                         </div>
+                        {{-- <button class="btn btn-primary btn-sm "  id="getGst">gst</button> --}}
                     </div>
                     <div class="card-body"style="max-height:400px;">
                        <div class="row">
@@ -352,19 +353,19 @@
                 <input type="hidden" name="size_id[]" class="size_id">
             </td>
             <td style="width: 100px;">
-                <input type="text" name="price[]" class="form-control form-control-sm price" readonly>
+                <input type="text" name="price[]" class="form-control form-control-sm price" id="price" >
             </td>
              <td style="width: 150px;">
-                 <input type="text" name="amount[]" class="form-control form-control-sm amount"readonly >
+                 <input type="text" name="amount[]" class="form-control form-control-sm amount" >
             </td> 
              <td style="width: 100px;" class="sgst_show_hide">
-                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="10">
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0" >
             </td> 
             <td style="width: 100px;" class="cgst_show_hide">
-                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="10" >
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0" >
             </td> 
             <td style="width: 100px;" class="igst_show_hide hide">
-                 <input type="text" name="igst[]" class="form-control form-control-sm igst " value="10" >
+                 <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0">
             </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -403,7 +404,7 @@
             // alert(state_type);
 
                 addItem();
-                calculateGst();
+             
             // $(".product_code").focus();
             });
 
@@ -412,6 +413,21 @@
                 // alert("call");
                 saveOrder();
             });
+
+            // $(document).on('click','#getGst', function (e) {
+            //     e.preventDefault();
+            //     var price =$("#price").val();
+            //     // alert("call");
+            //     // alert(price);
+            //     // calculateGst(price);
+            // });
+
+            // $(document).on('click','.price', function (e) {
+            //     var price = $(this).val();
+            //     $('#getGst').val(price);
+              
+            // });
+
 
             
 
@@ -463,7 +479,11 @@
                         $(object).parent().parent().find(".size").val(response.product.size);
                         $(object).parent().parent().find(".size_id").val(response.product.size.id);
                         // $(object).parent().parent().find(".qty").val(response.product.qty+1);
-                        calculateAmount(object)
+                        
+                        calculateAmount(object);
+                        // calculateGst(price);
+                        
+
                     }
                 });
             // }
@@ -486,9 +506,9 @@
                 $('.cgst_show_hide').addClass('hide');
                 $('.igst_show_hide').removeClass('hide');
 
-                
             });
 
+            
 
                 // if(mobile_no==mobile_no){
                 //     alert(true);
@@ -541,13 +561,19 @@
             
             
             $(document).on('keyup','.qty', function () {
+                
                 calculateAmount($(this));
+                // var price =$(".price").val();
+                // calculateGst($(this));
+                
+            });
+            $(document).on('keyup','.price', function () {
+                calculateGst($(this));
+                // alert("call")
+                
             });
 
-            // $(document).on('click','#product_id', function () {
-            //     var pro_id = $(this).val();
-            //     alert(pro_id);
-            // });
+           
             $(document).on('keyup','#given_amount', function () {
                 returnAmount();
             });
@@ -562,18 +588,7 @@
             //     orderDetail(order_id);
             // });
             
-            // $(document).on('click','.editOrderBtn', function (e) {
-            //     e.preventDefault();
-            //     const order_id = $(this).val();
-            //     editOrder(order_id);
-            // });
-
-            // $(document).on('click','#updateOrderBtn', function (e) {
-            //     e.preventDefault();
-            //     const order_id = $(this).val();
-            //     updateOrder(order_id);
-            // });
-
+           
             $(document).on('click','.orderInvoiceBtn', function (e) {
                 e.preventDefault();
                 const customer_id = $(this).val();
@@ -586,19 +601,7 @@
             });
 
 
-            // $(document).on('click','.deleteItemBtn', function (e) {
-            //     e.preventDefault();
-            //     const item_id = $(this).val();
-            //     $('#deleteItemModal').modal('show');
-            //     $('#yesDeleteItemBtn').val(item_id);
-            // });
-
-            // $(document).on('click','#yesDeleteItemBtn', function (e) {
-            //     e.preventDefault();
-            //     const item_id = $(this).val();
-            //     deleteItem(item_id);
-            // });
-
+            
         });
 
         function addItem() {
@@ -610,48 +613,70 @@
 
         // gst funcation 
 
-        function calculateGst(object, price) {
-
+        function calculateGst(object,price)  
+        {
+            
             if($("input[type='radio'].state_type").is(':checked')) {
                 var selected_value =  $("input[type='radio'].state_type:checked").val();
-                alert(selected_value);
-            
+                // alert(selected_value);
+            }else{
+                alert("Plz select with in state or inter state");
+                return false;
+            }
+            var price = parseFloat($(object).parent().parent().find(".price").val());
+            // alert(price);
                 var price = price;
                 // var purchase_amount = 0;
-                amount = 0;
+                var  amount = 0;
                 var sgst = 0;
                 var cgst = 0;
                 var igst = 0;
 
+                // var price =1499
 
-            if (amount < '{{MyApp::THOUSAND}}') {
-                amount = parseFloat(amount / 1.05);
-                // alert(amount);
-            }else{
-                amount = parseFloat(price / 1.12);
-            }
 
-            if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
-                if (amount < '{{MyApp::THOUSAND}}') {
-                    sgst = parseFloat(amount * 2.5 / 100);
-                    cgst = parseFloat(amount * 2.5 / 100);
-                    alert(sgst)
-                    alert(cgst)
-                }else{
-                    sgst = parseFloat(amount * 6 / 100) ;
-                    cgst = parseFloat(amount * 6 / 100) ;
-                    alert(sgst)
-                    alert(cgst)
-                }
-            }else{
                 if (price < '{{MyApp::THOUSAND}}') {
-                    igst = parseFloat(purchase_amount * 5 / 100) ;
+                    price = parseFloat(price / 1.05);
+                    // alert(price);
                 }else{
-                    igst = parseFloat(purchase_amount * 12 / 100) ;
+                    price = parseFloat(price / 1.12);
                 }
-            }
+
+                if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
+                    if (price < '{{MyApp::THOUSAND}}') {
+                        sgst = parseFloat((price * 2.5) / 100);
+                        cgst = parseFloat((price * 2.5) / 100);
+                        // alert(sgst);
+                        // alert(cgst);
+                        // $('.sgst').val(sgst);
+                        // $('.cgst').val(cgst);
+                        $(object).parent().parent().find(".sgst").val(sgst);
+                        $(object).parent().parent().find(".cgst").val(cgst);
+                    }else{
+                        sgst = parseFloat(price * 6) / 100 ;
+                        cgst = parseFloat(price * 6) / 100 ;
+                        // alert(sgst);
+                        // alert(cgst);
+                        // $('.sgst').val(sgst);
+                        // $('.cgst').val(cgst);
+                        $(object).parent().parent().find(".sgst").val(sgst);
+                        $(object).parent().parent().find(".cgst").val(cgst);
+                    }
+                }else{
+                    if (price < '{{MyApp::THOUSAND}}') {
+                        igst = parseFloat(price * 5 / 100);
+                        // alert(igst);
+                        // $('.igst').val(igst);
+                        $(object).parent().parent().find(".igst").val(igst);
+                    }else{
+                        igst = parseFloat(price * 12 / 100);
+                        // alert(igst);
+                        // $('.igst').val(igst);
+                        $(object).parent().parent().find(".igst").val(igst);
+                    }
+                }
+        
         }
-    }
 
             // end gst funcation
 
@@ -664,18 +689,18 @@
             var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
             var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
 
+
             if(qty == "" || isNaN(qty))
             {
                 qty = 0;   
             }
 
-            // var amount = parseFloat(price * qty);
+
             var amount = parseFloat(price * qty);
-            // if(amount>1000){
-            //    console.log((amount*2.50/100)+amount);
-            // }
+            
             $(object).parent().parent().find(".amount").val(amount);
             calculateTotalAmount();
+            
         }
 
         function calculateTotalAmount(){
