@@ -561,9 +561,10 @@
             
             
             $(document).on('keyup','.qty', function () {
+                
                 calculateAmount($(this));
                 // var price =$(".price").val();
-                calculateGst($(this));
+                // calculateGst($(this));
                 
             });
             $(document).on('keyup','.price', function () {
@@ -684,7 +685,6 @@
             var sgst = 0;
             var cgst = 0;
             var price = parseFloat($(object).parent().parent().find(".price").val());
-            // alert(price);
             var qty = parseFloat($(object).parent().parent().find(".qty").val());
             var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
             var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
