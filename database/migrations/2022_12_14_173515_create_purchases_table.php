@@ -15,6 +15,12 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+            $table->integer('supplier_id')->default(0);
+            $table->string('bill_no')->nullable();
+            $table->date('bill_date')->nullable();
+            $table->string('time')->nullable();
+            $table->integer('payment_days')->default(0);
+            $table->double('bill_amount')->default(0);
             $table->timestamps();
         });
     }

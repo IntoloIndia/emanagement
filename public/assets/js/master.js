@@ -41,6 +41,48 @@ function getCityByState(state_id) {
             if (response.status == 200) {
                 $('#city_id').append(response.html); 
                 $("#city_id").trigger("chosen:updated");  
+                
+            }
+        }
+    });
+}
+
+function manageCity(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var formData = new FormData($("#cityForm")[0]);
+    $.ajax({
+        type: "post",
+        url: "manage-city",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false, 
+        processData: false, 
+        success: function (response) {
+            //console.log(response);
+            if(response.status === 400)
+            {
+                $('#city_err').html('');
+                $('#city_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) { 
+                    $('#city_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                });
+                
+
+            }else{
+                $('#city_err').html('');
+                $('#cityModal').modal('hide');
+                var state_id = $("#put_country_id").val();
+
+                // alert(state_id);
+                getCityByState(state_id);
+                // window.location.reload();
             }
         }
     });

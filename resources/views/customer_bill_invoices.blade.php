@@ -118,6 +118,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Sno</th>
+                                        <th scope="col">check</th>
                                         <th scope="col">Code</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Qty</th>
@@ -149,7 +150,7 @@
                                 <b>CGST AMOUNT :</b><br/>
                                 <b>IGST AMOUNT :</b><br/>
                                 <b>OTHER ADJ  :</b><br/>
-                                <b>R/OFF AMT :</b><br/>
+                               
                                 <b>G.TOTAL  :</b><br/>
                             </div>
                             <div class="col-md-2 text-center">
@@ -159,7 +160,7 @@
                                 <span id="item_add_cgst" ></span><br/>
                                 <span id="item_add_igst" ></span><br/>
                                 <span id="item_other_adj"></span><br/>
-                                <span id="item_Roff_amt"></span><br/>
+                                
                                 <span id="item_total_amount"></span><br/>
                             </div>
                         </div>
@@ -187,41 +188,54 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-1">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
+                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
                         </div>
+                    </div>
+                        <div class="col-md-2">
+                            <input type="text" name="online_payment" id="online_payment" class="form-control form-control-sm hide">
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="cash_payment" id="cash_payment" class="form-control form-control-sm hide">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-1">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
+                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
                         </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="card_payment" id="card_payment" class="form-control form-control-sm hide">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-1">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
                         </div>
                     </div>
+                    <div class="col-md-2">
+                            <input type="text" name="credit_payment" id="credit_payment" class="form-control form-control-sm hide">
+                        </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input payment_mode" type="radio" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
-                        </div>
-                    </div>
-                    {{-- <div class="row"> --}}
+                    <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                             <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
                             <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
                         </div>
-                    {{-- </div> --}}
-                </div>
+                    </div>
+                {{-- </div> --}}
                    
                    
 
@@ -245,7 +259,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive" style="max-height: 250px">
+                <div class="table-responsive" style="height: 100vh">
                 <table class="table">
                     <thead>
                         <tr>
@@ -321,14 +335,17 @@
    <table class="hide">
     <tbody id="item_row">
         <tr>
-            <td id="count_item">
-                <div class="form-check">
-                    <input class="form-check-input float-right" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault"> 
-                      {{-- Default checkbox --}}
-                    </label> 
-                  </div>
-            </td>
+            <td id="count_item"></td>
+                <td>
+
+                    {{-- <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="alteration_voucher" value="1" id="alteration_voucher">
+                      <label class="form-check-label" for="flexCheckDefault"> 
+                          Default checkbox
+                        </label> 
+                      </div>
+                    </td> --}}
+                    {{-- </td> --}}
             
             <td style="width: 200px;">
                 <input type="text" name="product_code[]" id="product_code" class="form-control form-control-sm product_code">
@@ -341,7 +358,7 @@
                         <option value="{{$item->id}}">{{ucwords($item->product)}}</option>
                     @endforeach
                 </select> --}}
-                <input type="text" readonly name="product[]" class="form-control form-control-sm product" >
+                <input type="text"  name="product[]" class="form-control form-control-sm product" >
                 <input type="hidden" name="product_id[]" class="product_id">
             </td>
            
@@ -349,7 +366,7 @@
                 <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
             <td style="width: 80px;">
-                <input type="text" readonly name="size[]" class="form-control form-control-sm size">
+                <input type="text"  name="size[]" class="form-control form-control-sm size">
                 <input type="hidden" name="size_id[]" class="size_id">
             </td>
             <td style="width: 100px;">
@@ -359,10 +376,10 @@
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" >
             </td> 
              <td style="width: 100px;" class="sgst_show_hide">
-                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0" >
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0">
             </td> 
             <td style="width: 100px;" class="cgst_show_hide">
-                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0" >
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0">
             </td> 
             <td style="width: 100px;" class="igst_show_hide hide">
                  <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0">
@@ -508,6 +525,37 @@
 
             });
 
+            $('#online').change(function(){
+                if($(this).is(":checked")) {
+                    $('#online_payment').removeClass("hide");
+                } else {
+                    $('#online_payment').addClass("hide");
+                }
+            });
+            $('#cash').change(function(){
+                if($(this).is(":checked")) {
+                    $('#cash_payment').removeClass("hide");
+                } else {
+                    $('#cash_payment').addClass("hide");
+                }
+            });
+            $('#card').change(function(){
+                if($(this).is(":checked")) {
+                    $('#card_payment').removeClass("hide");
+                } else {
+                    $('#card_payment').addClass("hide");
+                }
+            });
+            $('#credit').change(function(){
+                if($(this).is(":checked")) {
+                    $('#credit_payment').removeClass("hide");
+                } else {
+                    $('#credit_payment').addClass("hide");
+                }
+            });
+
+           
+
             
 
                 // if(mobile_no==mobile_no){
@@ -532,7 +580,7 @@
                                 $('#month_id').val(response.customersData.month_id);
                                 $('#city_id').val(response.customersData.city_id);
                                 $('#gst_no').val(response.customersData.gst_no);
-                                $('#employee_id').val(response.customersData.employee_id);
+                                // $('#employee_id').val(response.customersData.employee_id);
                                 if(response.customersData.state_type==1){
                                     $('#with_in_state').prop('checked',true);
                                 }else{
@@ -549,7 +597,7 @@
                         $('#month_id').val('');
                         $('#city_id').val('');
                         $('#gst_no').val('');
-                        $('#employee_id').val('');
+                        // $('#employee_id').val('');
                         $('#with_in_state').prop('checked',false);
                         $('#inter_state').prop('checked',false);
                                
@@ -564,7 +612,7 @@
                 
                 calculateAmount($(this));
                 // var price =$(".price").val();
-                // calculateGst($(this));
+                calculateGst($(this));
                 
             });
             $(document).on('keyup','.price', function () {
@@ -624,34 +672,38 @@
                 return false;
             }
             var price = parseFloat($(object).parent().parent().find(".price").val());
-            // alert(price);
+            var qty = parseFloat($(object).parent().parent().find(".qty").val());
+            // alert(qty);
                 var price = price;
                 // var purchase_amount = 0;
                 var  amount = 0;
                 var sgst = 0;
                 var cgst = 0;
                 var igst = 0;
+                // var qty;
 
                 // var price =1499
 
 
-                if (price < '{{MyApp::THOUSAND}}') {
-                    price = parseFloat(price / 1.05);
-                    // alert(price);
-                }else{
-                    price = parseFloat(price / 1.12);
-                }
+                // if (price < '{{MyApp::THOUSAND}}') {
+                //     price = parseFloat(price / 1.05);
+                //     // alert(price);
+                // }else{
+                //     price = parseFloat(price / 1.12);
+                // }
 
                 if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
                     if (price < '{{MyApp::THOUSAND}}') {
+                        
                         sgst = parseFloat((price * 2.5) / 100);
                         cgst = parseFloat((price * 2.5) / 100);
+                        // sgst = qty*sgst;
                         // alert(sgst);
                         // alert(cgst);
                         // $('.sgst').val(sgst);
                         // $('.cgst').val(cgst);
-                        $(object).parent().parent().find(".sgst").val(sgst);
-                        $(object).parent().parent().find(".cgst").val(cgst);
+                        $(object).parent().parent().find(".sgst").val(sgst*qty);
+                        $(object).parent().parent().find(".cgst").val(cgst*qty);
                     }else{
                         sgst = parseFloat(price * 6) / 100 ;
                         cgst = parseFloat(price * 6) / 100 ;
@@ -659,25 +711,25 @@
                         // alert(cgst);
                         // $('.sgst').val(sgst);
                         // $('.cgst').val(cgst);
-                        $(object).parent().parent().find(".sgst").val(sgst);
-                        $(object).parent().parent().find(".cgst").val(cgst);
+                        $(object).parent().parent().find(".sgst").val(sgst*qty);
+                        $(object).parent().parent().find(".cgst").val(cgst*qty);
                     }
                 }else{
                     if (price < '{{MyApp::THOUSAND}}') {
                         igst = parseFloat(price * 5 / 100);
                         // alert(igst);
                         // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst);
+                        $(object).parent().parent().find(".igst").val(igst*qty);
                     }else{
                         igst = parseFloat(price * 12 / 100);
                         // alert(igst);
                         // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst);
+                        $(object).parent().parent().find(".igst").val(igst*qty);
                     }
                 }
         
         }
-
+        // PL6o2XQKFKClsqHz
             // end gst funcation
 
         function calculateAmount(object){
@@ -686,8 +738,8 @@
             var cgst = 0;
             var price = parseFloat($(object).parent().parent().find(".price").val());
             var qty = parseFloat($(object).parent().parent().find(".qty").val());
-            var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
-            var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
+            // var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
+            // var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
 
 
             if(qty == "" || isNaN(qty))
@@ -697,6 +749,9 @@
 
 
             var amount = parseFloat(price * qty);
+            // alert(amount);
+            // var sgst = parseFloat(sgst * qty);
+            // var cgst = parseFloat(cgst * qty);
             
             $(object).parent().parent().find(".amount").val(amount);
             calculateTotalAmount();

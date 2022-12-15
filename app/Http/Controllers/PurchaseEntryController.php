@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Purchase;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
 use App\Models\ProductImage;
@@ -71,12 +72,35 @@ class PurchaseEntryController extends Controller
 
     function savePurchaseEntry(Request $req)
     {
+        // if ($req->input('xs_qty') == null || $req->input('s_qty'); ) {
+        //     # code...
+        // }
+
+        // if($req->input('country_id') > 0)
+        // {
+        //     $country = 'required|unique:countries,country,'.$req->input('country_id');
+        //     $country_short = 'required|unique:countries,country_short,'.$req->input('country_id');
+        //     // $category_img = 'mimes:jpeg,png,jpg|max:1024|dimensions:max-width=480,max-height=336';
+        //     $model = Country::find($req->input('country_id'));
+        // }else{
+        //     $country = 'required|unique:countries,country,'.$req->input('country');
+        //     $country_short = 'required|unique:countries,country_short,'.$req->input('country_short');
+        //     $model = new Country ;
+        // }
+
+
+
         $validator = Validator::make($req->all(),[
             'supplier_id' => 'required|max:191',
             'bill_no'=>'required|max:191',
             // 'bill_no'=>'required|unique:purchase_entries,bill_no,'.$req->input('bill_no'),
             'bill_date'=>'required|max:191',
             'payment_days'=>'required|max:191',
+            'category_id'=>'required|max:191',
+            'sub_category_id'=>'required|max:191',
+            'brand_id'=>'required|max:191',
+            'style_no_id'=>'required|max:191',
+            'color'=>'required|max:191',
         ]);
 
         if($validator->fails())
@@ -88,11 +112,10 @@ class PurchaseEntryController extends Controller
         }else{
             $purchase_id = 0;
 
-            // $purchase_date = PurchaseEntry::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->exists();
-            $data = PurchaseEntry::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->first('id');
+            $data = Purchase::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->first('id');
             
             if ($data == null) {
-                $model = new PurchaseEntry;
+                $model = new Purchase;
                 
                 $model->supplier_id = $req->input('supplier_id');
                 $model->bill_no = $req->input('bill_no');
@@ -105,12 +128,35 @@ class PurchaseEntryController extends Controller
             }else{
                 $purchase_id = $data->id;
             }
-
+            
             $category_id = $req->input('category_id');
             $sub_category_id = $req->input('sub_category_id');
             $brand_id = $req->input('brand_id');
             $style_no_id = $req->input('style_no_id');
             $color = $req->input('color');
+            $product_image = $req->input('product_image');
+            
+            $purchase_entry_data = PurchaseEntry::where(['purchase_id'=>$purchase_id,'style_no_id'=>$style_no_id, 'color'=>$color])->first('id');
+            $purchase_entry_id = 0;
+            if ($purchase_entry_data == null) {
+                $purchase_entry = new PurchaseEntry;
+
+                $purchase_entry->purchase_id = $purchase_id;
+                $purchase_entry->category_id = $category_id;
+                $purchase_entry->sub_category_id = $sub_category_id;
+                $purchase_entry->brand_id = $brand_id;
+                $purchase_entry->style_no_id = $style_no_id;
+                $purchase_entry->color = $color;
+                if ($product_image != " ") {
+                    $purchase_entry->img = $product_image;
+                }
+
+                $purchase_entry->save();
+
+                $purchase_entry_id = $purchase_entry->id;
+            }else{
+                $purchase_entry_id = $purchase_entry_data->id;
+            }
 
             $xs_qty = $req->input('xs_qty');
             $s_qty = $req->input('s_qty');
@@ -137,12 +183,13 @@ class PurchaseEntryController extends Controller
             $size = "";
             $price = 0;
             $mrp = 0;
+
             if ($xs_qty > 0) {
                 $qty = $xs_qty;
                 $size = 'xs';
                 $price = $xs_price;
                 $mrp = $xs_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp);                
             }
 
             if ($s_qty > 0) {
@@ -150,7 +197,7 @@ class PurchaseEntryController extends Controller
                 $size = 's';
                 $price = $s_price;
                 $mrp = $s_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp);             
             }
 
             if ($m_qty > 0) {
@@ -158,7 +205,7 @@ class PurchaseEntryController extends Controller
                 $size = 'm';
                 $price = $m_price;
                 $mrp = $m_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
             }
 
             if ($l_qty > 0) {
@@ -166,7 +213,7 @@ class PurchaseEntryController extends Controller
                 $size = 'l';
                 $price = $l_price;
                 $mrp = $l_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
             }
 
             if ($xl_qty > 0) {
@@ -174,7 +221,7 @@ class PurchaseEntryController extends Controller
                 $size = 'xl';
                 $price = $xl_price;
                 $mrp = $xl_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
             }
 
             if ($xxl_qty > 0) {
@@ -182,7 +229,7 @@ class PurchaseEntryController extends Controller
                 $size = 'xxl';
                 $price = $xxl_price;
                 $mrp = $xxl_mrp;
-                $result = $this->saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp);                
+                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
             }
             
 
@@ -219,23 +266,21 @@ class PurchaseEntryController extends Controller
             //     }
             // }
 
+            $purchase_entry_html = $this->getPurchaseEntry($req->input('supplier_id'), $req->input('bill_no'));
+
             return response()->json([   
-                'status'=>$result   
+                'status'=>200,
+                'html'=>$purchase_entry_html['html'],
             ]);
         }
     }
 
-    public function saveItem($purchase_id, $qty, $category_id, $sub_category_id, $brand_id, $style_no_id, $color, $size, $price, $mrp){
+    public function saveItem($purchase_entry_id, $qty, $size, $price, $mrp){
 
         for ($i=0; $i < $qty; $i++) 
         { 
             $purchase_item = new PurchaseEntryItem;
-            $purchase_item->purchase_entry_id = $purchase_id;
-            $purchase_item->category_id = $category_id;
-            $purchase_item->sub_category_id = $sub_category_id;
-            $purchase_item->brand_id = $brand_id;
-            $purchase_item->style_no_id = $style_no_id;
-            $purchase_item->color = $color;
+            $purchase_item->purchase_entry_id = $purchase_entry_id;
             $purchase_item->size = $size;
             $purchase_item->price = $price;
             $purchase_item->mrp = $mrp;
@@ -244,6 +289,66 @@ class PurchaseEntryController extends Controller
         }
 
         return 'ok';
+    }
+
+    public function getPurchaseEntry($supplier_id, $bill_no){
+
+        $data = Purchase::where(['supplier_id'=>$supplier_id, 'bill_no'=>$bill_no])->first('id');
+
+        $html = "";
+        if ($data == null) {
+            $html .="<div class='alert alert-warning text-light my-2' role='alert'>";
+                $html .="<span>Purchase entry is not available</span>";
+            $html .="</div>";
+
+            return $result = [
+                'status'=>200,
+                'html'=>$html
+            ] ;
+        }                       
+
+            $purchase_entry = PurchaseEntry::Join('style_nos','style_nos.id','=','purchase_entries.style_no_id')
+                // ->Join('categories','categories.id','=','purchase_entries.category_id')
+                // ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
+                ->where('purchase_entries.purchase_id', '=', $data->id)
+                ->get(['purchase_entries.*','style_nos.style_no']);
+
+                $html .="<table class='table table-bordered'>";
+                    $html .="<thead>";
+                    $html .="<tr>";
+                        $html .="<th>SN</th>";
+                        $html .="<th>Style</th>";
+                        $html .="<th>Color</th>";
+                        $html .="<th>Qty</th>";
+                        $html .="<th>Action</th>";
+                        
+                    $html .="</tr>";
+                $html .="</thead>";
+                $html .="<tbody>";
+                    foreach ($purchase_entry as $key => $list) {
+                        // dd($list);
+                        $html .="<tr>";
+                            $html .="<td>".++$key."</td>";
+                            $html .="<td>".ucwords($list->style_no)."</td>";
+                            $html .="<td>".ucwords($list->color)."</td>";
+                            // $html .="<td>".$list->size."</td>";
+                           
+                        $html .="</tr>";
+                    }
+                $html .="</tbody>";
+                $html .="</table>";
+
+                return $result = [
+                    'status'=>200,
+                    'html'=>$html
+                ] ;
+
+                // return response()->json([
+                //     'status'=>200,
+                //     'html'=>$html
+                // ]);
+
+
     }
 
     // function saveProduct(Request $req)

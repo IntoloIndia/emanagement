@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomerInvoiceBillsTable extends Migration
+class CreateCustomerBillsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateCustomerInvoiceBillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_invoice_bills', function (Blueprint $table) {
+        Schema::create('customer_bills', function (Blueprint $table) {
             $table->id();
             $table->integer('cutomer_id')->default(0);
+            $table->integer('bill_date')->default(0);
+            $table->integer('bill_time')->default(0);
             $table->integer('bill_no')->default(0);
             $table->integer('total_amount')->default(0);
             $table->timestamps();
@@ -29,6 +31,6 @@ class CreateCustomerInvoiceBillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_invoice_bills');
+        Schema::dropIfExists('customer_bills');
     }
 }

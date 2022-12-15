@@ -238,8 +238,10 @@
             $(".state_chosen").chosen({ width: '100%' });
             $(".select_chosen").chosen({ width: '80%' });
 
+            
             $(document).on('click','#addsuplier', function (e) {
                 e.preventDefault();
+                
                 $('#supplierModal').modal('show');
                 $('#supplier_err').html('');
                 $('#supplier_err').removeClass('alert alert-danger');
@@ -254,17 +256,39 @@
 
             $(document).on('click','#cityBtn', function (e) {
             e.preventDefault();
-            $('#cityModal').modal('show');
-            $('#city_err').html('');
-            $('#city_err').removeClass('alert alert-danger');
-            $("#cityForm").trigger( "reset"); 
-            $('#saveCityBtn').removeClass('hide');
-            $('#updateCityBtn').addClass('hide');
-
-            const country_id = $('#city_country_id').val();
-            getStateByCountry(country_id);
+            if ($.trim($("#state_id").val()) == "") {
+                alert("Please Select state!");
+            }
+            else{
+                $('#cityModal').modal('show');
+                $('#city_err').html('');
+                $('#city_err').removeClass('alert alert-danger');
+                $("#cityForm").trigger( "reset"); 
+                $('#saveCityBtn').removeClass('hide');
+                $('#updateCityBtn').addClass('hide');
+    
+                // const country_id = $('#city_country_id').val();
+                var country = $("#country_id").val();
+                $("#put_country_id").val(country);
+                var state = $("#state_id").val();
+                // alert(state);
+                $("#city_state_id").val(state);
+                // getStateByCountry(country_id);
+            }
         });
 
+        $(document).on('click','#saveCityBtn', function (e) {
+            e.preventDefault();
+            manageCity();
+           
+            const country_id = $("#country_id").val();
+                //  alert(country_id);
+            // getStateByCountry(country_id);
+            // var state_id = $("#put_country_id").val();
+
+            // // alert(state_id);
+            // getCityByState(state_id);
+        });
 
             $(document).on('click',"#saveSupplierBtn",function(e){
                 e.preventDefault();
