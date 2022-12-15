@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use App\Models\SalesInvoice;
+use App\Models\CustomerBillInvoice;
 use App\Models\AlterationVoucher;
+use App\Models\CustomerBill;
 
 use Validator;
 
@@ -13,10 +14,10 @@ class AlterationVoucherController extends Controller
 {
         public function index(){
             $customers_billing = Customer::all();
-            // $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
-            //             join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
-            //             // ->where('sales_invoices.customer_id',$order->id)
-            //             ->select(['sales_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+            // $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
+            //             join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
+            //             // ->where('customer_bill_invoices.customer_id',$order->id)
+            //             ->select(['customer_bill_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
 
             return view('alteration_voucher',[
                 'customers_billing' => $customers_billing,
@@ -26,46 +27,46 @@ class AlterationVoucherController extends Controller
 
         function saveAlterationVoucher(Request $req)
         {
-           dd($req);
+        //    dd($req);
             
             
-            // $validator = Validator::make($req->all(),[
-            //     // 'product_id' => 'required|max:191'
-            // ]);
+            $validator = Validator::make($req->all(),[
+                // 'product_id' => 'required|max:191'
+            ]);
     
-            // if($validator->fails())
-            // {
-            //     return response()->json([
-            //         'status'=>400,
-            //         'errors'=>$validator->messages("plz fill size"),
-            //     ]);
-            // }else{
-            //     $model = new AlterationVoucher;
-            //     $model->checked_alt_voucher = $req->input('checked_alt_voucher');
-            //     $model->customer_id = $req->input('customer_id');
-            //     $model->product_id = $req->input('product_id');
-            //     // $model->bill_no = $req->input('bill_no');
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=>$validator->messages("plz fill size"),
+                ]);
+            }else{
+                $model = new AlterationVoucher;
+                $model->checked_alt_voucher = $req->input('checked_alt_voucher');
+                $model->customer_id = $req->input('customer_id');
+                $model->product_id = $req->input('product_id');
+                // $model->bill_no = $req->input('bill_no');
                
-            //     if($model->save()){
-            //         return response()->json([   
-            //             'status'=>200
-            //         ]);
-            //     }
-            // }
+                if($model->save()){
+                    return response()->json([   
+                        'status'=>200
+                    ]);
+                }
+            }
         }
 
         public function generateAlerationVoucher($customer_id)
         {
         
                  $customers =Customer::find($customer_id);
-                 $order_items =SalesInvoice::join('customers','customers.id','=','sales_invoices.customer_id')->
-                                join('purchase_entries','purchase_entries.id','=','sales_invoices.product_id')
+                 $order_items = CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
+                                join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
                                 // ->join('')
-                                // join('sizes','sizes.id','=','sales_invoices.size_id')
-                                // join('colors','colors.id','=','sales_invoices.color_id')
+                                // join('sizes','sizes.id','=','customer_bill_invoices.size_id')
+                                // join('colors','colors.id','=','customer_bill_invoices.color_id')
 
-                                ->where('sales_invoices.customer_id',$customers->id)
-                        ->select(['sales_invoices.*','purchase_entries.product'])->get(); 
+                                ->where('customer_bill_invoices.customer_id',$customers->id)
+                        ->select(['customer_bill_invoices.*'])->get(); 
 
 
                             
@@ -269,41 +270,87 @@ class AlterationVoucherController extends Controller
   } 
 
   
-  public function getCustomerBillData($customer_id)
+//   public function getCustomerBillData($customer_id)
+//   {
+//       $customers = Customer::where(['id'=>$customer_id])->get();
+      
+//       $html = "";
+
+//       //$html .= "<table class='table table-striped'>";
+
+//           $html .= "<thead>";
+//               $html .= "<tr>";
+//                   $html .= "<th>SN</th>";
+//                   $html .= "<th>Customer name</th>";
+//                   $html .= "<th>mobile no</th>";
+//                   $html .= "<th>Action</th>";
+//               $html .= "</tr>";
+//           $html .= "</thead>";
+//           $html .= "<tbody>";
+//               foreach ($customers as $key => $list) {
+//                   $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
+//                       $html .= "<td>" . ++$key . "</td>";
+//                       $html .= "<td>" . $list->customer_name ."</td>";
+//                       $html .= "<td>" . $list->mobile_no ."</td>";
+//                       $html .= "<td> 
+//                      <button type='button' class='btn btn-info btn-sm orderInvoiceBtn mr-1'  value='".$list->id."'>bills</button>
+//                      </td>";
+//                   $html .= "</tr>";
+//               }
+//           $html .= "<tbody>";
+         
+
+//       // $html .= "</table>";
+
+//       return response()->json([
+//           'status'=>200,
+//           'customers'=>$customers,
+//           'html'=>$html
+//       ]);
+
+//   }
+
+
+// get cutomer bills
+public function getCustomerBills($customer_id)
   {
-      $customers = Customer::where(['id'=>$customer_id])->get();
+      $customer_bills = CustomerBill::where(['id'=>$customer_id])->get();
       
       $html = "";
 
-      //$html .= "<table class='table table-striped'>";
+      $html .= "<table class='table table-striped'>";
 
           $html .= "<thead>";
               $html .= "<tr>";
                   $html .= "<th>SN</th>";
-                  $html .= "<th>Customer name</th>";
-                  $html .= "<th>mobile no</th>";
+                  $html .= "<th>Date</th>";
+                  $html .= "<th>Time</th>";
+                  $html .= "<th>Bill no</th>";
+                  $html .= "<th>Amount</th>";
                   $html .= "<th>Action</th>";
               $html .= "</tr>";
           $html .= "</thead>";
           $html .= "<tbody>";
-              foreach ($customers as $key => $list) {
+              foreach ($customer_bills as $key => $list) {
                   $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
                       $html .= "<td>" . ++$key . "</td>";
-                      $html .= "<td>" . $list->customer_name ."</td>";
-                      $html .= "<td>" . $list->mobile_no ."</td>";
+                      $html .= "<td>" . $list->bill_date ."</td>";
+                      $html .= "<td>" . $list->bill_time ."</td>";
+                      $html .= "<td>" . $list->bill_no ."</td>";
+                      $html .= "<td>" . $list->total_amount ."</td>";
                       $html .= "<td> 
-                     <button type='button' class='btn btn-info btn-sm orderInvoiceBtn mr-1'  value='".$list->id."'>bills</button>
+                     <button type='button' class='btn btn-info btn-sm alterBillsBtn mr-1'  value='".$list->id."'>Alter</button>
                      </td>";
                   $html .= "</tr>";
               }
           $html .= "<tbody>";
          
 
-      // $html .= "</table>";
+      $html .= "</table>";
 
       return response()->json([
           'status'=>200,
-          'customers'=>$customers,
+          'customer_bills'=>$customer_bills,
           'html'=>$html
       ]);
 

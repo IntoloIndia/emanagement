@@ -9,7 +9,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\PurchaseEntry;
-use App\Models\Salesinvoice;
+use App\Models\CustomerBillInvoice;
 use App\MyApp;
 
 class ProductAPIController extends Controller
@@ -75,11 +75,11 @@ class ProductAPIController extends Controller
     public function salesInvoice()
     {
         $date = date('Y-m-d');
-        // $sales = Salesinvoice::where('date', $date)->get();
+        // $sales = CustomerBillInvoice::where('date', $date)->get();
 
-        $sales = Salesinvoice::join('purchase_entries', 'sales_invoices.product_id','=','purchase_entries.id')
-            ->where('sales_invoices.date', $date)
-            ->get(['sales_invoices.*','purchase_entries.product']);
+        $sales = CustomerBillInvoice::join('purchase_entries', 'customer_bill_invoices.product_id','=','purchase_entries.id')
+            ->where('customer_bill_invoices.date', $date)
+            ->get(['customer_bill_invoices.*','purchase_entries.product']);
 
         return response()->json([
             'data'=>$sales,
@@ -91,9 +91,9 @@ class ProductAPIController extends Controller
     {
         $date = date('Y-m-d');
 
-        $sales = Salesinvoice::join('purchase_entries', 'sales_invoices.product_id','=','purchase_entries.id')
-            // ->where('sales_invoices.date', $date)
-            ->select('sales_invoices.*','purchase_entries.product','purchase_entries.category_id','purchase_entries.sub_category_id','purchase_entries.size','purchase_entries.color');
+        $sales = CustomerBillInvoice::join('purchase_entries', 'customer_bill_invoices.product_id','=','purchase_entries.id')
+            // ->where('customer_bill_invoices.date', $date)
+            ->select('customer_bill_invoices.*','purchase_entries.product','purchase_entries.category_id','purchase_entries.sub_category_id','purchase_entries.size','purchase_entries.color');
 
             if ($req->category_id > 0) {
                 $sales->where('purchase_entries.category_id', '=', $req->category_id);

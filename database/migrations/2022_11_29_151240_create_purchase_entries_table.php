@@ -15,12 +15,13 @@ class CreatePurchaseEntriesTable extends Migration
     {
         Schema::create('purchase_entries', function (Blueprint $table) {
             $table->id();
-            $table->integer('supplier_id')->default(0);
-            $table->string('bill_no')->nullable();
-            $table->date('bill_date')->nullable();
-            $table->string('time')->nullable();
-            $table->integer('payment_days')->default(0);
-            $table->double('bill_amount')->default(0);
+            $table->integer('purchase_id')->default(0);
+            $table->integer('category_id')->default(0);
+            $table->integer('sub_category_id')->default(0);
+            $table->integer('brand_id')->default(0);
+            $table->integer('style_no_id')->default(0);
+            $table->string('color')->nullable();
+            $table->longText('img')->nullable();
             $table->text('barcode')->nullable();
             $table->timestamps();
         });

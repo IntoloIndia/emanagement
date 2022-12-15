@@ -182,10 +182,18 @@
             </div>
         </div>
     </section>
+    <section>
+        <div id="">
+            <div class="modal fade" id="alterBillModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    
+            </div>
+        </div>
+    </section>
+    
     
    
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Customer bills</h3>
@@ -202,7 +210,8 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12 table-responsive" style="height: 200px;">
-                        <table class="table table-striped table-head-fixed " id="customer_list" >
+                        {{-- <table class="table table-striped table-head-fixed " id="customer_list" > --}}
+                        <table class="table table-striped table-head-fixed " id="customer_bills" >
                             
                         </table>    
                     </div>
@@ -210,7 +219,7 @@
         </div>
     </div>
  </div>
- <div class="col-md-8">
+ <div class="col-md-7">
     <div class="card">
         <div class="card-header">
             <b>Invoice</b>
@@ -284,12 +293,12 @@
 @section('script')
 <script>
     $(document).ready(function(){
-        $(document).on('click','#customer_id', function(e){
+        $(document).on('change','#customer_id', function(e){
             e.preventDefault();
             var customer_id = $(this).val();
-            // alert(customer_id);/
-            // $('#project_invoice').html("");
-            getCustomerBillData(customer_id);
+            // alert(customer_id);
+            getCustomerBills(customer_id);
+            // getCustomerBillData(customer_id);
            
         });
 
@@ -304,32 +313,48 @@
                 e.preventDefault();
                 // $('#generateInvoiceModal').modal('show');
                 const customer_id = $(this).val();
-
                 generateAlerationVoucher(customer_id);
             });
+            $(document).on('click','.alterBillsBtn',function(e){
+                e.preventDefault();
+                $('#alterBillModal').modal('show');
+                const customer_id = $(this).val();
+                // generateAlerationVoucher(customer_id);
+            });
+            
 
-            // $(document).on('click','#checked_alt_voucher',function(e){
-            //     e.preventDefault(); 
-            //     const customer_id = $(this).val();
-                
-            // });    
-
+           
     });
 
-    function getCustomerBillData(customer_id) {
+    // function getCustomerBillData(customer_id) {
+    //     $.ajax({
+    //         type: "get",
+    //         url: `get-customers-bills/${customer_id}`,
+    //         dataType: "json",
+    //         success: function (response) {
+    //             if(response.status == 200){
+    //                 $('#customer_list').html("");
+    //                 $('#customer_list').append(response.html);
+    //             }
+    //         }
+    //     });
+    // } 
+
+// get customer bills
+        function getCustomerBills(customer_id) {
         $.ajax({
             type: "get",
             url: `get-customers-bills/${customer_id}`,
             dataType: "json",
             success: function (response) {
+                console.log(response);
                 if(response.status == 200){
-                    $('#customer_list').html("");
-                    $('#customer_list').append(response.html);
+                    $('#customer_bills').html("");
+                    $('#customer_bills').append(response.html);
                 }
             }
         });
     } 
-
     function generateAlerationVoucher(customer_id) {
          $.ajax({
         type: "get",
@@ -360,18 +385,17 @@ function saveAlterationVoucher() {
     var product_id = $('#product_id').val();
     // alert(customer_id);
     // alert(product_id);
-    var formData = {
+    // var formData = {
 
-        'customer_id':customer_id,
-        'product_id':product_id
-        // bill_id:bill_id,
-        // checkbox:checkbox,
-    };
-    alert(JSON.stringify(formData));
+    //     'customer_id':customer_id,
+    //     'product_id':product_id
+      
+    // };
+    // alert(JSON.stringify(formData));
     $.ajax({
         type: "post",
-        url: "save-alteration-voucher-order",
-        data: JSON.stringify(formData),
+        url: "save-alteration-voucher",
+        data: {customer_id,product_id},
         dataType: "json",
         // cache: false,
         // contentType: false,
@@ -388,7 +412,7 @@ function saveAlterationVoucher() {
             } else {
                     $('#alterationvoucher_err').html('');
                 // $('#supplierModal').modal('hide');
-                // window.location.reload();
+                window.location.reload();
             }
         }
     });

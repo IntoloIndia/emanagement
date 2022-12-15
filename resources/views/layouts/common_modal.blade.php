@@ -268,23 +268,25 @@
 
                         <div class="row mb-2">
                             <div class="col-md-5">
-                                <label for="countryName" class="form-label">Country</label>
+                                <input type="hidden" name="country_id" id="put_country_id" class="form-control form-control-sm" placeholder="Country">
+                                {{-- <label for="countryName" class="form-label">Country</label>
                                 <select name="country_id" id="city_country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value);">
                                     <option selected disabled >Select...</option>
                                     @foreach ($countries as $list)
                                         @if ($list->id == MyApp::INDIA)
                                             <option selected value="{{$list->id}}">{{$list->country}}</option>
                                         @else
-                                            <option  value="{{$list->id}}">{{$list->country}}</option>
+                                            <option  value="{{$list->id}}">{{$list-city_id>country}}</option>
                                         @endif
                                     @endforeach
-                                </select>
+                                </select> --}}
                             </div>
                             <div class="col-md-7">
-                                <label for="stateName" class="form-label">State</label>
+                                <input type="hidden" name="state_id" id="city_state_id" class="form-control form-control-sm" placeholder="State" class="required" value="Validate">
+                                {{-- <label for="stateName" class="form-label">State</label>
                                 <select name="state_id" id="state_id" class="form-select form-select-sm">
                                     
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
 

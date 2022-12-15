@@ -112,8 +112,8 @@
             <li class="nav-header text-light">Sales Management</li>
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
-                <a href="sales_invoice" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sales invoice</p>
+                <a href="customer_bill_invoices" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>sales_invoice</p>
                 </a>
             </li>
             <li class="nav-item">

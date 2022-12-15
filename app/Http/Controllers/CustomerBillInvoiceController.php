@@ -6,14 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\PurchaseEntry;
 use App\Models\Size;
-use App\Models\SalesInvoice;
+use App\Models\CustomerBillInvoice;
+use App\Models\CustomerBill;
 use App\Models\Customer;
 use App\Models\Month;
 use App\Models\City;
 use App\Models\User;
 use Validator;
 
-class SalesInvoiceController extends Controller
+class CustomerBillInvoiceController extends Controller
 {
     public function index(){
         $products = PurchaseEntry::all();
@@ -22,7 +23,7 @@ class SalesInvoiceController extends Controller
         $months = Month::all();
         $cities = City::all();
         $users = User::all();
-        // $allSales = SalesInvoice::all();
+        // $allSales = CustomerBillInvoice::all();
         // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
         // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
         // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
@@ -51,7 +52,7 @@ class SalesInvoiceController extends Controller
         // return $req;
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required|max:191',
-            'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
+            // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
             'state_type'=>'required|max:191',
@@ -80,6 +81,7 @@ class SalesInvoiceController extends Controller
             $model->time = date('g:i A');
 
 
+        
 
             $product_id = $req->input('product_id');
             $product_code = $req->input('product_code');
@@ -90,7 +92,17 @@ class SalesInvoiceController extends Controller
             $sgst = $req->input('sgst');
             $cgst = $req->input('cgst');
             $igst = $req->input('igst');
-            $alteration_voucher = $req->input('alteration_voucher');
+            // $alteration_voucher = $req->input('alteration_voucher');
+
+
+             // customer bills tables insert
+              $model = new CustomerBill;
+            //   $model->bill_id = $req->id;
+            //   $model->customer_id = $req->id;
+              $model->total_amount = $req->input('total_amount');
+              $model->bill_date = date('Y-m-d');
+              $model->bill_time = date('g:i A');
+ 
             
             
 
@@ -100,7 +112,7 @@ class SalesInvoiceController extends Controller
                     
                     // $categories = Customer::find($product_code[$key]);
 
-                    $item = new SalesInvoice;
+                    $item = new CustomerBillInvoice;
 
                     $item->bill_id = $model->id;
                     $item->product_id = $product_id[$key];
@@ -111,9 +123,8 @@ class SalesInvoiceController extends Controller
                     $item->amount = $amount[$key];
                     $item->sgst = $sgst[$key];
                     $item->cgst = $cgst[$key];
-
                     $item->igst= $igst[$key];
-                    $item->alteration_voucher = $alteration_voucher[$key];
+                    // $item->alteration_voucher = $alteration_voucher[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();
@@ -162,7 +173,7 @@ class SalesInvoiceController extends Controller
 
                  $get_cutomer_data =Customer::find($customer_id);
         
-                $order_items =SalesInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
+                $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
                                     join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
                                     // join('sizes','sizes.id','=','customer_bill_invoices.size_id')
                                     // join('colors','colors.id','=','customer_bill_invoices.color_id')

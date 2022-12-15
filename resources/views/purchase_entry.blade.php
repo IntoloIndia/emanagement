@@ -307,7 +307,7 @@ a {
                                                 </div> --}}
                                             </div>
                                         </div>
-                                        <div class="card-body" >
+                                        <div class="card-body" id="product_section">
                                            <div class="row item_list" id="item_list">
 
                                             <div class="row">
@@ -320,7 +320,8 @@ a {
                                                         @endforeach
                                                     </select>
                                                     <div id="take_photo" class="take_photo mt-2">
-                                                        <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/user-img.jpg')}}" style="width: 60px; height:60px;" />
+                                                        {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/user-img.jpg')}}" style="width: 60px; height:60px;" /> --}}
+                                                        {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="" style="width: 60px; height:60px;" /> --}}
                                                     </div>                                
                                                     <input type="hidden" name="product_image" id="product_image" class="product_image">
                                                     <div class="d-grid gap-2 mt-2">
@@ -370,14 +371,14 @@ a {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th>MRP</th>
-                                                                                    <td><input type="text" name="xs_mrp" class="form-control form-control-sm xs_mrp" placeholder="MRP" value=""></td>
+                                                                                    <td><input type="text" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
                                                                                     <td >
-                                                                                        <input type="text" name="s_mrp" class="form-control form-control-sm s_mrp" placeholder="MRP" value="">
+                                                                                        <input type="text" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value="">
                                                                                     </td>
-                                                                                    <td ><input type="text" name="m_mrp" class="form-control form-control-sm m_mrp" placeholder="MRP" value=""></td>
-                                                                                    <td ><input type="text" name="l_mrp" class="form-control form-control-sm l_mrp" placeholder="MRP" value=""></td>
-                                                                                    <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp" placeholder="MRP" value=""></td>
-                                                                                    <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp" placeholder="MRP" value=""></td>
+                                                                                    <td ><input type="text" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
+                                                                                    <td ><input type="text" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
+                                                                                    <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                                    <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
                                                                                 </tr>
                                                                                 
                                                                             </tbody>
@@ -450,56 +451,34 @@ a {
                                            
                                         </div>
                                     </div>
-                                    <div class="card-body table-responsive p-0" style="height: 250px;">
-                                        <table class="table table-head-fixed text-nowrap">
-                                            <thead>
+                                    <div class="card-body table-responsive p-0" style="height: 300px;" >
+                                        <table class="table table-head-fixed text-nowrap" id="show_purchase_entry">
+                                            {{-- <thead>
                                                 <tr>
                                                     <th>SN</th>
                                                     <th>Style</th>
                                                     <th>Color</th>
+                                                    <th>QTY</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                {{-- @if($states->isEmpty())
-                                                    <div class="alert alert-warning text-light my-2" role="alert">
-                                                        <span>State is not available to add new state click add button</span>
-                                                    </div>
-                                                @else --}}
-                                                    {{-- {{$count = "";}}
-                                                    @foreach ($states as $item)
-                                                        <tr>
-                                                            <td>{{++$count}}</td>
-                                                            <td>{{ucwords($item->state)}}</td>
-                                                            <td>{{strtoupper($item->state_short)}}</td>
-                                                            <td>
-                                                                <button type="button" class="btn btn-secondary btn-sm editStateBtn" value="{{$item->id}}"><i class="fas fa-edit"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach --}}
-                                                {{-- @endif  --}}
+                                                
                                                 <tr>
                                                     <td>1</td>
                                                     <td>ABC-15-A</td>
                                                     <td>Red</td>
                                                     <td>1</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>ABC-15-B</td>
-                                                    <td>yellow</td>
                                                     <td>1</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>ABC-15-A</td>
-                                                    <td>Green</td>
-                                                    <td>1</td>
-                                                </tr>
-                                               
-                                            </tbody>
+                                                
+                                            </tbody> --}}
                                         </table>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                            <button type="button" id="viewPurchaseBtn" class="btn btn-info btn-sm "> View Purchase </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -798,54 +777,6 @@ a {
     </div>
 </div> --}}
 
-
-
-
-<div class="modal fade" id="showGstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Gst Modal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="row mt-2">
-                <input type="hidden" name="state_type" id="state_type" value="">
-                <div class="col-md-6">
-                    <label for="stateName" class="form-label">Price</label>
-                    <input type="text" name="base_amount" id="base_amount" class="form-control form-control-sm" placeholder="Base Amount">
-                </div>
-                <div class="col-md-6">
-                    <label for="stateName" class="form-label">Purchase Amount</label>
-                    <input type="text" name="purchase_amount" id="purchase_amount" class="form-control form-control-sm" placeholder="Purchase Amount" readonly>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-md-4">
-                    <label for="stateShort" class="form-label">SGST <span id="sgst_percent"></span></label>
-                    <input type="text" name="" id="sgst" class="form-control form-control-sm" placeholder="SGST">
-                </div>
-                <div class="col-md-4">
-                    <label for="stateShort" class="form-label">CGST <span id="cgst_percent"></span></label>
-                    <input type="text" name="" id="cgst" class="form-control form-control-sm" placeholder="CGST">
-                </div>
-                <div class="col-md-4">
-                    <label for="stateShort" class="form-label">IGST <span id="igst_percent"></span></label>
-                    <input type="text" name="" id="igst" class="form-control form-control-sm" placeholder="IGST">
-                </div>
-            </div>
-           
-            <div class="modal-footer">
-                <button type="button" id="ok" class="btn btn-primary btn-sm">Ok</button>
-            </div>
-            
-        </div>
-        
-      </div>
-    </div>
-  </div>
-
-
 {{-- <div class="row">
     <div class="col-12">
         <div class="card-box">
@@ -1056,6 +987,14 @@ a {
                 $('#captureLivePhotoModal').modal('show');
             });
 
+            $(document).on("focusout","#bill_no", function(e){
+                var supplier_id = $('#supplier_id').val();
+                var bill_no = $('#bill_no').val();
+
+                getPurchaseEntry(supplier_id, bill_no);
+            });
+
+           
 
             $(document).on('click','#savePurchaseEntryBtn', function (e) {
                 e.preventDefault();
@@ -1286,78 +1225,6 @@ a {
             });
         }
 
-        function editDepartment(brand_id){
-            $.ajax({
-                type: "get",
-                url: "edit-brand/"+brand_id,
-                dataType: "json",
-                success: function (response) {
-                    if(response.status == 200){
-                        $('#brandModal').modal('show');
-                        $('#brand_err').html('');
-                        $('#brand_err').removeClass('alert alert-danger');
-                        $("#brandForm").trigger( "reset" ); 
-                        $('#saveBrandBtn').addClass('hide');
-                        $('#updateBrandBtn').removeClass('hide');
-
-                        $('#brand_name').val(response.brand.brand_name);
-                        $('#updateBrandBtn').val(response.brand.id);
-                    }
-                }
-            });
-        }
-
-        function updateDepartment(brand_id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var formData = new FormData($("#brandForm")[0]);
-            $.ajax({
-                type: "post",
-                url: "update-brand/"+brand_id,
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false, 
-                processData: false, 
-                success: function (response) {
-                    if(response.status === 400)
-                    {
-                        $('#brand_err').html('');
-                        $('#brand_err').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) { 
-                            $('#brand_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
-                        });
-
-                    }else{
-                        $('#brand_err').html('');
-                        $('#brandModal').modal('hide');
-                        window.location.reload();
-                    }
-                }
-            });
-        }
-
-
-        function deleteBrand(brand_id){
-            $.ajax({
-                type: "get",
-                url: "delete-brand/"+brand_id,
-                dataType: "json",
-                success: function (response) {
-                    if(response.status == 200){
-                        window.location.reload();
-                    }
-                }
-            });
-        }
-
-       
-
         function calculateQtyPrice() { 
 
             var total_qty = 0;
@@ -1421,8 +1288,6 @@ a {
             var sgst = 0;
             var cgst = 0;
             var igst = 0;
-
-
 
             if (state_type == '{{MyApp::WITH_IN_STATE}}') {
                 if (total_price < '{{MyApp::THOUSAND}}') {
@@ -1566,6 +1431,22 @@ a {
             });
         }
 
+        function getPurchaseEntry(supplier_id, bill_no){
+            
+            $.ajax({
+                type: "get",
+                url: "get-purchase-entry/"+supplier_id+'/'+bill_no,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 200) {
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
+                    }
+                }
+            });
+        }
+
         function savePurchaseEntry() {
             $.ajaxSetup({
                 headers: {
@@ -1583,20 +1464,32 @@ a {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);
-                    // if (response.status === 400) {
-                    //     $('#purchase_entry_err').html('');
-                    //     $('#purchase_entry_err').addClass('alert alert-danger');
-                    //     var count = 1;
-                    //     $.each(response.errors, function (key, err_value) {
-                    //         $('#purchase_entry_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                    //     });
+                    // console.log(response);
+                    if (response.status === 400) {
+                        $('#purchase_entry_err').html('');
+                        $('#purchase_entry_err').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) {
+                            $('#purchase_entry_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                        });
 
-                    // } else {
-                    //     $('#purchase_entry_err').html('');
-                    //     $('#productModal').modal('hide');
-                    //     window.location.reload();
-                    // }
+                    } else {
+                        $('#purchase_entry_err').html('');
+                        alert("Save purchase entry successfully");
+                        // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".qty").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".price").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".mrp").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").removeAttr('src');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_qty").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_price").val('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
+                        // $('#productModal').modal('hide');
+                        // window.location.reload();
+                    }
                 }
             });
         }

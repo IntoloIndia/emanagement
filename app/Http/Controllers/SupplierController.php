@@ -183,21 +183,21 @@ class SupplierController extends Controller
         ]);
     }
 
-    public function getStateByCountry($country_id)
-    {
-        $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
+    // public function getStateByCountry($country_id)
+    // {
+    //     $data = State::where(['country_id'=>$country_id])->get(['id', 'state',]);
 
-        $html = "";
-        $html .= "<option selected disabled >State</option>";
-        foreach($data as $list)
-        {
-            $html.= "<option value='" . $list->id . "'>" . ucwords($list->state) . "</option>";
-        }
-        return response()->json([
-            'status'=> 200,
-            'html'=> $html,
-        ]);
-    }
+    //     $html = "";
+    //     $html .= "<option selected disabled >State</option>";
+    //     foreach($data as $list)
+    //     {
+    //         $html.= "<option value='" . $list->id . "'>" . ucwords($list->state) . "</option>";
+    //     }
+    //     return response()->json([
+    //         'status'=> 200,
+    //         'html'=> $html,
+    //     ]);
+    // }
 
     // public function getCityByState($state_id)
     // {
@@ -228,9 +228,51 @@ class SupplierController extends Controller
         // return response()->json([
         //     'city_short'=>$city_short_name->city_short
         // ]);
-
     }
 
+    // public function manageCity(Request $req)
+    // {
+    //     if($req->input('city_id') > 0)
+    //     {
+    //         $country_id = 'required|max:191';
+    //         $state_id = 'required|max:191';
+    //         $city = 'required|unique:cities,city,'.$req->input('city_id');
+    //         $city_short = 'required|unique:cities,city_short,'.$req->input('city_id');
+    //         $model = City::find($req->input('city_id'));
+    //     }else{
+    //         $country_id = 'required|max:191';
+    //         $state_id = 'required|max:191';
+    //         $city = 'required|unique:cities,city,'.$req->input('city');
+    //         $city_short = 'required|unique:cities,city_short,'.$req->input('city_short');
+    //         $model = new City ;
+    //     }
+
+    //     $validator = Validator::make($req->all(),[
+    //         'country_id' => $country_id,
+    //         'state_id' => $state_id,
+    //         'city' => $city,
+    //         'city_short' => $city_short
+    //     ]);
+    //     if($validator->fails())
+    //     {
+    //         return response()->json([
+    //             'status'=>400,
+    //             'errors'=>$validator->messages(),
+    //         ]);
+    //     }else{
+    //         $model->country_id = $req->input('country_id');
+    //         $model->state_id = $req->input('state_id');
+    //         $model->city = strtolower($req->input('city'));
+    //         $model->city_short = strtolower($req->input('city_short'));
+
+    //         if($model->save()){
+    //             return response()->json([
+    //                 'status'=>200,
+    //             ]);
+    //         }
+
+    //     }
+    // }
 
   
     
