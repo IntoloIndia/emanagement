@@ -44,51 +44,105 @@ class PurchaseEntryController extends Controller
         // return $barcode;
         // $product_code = rand(0000000001,9999999999);
         // // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
+        //$generator = new Picqer\Barcode\BarcodeGeneratorJPG();
         // // $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 40);
-        // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
-        // return $barcode;
+        //$barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';
+        //return $barcode;
 
 
 
-        // $products = PurchaseEntry::Join('suppliers','suppliers.id','=','purchase_entries.supplier_id')
-                // ->Join('categories','categories.id','=','purchase_entries.category_id')
-                // ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
-                // ->get(['purchase_entries.*',
-                //     'suppliers.supplier_name',
-                //     'categories.category',
-                //     'sub_categories.sub_category',
-                // ]);
+        $purchases = Purchase::Join('suppliers','suppliers.id','=','purchases.supplier_id')
+                ->orderBy('purchases.bill_date', 'desc')
+                // ->orderBy('purchases.time', 'asc')
+                ->get(['purchases.*',
+                    'suppliers.supplier_name',
+                ]);
+
+
+        // $first = rand(001,999);
+        // $second = rand(001,999);
+
+        // $month = date('m');
+        // $year = date('y');
+
+        // $product_code = $month . $first . '99999' . $second . $year;
+        // dd($product_code);
+
 
         return view('purchase_entry',[
+            'suppliers' => $suppliers,
             "categories"=>$categories,
             'sizes' => $sizes,
             'colors'=> $colors,
             'brands'=> $brands,
-            // 'products' => $products,
-            'suppliers' => $suppliers
+            'purchases' => $purchases,
         ]);
     }
 
     function savePurchaseEntry(Request $req)
     {
-        // if ($req->input('xs_qty') == null || $req->input('s_qty'); ) {
-        //     # code...
-        // }
+        if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
+        {
+            $xs_qty_validation = '';
+            $xs_price_validation = '';
+            $xs_mrp_validation = '';
+        }else{
+            $xs_qty_validation = 'required';
+            $xs_price_validation = 'required';
+            $xs_mrp_validation = 'required';
+        }
 
-        // if($req->input('country_id') > 0)
-        // {
-        //     $country = 'required|unique:countries,country,'.$req->input('country_id');
-        //     $country_short = 'required|unique:countries,country_short,'.$req->input('country_id');
-        //     // $category_img = 'mimes:jpeg,png,jpg|max:1024|dimensions:max-width=480,max-height=336';
-        //     $model = Country::find($req->input('country_id'));
-        // }else{
-        //     $country = 'required|unique:countries,country,'.$req->input('country');
-        //     $country_short = 'required|unique:countries,country_short,'.$req->input('country_short');
-        //     $model = new Country ;
-        // }
+        if($req->input('s_qty') == "" &&  $req->input('s_price') == "" && $req->input('s_mrp') == "")
+        {
+            $s_qty_validation = '';
+            $s_price_validation = '';
+            $s_mrp_validation = '';
+        }else{
+            $s_qty_validation = 'required';
+            $s_price_validation = 'required';
+            $s_mrp_validation = 'required';
+        }
 
-
+        if($req->input('m_qty') == "" &&  $req->input('m_price') == "" && $req->input('m_mrp') == "")
+        {
+            $m_qty_validation = '';
+            $m_price_validation = '';
+            $m_mrp_validation = '';
+        }else{
+            $m_qty_validation = 'required';
+            $m_price_validation = 'required';
+            $m_mrp_validation = 'required';
+        }
+        if($req->input('l_qty') == "" &&  $req->input('l_price') == "" && $req->input('l_mrp') == "")
+        {
+            $l_qty_validation = '';
+            $l_price_validation = '';
+            $l_mrp_validation = '';
+        }else{
+            $l_qty_validation = 'required';
+            $l_price_validation = 'required';
+            $l_mrp_validation = 'required';
+        }
+        if($req->input('xl_qty') == "" &&  $req->input('xl_price') == "" && $req->input('xl_mrp') == "")
+        {
+            $xl_qty_validation = '';
+            $xl_price_validation = '';
+            $xl_mrp_validation = '';
+        }else{
+            $xl_qty_validation = 'required';
+            $xl_price_validation = 'required';
+            $xl_mrp_validation = 'required';
+        }
+        if($req->input('xxl_qty') == "" &&  $req->input('xxl_price') == "" && $req->input('xxl_mrp') == "")
+        {
+            $xxl_qty_validation = '';
+            $xxl_price_validation = '';
+            $xxl_mrp_validation = '';
+        }else{
+            $xxl_qty_validation = 'required';
+            $xxl_price_validation = 'required';
+            $xxl_mrp_validation = 'required';
+        }
 
         $validator = Validator::make($req->all(),[
             'supplier_id' => 'required|max:191',
@@ -101,6 +155,24 @@ class PurchaseEntryController extends Controller
             'brand_id'=>'required|max:191',
             'style_no_id'=>'required|max:191',
             'color'=>'required|max:191',
+            'xs_qty'=>$xs_qty_validation,
+            'xs_price'=>$xs_price_validation,
+            'xs_mrp'=>$xs_mrp_validation,
+            's_qty'=>$s_qty_validation,
+            's_price'=>$s_price_validation,
+            's_mrp'=>$s_mrp_validation,
+            'm_qty'=>$m_qty_validation,
+            'm_price'=>$m_price_validation,
+            'm_mrp'=>$m_mrp_validation,
+            'l_qty'=>$l_qty_validation,
+            'l_price'=>$l_price_validation,
+            'l_mrp'=>$l_mrp_validation,
+            'xl_qty'=>$xl_qty_validation,
+            'xl_price'=>$xl_price_validation,
+            'xl_mrp'=>$xl_mrp_validation,
+            'xxl_qty'=>$xxl_qty_validation,
+            'xxl_price'=>$xxl_price_validation,
+            'xxl_mrp'=>$xxl_mrp_validation,
         ]);
 
         if($validator->fails())
@@ -277,16 +349,17 @@ class PurchaseEntryController extends Controller
 
     public function saveItem($purchase_entry_id, $qty, $size, $price, $mrp){
 
-        for ($i=0; $i < $qty; $i++) 
-        { 
+        // for ($i=0; $i < $qty; $i++) 
+        // { 
             $purchase_item = new PurchaseEntryItem;
             $purchase_item->purchase_entry_id = $purchase_entry_id;
             $purchase_item->size = $size;
+            $purchase_item->qty = $qty;
             $purchase_item->price = $price;
             $purchase_item->mrp = $mrp;
             // $purchase_item->time = date('g:i A');
             $purchase_item->save();
-        }
+        // }
 
         return 'ok';
     }

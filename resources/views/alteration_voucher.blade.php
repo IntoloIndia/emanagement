@@ -175,22 +175,59 @@
                </div>
 </div> --}}
 
-    <section>
+    {{-- <section>
         <div id="newcontent">
             <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     
             </div>
         </div>
-    </section>
+    </section> --}}
     <section>
-        <div id="">
-            <div class="modal fade" id="alterBillModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    
-            </div>
+        <div class="modal fade" id="alterBillModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            {{-- <div class="modal-dialog modal-lg">
+                <div class="modal-content"> --}}
+                    {{-- <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> --}}
+                    {{-- <div class="modal-body">
+                        <div class='row mt-2'>
+                            <div class='table-responsive'>
+                                <table class='table'>
+                                    <thead>
+                                        <tr>
+                                        <th>Bill No</th>
+                                        <th>Item Name</th>
+                                        <th>Qty</th>
+                                        <th>Size</th>
+                                        <th>Price</th>
+                                        <th>Amount</th>
+                                        <th>CGST%</th>
+                                        <th>SGST%</th>
+                                        <th>IGST</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> --}}
+                    {{-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
+                    </div> --}}
+                {{-- </div>
+            </div> --}}
         </div>
     </section>
-    
-    
+           
    
 <div class="row">
     <div class="col-md-5">
@@ -296,8 +333,8 @@
         $(document).on('change','#customer_id', function(e){
             e.preventDefault();
             var customer_id = $(this).val();
-            // alert(customer_id);
             getCustomerBills(customer_id);
+            // alert(customer_id);
             // getCustomerBillData(customer_id);
            
         });
@@ -305,21 +342,27 @@
         // save alterration bill 
         $(document).on('click','#saveAltertion',function(e){
                 e.preventDefault();
-
                  saveAlterationVoucher();
-            });
-
-        $(document).on('click','.orderInvoiceBtn',function(e){
+        });
+        $(document).on('click','#generateAltertionVoucher',function(e){
                 e.preventDefault();
-                // $('#generateInvoiceModal').modal('show');
-                const customer_id = $(this).val();
-                generateAlerationVoucher(customer_id);
-            });
+                saveAlterationItem();
+        });
+        
+     
+        // $(document).on('click','.orderInvoiceBtn',function(e){
+        //         e.preventDefault();
+        //         // $('#generateInvoiceModal').modal('show');
+        //         const customer_id = $(this).val();
+        //         generateAlerationVoucher(customer_id);
+        //     });
             $(document).on('click','.alterBillsBtn',function(e){
                 e.preventDefault();
-                $('#alterBillModal').modal('show');
-                const customer_id = $(this).val();
-                // generateAlerationVoucher(customer_id);
+                // $('#alterBillModal').modal('show');
+                const bill_id = $(this).val();
+                // alert(bill_id);
+                $('#generateAltertionVoucher').val(bill_id);
+                generateAlerationVoucher(bill_id);
             });
             
 
@@ -347,7 +390,7 @@
             url: `get-customers-bills/${customer_id}`,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response.status == 200){
                     $('#customer_bills').html("");
                     $('#customer_bills').append(response.html);
@@ -355,16 +398,18 @@
             }
         });
     } 
-    function generateAlerationVoucher(customer_id) {
+    function generateAlerationVoucher(bill_id) {
          $.ajax({
         type: "get",
-        url: "generate-invoice-voucher/"+customer_id,
+        url: "generate-invoice-voucher/"+bill_id,
         dataType: "json",
         success: function (response) {
             console.log(response);
             if (response.status == 200) {
-                $('#generateInvoiceModal').html(response.html);
-                $('#generateInvoiceModal').modal('show');
+                // $('#generateInvoiceModal').html(response.html);
+                // $('#generateInvoiceModal').modal('show');
+                 $('#alterBillModal').html(response.html);
+                $('#alterBillModal').modal('show');
                 // $('#box').html(response.html);
                
                 
@@ -411,6 +456,47 @@ function saveAlterationVoucher() {
 
             } else {
                     $('#alterationvoucher_err').html('');
+                // $('#supplierModal').modal('hide');
+                window.location.reload();
+            }
+        }
+    });
+}
+
+function saveAlterationItem() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    // var formData = new FormData($("#alterationItemForm")[0]);
+
+    var alteration_voucher_id = $('#alteration_voucher_id').val();
+    var product_id = $('#product_id').val();
+    var item_qty = $('#item_qty').val();
+    alert(alteration_voucher_id);
+    alert(item_qty);
+    alert(product_id);
+    $.ajax({
+        type: "post",
+        url: "save-alteration-item",
+        data: {alteration_voucher_id,item_qty,product_id},
+        // data: formData,
+        dataType: "json",
+        // cache: false,
+        // contentType: false,
+        // processData: false,
+        success: function (response) {
+            if (response.status === 400) {
+                $('#alteration_item_err').html('');
+                $('#alteration_item_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#alteration_item_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
+
+            } else {
+                    $('#alteratio_item_err').html('');
                 // $('#supplierModal').modal('hide');
                 window.location.reload();
             }

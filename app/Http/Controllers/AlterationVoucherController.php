@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\CustomerBillInvoice;
 use App\Models\AlterationVoucher;
 use App\Models\CustomerBill;
+use App\Models\AlterationItem;
 
 use Validator;
 
@@ -27,9 +28,6 @@ class AlterationVoucherController extends Controller
 
         function saveAlterationVoucher(Request $req)
         {
-        //    dd($req);
-            
-            
             $validator = Validator::make($req->all(),[
                 // 'product_id' => 'required|max:191'
             ]);
@@ -46,7 +44,7 @@ class AlterationVoucherController extends Controller
                 $model->customer_id = $req->input('customer_id');
                 $model->product_id = $req->input('product_id');
                 // $model->bill_no = $req->input('bill_no');
-               
+                
                 if($model->save()){
                     return response()->json([   
                         'status'=>200
@@ -55,52 +53,31 @@ class AlterationVoucherController extends Controller
             }
         }
 
-        public function generateAlerationVoucher($customer_id)
-        {
+       
         
-                 $customers =Customer::find($customer_id);
-                 $order_items = CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
-                                join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
-                                // ->join('')
-                                // join('sizes','sizes.id','=','customer_bill_invoices.size_id')
-                                // join('colors','colors.id','=','customer_bill_invoices.color_id')
+        
+        public function generateAlerationVoucher($bill_id)
+        {
+            $customer_detail = CustomerBill::where(['id'=>$bill_id])->first('customer_id');
+            $customer = Customer::where(['id'=>$customer_detail->customer_id])->first('customer_name');
+            $customer_name = $customer->customer_name;
+            $customer_bill_detail = CustomerBillInvoice::join('customer_bills','customer_bill_invoices.bill_id','=','customer_bills.customer_id')
+                ->join('customers','customer_bills.customer_id','=','customers.id')
+                ->where(['bill_id'=>$bill_id])
+                ->select('customer_bill_invoices.*','customers.customer_name')
+                ->get();
 
-                                ->where('customer_bill_invoices.customer_id',$customers->id)
-                        ->select(['customer_bill_invoices.*'])->get(); 
-
-
-                            
-                    //  print_r($order_items);     
-                    // print_r($order_items);    
-        //         ->get(['order_items.*','items.item_name','items.price' ]);
-
-        //         if($order->payment_mode == MyApp::ONLINE){
-        //             $payment_mode = "Online";
-        //         }else{
-        //             $payment_mode = "Cash";
-        //         }
-
-
-        $html = "";
-        $html .="<div class='modal-dialog modal-lg'>";
+            $html = "";
+            $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$customers->customer_name</b></h5>";
+          
+                $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
-
-                //  $html .="<div class='modal-body-wrapper'>";
-
-
                     $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
                     $html .="<form id='alterationVoucherForm'>";
-                        // $html .= @csrf;
                     $html .="<div class='alterationvoucher_err'></div>";
-                        // $html .="<div class='row text-center'>";
-                        //     $html .="<h5><b>Mangaldeep </b></h5>";
-                        //     $html .="<small>Jabalpur</small>";
-                        // $html .="</div>";
-
                         $html .="<div class='row mb-1'>";
                                 $html .="<div class='col-md-3 '>";
                                     $html .="<span></span><br>";
@@ -119,155 +96,313 @@ class AlterationVoucherController extends Controller
                                     $html .="<span>Mobile no : 09826683399<small></small></span><br>";
                                     $html .="<span></span><br>";
                             $html .="</div>";
+                            $html .="<form id='alterationItemForm'>";
+                            $html .="<input type='hidden' value='@csrf'>";
+                            $html .="<div class='row mt-2'>";
+                        $html .="<div class='table-responsive'>";
+                        $html .="<table class='table table-bordered'>";
+                            $html .="<thead>";
+                                $html .="<tr>";
+                                    $html .="<th>#</th>";
+                                    $html .="<th>Check</th>";
+                                    $html .="<th>Item Name</th>";
+                                    $html .="<th>Qty</th>";
+                                    $html .="<th>Size</th>";
+                                    $html .="<th>Color</th>";
+                                    $html .="<th>MRP</th>";
+                                    $html .="<th>Rate</th>";
+                                    $html .="<th>Disc</th>";
+                                    $html .="<th>Total</th>";
+                                    $html .="<th>Taxable</th>";
+                                    $html .="<th>CGST%</th>";
+                                    $html .="<th>SGST%</th>";
+                                $html .="</tr>";
+                            $html .="</thead>";
+                            $html .="<tbody>";
+                          
+                            foreach ($customer_bill_detail as $key => $list) {
+                                $customer_name = $list->customer_name;
+                                $html .="<tr>";
+                                    $html .="<td>".++$key."</td>";
+                                     $html .="<input type='hidden' id='alteration_voucher_id' name='alteration_voucher_id' value='".$list->id."' class='form-control form-control-sm' >";
+                                     
+                                    $html .="<td><div class='form-check text-center'>
+                                        <input class='form-check-input' type='checkbox' name='product_id' id='product_id' value='".$list->id."'>
+                                    </div></td>";
+                                    $html .="<td>".$list->product_id."</td>";
+                                    // $html .="<td><input type='hidden' id='product_id' name='product_id' value='".$list->product_id."' class='form-control form-control-sm' ></td>";
+                                    $html .="<td>".$list->qty."</td>";
+                                    $html .="<input type='hidden' id='item_qty' name='item_qty' value='".$list->qty."' class='form-control form-control-sm' >";
+                                    $html .="<td>".$list->size."</td>";
+                                    // $html .="<td>".$list->color."</td>";
+                                    $html .="<td>".$list->price."</td>";
+                                    // $html .="<td>".$list->price."</td>";
+                                    // $html .="<td>".$list->price."</td>";
+                                    // $html .="<td>".$list->amount."</td>";
+                                    // $html .="<td>".$list->amount."</td>";
+                                    // $html .="<td>".$list->amount."</td>";
+                                    // $html .="<td>".$list->amount."</td>";
+                                $html .="</tr>";
+                            }
+                                
+                            $html .="</tbody>";
+                            $html .="<tfoot>";
+                                // $html .="<tr>";
+                                // $html .="<td colspan='3'></td>";
+                                // $html .="<td>".$key."</td>";
+                                    // $html .="<td colspan='4'></td>";
+                                    // $html .="<td><b>Total :</b></td>";
+                                    // $html .="<td>".$customers->total_amount."</td>";
+                                    // $html .="<td>".$customers->total_amount."</td>";
+                                    // $html .="<td>".$customers->total_amount."</td>";
+                                    // $html .="<td>".$customers->total_amount."</td>";
+                                // $html .="</tr>";
+                            $html .="</tfoot>";
+                        $html .="</table>";
                         $html .="</div>";
-                        // $html .="<hr>";
+                    $html .="</div>";
+                    $html .="<form>";
+                        $html .="</div>";
+                        $html .="</div>";
 
-                        $html .="<div class='row '>";
-                            $html .="<div class='col-md-6' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small name='customer_id'>".$customers->customer_name."</small></span><br>";
-                            $html .="<input type='hidden' id='customer_id' value='".$customers->id."' class='form-control form-control-sm' >";
-                            $html .="<span>Location : <small>Jabalpur</small></span><br>";
-                            $html .="<span>Mobile no : <small>".$customers->mobile_no."</small></span><br>";
-                            $html .="<span>State code  : <small>0761</small></span><br>";
-                            // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
+                                $html .="<div class='modal-footer'>";
+                                    // $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
+                                    // $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+                                $html .="<button type='button' id='generateAltertionVoucher' class='btn btn-success btn-sm'>save</button>";
                             $html .="</div>";
-                            $html .="<div class='col-md-2' style='border:1px solid black'>";
-                            $html .="<span class=''>CASH :<br/> <small><b>10000</b></small></span> ";
-                            $html .="</div>";
-                            $html .="<div class='col-md-4' style='border:1px solid black'>";
-                            $html .="<span>Invoice No : <small class='float-end'>".$customers->invoice_no."</small></span><br>";
-                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($customers->date))."</small></span><br>";
-                                $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
+                               
+                
                             $html .="</div>";
                         $html .="</div>";
-                        // $html .="<hr>";
 
-                        $html .="<div class='row mt-2'>";
-                            $html .="<div class='table-responsive'>";
-                            $html .="<table class='table table-bordered'>";
+                        // $model = new AlterationItem;
+                        // $model->alteration_voucher_id = $customer_bill_detail->id;
+                        // $model->product_id = 1;
+                        // // $model->item_qty =$customer_bill_detail->item_qty; 
+                        // // $model->status = $customer_bill_detail->;
+                        // $model->save();
+
+         
+            return response()->json([
+                'status'=>200,
+                'html'=>$html,
+                'customer_bill_detail'=>$customer_bill_detail
+          
+            ]);
+        }
+
+        function saveAlterationItem(Request $req)
+        {
+            // $get_alteration_voucher = CustomerBillInvoice::where(['bill_id'=>$bill_id])->get();
+            $validator = Validator::make($req->all(),[
+                // 'product_id' => 'required|max:191'
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=>$validator->messages("plz fill size"),
+                ]);
+            }else{
+                $model = new AlterationItem;
+                $model->alteration_voucher_id = $req->input('alteration_voucher_id');
+                $model->product_id = $req->input('product_id');
+                $model->item_qty = $req->input('item_qty');
+                // $model->status = $req->input('bill_no');
+                
+                if($model->save()){
+                    return response()->json([   
+                        'status'=>200
+                    ]);
+                }
+            }
+        }
+
+            // public function generateAlerationVoucher($customer_id)
+            // {
+                // Previous coding
+                //  $customers =Customer::find($customer_id);
+                //  $order_items = CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
+                //     join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
+                //     ->where('customer_bill_invoices.customer_id',$customers->id)
+                //     ->select(['customer_bill_invoices.*'])->get(); 
+
+        // $html = "";
+        // $html .="<div class='modal-dialog modal-lg'>";
+        //     $html .="<div class='modal-content'>";
+        //         $html .="<div class='modal-header'>";
+        //             $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$customers->customer_name</b></h5>";
+        //             $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+        //         $html .="</div>";
+        //             $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
+        //             $html .="<form id='alterationVoucherForm'>";
+        //             $html .="<div class='alterationvoucher_err'></div>";
+        //                 $html .="<div class='row mb-1'>";
+        //                         $html .="<div class='col-md-3 '>";
+        //                             $html .="<span></span><br>";
+        //                             $html .="<span>GST NO: <small>4125666</small></span><br>";
+        //                             $html .="<span></span><br>";
+        //                         $html .="</div>";
+        //                     $html .="<div class='col-md-6 text-center'>";
+        //                             $html .="<span>SALES INVOICE</span><br>";
+        //                             $html .="<span>ERENOWN CLOTHING CO </span><br>";
+        //                             $html .="<span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>";
+        //                             $html .="<span>Jabalpur -482002 </span><br>";
+        //                     $html .="</div>";
+        //                     $html .="<div class='col-md-3' >";
+        //                             $html .="<span>Phone no: 0761-4047699</span><br>";
+        //                             $html .="<span></span><br>";
+        //                             $html .="<span>Mobile no : 09826683399<small></small></span><br>";
+        //                             $html .="<span></span><br>";
+        //                     $html .="</div>";
+        //                 $html .="</div>";
+        //                 $html .="<div class='row '>";
+        //                     $html .="<div class='col-md-6' style='border:1px solid black'>";
+        //                     $html .="<span>Customer name: <small name='customer_id'>".$customers->customer_name."</small></span><br>";
+        //                     $html .="<input type='hidden' id='customer_id' value='".$customers->id."' class='form-control form-control-sm' >";
+        //                     $html .="<span>Location : <small>Jabalpur</small></span><br>";
+        //                     $html .="<span>Mobile no : <small>".$customers->mobile_no."</small></span><br>";
+        //                     $html .="<span>State code  : <small>0761</small></span><br>";
+        //                     // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
+        //                     $html .="</div>";
+        //                     $html .="<div class='col-md-2' style='border:1px solid black'>";
+        //                     $html .="<span class=''>CASH :<br/> <small><b>10000</b></small></span> ";
+        //                     $html .="</div>";
+        //                     $html .="<div class='col-md-4' style='border:1px solid black'>";
+        //                     $html .="<span>Invoice No : <small class='float-end'>".$customers->invoice_no."</small></span><br>";
+        //                         $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($customers->date))."</small></span><br>";
+        //                         $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
+        //                     $html .="</div>";
+        //                 $html .="</div>";
+        //                 // $html .="<hr>";
+
+        //                 $html .="<div class='row mt-2'>";
+        //                     $html .="<div class='table-responsive'>";
+        //                     $html .="<table class='table table-bordered'>";
                         
-                                $html .="<thead>";
-                                    $html .="<tr>";
-                                        $html .="<th>#</th>";
-                                        $html .="<th>Check</th>";
-                                        $html .="<th>Item Name</th>";
-                                        $html .="<th>Qty</th>";
-                                        $html .="<th>Size</th>";
-                                        $html .="<th>Color</th>";
-                                        $html .="<th>MRP</th>";
-                                        $html .="<th>Rate</th>";
-                                        $html .="<th>Disc</th>";
-                                        $html .="<th>Total</th>";
-                                        $html .="<th>Taxable</th>";
-                                        $html .="<th>CGST%</th>";
-                                        $html .="<th>SGST%</th>";
-                                    $html .="</tr>";
-                                $html .="</thead>";
-                                $html .="<tbody>";
-                                foreach ($order_items as $key => $list) {
-                                    $html .="<tr>";
-                                        $html .="<td>".++$key."</td>";
+        //                         $html .="<thead>";
+        //                             $html .="<tr>";
+        //                                 $html .="<th>#</th>";
+        //                                 $html .="<th>Check</th>";
+        //                                 $html .="<th>Item Name</th>";
+        //                                 $html .="<th>Qty</th>";
+        //                                 $html .="<th>Size</th>";
+        //                                 $html .="<th>Color</th>";
+        //                                 $html .="<th>MRP</th>";
+        //                                 $html .="<th>Rate</th>";
+        //                                 $html .="<th>Disc</th>";
+        //                                 $html .="<th>Total</th>";
+        //                                 $html .="<th>Taxable</th>";
+        //                                 $html .="<th>CGST%</th>";
+        //                                 $html .="<th>SGST%</th>";
+        //                             $html .="</tr>";
+        //                         $html .="</thead>";
+        //                         $html .="<tbody>";
+        //                         foreach ($order_items as $key => $list) {
+        //                             $html .="<tr>";
+        //                                 $html .="<td>".++$key."</td>";
 
                                        
-                                        // <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        //                                 // <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                         
 
 
 
 
-                                        $html .="<td><div class='form-check text-center'>
-                                            <input class='form-check-input' type='checkbox'  name='checked_alt_voucher' id='checked_alt_voucher' value='1'>
-                                        </div></td>";
-                                        $html .="<td>".ucwords($list->product)."</td>";
-                                        $html .="<td><input type='hidden' id='product_id' value='".$list->product_id."' class='form-control form-control-sm' ></td>";
-                                        $html .="<td>".$list->qty."</td>";
-                                        $html .="<td>".$list->size."</td>";
-                                        $html .="<td>".$list->color."</td>";
-                                        $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                    $html .="</tr>";
-                                }
+        //                                 $html .="<td><div class='form-check text-center'>
+        //                                     <input class='form-check-input' type='checkbox'  name='checked_alt_voucher' id='checked_alt_voucher' value='1'>
+        //                                 </div></td>";
+        //                                 $html .="<td>".ucwords($list->product)."</td>";
+        //                                 $html .="<td><input type='hidden' id='product_id' value='".$list->product_id."' class='form-control form-control-sm' ></td>";
+        //                                 $html .="<td>".$list->qty."</td>";
+        //                                 $html .="<td>".$list->size."</td>";
+        //                                 $html .="<td>".$list->color."</td>";
+        //                                 $html .="<td>".$list->price."</td>";
+        //                                 $html .="<td>".$list->price."</td>";
+        //                                 $html .="<td>".$list->price."</td>";
+        //                                 $html .="<td>".$list->amount."</td>";
+        //                                 $html .="<td>".$list->amount."</td>";
+        //                                 $html .="<td>".$list->amount."</td>";
+        //                                 $html .="<td>".$list->amount."</td>";
+        //                             $html .="</tr>";
+        //                         }
                                     
-                                $html .="</tbody>";
-                                $html .="<tfoot>";
-                                    $html .="<tr>";
-                                    $html .="<td colspan='3'></td>";
-                                    $html .="<td>".$key."</td>";
-                                        $html .="<td colspan='4'></td>";
-                                        $html .="<td><b>Total :</b></td>";
-                                        // $html .="<td>".$customers->total_amount."</td>";
-                                        // $html .="<td>".$customers->total_amount."</td>";
-                                        // $html .="<td>".$customers->total_amount."</td>";
-                                        // $html .="<td>".$customers->total_amount."</td>";
-                                    $html .="</tr>";
-                                $html .="</tfoot>";
-                            $html .="</table>";
-                            $html .="</div>";
-                        $html .="</div>";
+        //                         $html .="</tbody>";
+        //                         $html .="<tfoot>";
+        //                             $html .="<tr>";
+        //                             $html .="<td colspan='3'></td>";
+        //                             $html .="<td>".$key."</td>";
+        //                                 $html .="<td colspan='4'></td>";
+        //                                 $html .="<td><b>Total :</b></td>";
+        //                                 // $html .="<td>".$customers->total_amount."</td>";
+        //                                 // $html .="<td>".$customers->total_amount."</td>";
+        //                                 // $html .="<td>".$customers->total_amount."</td>";
+        //                                 // $html .="<td>".$customers->total_amount."</td>";
+        //                             $html .="</tr>";
+        //                         $html .="</tfoot>";
+        //                     $html .="</table>";
+        //                     $html .="</div>";
+        //                 $html .="</div>";
 
-                        $html .="<div class='row'>";
-                        $html .="<div class='col-md-8'>";
-                        $html .="<span class='float-start'>Amount of Tax Subject to Recvers Change :</span><br>";
+        //                 $html .="<div class='row'>";
+        //                 $html .="<div class='col-md-8'>";
+        //                 $html .="<span class='float-start'>Amount of Tax Subject to Recvers Change :</span><br>";
                            
-                        $html .="</div>";
-                        $html .="<div class='col-md-2'>";
+        //                 $html .="</div>";
+        //                 $html .="<div class='col-md-2'>";
 
-                                $html .="<span class='float-end'>GROSS AMOUNT:</span><br>";
-                                $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
-                                $html .="<span class='float-end'>ADD CGST :</span> <br>";
-                                $html .="<span class='float-end'>ADD SGST : </span><br>";
-                                $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
-                                $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
-                                $html .="<span class='float-end'>G.TOTAL : </span><br>";
+        //                         $html .="<span class='float-end'>GROSS AMOUNT:</span><br>";
+        //                         $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
+        //                         $html .="<span class='float-end'>ADD CGST :</span> <br>";
+        //                         $html .="<span class='float-end'>ADD SGST : </span><br>";
+        //                         $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
+        //                         $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
+        //                         $html .="<span class='float-end'>G.TOTAL : </span><br>";
 
-                        $html .="</div>";
-                        $html .="<div class='col-md-2'>";
+        //                 $html .="</div>";
+        //                 $html .="<div class='col-md-2'>";
 
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
-                            // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
+        //                     // $html .="<small class='text-center'>".$customers->total_amount."</small><br>";
 
-                    $html .="</div>";
-                    $html .="</div>";
+        //             $html .="</div>";
+        //             $html .="</div>";
 
                     
-                        $html .="<hr>";
-                        $html .="<div class='row text-center'>";
-                            $html .="<h6><b>Thank  Have a Nice Day </b></h6>";
-                            $html .="<small>Visit Again !</small>";
-                        $html .="</div>";
+        //                 $html .="<hr>";
+        //                 $html .="<div class='row text-center'>";
+        //                     $html .="<h6><b>Thank  Have a Nice Day </b></h6>";
+        //                     $html .="<small>Visit Again !</small>";
+        //                 $html .="</div>";
 
-                    // $html .="</div>";
+        //             // $html .="</div>";
                 
 
 
-             $html .="</div>";
+        //      $html .="</div>";
 
-                $html .="<div class='modal-footer'>";
-                    // $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
-                    // $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
-                    $html .="<button type='button' id='saveAltertion' class='btn btn-success btn-sm'>save</button>";
-                $html .="</div>";
-                $html .="</form>";
+        //         $html .="<div class='modal-footer'>";
+        //             // $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
+        //             // $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button>";
+        //             $html .="<button type='button' id='saveAltertion' class='btn btn-success btn-sm'>save</button>";
+        //         $html .="</div>";
+        //         $html .="</form>";
 
-            $html .="</div>";
-        $html .="</div>";
-
-        return response()->json([
-            'status'=>200,
-            'html'=>$html,
-            ' $customers'=>$customers
-        ]);
-  } 
+        //     $html .="</div>";
+        // $html .="</div>";
+        // return response()->json([
+        //     'status'=>200,
+        //     'html'=>$html,
+        //     ' $customers'=>$customers
+        // ]);
+    // }
+    
 
   
 //   public function getCustomerBillData($customer_id)
@@ -312,47 +447,50 @@ class AlterationVoucherController extends Controller
 
 
 // get cutomer bills
-public function getCustomerBills($customer_id)
-  {
-      $customer_bills = CustomerBill::where(['id'=>$customer_id])->get();
-      
-      $html = "";
+    public function getCustomerBills($customer_id)
+    {
+        $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])->get();
+        
+        $html = "";
 
-      $html .= "<table class='table table-striped'>";
+        $html .= "<table class='table table-striped'>";
 
-          $html .= "<thead>";
-              $html .= "<tr>";
-                  $html .= "<th>SN</th>";
-                  $html .= "<th>Date</th>";
-                  $html .= "<th>Time</th>";
-                  $html .= "<th>Bill no</th>";
-                  $html .= "<th>Amount</th>";
-                  $html .= "<th>Action</th>";
-              $html .= "</tr>";
-          $html .= "</thead>";
-          $html .= "<tbody>";
-              foreach ($customer_bills as $key => $list) {
-                  $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
-                      $html .= "<td>" . ++$key . "</td>";
-                      $html .= "<td>" . $list->bill_date ."</td>";
-                      $html .= "<td>" . $list->bill_time ."</td>";
-                      $html .= "<td>" . $list->bill_no ."</td>";
-                      $html .= "<td>" . $list->total_amount ."</td>";
-                      $html .= "<td> 
-                     <button type='button' class='btn btn-info btn-sm alterBillsBtn mr-1'  value='".$list->id."'>Alter</button>
-                     </td>";
-                  $html .= "</tr>";
-              }
-          $html .= "<tbody>";
-         
+            $html .= "<thead>";
+                $html .= "<tr>";
+                    $html .= "<th>SN</th>";
+                    $html .= "<th>Date</th>";
+                    $html .= "<th>Time</th>";
+                    $html .= "<th>Bill no</th>";
+                    $html .= "<th>Amount</th>";
+                    $html .= "<th>Action</th>";
+                $html .= "</tr>";
+            $html .= "</thead>";
+            $html .= "<tbody>";
+                foreach ($customer_bills as $key => $list) {
+                    $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
+                        $html .= "<td>" . ++$key . "</td>";
+                        $html .= "<td>" . $list->bill_date ."</td>";
+                        $html .= "<td>" . $list->bill_time ."</td>";
+                        $html .= "<td>" . $list->bill_no ."</td>";
+                        $html .= "<td>" . $list->total_amount ."</td>";
+                        $html .= "<td> 
+                        <button type='button' class='btn btn-info btn-sm alterBillsBtn mr-1'  value='".$list->id."'>Alter</button>
+                        </td>";
+                    $html .= "</tr>";
+                }
+            $html .= "<tbody>";
+            
 
-      $html .= "</table>";
+        $html .= "</table>";
 
-      return response()->json([
-          'status'=>200,
-          'customer_bills'=>$customer_bills,
-          'html'=>$html
-      ]);
+        return response()->json([
+            'status'=>200,
+            'customer_bills'=>$customer_bills,
+            'html'=>$html
+        ]);
 
-  }
+    }
+
 }
+
+

@@ -22,7 +22,6 @@ class CreatePurchaseEntriesTable extends Migration
             $table->integer('style_no_id')->default(0);
             $table->string('color')->nullable();
             $table->longText('img')->nullable();
-            $table->text('barcode')->nullable();
             $table->timestamps();
         });
     }
