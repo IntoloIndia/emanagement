@@ -313,7 +313,7 @@ a {
                                             <div class="row">
 
                                                 <div class="col-md-3">
-                                                    <select id="color" name="color" class="form-select form-select-sm color_code ">
+                                                    <select id="color" name="color" class="form-select form-select-sm color_code select_chosen">
                                                         <option selected disabled >Color</option>
                                                         @foreach ($colors as $list)
                                                         <option value="{{$list->color}}">{{ucwords($list->color)}}</option>
@@ -380,6 +380,21 @@ a {
                                                                                     <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
                                                                                     <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
                                                                                 </tr>
+                                                                                <tr>
+                                                                                    <th>Total</th>
+                                                                                    <td colspan="3">
+                                                                                        <div class="form-floating">
+                                                                                            <input type="text" class="form-control" id="total_qty" value="0" readonly disabled>
+                                                                                            <label for="floatingInputGrid">Quantity</label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td colspan="3">
+                                                                                        <div class="form-floating">
+                                                                                            <input type="text" class="form-control" id="total_price" value="0" readonly disabled>
+                                                                                            <label for="floatingInputGrid">Value</label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
                                                                                 
                                                                             </tbody>
                                                                         </table>
@@ -403,7 +418,7 @@ a {
                                     </div>
 
                                     {{-- <div class="row"> --}}
-                                        <div class="mypopover-content ">
+                                        {{-- <div class="mypopover-content ">
                                             <div class="card card-body" >
                                                 <div class="row">
                                                     <div class="col-md-2">
@@ -428,7 +443,7 @@ a {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     {{-- </div> --}}
 
                                     <div class="card-footer text-muted">
@@ -446,12 +461,22 @@ a {
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-6">
-                                                <b>Product Details</b>
+                                                <b>Details</b>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="card-tools">
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                                        <button type="button" class="btn  btn-sm" data-card-widget="collapse" title="Collapse" style="background-color: #ABEBC6;">
+                                                          <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        
+                                                    </div>
+                                                </div>
                                             </div>
                                            
                                         </div>
                                     </div>
-                                    <div class="card-body table-responsive p-0" style="height: 300px;" >
+                                    <div class="card-body table-responsive p-0 " style="height: 250px;" >
                                         <table class="table table-head-fixed text-nowrap" id="show_purchase_entry">
                                             {{-- <thead>
                                                 <tr>
@@ -550,6 +575,90 @@ a {
 </div> --}}
 
 <div class="row">
+
+
+    <div class="col-md-5">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-5 col-lg-5 col-xl-5">
+                        <h3 class="card-title">Purchase</h3>
+                    </div>
+                    <div class=" col-md-6 col-lg-6 col-xl-6">
+                        <select id="filter_supplier_id" name="filter_supplier_id" class="form-select form-select-sm select_chosen">
+                            <option selected disabled value="0">Supplier</option>                                          
+                            @foreach ($suppliers as $list)
+                            <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class=" col-md-1 col-lg-1 col-xl-1">
+                        {{-- <div class="card-tools">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                <button type="button" class="btn btn-sm" data-card-widget="collapse" title="Collapse" style="background-color: #ABEBC6;">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div> --}}
+                        {{-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-minus"></i>
+                          </button> --}}
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0" style="height: 500px;" >
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Bill Date</th>
+                            <th>Bill No</th>
+                            <th>Supplier</th>
+                            <th>Pay Days</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($purchases->isEmpty())
+                            <div class="alert alert-warning text-light my-2" role="alert">
+                                <span>State is not available to add new state click add button</span>
+                            </div>
+                        @else
+                            {{$count = "";}}
+                            @foreach ($purchases as $list)
+                                <tr>
+                                    <td>{{++$count}}</td>
+                                    <td>{{date('d-m-Y', strtotime($list->bill_date))}}</td>
+                                    <td>{{strtoupper($list->bill_no)}}</td>
+                                    <td>{{ucwords($list->supplier_name)}}</td>
+                                    <td>{{$list->payment_days}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm " value="{{$list->id}}"><i class="fas fa-eye"></i></button>
+                                        <button type="button" class="btn btn-success btn-sm " value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button>
+                                        {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif 
+                    </tbody>
+                </table>
+                {{-- <br>
+                <div class="row">
+                    <div class="col-md-12 table-responsive" style="height: 200px;">
+                        <table class="table table-striped table-head-fixed" id="customer_list" >
+                            
+                        </table>    
+                    </div>
+                </div> --}}
+        </div>
+    </div>
+
+    
    
     {{-- <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
@@ -603,8 +712,11 @@ a {
             </div>
         </div>
     </div> --}}
+
+
+
     
-    <div class="col-md-3 ">
+    {{-- <div class="col-md-3 ">
         <div class="card hide">
             <div class="card-header">
                 <div class="row">
@@ -616,7 +728,7 @@ a {
                     </div>
                 </div>
             </div>
-            {{-- <div class="card-body page" id="barcode_body" >
+            <div class="card-body page" id="barcode_body" >
                 @foreach ($products as $list)
                     <div class="card" >
                         <div class="card-body pt-5">
@@ -649,10 +761,10 @@ a {
                         </div>
                     </div>
                 @endforeach
-            </div> --}}
+            </div> 
            
         </div>
-    </div>
+    </div> --}}
 
 
 </div>
@@ -1000,7 +1112,9 @@ a {
                 e.preventDefault();
                 // let productCode = Math.floor((Math.random() * 1000000) + 1);
                 // alert(productCode);
-                savePurchaseEntry();
+
+                // savePurchaseEntry();
+                validateForm();
             });
 
             $(document).on('change','#category_id', function (e) {
@@ -1445,6 +1559,74 @@ a {
                     }
                 }
             });
+        }
+
+        function validateForm() {
+
+            var msg = "";
+            // if($("#invoice_no").val() == "")
+            // {
+            //     msg = "Please enter customer name";
+            //     validateModal(msg);
+            //     return false;
+            // }
+
+            // if($("#item_list tr").length == 0)
+            if($("#supplier_id").val() == null)
+            {
+                msg = "Please select supplier.";
+                alert(msg);
+                return false;
+            }
+
+            if($("#bill_date").val() == "")
+            {
+                msg = "Please select bill date.";
+                alert(msg);
+                return false;
+            }
+
+            if($("#bill_no").val() == "")
+            {
+                msg = "Please enter bill no.";
+                alert(msg);
+                return false;
+            }
+
+            if($("#category_id").val() == null)
+            {
+                msg = "Please select category.";
+                alert(msg);
+                return false;
+            }
+            if($("#sub_category_id").val() == null)
+            {
+                msg = "Please select sub category.";
+                alert(msg);
+                return false;
+            }
+            if($("#brand_id").val() == null)
+            {
+                msg = "Please select brand.";
+                alert(msg);
+                return false;
+            }
+            if($("#style_no_id").val() == null)
+            {
+                msg = "Please select style no.";
+                alert(msg);
+                return false;
+            }
+            if($("#color").val() == null)
+            {
+                msg = "Please select color.";
+                alert(msg);
+                return false;
+            }
+
+           
+
+            savePurchaseEntry()
         }
 
         function savePurchaseEntry() {

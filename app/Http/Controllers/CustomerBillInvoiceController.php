@@ -19,7 +19,10 @@ class CustomerBillInvoiceController extends Controller
     public function index(){
         $products = PurchaseEntry::all();
         $sizes = Size::all();
-        $customers_billing = Customer::all();
+        // $customers_billing = Customer::all();
+        $customers_billing = Customer::join('customer_bills','customer_bills.id','=','customers.id')->get([
+            'customers.*','customer_bills.*'
+        ]);
         $months = Month::all();
         $cities = City::all();
         $users = User::all();
@@ -67,46 +70,63 @@ class CustomerBillInvoiceController extends Controller
                 'status'=>400,
                 'errors'=>$validator->messages("plz  all field required"),
             ]);
+
         }else{
-            $model = new Customer;
-            $model->customer_name = $req->input('customer_name');
-            $model->mobile_no = $req->input('mobile_no');
-            $model->birthday_date = $req->input('birthday_date');
-            $model->month_id = $req->input('month_id');
-            $model->state_type = $req->input('state_type');
-            $model->employee_id = $req->input('employee_id');
-            $model->city_id = $req->input('city_id');
-            $model->gst_no = $req->input('gst_no');
-            $model->date = date('Y-m-d');
-            $model->time = date('g:i A');
+            
+            $customer_id = 0;
+            
+            $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first('id');
+            // alert($data);
+            
+            if ($data == null) {
 
+                $model = new Customer;
+                $model->customer_name = $req->input('customer_name');
+                $model->mobile_no = $req->input('mobile_no');
+                $model->birthday_date = $req->input('birthday_date');
+                $model->month_id = $req->input('month_id');
+                $model->state_type = $req->input('state_type');
+                $model->employee_id = $req->input('employee_id');
+                $model->city_id = $req->input('city_id');
+                $model->gst_no = $req->input('gst_no');
+                $model->date = date('Y-m-d');
+                $model->time = date('g:i A');
+                $model->save();
+                
+                $customer_id = $model->id;
 
-        
-
-            $product_id = $req->input('product_id');
-            $product_code = $req->input('product_code');
-            $price = $req->input('price');
-            $qty = $req->input('qty');
-            $size = $req->input('size');
-            $amount = $req->input('amount');
-            $sgst = $req->input('sgst');
-            $cgst = $req->input('cgst');
-            $igst = $req->input('igst');
+            }else{
+                $customer_id = $data->id;
+                
+            }
+           
+              // customer bills tables insert
+              $bill_no = rand(000001,999999);
+              $billmodel = new CustomerBill;
+              $billmodel->bill_no = $bill_no;
+              $billmodel->customer_id = $customer_id;   
+              $billmodel->total_amount = $req->input('total_amount');
+              $billmodel->bill_date = date('Y-m-d');
+              $billmodel->bill_time = date('g:i A');
+              $billmodel->save();
+           
+                
+               
+                $product_id = $req->input('product_id');
+                $product_code = $req->input('product_code');
+                $price = $req->input('price');
+                $qty = $req->input('qty');
+                $size = $req->input('size');
+                $amount = $req->input('amount');
+                $sgst = $req->input('sgst');
+                $cgst = $req->input('cgst');
+                $igst = $req->input('igst');
             // $alteration_voucher = $req->input('alteration_voucher');
 
+            // }
 
-             // customer bills tables insert
-              $model = new CustomerBill;
-            //   $model->bill_id = $req->id;
-            //   $model->customer_id = $req->id;
-              $model->total_amount = $req->input('total_amount');
-              $model->bill_date = date('Y-m-d');
-              $model->bill_time = date('g:i A');
- 
+            if($billmodel->save()){
             
-            
-
-            if($model->save()){
 
                 foreach ($product_id as $key => $list) {
                     
@@ -114,7 +134,7 @@ class CustomerBillInvoiceController extends Controller
 
                     $item = new CustomerBillInvoice;
 
-                    $item->bill_id = $model->id;
+                    $item->bill_id = $billmodel->id;
                     $item->product_id = $product_id[$key];
                     $item->product_code = $product_code[$key];
                     $item->price = $price[$key];
@@ -130,6 +150,8 @@ class CustomerBillInvoiceController extends Controller
                     $item->save();
                     if ($item->save()) {
                         // updateProductStatus($product_id[$key]);
+
+                       
                     }
 
                 } 
@@ -173,13 +195,14 @@ class CustomerBillInvoiceController extends Controller
 
                  $get_cutomer_data =Customer::find($customer_id);
         
-                $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
-                                    join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
+                $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.bill_id')->
+                                    // join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
+                                    join('customer_bills','customer_bills.id','=','customer_bill_invoices.bill_id')
                                     // join('sizes','sizes.id','=','customer_bill_invoices.size_id')
                                     // join('colors','colors.id','=','customer_bill_invoices.color_id')
 
-                                    ->where('customer_bill_invoices.customer_id',$get_cutomer_data->id)
-                            ->select(['customer_bill_invoices.*','customers.total_amount','purchase_entries.product'])->get(); 
+                                    ->where('customer_bill_invoices.bill_id',$get_cutomer_data->id)
+                            ->select(['customer_bill_invoices.*','customer_bills.total_amount'])->get(); 
 
                             
                     //  print_r($order_items);
@@ -273,6 +296,9 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="</tr>";
                                 $html .="</thead>";
                                 $html .="<tbody>";
+                                $total_amount = 0;
+                                $cgst = 0;
+                                $sgst = 0;
                                 foreach ($order_items as $key => $list) {
                                     // dd($list);
                                     $html .="<tr>";
@@ -283,12 +309,18 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->price."</td>";
+                                        $html .="<td>0.00</td>";
                                         $html .="<td>".$list->amount."</td>";
                                         $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
+                                        $html .="<td>".$list->cgst."</td>";
+                                        $html .="<td>".$list->sgst."</td>";
                                     $html .="</tr>";
+                                $total_amount =  $list->total_amount;
+                                $cgst =  $list->cgst;
+                                $sgst =  $list->sgst;
+                                $total_cgst =  $list->cgst + $list->cgst;
+                                $total_sgst =  $list->sgst + $list->sgst;
+
                                 }
                                     
                                 $html .="</tbody>";
@@ -298,10 +330,10 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<td>".$key."</td>";
                                         $html .="<td colspan='4'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
-                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
-                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
-                                        $html .="<td>".$get_cutomer_data->total_amount."</td>";
+                                        $html .="<td>".$total_amount."</td>";
+                                        $html .="<td>".$total_amount."</td>";
+                                        $html .="<td>".$total_sgst."</td>";
+                                        $html .="<td>".$total_cgst."</td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -319,20 +351,20 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
                                 $html .="<span class='float-end'>ADD CGST :</span> <br>";
                                 $html .="<span class='float-end'>ADD SGST : </span><br>";
-                                $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
-                                $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
+                                // $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
+                                // $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
                                 $html .="<span class='float-end'>G.TOTAL : </span><br>";
 
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
 
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
-                            $html .="<small class='text-center'>".$get_cutomer_data->total_amount."</small><br>";
+                            $html .="<b class='text-center'>".$total_amount."</b><br>";
+                            $html .="<b class='text-center'>0.00</b><br>";
+                            $html .="<b class='text-center'>".$total_cgst."</b><br>";
+                            $html .="<b class='text-center'>".$total_sgst."</b><br>";
+                            // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
+                            // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
+                            $html .="<b class='text-center'>".$total_amount."</b><br>";
 
                     $html .="</div>";
                     $html .="</div>";

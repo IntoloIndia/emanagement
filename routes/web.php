@@ -158,7 +158,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(AlterationVoucherController::class)->group(function () {
         Route::get('admin/alteration_voucher','index');
         Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
-        Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
+        Route::post('admin/save-alteration-item','saveAlterationItem');
+        // Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
+        Route::get('admin/generate-invoice-voucher/{bill_id}','generateAlerationVoucher');
+      
         // Route::get('admin/get-customer-data-bill/{customer_id}', 'getCumosterDataBills');
         // Route::get('admin/get-customers-bills/{customer_id}','getCustomerBillData');
         Route::get('admin/get-customers-bills/{customer_id}','getCustomerBills');

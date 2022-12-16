@@ -113,7 +113,7 @@
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
                 <a href="customer_bill_invoices" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>sales_invoice</p>
+                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
                 </a>
             </li>
             <li class="nav-item">

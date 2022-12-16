@@ -194,7 +194,7 @@
                         </div>
                     </div>
                         <div class="col-md-2">
-                            <input type="text" name="online_payment" id="online_payment" class="form-control form-control-sm hide">
+                            <input type="text" name="online_payment" id="online_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
                 </div>
                 <div class="row">
@@ -204,7 +204,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="cash_payment" id="cash_payment" class="form-control form-control-sm hide">
+                        <input type="text" name="cash_payment" id="cash_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
                 </div>
                 <div class="row">
@@ -214,7 +214,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="card_payment" id="card_payment" class="form-control form-control-sm hide">
+                        <input type="text" name="card_payment" id="card_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
                 </div>
                 <div class="row">
@@ -224,7 +224,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                            <input type="text" name="credit_payment" id="credit_payment" class="form-control form-control-sm hide">
+                            <input type="text" name="credit_payment" id="credit_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
                 </div>
                     <div class="row">
@@ -264,7 +264,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Sno</th>
-                            <th scope="col">Name</th>
+                            {{-- <th scope="col">Name</th> --}}
                             <th scope="col">Mobile</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Print</th>
@@ -277,7 +277,7 @@
                          @foreach ($customers_billing as $item)
                         <tr>
                             <td>{{++$count}}</td>
-                            <td>{{ucwords($item->customer_name)}}</td>
+                            {{-- <td>{{ucwords($item->customer_name)}}</td> --}}
                             <td>{{$item->mobile_no}}</td>
                             <td>{{$item->total_amount}}</td>
 
@@ -375,6 +375,9 @@
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" >
             </td> 
+             {{-- <td style="width: 150px;">
+                 <input type="text" name="taxable[]" class="form-control form-control-sm taxable" >
+            </td>  --}}
              <td style="width: 100px;" class="sgst_show_hide">
                  <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0">
             </td> 
@@ -824,6 +827,7 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
+                    console.log(response);
                     if (response.status === 400) {
                         $('#order_err').html('');
                         $('#order_err').addClass('alert alert-danger');

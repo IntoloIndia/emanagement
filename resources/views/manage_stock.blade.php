@@ -66,14 +66,14 @@
                         </thead>
                         <tbody >
 
-                            {{$count = "";}}
-                                @foreach ($sub_category_qty as $item)
-                                    <tr class="row_filter" category-id="{{$item['category_id']}}">
-                                        <th scope="row">{{++$count}}</th>
-                                        <td>{{ucwords($item['sub_category'])}}</td>
-                                        <td>{{$item['count']}}</td>
-                                    </tr>
-                                @endforeach
+                            {{-- {{$count = "";}}
+                            @foreach ($sub_category_qty as $item)
+                                <tr class="row_filter" category-id="{{$item['category_id']}}">
+                                    <th scope="row">{{++$count}}</th>
+                                    <td>{{ucwords($item['sub_category'])}}</td>
+                                    <td>{{$item['count']}}</td>
+                                </tr>
+                            @endforeach --}}
                             
                         </tbody>
                     </table>
@@ -135,7 +135,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($stock as $key => $list)
+                                {{-- @foreach ($stock as $key => $list)
                                     <tr>
                                         <td scope="row">{{++$key}}</td>
                                         <td></td>
@@ -147,7 +147,7 @@
                                             <div style="width:15px; height:15px; background-color:{{$list->color}};"></div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>  
