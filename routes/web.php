@@ -246,6 +246,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-brand','saveBrand');
         Route::get('admin/get-purchase-entry/{supplier_id}/{bill_no}','getPurchaseEntry');
 
+        Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
+
     });
     
     Route::controller(ManageStockController::class)->group(function () {

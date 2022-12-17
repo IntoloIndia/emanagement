@@ -118,6 +118,7 @@ class CustomerBillInvoiceController extends Controller
                 $qty = $req->input('qty');
                 $size = $req->input('size');
                 $amount = $req->input('amount');
+                $taxfree_amount = $req->input('taxfree_amount');
                 $sgst = $req->input('sgst');
                 $cgst = $req->input('cgst');
                 $igst = $req->input('igst');
@@ -141,6 +142,7 @@ class CustomerBillInvoiceController extends Controller
                     $item->qty = $qty[$key];
                     $item->size = $size[$key];
                     $item->amount = $amount[$key];
+                    $item->taxfree_amount = $taxfree_amount[$key];
                     $item->sgst = $sgst[$key];
                     $item->cgst = $cgst[$key];
                     $item->igst= $igst[$key];
@@ -285,7 +287,7 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<th>Item Name</th>";
                                         $html .="<th>Qty</th>";
                                         $html .="<th>Size</th>";
-                                        $html .="<th>Color</th>";
+                                        // $html .="<th>Color</th>";
                                         $html .="<th>MRP</th>";
                                         $html .="<th>Rate</th>";
                                         $html .="<th>Disc</th>";
@@ -293,12 +295,15 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<th>Taxable</th>";
                                         $html .="<th>CGST%</th>";
                                         $html .="<th>SGST%</th>";
+                                        $html .="<th>IGST%</th>";
                                     $html .="</tr>";
                                 $html .="</thead>";
                                 $html .="<tbody>";
                                 $total_amount = 0;
-                                $cgst = 0;
-                                $sgst = 0;
+                                $total_cgst = 0;
+                                $total_sgst = 0;
+                                $total_igst = 0;
+                                $taxfree_amount =0;
                                 foreach ($order_items as $key => $list) {
                                     // dd($list);
                                     $html .="<tr>";
@@ -306,20 +311,22 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<td>".ucwords($list->product)."</td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->size."</td>";
-                                        $html .="<td>".$list->color."</td>";
+                                        // $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         $html .="<td>0.00</td>";
                                         $html .="<td>".$list->amount."</td>";
-                                        $html .="<td>".$list->amount."</td>";
+                                        $html .="<td>".$list->taxfree_amount."</td>";
                                         $html .="<td>".$list->cgst."</td>";
                                         $html .="<td>".$list->sgst."</td>";
+                                        $html .="<td>".$list->igst."</td>";
                                     $html .="</tr>";
                                 $total_amount =  $list->total_amount;
-                                $cgst =  $list->cgst;
-                                $sgst =  $list->sgst;
-                                $total_cgst =  $list->cgst + $list->cgst;
-                                $total_sgst =  $list->sgst + $list->sgst;
+                              
+                                $total_cgst =  $total_cgst + $list->cgst;
+                                $total_sgst =  $total_sgst+ $list->sgst;
+                                $total_igst =  $total_igst+ $list->igst;
+                                $taxfree_amount =  $taxfree_amount+ $list->taxfree_amount;
 
                                 }
                                     
@@ -328,12 +335,13 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<tr>";
                                     $html .="<td colspan='2'></td>";
                                     $html .="<td>".$key."</td>";
-                                        $html .="<td colspan='4'></td>";
+                                        $html .="<td colspan='3'></td>";
                                         $html .="<td><b>Total :</b></td>";
                                         $html .="<td>".$total_amount."</td>";
-                                        $html .="<td>".$total_amount."</td>";
+                                        $html .="<td>".$taxfree_amount."</td>";
                                         $html .="<td>".$total_sgst."</td>";
                                         $html .="<td>".$total_cgst."</td>";
+                                        $html .="<td>".$total_igst."</td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -342,7 +350,7 @@ class CustomerBillInvoiceController extends Controller
 
                         $html .="<div class='row'>";
                         $html .="<div class='col-md-8'>";
-                        $html .="<span class='float-start'>Amount of Tax Subject to Recvers Change :</span><br>";
+                        $html .="<span class='float-start'>Amount of Tax Subject to Reverse Change :</span><br>";
                            
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
@@ -351,6 +359,7 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="<span class='float-end'>LESS DISCOUNT:</span><br>";
                                 $html .="<span class='float-end'>ADD CGST :</span> <br>";
                                 $html .="<span class='float-end'>ADD SGST : </span><br>";
+                                $html .="<span class='float-end'>ADD IGST : </span><br>";
                                 // $html .="<span class='float-end'>OTHER ADJ :</span> <br>";
                                 // $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
                                 $html .="<span class='float-end'>G.TOTAL : </span><br>";
@@ -362,6 +371,7 @@ class CustomerBillInvoiceController extends Controller
                             $html .="<b class='text-center'>0.00</b><br>";
                             $html .="<b class='text-center'>".$total_cgst."</b><br>";
                             $html .="<b class='text-center'>".$total_sgst."</b><br>";
+                            $html .="<b class='text-center'>".$total_igst."</b><br>";
                             // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
                             // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
                             $html .="<b class='text-center'>".$total_amount."</b><br>";

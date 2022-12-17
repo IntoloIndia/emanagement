@@ -118,13 +118,14 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Sno</th>
-                                        <th scope="col">check</th>
+                                        {{-- <th scope="col">check</th> --}}
                                         <th scope="col">Code</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
                                         <th scope="col">Amount</th>
+                                        {{-- <th scope="col">Taxable</th> --}}
                                         <th scope="col" class="sgst_show_hide">SGST%</th>
                                         <th scope="col" class="cgst_show_hide">CGST%</th>
                                         <th scope="col" class="igst_show_hide hide">IGST%</th>
@@ -336,7 +337,7 @@
     <tbody id="item_row">
         <tr>
             <td id="count_item"></td>
-                <td>
+                {{-- <td> --}}
 
                     {{-- <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="alteration_voucher" value="1" id="alteration_voucher">
@@ -374,10 +375,10 @@
             </td>
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" >
+                 <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"  style="width: 150px;">
             </td> 
-             {{-- <td style="width: 150px;">
-                 <input type="text" name="taxable[]" class="form-control form-control-sm taxable" >
-            </td>  --}}
+             {{-- <td style="width: 150px;"> --}}
+            {{-- </td>  --}}
              <td style="width: 100px;" class="sgst_show_hide">
                  <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0">
             </td> 
@@ -683,18 +684,21 @@
                 var sgst = 0;
                 var cgst = 0;
                 var igst = 0;
+                // var taxablePrice = price;
                 // var qty;
 
                 // var price =1499
 
-
-                // if (price < '{{MyApp::THOUSAND}}') {
-                //     price = parseFloat(price / 1.05);
-                //     // alert(price);
-                // }else{
-                //     price = parseFloat(price / 1.12);
-                // }
-
+                        
+                if (price < '{{MyApp::THOUSAND}}') {
+                    price = parseFloat(price / 1.05);
+                    $(object).parent().parent().find(".taxable").val(price*qty);
+                    }else{
+                        price = parseFloat(price / 1.12);
+                        $(object).parent().parent().find(".taxable").val(price*qty);
+                }
+                    
+           
                 if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
                     if (price < '{{MyApp::THOUSAND}}') {
                         

@@ -240,7 +240,7 @@
                     <select class="form-select form-select-sm" name="customer_id" id="customer_id" >
                         <option selected="" disabled=""> Select name </option>
                         @foreach ($customers_billing as $item)
-                            <option value="{{$item->id}}">{{$item->mobile_no}}-{{$item->customer_name}}</option> 
+                            <option value="{{$item->id}}">{{$item->mobile_no}}</option> 
                         @endforeach
                     </select>
                 </div>
@@ -255,76 +255,43 @@
                 </div>
         </div>
     </div>
- </div>
- <div class="col-md-7">
+</div>
+<div class="col-md-7">
     <div class="card">
         <div class="card-header">
             <b>Invoice</b>
         </div>
-        {{-- <div class="card-body">
-            <div id="box">
-                <div class="row">
-                    <div class='col-md-3'>
-                        <span>GST NO: <small>4125666</small></span><br>
-                    </div>
-                    <div class='col-md-6 text-center'>
-                        <span>SALES INVOICE</span><br>
-                        <span>ERENOWN CLOTHING CO </span><br>
-                        <span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>
-                        <span>Jabalpur -482002 </span><br>
-                    </div>
-                    <div class='col-md-3' >
-                        <span>Phone no: 0761-4047699</span><br>
-                        <span></span><br>
-                        <span>Mobile no : 09826683399<small></small></span><br>
-                        <span></span><br>
-                    </div>
-                </div>
-                <div class='row' style="padding: 10px;">
-                    <div class='col-md-6' style='border:1px solid black'>
-                        <span>Customer name: <small></small></span><br>
-                        <span>Location : <small>Jabalpur</small></span><br/>
-                        <span>State code  : <small>0761</small></span><br>
-                    </div>
-                     <div class='col-md-2' style='border:1px solid black'>
-                        <span class=''>CASH :<br/> <small><b>10000</b></small></span>
-                    </div>
-                    <div class='col-md-4' style='border:1px solid black'>
-                        <span>Invoicen No : <small class='float-end'></small></span><br>
-                        <span class=''>Date : <small class='float-end'></small></span><br>
-                        <span class=''>Attent By : <small class='float-end'></small></span>
-                    </div>
-                </div>
+        <div class="card-body">
+          
                 <div class='row mt-2'>
                     <div class='table-responsive'>
                         <table class='table table-bordered'>
                             <thead>
-                                    <tr>
-                                    <th>#</th>
-                                    <th></th>
-                                    <th>Item Name</th>
-                                    <th>Qty</th>
-                                    <th>Size</th>
-                                    <th>Color</th>
-                                    <th>MRP</th>
-                                    <th>Rate</th>
-                                    <th>Disc</th>
-                                    <th>Total</th>
-                                    <th>Taxable</th>
-                                    <th>CGST%</th>
-                                    <th>SGST%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                <tr>
+                                <th>Invoice No</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($alteration_items as $list)
+                                <tr>
+                                    <td>{{$list->invoice_no}}</td>
+                                    <td>{{$list->alteration_date}}</td>
+                                    <td>{{$list->alteration_time}}</td>
+                                    <td>{{$list->product_id}}</td>
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-        </div> --}}
+           
+        </div>
     </div>
- </div>
 </div>
+
 
 @endsection
 @section('script')
@@ -334,9 +301,6 @@
             e.preventDefault();
             var customer_id = $(this).val();
             getCustomerBills(customer_id);
-            // alert(customer_id);
-            // getCustomerBillData(customer_id);
-           
         });
 
         // save alterration bill 
@@ -346,9 +310,22 @@
         });
         $(document).on('click','#generateAltertionVoucher',function(e){
                 e.preventDefault();
+             
                 saveAlterationItem();
         });
         
+        // $(document).on('click','#leaveVerifyBtn', function (e) {
+        //     var emp_id = $(this).val();
+        //     var leave_ids = [];
+        //     $(".leave_checkbox").each(function () {
+        //         var self = $(this);
+        //         if (self.is(':checked')) {
+        //             leave_ids.push(self.attr("get-leave-id")); 
+        //             alert(leave_ids);
+        //         }
+        //     });
+
+
      
         // $(document).on('click','.orderInvoiceBtn',function(e){
         //         e.preventDefault();
@@ -358,12 +335,11 @@
         //     });
             $(document).on('click','.alterBillsBtn',function(e){
                 e.preventDefault();
-                // $('#alterBillModal').modal('show');
                 const bill_id = $(this).val();
-                // alert(bill_id);
                 $('#generateAltertionVoucher').val(bill_id);
                 generateAlerationVoucher(bill_id);
             });
+         
             
 
            
@@ -404,7 +380,7 @@
         url: "generate-invoice-voucher/"+bill_id,
         dataType: "json",
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             if (response.status == 200) {
                 // $('#generateInvoiceModal').html(response.html);
                 // $('#generateInvoiceModal').modal('show');
@@ -456,8 +432,7 @@ function saveAlterationVoucher() {
 
             } else {
                     $('#alterationvoucher_err').html('');
-                // $('#supplierModal').modal('hide');
-                window.location.reload();
+                // window.location.reload();
             }
         }
     });
@@ -469,24 +444,38 @@ function saveAlterationItem() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    // var formData = new FormData($("#alterationItemForm")[0]);
+    
 
     var alteration_voucher_id = $('#alteration_voucher_id').val();
-    var product_id = $('#product_id').val();
+    var product_id = $('.product_id').val();
+    // alert(product_id);
     var item_qty = $('#item_qty').val();
-    alert(alteration_voucher_id);
-    alert(item_qty);
-    alert(product_id);
+
+        var checked_product_ids = [];
+        $(".product_id").each(function () {
+            var self = $(this);
+            if (self.is(':checked')) {
+                checked_product_ids.push(self.val()); 
+                // alert(checked_product_ids);
+            }
+        });
+
+    var sendData = { 
+        product_id: checked_product_ids,
+        alteration_voucher_id: alteration_voucher_id,
+        item_qty: item_qty
+    };
+    
     $.ajax({
         type: "post",
         url: "save-alteration-item",
-        data: {alteration_voucher_id,item_qty,product_id},
-        // data: formData,
-        dataType: "json",
-        // cache: false,
-        // contentType: false,
-        // processData: false,
+        // data: {alteration_voucher_id,item_qty,product_id},
+        data: JSON.stringify(sendData),
+        contentType: "application/json; charset=utf-8",
+        // dataType: "json",
+        
         success: function (response) {
+            console.log(response);
             if (response.status === 400) {
                 $('#alteration_item_err').html('');
                 $('#alteration_item_err').addClass('alert alert-danger');
@@ -497,7 +486,6 @@ function saveAlterationItem() {
 
             } else {
                     $('#alteratio_item_err').html('');
-                // $('#supplierModal').modal('hide');
                 window.location.reload();
             }
         }

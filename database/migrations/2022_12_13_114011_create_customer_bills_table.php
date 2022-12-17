@@ -18,7 +18,7 @@ class CreateCustomerBillsTable extends Migration
             $table->integer('cutomer_id')->default(0);
             $table->integer('bill_date')->default(0);
             $table->integer('bill_time')->default(0);
-            $table->integer('bill_no')->default(0);
+            $table->integer('invoice_no')->default(0);
             $table->integer('total_amount')->default(0);
             $table->timestamps();
         });

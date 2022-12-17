@@ -22,7 +22,6 @@ class CategoryController extends Controller
         $validator = Validator::make($req->all(),[
             "category" => 'required|unique:categories,category,'.$req->input('category'),
             'category_img' => 'required|max:191',
-
             
         ]);
 
