@@ -69,7 +69,16 @@ class PurchaseEntryController extends Controller
         // dd($product_code);
 
 
-        return view('purchase_entry',[
+        // return view('purchase_entry',[
+        //     'suppliers' => $suppliers,
+        //     "categories"=>$categories,
+        //     'sizes' => $sizes,
+        //     'colors'=> $colors,
+        //     'brands'=> $brands,
+        //     'purchases' => $purchases,
+        // ]);
+
+        return view('purchase.index',[
             'suppliers' => $suppliers,
             "categories"=>$categories,
             'sizes' => $sizes,
@@ -349,17 +358,30 @@ class PurchaseEntryController extends Controller
 
     public function saveItem($purchase_entry_id, $qty, $size, $price, $mrp){
 
-        // for ($i=0; $i < $qty; $i++) 
-        // { 
-            $purchase_item = new PurchaseEntryItem;
-            $purchase_item->purchase_entry_id = $purchase_entry_id;
-            $purchase_item->size = $size;
-            $purchase_item->qty = $qty;
-            $purchase_item->price = $price;
-            $purchase_item->mrp = $mrp;
-            // $purchase_item->time = date('g:i A');
-            $purchase_item->save();
-        // }
+        $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+
+        $first = rand(001,999);
+        $second = rand(001,999);
+        $month = date('m');
+        $year = date('y');
+        
+        $purchase_item = new PurchaseEntryItem;
+        $purchase_item->purchase_entry_id = $purchase_entry_id;
+        $purchase_item->size = $size;
+        $purchase_item->qty = $qty;
+        $purchase_item->price = $price;
+        $purchase_item->mrp = $mrp;
+        // $purchase_item->time = date('g:i A');
+        // $purchase_item->save();
+
+        if ($purchase_item->save()) {
+            $model = PurchaseEntryItem::find($purchase_item->id);
+
+            $product_code = $month . $first . $purchase_item->id . $second . $year;               
+            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+            $model->barcode = $barcode;
+            $model->save();
+        }
 
         return 'ok';
     }
@@ -422,6 +444,146 @@ class PurchaseEntryController extends Controller
                 // ]);
 
 
+    }
+
+    public function generatePurchaseInvoice($purchase_id)
+    {
+
+        $purchase = Purchase::find($purchase_id);
+        // $supplier = Supplier::find($purchase->supplier_id);
+
+        $supplier = Supplier::join('cities','suppliers.city_id','=','cities.id')
+            ->where('suppliers.id', $purchase->supplier_id)
+            ->select('suppliers.*','cities.city')
+            ->first();
+
+
+        $html = "";
+
+        $html .= "<div class='row mb-1'>";
+            $html .= "<div class='col-sm-12'>";
+                $html .= "<h5 class='modal-title text-center'><b> ".strtoupper($supplier->supplier_name)." </b></h5>";
+            $html .= "</div>";
+
+            $html .= "<div class='col-sm-12 text-center'>";
+                $html .= "<small class='modal-title'>";
+                    $html .= "<b>".$supplier->address."</b><br>";
+                    $html .= "<b>".ucwords($supplier->city)."</b><br>";
+                $html .= "</small>";
+            $html .= "</div>";
+            $html .= "<div class='col-sm-6 '>";
+                $html .= "<small class='modal-title'>";
+                    $html .= "<b>GSTNO -  </b> ".$supplier->gst_no."<br>";
+                    // $html .= "<b>PAN -  </b> AVT12547GH<br>";
+                $html .= "</small>";
+            $html .= "</div>";
+            $html .= "<div class='col-sm-6 text-right'>";
+                $html .= "<small class='modal-title'>";
+                    $html .= "<b>Mobile -  </b> ".$supplier->mobile_no."<br>";
+                    // $html .= "<b>Email -  </b> abc@gmail.com<br>";
+                $html .= "</small>";
+            $html .= "</div>";
+            
+        $html .= "</div>";
+
+        $html .= "<div class='row'>";
+                
+            $html .= "<div class='card text-dark bg-light mt-2' >";
+                $html .= "<div class='card-header text-center'><b>TAX INVOICE</b></div>";
+                $html .= "<div class='card-body'>";
+                    $html .= "<div class='row'>";
+                        $html .= "<div class='col-md-6'>";
+                        $html .= "<small class='modal-title'>";
+                            $html .= "<b>Mangaldeep (Jabalpur) </b> <br>";
+                            $html .= "Samdariya Mall Jabalpur-482002<br>";
+                            $html .= "<b>GSTNO -  </b> 1245GDFTE4587<br>";
+                        $html .= "</small>";
+                        $html .= "</div>";
+                        $html .= "<div class='col-md-6'>";
+                        $html .= "<small class='modal-title'>";
+                            $html .= "<b>Invoice No -  </b> 1245GDFTE4587<br>";
+                            $html .= "<b>Invoice Date -  </b> 17-12-22<br>";
+                        $html .= "</small>";
+                        $html .= "</div>";
+                    $html .= "</div>";
+                $html .= "</div>";
+            $html .= "</div>";
+            
+        $html .= "</div>";
+
+        $html .= "<div class='row'>";
+            $html .= "<table class='table table-bordered border-dark'>";
+                $html .= "<thead>";
+                    $html .= "<tr>";
+                        $html .= "<th>SN</th>";
+                        $html .= "<th>Description</th>";
+                        $html .= "<th>Style No</th>";
+                        $html .= "<th>Size</th>";
+                        $html .= "<th>Qty</th>";
+                        $html .= "<th>Price</th>";
+                        $html .= "<th>SGST</th>";
+                        $html .= "<th>CGST</th>";
+                        $html .= "<th>IGST</th>";
+                        $html .= "<th>Amount</th>";
+                    $html .= "</tr>";
+                $html .= "</thead>";
+    
+                $html .= "<tbody>";
+                for ($i=0; $i <5 ; $i++) { 
+                    $html .= "<tr>";
+                        $html .= "<td>1</td>";
+                        $html .= "<td>Jeans</td>";
+                        $html .= "<td>A-125-AK</td>";
+                        $html .= "<td>S</td>";
+                        $html .= "<td>4</td>";
+                        $html .= "<td>799</td>";
+                        $html .= "<td>0</td>";
+                        $html .= "<td>0</td>";
+                        $html .= "<td>0</td>";
+                        $html .= "<td>3196</td>";
+                    $html .= "</tr>";
+                }
+                $html .= "</tbody>";
+    
+                $html .= "<tfoot>";
+                    $html .= "<tr>";
+                        $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
+                            $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>";
+                        $html .= "</td>  ";
+                        $html .= "<td  class='col-sm-2'>Subtotal :</td>";
+                        $html .= "<td  class='col-sm-2'><input type='text' name='sub_total' id='sub_total' class='form-control form-control-sm' placeholder='' readonly></td>";
+                    $html .= "</tr> ";
+                    $html .= "<tr>";
+                        $html .= "<td>SGST :</td>";
+                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                    $html .= "</tr>";
+                    $html .= "<tr> ";
+                        $html .= "<td>CGST : </td>";
+                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='cgst_amount' id='cgst_amount' type='text' placeholder='' readonly></td>";
+                    $html .= "</tr>";
+                    $html .= "<tr>";
+                        $html .= "<td>IGST :</td>";
+                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                    $html .= "</tr>";
+                    $html .= "<tr>";
+                        $html .= "<td>Grand Total :</td>";
+                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='grand_total' id='grand_total' type='text' readonly ></td>";
+                    $html .= "</tr>";
+                    
+                $html .= "</tfoot>";
+    
+            $html .= "</table>";
+        $html .= "</div>";
+
+
+        
+
+        return response()->json([
+            'status'=>200,
+            'html'=>$html,
+            'purchase'=>$purchase,
+            'supplier'=>$supplier
+        ]);
     }
 
     // function saveProduct(Request $req)

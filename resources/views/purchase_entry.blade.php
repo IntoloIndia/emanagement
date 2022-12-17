@@ -170,7 +170,6 @@ a {
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-md-12">
-
                                                         <div class="input-group">
                                                             <select id="sub_category_id" name="sub_category_id" class="form-select select_chosen_80">
                                                                 <option selected disabled >Sub Category</option>
@@ -179,8 +178,6 @@ a {
                                                                 <i class="fas fa-plus cursor_pointer" id="subCategoryBtn"></i>
                                                             </span>
                                                         </div>
-
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -510,8 +507,6 @@ a {
 
                         </div>
 
-                        
-
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                     {{-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -544,8 +539,6 @@ a {
     </div>
 </div>
 
-{{-- camera modal start --}}
-<!--Modal-->
 
 <div class="modal fade" id="captureLivePhotoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -638,8 +631,8 @@ a {
                                     <td>{{ucwords($list->supplier_name)}}</td>
                                     <td>{{$list->payment_days}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-info btn-sm " value="{{$list->id}}"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-success btn-sm " value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button>
+                                        {{-- <button type="button" class="btn btn-info btn-sm " value="{{$list->id}}"><i class="fas fa-eye"></i></button> --}}
+                                        <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button>
                                         {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                     </td>
                                 </tr>
@@ -962,9 +955,6 @@ a {
     //     });
     // }
 
-
-
-
     $(document).ready(function () {
 
         $(".select_chosen_80").chosen({ width: '90%' });
@@ -1274,6 +1264,11 @@ a {
             $(document).on('click','#saveStyleNoBtn', function (e) {
                 e.preventDefault();
                 manageStyleNo();
+            });
+
+            $(document).on('click','.generatePurchaseInvoice', function (e) {
+                e.preventDefault();
+                generatePurchaseInvoice();
             });
 
           
@@ -1624,9 +1619,11 @@ a {
                 return false;
             }
 
-           
-
             savePurchaseEntry()
+        }
+
+        function generatePurchaseInvoice() {  
+
         }
 
         function savePurchaseEntry() {

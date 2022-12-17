@@ -3,6 +3,41 @@
 
 @section('style')
 
+  <style>
+    @media screen {
+            #printSection {
+                display: none;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility:hidden;
+                
+            }
+            #printSection, #printSection * {
+                visibility:visible;
+                
+                
+            }
+            #printSection {
+                position:absolute;
+                left:0;
+                top:0;
+                width: 100%;
+                height: ;
+            }
+        }
+
+        hr{
+            color: black;
+            opacity: initial;
+            margin: 5px;
+        }
+        .table td{
+          padding: 2px 5px;
+        }
+  </style>
     
 @endsection
 
@@ -198,6 +233,160 @@
 
   {{-- sub category div end  --}}
 </div>
+
+
+{{-- <div class="modal fade" id="generatePurchaseInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Purchase Invoice</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div id="show_purchase_invoice"> </div>
+
+
+              <div class='row'>
+                  <div class='col-sm-12 text-center'>
+                      <h5 class='modal-title'><b>Shree Navkar Private Limited </b></h5>
+                  </div>
+
+                  <div class='col-sm-12 text-center'>
+                    <small class='modal-title'>
+                      <b>95A Techno Park, First Floor </b><br>
+                      <b>Jabalpur - 482003 </b><br>
+                    </small>
+                  </div>
+                  <div class='col-sm-6 '>
+                    <small class='modal-title'>
+                      <b>GSTNO -  </b> 1245GDFTE4587<br>
+                      <b>PAN -  </b> AVT12547GH<br>
+                    </small>
+                  </div>
+                  <div class='col-sm-6 text-right'>
+                    <small class='modal-title'>
+                      <b>Mobile -  </b> 1236589547<br>
+                      <b>Email -  </b> abc@gmail.com<br>
+                    </small>
+                  </div>
+
+              </div>
+              
+              <div class='row'>
+                
+                <div class='card text-dark bg-light mt-2' >
+                  <div class='card-header text-center'><b>TAX INVOICE</b></div>
+                  <div class='card-body'>
+                      <div class='row'>
+                        <div class='col-md-6'>
+                          <small class='modal-title'>
+                            <b>Mangaldeep (Jabalpur) </b> <br>
+                            Samdariya Mall Jabalpur-482002<br>
+                            <b>GSTNO -  </b> 1245GDFTE4587<br>
+                            
+                          </small>
+                        </div>
+                        <div class='col-md-6'>
+                          <small class='modal-title'>
+                            <b>Invoice No -  </b> 1245GDFTE4587<br>
+                            <b>Invoice Date -  </b> 17-12-22<br>
+                            
+                          </small>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                
+              </div>
+
+              <div class='row'>
+                  <table class='table table-bordered border-dark'>
+                      <thead>
+                          <tr>
+                              <th>SN</th>
+                              <th>Description</th>
+                              <th>Style No</th>
+                              <th>Size</th>
+                              <th>Qty</th>
+                              <th>Price</th>
+                              <th>SGST</th>
+                              <th>CGST</th>
+                              <th>IGST</th>
+                              <th>Amount</th>
+                          </tr>
+                      </thead>
+    
+                      <tbody>
+                          <tr>
+                              <td>1</td>
+                              <td>Jeans</td>
+                              <td>A-125-AK</td>
+                              <td>S</td>
+                              <td>4</td>
+                              <td>799</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>3196</td>
+                          </tr>
+                          <tr>
+                              <td>2</td>
+                              <td>Jeans</td>
+                              <td>A-125-AK</td>
+                              <td>M</td>
+                              <td>4</td>
+                              <td>899</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>3596</td>
+                          </tr>
+                          
+                        </tbody>
+    
+                      <tfoot>
+                          <tr>
+                              <td colspan='8' rowspan='6'  class='align-top'> Amount in Words : 
+                                  <textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>
+                              </td>  
+                              <td  class='col-sm-2'>Subtotal :</td>
+                              <td  class='col-sm-2'><input type='text' name='sub_total' id='sub_total' class='form-control form-control-sm' placeholder='' readonly></td></td>
+                          </tr> 
+                          <tr>
+                              <td>SGST :</td>
+                              <td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>
+                          </tr>
+                          <tr> 
+                              <td>CGST : </td>
+                              <td  class='col-sm-2'><input class='form-control form-control-sm' name='cgst_amount' id='cgst_amount' type='text' placeholder='' readonly></td>
+                          </tr>
+                          <tr>
+                              <td>IGST :</td>
+                              <td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>
+                          </tr>
+                          <tr>
+                              <td>Grand Total :</td>
+                              <td  class='col-sm-2'><input class='form-control form-control-sm' name='grand_total' id='grand_total' type='text' readonly ></td>
+                          </tr>
+                          
+                      </tfoot>
+    
+                  </table>
+              </div>
+
+
+          </div>
+
+
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn-sm float-end" onClick="printPurchaseInvoice()">Print</button>
+          </div>
+      </div>
+  </div>
+</div>   --}}
+
+
+
 @endsection
 
 
@@ -208,6 +397,7 @@
             $(document).on('click','#addCategory', function (e) {
                 e.preventDefault();
                 $('#categoryModal').modal('show');
+                // $('#generatePurchaseInvoiceModal').modal('show');
                 $('#category_err').html('');
                 $('#category_err').removeClass('alert alert-danger');
                 $("#categoryForm").trigger("reset"); 
