@@ -96,9 +96,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(CustomerController::class)->group(function () {
         Route::get('admin/customer','index');
-        Route::get('admin/get-customer/{customer_id}','getCustomerData');
-
-        
+        // Route::get('admin/get-customer/{customer_id}','getCustomerData');
+        Route::get('admin/customer-detail/{customer_id}','CustomerDetail');
+    //  Route::get('admin/get-customer-points/{customer_id}','getCustomerPoints');
     });
 
 
@@ -148,7 +148,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
      Route::controller(CustomerBillInvoiceController::class)->group(function () {
         Route::get('admin/customer_bill_invoices','index');
         Route::post('admin/save-order', 'saveOrder');
-        Route::get('admin/get-item-price/{product_code}', 'getItemPrice');
+        Route::get('admin/get-item-price/{product_code}', 'getItemData');
         Route::get('admin/get-customer-data/{mobile_no}', 'getCumosterData');
         Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
     });
@@ -160,7 +160,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
         Route::post('admin/save-alteration-item','saveAlterationItem');
         // Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
-        Route::get('admin/generate-invoice-voucher/{bill_id}','generateAlerationVoucher');
+        Route::get('admin/generate-alteration-Item/{bill_id}','generateAlerationItem');
       
         // Route::get('admin/get-customer-data-bill/{customer_id}', 'getCumosterDataBills');
         // Route::get('admin/get-customers-bills/{customer_id}','getCustomerBillData');
@@ -239,7 +239,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/export-excel-data','exportProduct');
 
         // category of purchase entry
-        Route::post('admin/save-category', 'saveCategory');
+        // Route::post('admin/save-category', 'saveCategory');
         Route::post('admin/save-sub-category', 'saveSubCategory');
         Route::post('admin/save-style-no','manageStyleNo');
 

@@ -119,7 +119,7 @@ a {
                         <tbody>
                             @if($purchases->isEmpty())
                                 <div class="alert alert-warning text-light my-2" role="alert">
-                                    <span>State is not available to add new state click add button</span>
+                                    <span>Purchase is not available to add new purchase click on " Purchase Entry " button</span>
                                 </div>
                             @else
                                 {{$count = "";}}
@@ -161,6 +161,7 @@ a {
         $(document).ready(function () {
 
             $(".select_chosen_80").chosen({ width: '90%' });
+            $(".select_chosen_70").chosen({ width: '80%' });
             $(".select_chosen").chosen({ width: '100%' });
 
             Webcam.set({
@@ -442,10 +443,20 @@ a {
             $(document).on('click','#styleNoBtn', function () {
                 $('#styleNoModal').modal('show');
             });
+
             // save style no
             $(document).on('click','#saveStyleNoBtn', function (e) {
                 e.preventDefault();
                 manageStyleNo();
+            });
+
+            $(document).on('click','#addNewColorBtn', function () {
+                $('#colorModal').modal('show');
+            });
+
+            $(document).on('click','#saveColorBtn', function (e) {
+                e.preventDefault();
+                saveColor();
             });
 
             $(document).on('click','.generatePurchaseInvoice', function (e) {

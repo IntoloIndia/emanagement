@@ -260,7 +260,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive" style="height: 100vh">
+                <div class="table-responsive" style="max_height: 300px;">
                 <table class="table">
                     <thead>
                         <tr>
@@ -304,22 +304,23 @@
         </div>
 
 
-        <div class="card hide">
-            <div class="card-body page" id="barcode_body" >
-                @foreach ($products as $list)
+        <div class="card " >
+            <div class="card-body page" id="barcode_body" style="max_height: 300px;">
+                @foreach ($product_barcode as $list)
                     <div class="card" >
                         <div class="card-body pt-5">
-                            <div class="row mb-2">
+                            {{-- <div class="row mb-2">
                                 <span class="tect-center business_title text-center"><b>MANGALDEEP CLOTHS LLP</b></span>
-                            </div>
+                            </div> --}}
                             <div class="row" >
                                
-                                <div class="col-md-5">
-                                    <img src="{{$list->barcode}}" class="barcode_image barcode" ><br/>
+                                <div class="col-md-12" id="div1">
+                                    <img src="{{$list->barcode_img}}" class="barcode_image barcode img-fluid" ><br/>
                                     {{-- <img src="{{asset('public/assets/barcodes/barcode.gif')}}" class="img-thumbnail " > --}}
-                                    <span class="product_detail"><b>{{$list->product_code}}</b></span> <br/>
+                                    <span class="product_detail"><b>{{$list->barcode}}</b></span> <br/>
                                 </div>
                             </div>
+                            <button class="btn btn-primary btn-sm float-right" onclick="myFun('div1')">print</button>
                         </div>
                     </div>
                 @endforeach
@@ -414,6 +415,7 @@
     $(document).ready(function () {
 
         $(".select_chosen").chosen({ width: '100%' });
+     
         
         $(document).on('click','#addItemBtn', function (e) {
             e.preventDefault();
@@ -485,6 +487,7 @@
             
             $(document).on('change','.product_code', function () {
                 const product_code = $(this).val();
+                // alert(product_code);
 
                 // if(product_code==product_code){
                 var object = $(this);
@@ -494,15 +497,15 @@
                     dataType: "json",
                     success: function (response) {
                         console.log(response);
-                        $(object).parent().parent().find(".price").val(response.product.sales_price);
-                        $(object).parent().parent().find(".product").val(response.product.product);
+                        $(object).parent().parent().find(".price").val(response.product.mrp);
+                        $(object).parent().parent().find(".product").val(response.product.sub_category);
                         $(object).parent().parent().find(".product_id").val(response.product.id);
                         $(object).parent().parent().find(".size").val(response.product.size);
                         $(object).parent().parent().find(".size_id").val(response.product.size.id);
                         // $(object).parent().parent().find(".qty").val(response.product.qty+1);
                         
                         calculateAmount(object);
-                        // calculateGst(price);
+                        calculateGst(object);
                         
 
                     }
@@ -882,6 +885,16 @@
 
 
            
+    </script>
+    <script>
+        function myFun(params) {
+            // alert("call");
+            var backup = document.body.innerHTML;
+            var divcon = document.getElementById(params).innerHTML;
+            document.body.innerHTML = divcon;
+            window.print();
+            document.body.innerHTML = backup;
+        }
     </script>
 
 @endsection

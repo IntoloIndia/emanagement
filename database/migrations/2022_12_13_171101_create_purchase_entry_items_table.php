@@ -20,7 +20,8 @@ class CreatePurchaseEntryItemsTable extends Migration
             $table->integer('qty')->default(0);
             $table->string('price')->nullable();
             $table->string('mrp')->nullable();
-            $table->longtext('barcode')->nullable();
+            $table->string('barcode')->nullable();
+            $table->longtext('barcode_img')->nullable();
             $table->timestamps();
         });
     }

@@ -376,12 +376,13 @@
                     $('#purchase_entry_err').html('');
                     alert("Save purchase entry successfully");
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
-                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('').trigger('chosen:updated');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".qty").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".price").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".mrp").val('');
-                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").removeAttr('src');
+                    // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').find(".after_capture_frame").removeAttr('src');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").addClass('hide');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_qty").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_price").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
@@ -511,39 +512,7 @@
     }
 
     // save category of purchase entry
-function saveCategory() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
-    var formData = new FormData($("#categoryForm")[0]);
-    $.ajax({
-        type: "post",
-        url: "save-category",
-        data: formData,
-        dataType: "json",
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            // console.log(response);
-            if (response.status === 400) {
-                $('#category_err').html('');
-                $('#category_err').addClass('alert alert-danger');
-                var count = 1;
-                $.each(response.errors, function (key, err_value) {
-                    $('#category_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                });
-            } else {
-                $('#category_err').html('');
-                $('#categoryModal').modal('hide');
-                window.location.reload();
-            }
-        }
-    });
-}
 // save subcategory of purchase entry
 function saveSubCategory() {
     $.ajaxSetup({
