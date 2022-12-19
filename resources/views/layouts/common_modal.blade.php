@@ -314,3 +314,37 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="colorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="colorForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div id="size_err"></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="Color" class="form-label">Color</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{-- <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color"> --}}
+                                <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="saveColorBtn" class="btn btn-primary btn-sm ">Save</button>
+                        <button type="button" id="updateColorBtn" class="btn btn-primary btn-sm hide">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,9 +15,9 @@ class ColorController extends Controller
         return view('size',[
             'allColor'=>$allColor,
             'allSize'=>$allSize
-        
-    ]);
+        ]);
     }
+
     function saveColor(Request $req)
     {
         // return view('employee');
@@ -36,12 +36,30 @@ class ColorController extends Controller
             $model->color = $req->input('color');
            
             if($model->save()){
+                $data = $this->getColor();
                 return response()->json([   
-                    'status'=>200
+                    'status'=>200,
+                    'color_html'=>$data['html']
                 ]);
             }
         }
     }
 
+    public function getColor()
+    {
+        $colors = Color::all();
+
+        $html = "";
+        $html .= "<option selected disabled value='0'>Color</option>";
+        foreach ($categories as $key => $list) {
+            $html .= "<option value='".$list->id."' selected>" . ucwords($list->color)  . "</option>" ;
+        }
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+
+    }
 
 }

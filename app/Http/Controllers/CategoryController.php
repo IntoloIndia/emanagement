@@ -21,7 +21,7 @@ class CategoryController extends Controller
         // return view('employee');
         $validator = Validator::make($req->all(),[
             "category" => 'required|unique:categories,category,'.$req->input('category'),
-            'category_img' => 'required|max:191',
+            // 'category_img' => 'required|max:191',
             
         ]);
 
@@ -37,25 +37,38 @@ class CategoryController extends Controller
             // $model->category_img = $req->input('category_img');
             
             // $model->category_name = strtolower($req->input('category_name'));
-            // if ($req->hasFile('category_img')){
-            //     if($req->input('category_id') > 0)
-            //     {   
-                    $CategoryImage = public_path('storage/').$model->category_img;
-                    if(file_exists($CategoryImage)){
-                        @unlink($CategoryImage); 
-                    }
-            //     }
+            if ($req->hasFile('category_img')){
                 $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');            
+            }
             
            
             if($model->save()){
+                $data = $this->getCategory();
                 return response()->json([   
                     'status'=>200,
+                    'category_html'=>$data['html']
 
                 ]);
                 // return redirect('category');
             }
         }
+    }
+
+    public function getCategory()
+    {
+        $categories = Category::all();
+
+        $html = "";
+        $html .= "<option selected disabled value='0'>Category</option>";
+        foreach ($categories as $key => $list) {
+            $html .= "<option value='".$list->id."' selected>" . ucwords($list->category)  . "</option>" ;
+        }
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+
     }
 
     

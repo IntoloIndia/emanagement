@@ -16,10 +16,14 @@ class AlterationVoucherController extends Controller
         public function index(){
             $customers_billing = Customer::all();
             $alteration_items = AlterationItem::all();
+
+            // $alteration_items = AlterationItem::join('alteration_vouchers','alteration_items.alteration_voucher_id','=','alteration_vouchers.id')
+            // ->select('alteration_items.*','alteration_vouchers.customer_id')->get();
             // $alteration_items = AlterationVoucher::join('alteration_items','alteration_vouchers.id','=','alteration_items.alteration_voucher_id')
-            // // ->join('customer_bills','customer_bills.id','=','alteration_vouchers.customer_id')
+            // ->join('customer_bills','customer_bills.id','=','alteration_vouchers.customer_id')
+            // dd($alteration_items);
             // ->select('alteration_vouchers.*','alteration_items.alteration_date','alteration_items.alteration_time','alteration_items.product_id')->get();
-            // // ->select('alteration_vouchers.*','alteration_items.alteration_date','alteration_items.alteration_time','alteration_items.product_id','customer_bills.invoice_no')->get();
+            // ->select('alteration_vouchers.*','alteration_items.alteration_date','alteration_items.alteration_time','alteration_items.product_id','customer_bills.invoice_no')->get();
 
       
             // $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.customer_id')->
@@ -62,7 +66,7 @@ class AlterationVoucherController extends Controller
             }
         }
         
-        public function generateAlerationVoucher($bill_id)
+        public function generateAlerationItem($bill_id)
         {
             $customer_detail = CustomerBill::where(['id'=>$bill_id])->first(['customer_id','total_amount']);
             $customer = Customer::where(['id'=>$customer_detail->customer_id])->first(['customer_name','mobile_no','date']);
@@ -78,7 +82,7 @@ class AlterationVoucherController extends Controller
             $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$customer_name</b></h5>";
+                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>Alter Voucher</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
                 $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
@@ -102,16 +106,15 @@ class AlterationVoucherController extends Controller
                                         $html .="<span>Mobile no : 09826683399<small></small></span><br>";
                                         $html .="<span></span><br>";
                                 $html .="</div>";
-
                             $html .="<div class='row '>";
-                                $html .="<div class='col-md-6' style='border:1px solid black'>";
+                                $html .="<div class='col-md-5' style='border:1px solid black'>";
                                     $html .="<span>Customer name: <small name='customer_id'>".$customer_name."</small></span><br>";
                                     $html .="<input type='hidden' id='customer_id' value='".$customer->id."' class='form-control form-control-sm'>";
                                     $html .="<span>Location : <small>Jabalpur</small></span><br>";
                                     $html .="<span>Mobile no : <small>".$customer->mobile_no."</small></span><br>";
                                     // $html .="<span>State code  : <small>0761</small></span><br>";
                                 $html .="</div>";
-                                $html .="<div class='col-md-2' style='border:1px solid black'>";
+                                $html .="<div class='col-md-3' style='border:1px solid black'>";
                                     $html .="<span class=''>CASH : <small><b>10000</b></small></span> ";
                                 $html .="</div>";
                                 $html .="<div class='col-md-4' style='border:1px solid black'>";
@@ -131,7 +134,7 @@ class AlterationVoucherController extends Controller
                                                         $html .="<th>Item Name</th>";
                                                         $html .="<th>Qty</th>";
                                                         $html .="<th>Size</th>";
-                                                        $html .="<th>Color</th>";
+                                                        // $html .="<th>Color</th>";
                                                         $html .="<th>MRP</th>";
                                                         $html .="<th>Rate</th>";
                                                         $html .="<th>Disc</th>";
@@ -159,12 +162,12 @@ class AlterationVoucherController extends Controller
                                                                 $html .="<td>".$list->qty."</td>";
                                                                 $html .="<input type='hidden' id='item_qty' name='item_qty' value='".$list->qty."' class='form-control form-control-sm' >";
                                                                 $html .="<td>".$list->size."</td>";
-                                                                $html .="<td>".$list->color."</td>";
+                                                                // $html .="<td>".$list->color."</td>";
                                                                 $html .="<td>".$list->price."</td>";
                                                                 $html .="<td>".$list->price."</td>";
                                                                 $html .="<td>0</td>";
                                                                 $html .="<td>".$list->amount."</td>";
-                                                                $html .="<td>0</td>";
+                                                                $html .="<td>".$list->taxfree_amount."</td>";
                                                                 $html .="<td>".$list->cgst."</td>";
                                                                 $html .="<td>".$list->sgst."</td>";
                                                                 $html .="<td>".$list->igst."</td>";
@@ -182,7 +185,7 @@ class AlterationVoucherController extends Controller
                                                     $html .="<tr>";
                                                         $html .="<td colspan='3'></td>";
                                                         $html .="<td>".$key."</td>";
-                                                        $html .="<td colspan='4'></td>";
+                                                        $html .="<td colspan='3'></td>";
                                                         $html .="<td><b>Total :</b></td>";
                                                         $html .="<td>".$total_amount."</td>";
                                                         $html .="<td>".$total_amount."</td>";
@@ -528,7 +531,7 @@ class AlterationVoucherController extends Controller
                 foreach ($customer_bills as $key => $list) {
                     $html .= "<tr class='client_project_row ' project-id='".$list->id."'>";
                         $html .= "<td>" . ++$key . "</td>";
-                        $html .= "<td>" . $list->bill_date ."</td>";
+                        $html .= "<td>" . date('d-m-Y', strtotime($list->bill_date))."</td>";
                         $html .= "<td>" . $list->bill_time ."</td>";
                         $html .= "<td>" . $list->invoice_no ."</td>";
                         $html .= "<td>" . $list->total_amount ."</td>";

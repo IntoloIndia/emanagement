@@ -30,7 +30,30 @@
                     <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Dashboard</p></a>
                 </li>
                 
-                
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>User Management<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item ">
+                            <a href="admin" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="department" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Department </p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item ">
+                            <a href="user" class="nav-link ">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Team</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -38,17 +61,38 @@
                         <p>Master<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item ">
+                        {{-- <li class="nav-item ">
                             <a href="admin" class="nav-link "><i class="nav-icon fas fa-users-cog"></i><p>Admin</p></a>
                         </li>
-                        <li class="nav-item">
-                            <a href="department" class="nav-link">
-                                <i class="fas-screen-users nav-icon"></i><i class="fas fa-angle-right nav-icon"></i><p>Department </p>
-                                
-                            </a>
-                        </li>
+                        
                         <li class="nav-item ">
                             <a href="user" class="nav-link "><i class="nav-icon fas fa-users"></i><p>Team</p></a>
+                        </li> --}}
+                        <li class="nav-item ">
+                            <a href="country-state-city" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Country State City </p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="category" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="sub-category" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Sub Category </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="brand" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Brand </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="size-color" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Size & Color</p>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -75,29 +119,9 @@
 
             
             <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light ">Manage & Utilities</li>
+            <li class="nav-header text-light ">Purchase Management</li>
             <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-item ">
-                <a href="country-state-city" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Country State City </p>
-                </a>
-            </li>
             
-            <li class="nav-item">
-                <a href="category" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Category </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="sub-category" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sub Category </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="size-color" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Size & Color</p>
-                </a>
-            </li>
             <li class="nav-item">
                 <a href="supplier" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
@@ -108,17 +132,28 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Style No</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="purchase-entry" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-return" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Purchase Return</p>
+                </a>
+            </li>
+
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light">Sales Management</li>
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
-                <a href="customer_bill_invoices" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
+                <a href="customer" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Customers</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="customer" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Customer</p>
+                <a href="customer_bill_invoices" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
                 </a>
             </li>
             <li class="nav-item">
@@ -126,30 +161,27 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
                 </a>
             </li>
-            <li class="nav-item">      
-                <a href="" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
-                </a>
-            </li>
+            
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light">Stock Management</li>
             <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-item">
-                <a href="purchase-entry" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
-                </a>
-            </li>
+           
             <li class="nav-item">
                 <a href="manage-stock" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
                 </a>
             </li>
+            <li class="nav-item">      
+                <a href="" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
+                </a>
+            </li>
 
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="barcode" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
                 </a>
-            </li> --}}
+            </li>
             
             <li class="nav-item">
                 <a href="business-details" class="nav-link">

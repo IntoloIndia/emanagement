@@ -31,7 +31,7 @@ class SubCategoryController extends Controller
         $validator = Validator::make($req->all(),[
             "category_id" => 'required|max:191',
             "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
-            'sub_category_img' => 'required|max:191'
+            // 'sub_category_img' => 'required|max:191'
         ]);
 
         if($validator->fails())
@@ -47,15 +47,9 @@ class SubCategoryController extends Controller
             // $model->category_img = $req->input('category_img');
             
             // $model->category_name = strtolower($req->input('category_name'));
-            // if ($req->hasFile('category_img')){
-            //     if($req->input('category_id') > 0)
-            //     {   
-                    $subCategoryImage = public_path('storage/').$model->subcategory_img;
-                    if(file_exists($subCategoryImage)){
-                        @unlink($subCategoryImage); 
-                    }
-            //     }
+            if ($req->hasFile('sub_category')){
                 $model->sub_category_img = $req->file('sub_category_img')->store('image/subcategory'. $req->input('sub_category_img'),'public');            
+            }
             
            
             if($model->save()){

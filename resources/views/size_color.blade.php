@@ -60,10 +60,10 @@
                     <div class="modal-body">
                         <div id="size_err"></div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-9">
                                 <label for="Color" class="form-label">Color</label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 {{-- <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color"> --}}
                                 <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
                             </div>

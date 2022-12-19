@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\PurchaseEntry;
+use App\Models\PurchaseEntryItem;
 use App\Models\Size;
 use App\Models\CustomerBillInvoice;
 use App\Models\CustomerBill;
@@ -18,6 +19,7 @@ class CustomerBillInvoiceController extends Controller
 {
     public function index(){
         $products = PurchaseEntry::all();
+        $product_barcode = PurchaseEntryItem::all();
         $sizes = Size::all();
         // $customers_billing = Customer::all();
         $customers_billing = Customer::join('customer_bills','customer_bills.id','=','customers.id')->get([
@@ -40,6 +42,7 @@ class CustomerBillInvoiceController extends Controller
                     
         return view('customer_bill_invoices',[ 
             'products'=> $products,
+            'product_barcode'=> $product_barcode,
             'sizes' => $sizes,
             'customers_billing' => $customers_billing,
             'months' => $months,
@@ -101,16 +104,16 @@ class CustomerBillInvoiceController extends Controller
             }
            
               // customer bills tables insert
-              $bill_no = rand(000001,999999);
+              $invoice_no = rand(000001,999999);
               $billmodel = new CustomerBill;
-              $billmodel->bill_no = $bill_no;
+              $billmodel->invoice_no = $invoice_no;
               $billmodel->customer_id = $customer_id;   
               $billmodel->total_amount = $req->input('total_amount');
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
            
-                
+
                
                 $product_id = $req->input('product_id');
                 $product_code = $req->input('product_code');
@@ -168,9 +171,14 @@ class CustomerBillInvoiceController extends Controller
     }
             
 
-    public function getItemPrice($product_code)
+    public function getItemData($product_code)
     {
-        $product = PurchaseEntry::where(['product_code'=>$product_code])->first();
+        $product = PurchaseEntryItem::join('purchase_entries','purchase_entries.purchase_id','=','purchase_entry_items.id')->
+                                        join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')->
+                                        where(['purchase_entry_items.barcode'=>$product_code])
+                                        ->select('purchase_entry_items.*','purchase_entries.id','sub_categories.sub_category')
+                                        ->first();
+                        //   dd( $product);  
         // print_r($product);
         // $product = Product::find($product_code);
                         

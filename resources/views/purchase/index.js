@@ -95,38 +95,199 @@
         total_price = parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) ;
         $('#total_price').val(total_price);
 
+        var total_amount = 0;
+        var total_taxable = 0;
+        var xs_taxable = 0;
+        var s_taxable = 0;
+        var m_taxable = 0;
+        var l_taxable = 0;
+        var xl_taxable = 0;
+        var xxl_taxable = 0;
+
+        var total_sgst = 0;
+        var total_cgst = 0;
+        var total_igst = 0;
+
+        var xs_sgst = 0;
+        var xs_cgst = 0;
+        var xs_igst = 0;
+
+        var s_sgst = 0;
+        var s_cgst = 0;
+        var s_igst = 0;
+
+        var m_sgst = 0;
+        var m_cgst = 0;
+        var m_igst = 0;
+
+        var l_sgst = 0;
+        var l_cgst = 0;
+        var l_igst = 0;
+
+        var xl_sgst = 0;
+        var xl_cgst = 0;
+        var xl_igst = 0;
+
+        var xxl_sgst = 0;
+        var xxl_cgst = 0;
+        var xxl_igst = 0;
+
+        if (xs_qty > 0) {
+            var xs_taxable = calculateTaxable(xs_qty, xs_price);
+            if (xs_taxable > 0) {
+                var xs_gst = calculateGst(xs_taxable);
+                xs_sgst = xs_gst.sgst;
+                xs_cgst = xs_gst.cgst;
+                xs_igst = xs_gst.igst;
+            }
+           
+        }
+        if (s_qty > 0) {
+            var s_taxable = calculateTaxable(s_qty, s_price);
+            if (s_taxable > 0) {
+                var s_gst = calculateGst(s_taxable);
+                s_sgst = s_gst.sgst;
+                s_cgst = s_gst.cgst;
+                s_igst = s_gst.igst;
+            }
+        }
+        if (m_qty > 0) {
+            var m_taxable = calculateTaxable(m_qty, m_price);
+            if (m_taxable > 0) {
+                var m_gst = calculateGst(m_taxable);
+                m_sgst = m_gst.sgst;
+                m_cgst = m_gst.cgst;
+                m_igst = m_gst.igst;
+            }
+        }
+        if (l_qty > 0) {
+            var l_taxable = calculateTaxable(l_qty, l_price);
+            if (l_taxable > 0) {
+                var l_gst = calculateGst(l_taxable);
+                l_sgst = l_gst.sgst;
+                l_cgst = l_gst.cgst;
+                l_igst = l_gst.igst;
+            }
+        }
+        if (xl_qty > 0) {
+            var xl_taxable = calculateTaxable(xl_qty, xl_price);
+            if (xl_taxable > 0) {
+                var xl_gst = calculateGst(xl_taxable);
+                xl_sgst = xl_gst.sgst;
+                xl_cgst = xl_gst.cgst;
+                xl_igst = xl_gst.igst;
+            }
+        }
+        if (xxl_qty > 0) {
+            var xxl_taxable = calculateTaxable(xxl_qty, xxl_price);
+            if (xxl_taxable > 0) {
+                var xxl_gst = calculateGst(xxl_taxable);
+                xxl_sgst = xxl_gst.sgst;
+                xxl_cgst = xxl_gst.cgst;
+                xxl_igst = xxl_gst.igst;
+            }
+        }
+
+        total_taxable = xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable;
+        $('#taxable').val(total_taxable);
+
+        total_sgst = parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst);
+        total_cgst = parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst);
+        total_igst = parseFloat(xs_igst) + parseFloat(s_igst) + parseFloat(m_igst) + parseFloat(l_igst) + parseFloat(xl_igst) + parseFloat(xxl_igst);
+
+        
+        $('#total_sgst').val(total_sgst.toFixed(2));
+        $('#total_cgst').val(total_cgst.toFixed(2));
+        $('#total_igst').val(total_igst.toFixed(2));
+
+        total_amount = parseFloat(total_taxable + (total_sgst + total_cgst + total_igst));
+        $('#total_amount').val(total_amount.toFixed(2));
+
         // calculateGst(parseFloat(total_price))
     }
 
-    function calculateGst(total_price) {
+    function calculateTaxable(qty, price) {
+
+        var discount = parseFloat($('#discount').val());
+        // var value = parseFloat($('#total_price').val());
+
+        var taxable = 0;
+        if (discount > 0) {
+            var discount_amount = price * discount / 100 ;
+            taxable = price - discount_amount ;
+        }else{
+            taxable = price;
+        }
+        return parseFloat(taxable * qty);
+       
+    }
+
+    function calculateGst(price) {
+
         var state_type = $('#supplier_id').find("option:selected").attr('state-type');
         var sgst = 0;
         var cgst = 0;
         var igst = 0;
 
-        if (state_type == '{{MyApp::WITH_IN_STATE}}') {
-            if (total_price < '{{MyApp::THOUSAND}}') {
-                sgst = parseFloat(total_price * 2.5 / 100);
-                cgst = parseFloat(total_price * 2.5 / 100);
-            }else{
-                sgst = parseFloat(total_price * 6 / 100) ;
-                cgst = parseFloat(total_price * 6 / 100) ;
-            }
-        }else{
-            if (total_price < '{{MyApp::THOUSAND}}') {
-                igst = parseFloat(total_price * 5 / 100) ;
-            }else{
-                igst = parseFloat(total_price * 12 / 100) ;
-            }
-        }
         console.log(state_type);
         
+        if (state_type == 1) {
+            if (price < 1000) {
+                sgst = parseFloat(price * 2.5 / 100);
+                cgst = parseFloat(price * 2.5 / 100);
+            }else{
+                sgst = parseFloat(price * 6 / 100) ;
+                cgst = parseFloat(price * 6 / 100) ;
+            }
+        }else{
+            if (price < 1000) {
+                igst = parseFloat(price * 5 / 100) ;
+            }else{
+                igst = parseFloat(price * 12 / 100) ;
+            }
+        }
 
-        // $('#total_sgst').val(sgst.toFixed(2));
-        // $('#total_cgst').val(cgst.toFixed(2));
-        // $('#total_igst').val(igst.toFixed(2));
+        data = {
+            "sgst":sgst,
+            "cgst":cgst,
+            "igst":igst,
+        }
+
+        console.log(data);
+
+        return(data);
 
     }
+
+    // function calculateGst(taxable) {
+    //     var state_type = $('#supplier_id').find("option:selected").attr('state-type');
+    //     var sgst = 0;
+    //     var cgst = 0;
+    //     var igst = 0;
+
+    //     if (state_type == '{{MyApp::WITH_IN_STATE}}') {
+    //         if (total_price < '{{MyApp::THOUSAND}}') {
+    //             sgst = parseFloat(total_price * 2.5 / 100);
+    //             cgst = parseFloat(total_price * 2.5 / 100);
+    //         }else{
+    //             sgst = parseFloat(total_price * 6 / 100) ;
+    //             cgst = parseFloat(total_price * 6 / 100) ;
+    //         }
+    //     }else{
+    //         if (total_price < '{{MyApp::THOUSAND}}') {
+    //             igst = parseFloat(total_price * 5 / 100) ;
+    //         }else{
+    //             igst = parseFloat(total_price * 12 / 100) ;
+    //         }
+    //     }
+    //     console.log(state_type);
+        
+
+    //     // $('#total_sgst').val(sgst.toFixed(2));
+    //     // $('#total_cgst').val(cgst.toFixed(2));
+    //     // $('#total_igst').val(igst.toFixed(2));
+
+    // }
 
 
     // function calculateGst(object, price) {
@@ -376,12 +537,13 @@
                     $('#purchase_entry_err').html('');
                     alert("Save purchase entry successfully");
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
-                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('').trigger('chosen:updated');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".qty").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".price").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".mrp").val('');
-                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").removeAttr('src');
+                    // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').find(".after_capture_frame").removeAttr('src');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").addClass('hide');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_qty").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_price").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
@@ -511,39 +673,7 @@
     }
 
     // save category of purchase entry
-function saveCategory() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
-    var formData = new FormData($("#categoryForm")[0]);
-    $.ajax({
-        type: "post",
-        url: "save-category",
-        data: formData,
-        dataType: "json",
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            // console.log(response);
-            if (response.status === 400) {
-                $('#category_err').html('');
-                $('#category_err').addClass('alert alert-danger');
-                var count = 1;
-                $.each(response.errors, function (key, err_value) {
-                    $('#category_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                });
-            } else {
-                $('#category_err').html('');
-                $('#categoryModal').modal('hide');
-                window.location.reload();
-            }
-        }
-    });
-}
 // save subcategory of purchase entry
 function saveSubCategory() {
     $.ajaxSetup({

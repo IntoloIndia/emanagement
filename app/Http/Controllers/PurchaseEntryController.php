@@ -378,8 +378,9 @@ class PurchaseEntryController extends Controller
             $model = PurchaseEntryItem::find($purchase_item->id);
 
             $product_code = $month . $first . $purchase_item->id . $second . $year;               
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-            $model->barcode = $barcode;
+            $barcode_img = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+            $model->barcode = $product_code;
+            $model->barcode_img = $barcode_img;
             $model->save();
         }
 
@@ -414,7 +415,7 @@ class PurchaseEntryController extends Controller
                         $html .="<th>SN</th>";
                         $html .="<th>Style</th>";
                         $html .="<th>Color</th>";
-                        $html .="<th>Qty</th>";
+                        // $html .="<th>Qty</th>";
                         $html .="<th>Action</th>";
                         
                     $html .="</tr>";
@@ -426,7 +427,7 @@ class PurchaseEntryController extends Controller
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
                             $html .="<td>".ucwords($list->color)."</td>";
-                            // $html .="<td>".$list->size."</td>";
+                            $html .="<td><button type='button' class='btn btn-info btn-sm ' value=''><i class='fas fa-eye'></i></button></td>";
                            
                         $html .="</tr>";
                     }
@@ -437,11 +438,6 @@ class PurchaseEntryController extends Controller
                     'status'=>200,
                     'html'=>$html
                 ] ;
-
-                // return response()->json([
-                //     'status'=>200,
-                //     'html'=>$html
-                // ]);
 
 
     }
@@ -873,34 +869,34 @@ class PurchaseEntryController extends Controller
     }
 
     // save category of purchase entry
-    function saveCategory(Request $req)
-    {
-        // return view('employee');
-        $validator = Validator::make($req->all(),[
-            "category" => 'required|unique:categories,category,'.$req->input('category'),
-            'category_img' => 'required|max:191',
-        ]);
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=>$validator->messages("plz fill all field required"),
-            ]);
-        }else{
-            $model = new Category;
-            $model->category = $req->input('category');
-                    $CategoryImage = public_path('storage/').$model->category_img;
-                    if(file_exists($CategoryImage)){
-                        @unlink($CategoryImage); 
-                    }
-                $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');
-            if($model->save()){
-                return response()->json([   
-                    'status'=>200,
-                ]);
-            }
-        }
-    }
+    // function saveCategory(Request $req)
+    // {
+    //     // return view('employee');
+    //     $validator = Validator::make($req->all(),[
+    //         "category" => 'required|unique:categories,category,'.$req->input('category'),
+    //         'category_img' => 'required|max:191',
+    //     ]);
+    //     if($validator->fails())
+    //     {
+    //         return response()->json([
+    //             'status'=>400,
+    //             'errors'=>$validator->messages("plz fill all field required"),
+    //         ]);
+    //     }else{
+    //         $model = new Category;
+    //         $model->category = $req->input('category');
+    //                 $CategoryImage = public_path('storage/').$model->category_img;
+    //                 if(file_exists($CategoryImage)){
+    //                     @unlink($CategoryImage); 
+    //                 }
+    //             $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');
+    //         if($model->save()){
+    //             return response()->json([   
+    //                 'status'=>200,
+    //             ]);
+    //         }
+    //     }
+    // }
 
     // save subcategory of purchase entry
     function saveSubCategory(Request $req)

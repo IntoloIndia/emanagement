@@ -1,12 +1,24 @@
 
-
 @extends('layouts.app')
-@section('page_title', 'Dashboard')
+@section('page_title', 'Supplier')
+
+@section('content-header')
+    <div class="content-header">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="m-0"><b>Supplier</b></h3>
+            </div>
+            <div class="col-sm-6">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                    <button type="button" id="addsuplier" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
 @section('content')
 
-
-    
    {{-- modal supplier  --}}
 
    <div class="modal fade" id="supplierModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -23,11 +35,14 @@
                     {{-- <div class="modal-body"> --}}
                         <div id="supplier_err"></div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <input type="text" name="supplier_name" id="supplier_name" class="form-control-sm form-control" placeholder="Name">
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="text" name="mobile_no" id="mobile_no" class="form-control-sm form-control" placeholder="Mobile no">
+                                <div class="col-md-3">
+                                    <input type="number" name="mobile_no" id="mobile_no" class="form-control-sm form-control" placeholder="Mobile no">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" name="phone_no" id="phone_no" class="form-control-sm form-control" placeholder="Phone no">
                                 </div>
                             </div>
 
@@ -134,11 +149,11 @@
 </div>
 
     {{-- open modal button --}}
-    <div class="row ">
+    {{-- <div class="row ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
             <button type="button" id="addsuplier" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
         </div>
-    </div>
+    </div> --}}
 
     {{-- end  --}}
 
@@ -179,22 +194,23 @@
 
                 </div>
 
-                <div class="card-body table-responsive p-0" style="height: 400px;">
+                <div class="card-body table-responsive p-0" style="height: 500px;">
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
                                 <th>SN</th>
                                 <th>State Type</th>
-                                <th>Supplier code</th>
+                                <th>Code</th>
                                 <th>Name</th>
                                 <th>Mobile no</th>
+                                <th>Phone no</th>
                                 <th>GST No</th>
                                 <th>Payment Days</th>
-                                <th>Country</th>
+                                {{-- <th>Country</th> --}}
                                 <th>State</th>
                                 <th>City</th>
                                 {{-- <th>City short</th> --}}
-                                <th>Address</th>
+                                {{-- <th>Address</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -206,15 +222,16 @@
                                 <tr class="row_filter search_data" city-id="{{$list->city_id}}">
                                     <td>{{++$count}}</td>
                                     <td>{{($list->state_type == MyApp::WITH_IN_STATE) ? "Within State":"Inter State" }}</td>
-                                    <td class="text-center">{{$list->supplier_code}}</td>
+                                    <td >{{$list->supplier_code}}</td>
                                     <td>{{ucwords($list->supplier_name)}}</td>
                                     <td>{{$list->mobile_no}}</td>
+                                    <td>{{$list->phone_no}}</td>
                                     <td>{{$list->gst_no}}</td>
                                     <td class="text-center">{{$list->payment_days}}</td>
-                                    <td>{{ucwords($list->country)}}</td>
+                                    {{-- <td>{{ucwords($list->country)}}</td> --}}
                                     <td>{{ucwords($list->state)}}</td>
                                     <td>{{ucwords($list->city)}}</td>
-                                    <td>{{ucwords($list->address)}}</td>
+                                    {{-- <td>{{ucwords($list->address)}}</td> --}}
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editSupplierBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban"></i></button>
@@ -454,12 +471,14 @@
                         $('#updateSupplierBtn').removeClass('hide');
                         $('#supplier_name').val(response.supplier.supplier_name);
                         $('#mobile_no').val(response.supplier.mobile_no);
+                        $('#phone_no').val(response.supplier.phone_no);
                         $('#country_id').val(response.supplier.country_id);
 
                         $('#state_id').html("");
                         $('#state_id').append(response.html);
                         $('#city_id').html("");
                         $('#city_id').append(response.htmlcity);
+                        $('#city_id').trigger("chosen:updated");
 
                         // $('#state_id').val(response.supplier.state_id);
                         $('#city_id').val(response.supplier.city_id);

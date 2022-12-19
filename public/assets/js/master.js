@@ -47,6 +47,81 @@ function getCityByState(state_id) {
     });
 }
 
+function saveCategory() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var formData = new FormData($("#categoryForm")[0]);
+    $.ajax({
+        type: "post",
+        url: "save-category",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            // console.log(response);
+            if (response.status === 400) {
+                $('#category_err').html('');
+                $('#category_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#category_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
+            } else {
+                $('#category_err').html('');
+                $('#categoryModal').modal('hide');
+                $('#category_id').html('');
+                $('#category_id').append(response.category_html); 
+                $("#category_id").trigger("chosen:updated");  
+                // window.location.reload();
+            }
+        }
+    });
+}
+
+// function saveColor() {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
+
+//     var formData = new FormData($("#colorForm")[0]);
+//     $.ajax({
+//         type: "post",
+//         url: "save-color",
+//         data: formData,
+//         dataType: "json",
+//         cache: false,
+//         contentType: false,
+//         processData: false,
+//         success: function (response) {
+//             // console.log(response);
+//             if (response.status === 400) {
+//                 $('#color_err').html('');
+//                 $('#color_err').addClass('alert alert-danger');
+//                 var count = 1;
+//                 $.each(response.errors, function (key, err_value) {
+//                     $('#color_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+//                 });
+
+//             } else {
+//                 $('#color_err').html('');
+//                 $('#colorModal').modal('hide');
+//                 // window.location.reload();
+//                 $('#color').html('');
+//                 $('#color').append(response.color_html); 
+//                 $("#color").trigger("chosen:updated");  
+//             }
+//         }
+//     });
+// }
+
 function manageCity(){
     $.ajaxSetup({
         headers: {

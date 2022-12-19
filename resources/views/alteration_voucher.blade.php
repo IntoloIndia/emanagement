@@ -21,6 +21,7 @@
             padding: 10px;
             margin-top: 10px;
         }
+      
     </style>
 
 @endsection
@@ -262,32 +263,141 @@
             <b>Invoice</b>
         </div>
         <div class="card-body">
-          
-                <div class='row mt-2'>
+          {{-- previous table --}}
+                {{-- <div class='row mt-2'>
                     <div class='table-responsive'>
                         <table class='table table-bordered'>
                             <thead>
                                 <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                <th>Customer</th>
                                 <th>Invoice No</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Item</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($alteration_items as $list)
                                 <tr>
-                                    <td>{{$list->invoice_no}}</td>
                                     <td>{{$list->alteration_date}}</td>
                                     <td>{{$list->alteration_time}}</td>
-                                    <td>{{$list->product_id}}</td>
+                                    <td>{{$list->customer_id}}</td>
+                                    <td>{{$list->invoice_no}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                </div> --}}
+
+
+                {{-- new expand --}}
+              
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <table class="table table-striped">
+                        <tr>
+                            <th class="col-md-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"  data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne"style="border-style:none;">
+                                    date
+                                </button>
+                                {{-- <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne"> --}}
+                                    {{-- Date
+                                </button> --}}
+                            </th>
+                            <th class="col-md-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Time
+                                </button>
+                            </th>
+                            <th class="col-md-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Customer
+                                </button>
+                            </th>
+                            <th class="col-md-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Invoice
+                                </button>
+                            </th>
+                        </tr>
+                    </table>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">3</th>
+                                <td colspan="2">Larry the Bird</td>
+                                <td>@twitter</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-           
+                <div class="accordion-item">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Accordion Item #2
+                    </button>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                </tr>
+                                <tr>
+                                <th scope="row">3</th>
+                                <td colspan="2">Larry the Bird</td>
+                                <td>@twitter</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Accordion Item #3
+                    </button>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -297,6 +407,7 @@
 @section('script')
 <script>
     $(document).ready(function(){
+        $("#customer_id").chosen({ width: '100%' });
         $(document).on('change','#customer_id', function(e){
             e.preventDefault();
             var customer_id = $(this).val();
@@ -337,7 +448,7 @@
                 e.preventDefault();
                 const bill_id = $(this).val();
                 $('#generateAltertionVoucher').val(bill_id);
-                generateAlerationVoucher(bill_id);
+                generateAlerationItem(bill_id);
             });
          
             
@@ -374,10 +485,10 @@
             }
         });
     } 
-    function generateAlerationVoucher(bill_id) {
+    function generateAlerationItem(bill_id) {
          $.ajax({
         type: "get",
-        url: "generate-invoice-voucher/"+bill_id,
+        url: "generate-alteration-Item/"+bill_id,
         dataType: "json",
         success: function (response) {
             // console.log(response);
