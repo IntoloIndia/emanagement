@@ -439,8 +439,6 @@ class PurchaseEntryController extends Controller
                     'html'=>$html
                 ] ;
 
-                
-
 
     }
 

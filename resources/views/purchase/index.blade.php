@@ -195,6 +195,19 @@ a {
                 $('#savePurchaseEntryBtn').removeClass('hide');
                 $('#updatePurchaseEntryBtn').addClass('hide');
             });
+
+            $(document).on('change','#supplier_id', function (e) {
+                e.preventDefault();
+                var supplier_id = $('#supplier_id').val();
+                
+                supplierDetail(supplier_id);
+                $('#bill_no').val('');
+                $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
+                // getPurchaseEntry(supplier_id, bill_no);
+
+                calculateQtyPrice();
+                
+            });
         
             $(document).on('click','#addBrandBtn',function(e)
             {
@@ -270,6 +283,10 @@ a {
             $(document).on('keyup','.price', function () {
                 calculateQtyPrice();
             });
+
+            $(document).on('keyup','#discount', function () {
+                calculateQtyPrice();
+            });
             
             
             $(document).on('click','.captureLivePhotoBtn', function (e) {
@@ -293,6 +310,7 @@ a {
                 validateForm();
             });
 
+            
             $(document).on('change','#category_id', function (e) {
                 e.preventDefault();
                 const category_id = $(this).val();

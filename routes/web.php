@@ -23,6 +23,8 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StyleNoController;
 use App\Http\Controllers\AlterationVoucherController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\PurchaseReturnController;
 
 use App\MyApp;
 /*
@@ -105,6 +107,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
     // discount route 
     Route::controller(DiscountController::class)->group(function () {
         Route::get('admin/discount','index');
+          
+    });
+    Route::controller(BarcodeController::class)->group(function () {
+        Route::get('admin/barcode','index');
           
     });
 
@@ -223,6 +229,13 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
+    
+    Route::controller(PurchaseReturnController::class)->group(function () {
+        Route::get('admin/purchase-return', 'index');
+        
+    });
+
+
     Route::controller(PurchaseEntryController::class)->group(function () {
         Route::get('admin/purchase-entry', 'index');
         Route::post('admin/save-purchase-entry', 'savePurchaseEntry');
@@ -230,7 +243,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-purchase-entry/{product_id}', 'updatePurchaseEntry');
         Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
 
-        Route::get('admin/barcode', 'getBarcode');
+        // Route::get('admin/barcode', 'getBarcode');
         Route::get('admin/get-color_code/{color_code}','getcolorcode');
 
         // excel file route 
@@ -309,6 +322,11 @@ Route::group(['middleware'=>'billing_auth'], function(){
         Route::get('edit-color/{color_id}', 'editColor');
         Route::post('update-color/{color_id}', 'updateColor'); 
         Route::get('delete-color/{color_id}', 'deleteColor');
+    });
+
+    Route::controller(PurchaseReturnController::class)->group(function () {
+        Route::get('purchase-return', 'index');
+        
     });
 
 

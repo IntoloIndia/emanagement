@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="row mb-2">
+                            <div class="row  mb-2  justify-content-end">
                                 <div class="col-md-4">
                                     <select name="city_id" id="city_id" class="form-select" >
                                         <option selected disabled>City</option>
@@ -81,14 +81,14 @@
                                     {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
                                     <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <select name="employee_id" id="employee_id" class="form-select" >
                                         <option selected disabled>code</option>
                                        @foreach($users as $item)
                                            <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
                                        @endforeach
                                       </select>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 
@@ -118,14 +118,14 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Sno</th>
-                                        {{-- <th scope="col">check</th> --}}
+                                        <th scope="col">Emp</th>
                                         <th scope="col">Code</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
+                                        <th scope="col">Dis%</th>
                                         <th scope="col">Amount</th>
-                                        {{-- <th scope="col">Taxable</th> --}}
                                         <th scope="col" class="sgst_show_hide">SGST%</th>
                                         <th scope="col" class="cgst_show_hide">CGST%</th>
                                         <th scope="col" class="igst_show_hide hide">IGST%</th>
@@ -141,12 +141,65 @@
                     </div>
                     <div class="card-footer ">
                         <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>GROSS AMOUNT :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>LESS DISCOUNT :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm dis_amount">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>CGST AMOUNT :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>SGST AMOUNT :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>IGST AMOUNT :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>OTHER ADJ :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>G TOTAL :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                        {{-- <div class="row text-end">
                             <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3 text-end">
-                                {{-- <b>Total Amt :</b><br/> --}}
-                                <b>GROSS AMOUNT :</b><br/>
-                                <b>LESS DISCOUNT :</b><br/>
+                            <div class="col-md-6 ">
+                                <b>LESS DISCOUNT : </b>
                                 <b>SGST AMOUNT :</b><br/>
                                 <b>CGST AMOUNT :</b><br/>
                                 <b>IGST AMOUNT :</b><br/>
@@ -164,7 +217,7 @@
                                 
                                 <span id="item_total_amount"></span><br/>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row mt-1 hide" id="given_return_amount" >
                             <div class="col-md-4"></div>
                             <div class="col-md-4"></div>
@@ -348,12 +401,19 @@
                       </div>
                     </td> --}}
                     {{-- </td> --}}
-            
+            <td style="width: 200px;">
+                <select name="employee_id" id="employee_id" class="form-select" >
+                    <option selected disabled>code</option>
+                    @foreach($users as $item)
+                        <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
+                    @endforeach
+                </select>
+            </td>
             <td style="width: 200px;">
                 <input type="text" name="product_code[]" id="product_code" class="form-control form-control-sm product_code">
             </td>
 
-            <td style="width: 200px;">
+            <td style="width:150px;">
                 {{-- <select name="product_id[]"  id="product_id" class=" form-select form-select-sm product_id">
                     <option selected>Choose..</option>
                     @foreach ($products as $item)
@@ -374,19 +434,22 @@
             <td style="width: 100px;">
                 <input type="text" name="price[]" class="form-control form-control-sm price" id="price" >
             </td>
+            <td style="width: 50px;">
+                <input type="text" name="discount[]" class="form-control form-control-sm discount" id="" value="" >
+            </td>
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" >
                  <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"  style="width: 150px;">
             </td> 
              {{-- <td style="width: 150px;"> --}}
             {{-- </td>  --}}
-             <td style="width: 100px;" class="sgst_show_hide">
+             <td style="width: 80px;" class="sgst_show_hide">
                  <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0">
             </td> 
-            <td style="width: 100px;" class="cgst_show_hide">
+            <td style="width: 80px;" class="cgst_show_hide">
                  <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0">
             </td> 
-            <td style="width: 100px;" class="igst_show_hide hide">
+            <td style="width: 80px;" class="igst_show_hide hide">
                  <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0">
             </td> 
             <td>
@@ -484,9 +547,36 @@
                 calculateTotalAmount();
             });
 
+            // $(document).on('keyup','.amount', function () {
+            //     var amount = $(this).val();
+            //     alert(amount);
+            //     $('.discount').val(amount);
+            // });
+            
+            $(document).on('keyup','.discount', function () {
+                var discount = parseFloat($(this).val());
+                var amount = parseFloat($(".amount").val());
+                // alert(amount);
+                
+                var dis_amount = ((amount * discount)/100).toFixed(2);
+                if(discount == "" || discount == isNaN){
+                    $('.dis_amount').val(0);
+                }
+                else{
+
+                    $('.dis_amount').val(dis_amount);
+                }
+
+                    // console.log(dis_amount);
+               
+            });
+
+
             
             $(document).on('change','.product_code', function () {
                 const product_code = $(this).val();
+            
+
                 // alert(product_code);
 
                 // if(product_code==product_code){
@@ -624,10 +714,8 @@
             });
             $(document).on('keyup','.price', function () {
                 calculateGst($(this));
-                // alert("call")
-                
             });
-
+           
            
             $(document).on('keyup','#given_amount', function () {
                 returnAmount();
@@ -764,6 +852,7 @@
             // var cgst = parseFloat(cgst * qty);
             
             $(object).parent().parent().find(".amount").val(amount);
+            $('.discount').val();
             calculateTotalAmount();
             
         }

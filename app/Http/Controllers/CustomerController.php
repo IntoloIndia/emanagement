@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\CustomerBill;
+use App\Models\CustomerBillInvoice;
 use App\Models\CustomerPoint;
 use Validator;
 
@@ -20,44 +22,86 @@ class CustomerController extends Controller
     }
     public function CustomerDetail($customer_id)
     {
-        $customer_detail = Customer::where(['id'=>$customer_id])->get();
+        $customer_detail = Customer::join('states','customers.state_type','=','states.id')
+        ->join('cities','customers.city_id','=','cities.id')
+        ->where(['customers.id'=>$customer_id])
+        ->first(['customers.customer_name' ,'customers.date','customers.birthday_date','customers.month_id','states.state','cities.city','customers.gst_no']);
         
+        
+        // $customer_detail = Customer::join('states','customers.state_type','=','states.id')->join('cities','customers.city_id','=','cities.id')
+        // ->where(['customers.id'=>$customer_id])->select('customers.*','states.state','cities.city')->get();
+        $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
+        ->orderBy('bill_date','DESC')
+        ->orderBy('bill_time','DESC')->get();
+
+        // $customer_bills = CustomerBill::join('customer_bill_invoices','customer_bills.id','=','customer_bill_invoices.bill_id')
+        // ->where(['customer_bills.customer_id'=>$customer_id])
+        // ->select('customer_bills.*','customer_bill_invoices.product_code','customer_bill_invoices.product_id','customer_bill_invoices.qty','customer_bill_invoices.size','customer_bill_invoices.price','customer_bill_invoices.taxfree_amount','customer_bill_invoices.sgst','customer_bill_invoices.cgst','customer_bill_invoices.igst','customer_bill_invoices.amount')->get();
+
         $html = "";
-
-        //$html .= "<table class='table table-striped'>";
-
-            $html .= "<thead>";
-                $html .= "<tr>";
-                    $html .= "<th>Date</th>";
-                    $html .= "<th>Time</th>";
-                    $html .= "<th>Gst No</th>";
-                    // get customer_id
-                    //  $html .= "<th><input type='hidden' id='customer_id' value='".$customer->id."' class='form-control form-control-sm'></th>";
-                    // $html .= "<th>mobile no</th>";
-                    // $html .= "<th>Action</th>";
-                $html .= "</tr>";
-            $html .= "</thead>";
-            $html .= "<tbody>";
-                foreach ($customer_detail as $key => $list) {
-                    $html .= "<tr class='client_project_row'  project-id='".$list->id."'>";
-                        $html .= "<td>" . ++$key . "</td>";
-                        $html .= "<td>" . $list->date ."</td>";
-                        // $html .= "<td>" . $list->id ."</td>";
-                        $html .= "<td>" . $list->time ."</td>";
-                        $html .= "<td>" . $list->gst_no ."</td>";
-                        // $html .= "<td> 
-                        // <button type='button' class='btn btn-info btn-sm editStyleNoBtn mr-1'  value='".$list->id."'>Edit</button>
-                        //  <button type='button' class='btn btn-danger btn-sm deleteStyleNoBtn ml-1'  value='".$list->id."'>delete</button>
-                        // </td>";
-                    $html .= "</tr>";
-                }
-            $html .= "<tbody>";
-
-        // $html .= "</table>";
+        $html .= "<div class='row'>";
+            $html .= "<div class='col-md-12 text-center'><b>".ucwords($customer_detail->customer_name)."</b></div>";
+            $html .= "</div>";
+        $html .= "<div class='row'>";
+            $html .= "<div class='col-md-3'>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."</div>";
+            $html .= "<div class='col-md-9 text-end'>".ucwords($customer_detail->state).", ".ucwords($customer_detail->city). "</br>GST No - ".$customer_detail->gst_no. "</div></br>";
+        $html .= "</div>";
+        $html .= "<hr>";
+        $html .="<div class='table-responsive'>";
+        $html .="<table class='table table-bordered'>";
+            $html .="<thead>";
+                $html .="<tr>";
+                    $html .="<th>S No</th>";
+                    $html .="<th>Date</th>";
+                    $html .="<th>Time</th>";
+                    $html .="<th>Invoice No</th>";
+                    // $html .="<th>Product Code</th>";
+                    // $html .="<th>Product Id</th>";
+                    // $html .="<th>Qty</th>";
+                    // $html .="<th>Size</th>";
+                    // $html .="<th>Price</th>";
+                    // $html .="<th>taxfree_amount</th>";
+                    // $html .="<th>Sgst</th>";
+                    // $html .="<th>Cgst</th>";
+                    // $html .="<th>Igst</th>";
+                    $html .="<th>Total amount</th>";
+                
+                $html .="</tr>";
+            $html .="</thead>";
+                $html .="<tbody>";
+                    foreach ($customer_bills as $key => $bills) {
+                    
+                        $html .="<tr>";
+                            $html .="<td>".++$key."</td>";
+                            $html .="<td>".date('d-m-Y',strtotime($bills->bill_date))."</td>";
+                            $html .="<td>".$bills->bill_time."</td>";
+                            $html .="<td>".$bills->invoice_no."</td>";
+                            // $html .="<td>".$bills->product_code."</td>";
+                            // $html .="<td>".$bills->product_id."</td>";
+                            // $html .="<td>".$bills->qty."</td>";
+                            // $html .="<td>".$bills->size."</td>";
+                            // $html .="<td>".$bills->price."</td>";
+                            // $html .="<td>".$bills->taxfree_amount."</td>";
+                            // $html .="<td>".$bills->sgst."</td>";
+                            // $html .="<td>".$bills->cgst."</td>";
+                            // $html .="<td>".$bills->igst."</td>";
+                            $html .="<td>".$bills->total_amount."</td>";
+                            
+                        $html .="</tr>";
+                    }
+                $html .="</tbody>";
+            $html .="<tfoot>";
+                $html .="<tr>";
+               
+                $html .="</tr>";
+            $html .="</tfoot>";
+        $html .="</table>";
+    $html .="</div>";
 
         return response()->json([
             'status'=>200,
             'customer_detail'=>$customer_detail,
+            'customer_bills'=>$customer_bills,
             'html'=>$html
         ]);
     }

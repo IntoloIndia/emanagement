@@ -22,7 +22,8 @@
                                             <div class="col-md-3">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);">
+                                                        {{-- <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);"> --}}
+                                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" >
                                                             <option selected disabled value="0">Supplier</option>                                          
                                                             @foreach ($suppliers as $list)
                                                             <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
@@ -181,7 +182,7 @@
                                                 
                                                 <div class="col-md-9">
                                         
-                                                    <div class="row ">
+                                                    {{-- <div class="row "> --}}
                                                         <div class="card">
                                                             <div class="card-body ">
                                                                     
@@ -228,21 +229,31 @@
                                                                             <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        {{-- <tr>
                                                                             <th>Total</th>
                                                                             <td colspan="3">
-                                                                                <div class="input-group mb-3">
+                                                                                <div class="input-group input-group-sm mb-1">
                                                                                     <span class="input-group-text" ><b>Qty</b></span>
                                                                                     <input type="text" id="total_qty" class="form-control" placeholder="Qty" value="0" readonly disabled>
                                                                                 </div>
+                                                                                <div class="input-group input-group-sm mb-1">
+                                                                                    <span class="input-group-text" ><b>Discount</b></span>
+                                                                                    <input type="text" id="total_qty" class="form-control" placeholder="Discount" value="0" >
+                                                                                </div>
+
                                                                             </td>
                                                                             <td colspan="3">
-                                                                                <div class="input-group mb-3">
+                                                                                <div class="input-group input-group-sm mb-1">
                                                                                     <span class="input-group-text" ><b>Value</b></span>
                                                                                     <input type="text" id="total_price" class="form-control" placeholder="Value" value="0" readonly disabled>
                                                                                 </div>
+                                                                                <div class="input-group input-group-sm mb-1">
+                                                                                    <span class="input-group-text" ><b>Amount</b></span>
+                                                                                    <input type="text" id="total_amount" class="form-control" placeholder="Total Amount" value="0" readonly disabled>
+                                                                                </div>
                                                                             </td>
-                                                                        </tr>
+                                                                            
+                                                                        </tr> --}}
                                                                         
                                                                     </tbody>
                                                                 </table>
@@ -250,26 +261,73 @@
                                                             </div>
                                                         </div>
                                                         
-                                                    </div>
+                                                    {{-- </div> --}}
                                                 </div>
                                         
                                             </div>
 
+                                            
+                                        </div>
+                                        <div class="row">
+                                            <div class="card card-body" >
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <small  ><b>Qty</b> </small>
+                                                        <input type="text" name="" id="total_qty" class="form-control form-control-sm" placeholder="QTY" readonly>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <small  ><b>Value</b> </small>
+                                                        <input type="text" name="" id="total_price" class="form-control form-control-sm" placeholder="Value" readonly>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <small  ><b>Discount</b> </small>
+                                                        <input type="text" name="" id="discount" class="form-control form-control-sm" placeholder="Discount" value="0">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <small  ><b>Taxable</b> </small>
+                                                        <input type="text" name="" id="taxable" class="form-control form-control-sm" placeholder="Taxable" value="0" readonly>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <small  ><b>SGST</b> </small>
+                                                        <input type="text" name="" id="total_sgst" class="form-control form-control-sm sgst" placeholder="SGST" value="0"  readonly>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <small  ><b>CGST</b> </small>
+                                                        <input type="text" name="" id="total_cgst" class="form-control form-control-sm cgst" placeholder="CGST" value="0" readonly>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <small ><b>IGST</b> </small>
+                                                        <input type="text" name="" id="total_igst" class="form-control form-control-sm igst" placeholder="IGST" value="0" readonly>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <small ><b>Amount</b> </small>
+                                                        <input type="text" name="" id="total_amount" class="form-control form-control-sm total_amount" placeholder="Amount" readonly>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
                                         </div>
                                         
                                     </div>
 
                                     {{-- <div class="row"> --}}
-                                        {{-- <div class="mypopover-content ">
-                                            <div class="card card-body" >
+                                        {{-- <div class="mypopover-content "> --}}
+                                            {{-- <div class="card card-body" >
                                                 <div class="row">
-                                                    <div class="col-md-2">
-                                                        <small  ><b>Total Qty</b> </small>
+                                                    <div class="col-md-1">
+                                                        <small  ><b>Qty</b> </small>
                                                         <input type="text" name="" id="total_qty" class="form-control form-control-sm" placeholder="QTY" >
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <small  ><b>Value</b> </small>
                                                         <input type="text" name="" id="total_price" class="form-control form-control-sm" placeholder="Value" >
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <small  ><b>Dis.</b> </small>
+                                                        <input type="text" name="" id="total_discount" class="form-control form-control-sm" placeholder="Discount" >
                                                     </div>
                                                     <div class="col-md-2">
                                                         <small  ><b>SGST</b> </small>
@@ -279,16 +337,20 @@
                                                         <small  ><b>CGST</b> </small>
                                                         <input type="text" name="" id="total_cgst" class="form-control form-control-sm cgst" placeholder="CGST">
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <small ><b>IGST</b> </small>
                                                         <input type="text" name="" id="total_igst" class="form-control form-control-sm igst" placeholder="IGST">
                                                     </div>
+                                                    <div class="col-md-2">
+                                                        <small ><b>Amount</b> </small>
+                                                        <input type="text" name="" id="total_amount" class="form-control form-control-sm total_amount" placeholder="Amount">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div> --}}
+                                            </div> --}}
+                                        {{-- </div> --}}
                                     {{-- </div> --}}
 
-                                    <div class="card-footer text-muted">
+                                    <div class="card-footer ">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
                                             <button type="button" id="savePurchaseEntryBtn" class="btn btn-primary btn-sm ">Save </button>
                                         </div>

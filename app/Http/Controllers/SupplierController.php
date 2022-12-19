@@ -38,7 +38,7 @@ class SupplierController extends Controller
     {
         $validator = Validator::make($req->all(),[
             'supplier_name' => 'required|max:191',
-            'mobile_no' => 'required|max:191',
+            'mobile_no' => 'required|unique:suppliers,mobile_no,'.$req->input('mobile_no'),
             // 'address' => 'required|unique:admins,email,'.$req->input('email'),
             'address' => 'required|max:200',
             'gst_no' => 'required|max:191',
@@ -62,6 +62,7 @@ class SupplierController extends Controller
             // $model->supplier_code = strtoupper($supplier_code);
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
+            $model->phone_no = $req->input('phone_no');
             $model->country_id = $req->input('country_id');
             $model->state_id = $req->input('state_id');
             $model->city_id = $req->input('city_id');
@@ -123,8 +124,8 @@ class SupplierController extends Controller
     {
         $validator = Validator::make($req->all(),[
             'supplier_name' => 'required|max:191',
-            'mobile_no' => 'required|max:12',
-            // 'address' => 'required|unique:admins,email,'.$req->input('email'),
+            // 'mobile_no' => 'required|max:12',
+            'mobile_no' => 'required|unique:suppliers,mobile_no,'.$supplier_id,
             'address' => 'required|max:200',
             'gst_no' => 'required|max:20',
             'supplier_code' => 'required|max:20',
@@ -143,6 +144,7 @@ class SupplierController extends Controller
             $model = Supplier::find($supplier_id);
             $model->supplier_name = $req->input('supplier_name');
             $model->mobile_no = $req->input('mobile_no');
+            $model->phone_no = $req->input('phone_no');
             $model->country_id = $req->input('country_id');
             $model->state_id = $req->input('state_id');
             $model->city_id = $req->input('city_id');
