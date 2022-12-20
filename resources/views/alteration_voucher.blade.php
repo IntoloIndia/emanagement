@@ -228,6 +228,40 @@
             </div> --}}
         </div>
     </section>
+
+{{-- alter voucher modal --}}
+    <section>
+        <div class="modal fade" id="alterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="alterVoucherForm">
+                        @csrf
+                    <div id="show_alteration_items"></div>
+
+                    <div class='card'>
+                        <div class='card-body'>
+                          <h5 class='card-title'>Special title treatment</h5>
+                          <p class='card-text'>With supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                    </div>
+
+
+                </form>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
            
    
 <div class="row">
@@ -415,14 +449,14 @@
         });
 
         // save alterration bill 
-        $(document).on('click','#saveAltertion',function(e){
-                e.preventDefault();
-                 saveAlterationVoucher();
-        });
+        // $(document).on('click','#saveAltertion',function(e){
+        //         e.preventDefault();
+        //          saveAlterationVoucher();
+        // });
         $(document).on('click','#generateAltertionVoucher',function(e){
                 e.preventDefault();
-             
-                saveAlterationItem();
+                saveAlterationVoucher();
+                // saveAlterationItem();
         });
         
         // $(document).on('click','#leaveVerifyBtn', function (e) {
@@ -446,9 +480,15 @@
         //     });
             $(document).on('click','.alterBillsBtn',function(e){
                 e.preventDefault();
-                const bill_id = $(this).val();
-                $('#generateAltertionVoucher').val(bill_id);
-                generateAlerationItem(bill_id);
+
+                var bill_id = $(this).val();
+                // alterVoucher(bill_id);
+
+                $('#alterVoucherModal').modal('show');
+                
+                // const bill_id = $(this).val();
+                // $('#generateAltertionVoucher').val(bill_id);
+                // generateAlerationItem(bill_id);
             });
          
             
@@ -512,26 +552,39 @@ function saveAlterationVoucher() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
     var customer_id = $('#customer_id').val();
-    var product_id = $('#product_id').val();
-    // alert(customer_id);
-    // alert(product_id);
-    // var formData = {
+    var bill_id = $('#bill_id').val();
+    // alter item
+    var alteration_voucher_id = $('#alteration_voucher_id').val(); 
+    var item_qty = $('#item_qty').val();
+    // alert(item_qty);
+    
+    var product_id = [];
+    // var item_qty = [];
+    $(".product_id").each(function () {
+        var self = $(this);
+        if (self.is(':checked')) {
+            product_id.push(self.val());
+            // item_qty.push(self.attr('item-qty'));
+        }
+    });
+    // alert(product_id);   
+    var sendData = { 
+        customer_id: customer_id,
+        bill_id: bill_id,
+        product_id: product_id,
+        alteration_voucher_id: alteration_voucher_id,
+        item_qty: item_qty
+    };
+    
 
-    //     'customer_id':customer_id,
-    //     'product_id':product_id
-      
-    // };
-    // alert(JSON.stringify(formData));
     $.ajax({
         type: "post",
         url: "save-alteration-voucher",
-        data: {customer_id,product_id},
+        // data: JSON.stringify(sendData),
+        data:{customer_id,bill_id, product_id,alteration_voucher_id,item_qty},
         dataType: "json",
-        // cache: false,
-        // contentType: false,
-        // processData: false,
+        
         success: function (response) {
             if (response.status === 400) {
                 $('#alterationvoucher_err').html('');
@@ -549,59 +602,75 @@ function saveAlterationVoucher() {
     });
 }
 
-function saveAlterationItem() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    
-
-    var alteration_voucher_id = $('#alteration_voucher_id').val();
-    var product_id = $('.product_id').val();
-    // alert(product_id);
-    var item_qty = $('#item_qty').val();
-
-        var checked_product_ids = [];
-        $(".product_id").each(function () {
-            var self = $(this);
-            if (self.is(':checked')) {
-                checked_product_ids.push(self.val()); 
-                // alert(checked_product_ids);
+ function alterVoucher(bill_id) {
+        $.ajax({
+            type: "get",
+            url: "alter-voucher/"+bill_id,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if(response.status == 200){
+                    $('#alterVoucherModal').modal('show');
+                    $('#show_alteration_items').html("");
+                    $('#show_alteration_items').append(response.html);
+                }
             }
         });
+    }
 
-    var sendData = { 
-        product_id: checked_product_ids,
-        alteration_voucher_id: alteration_voucher_id,
-        item_qty: item_qty
-    };
+
+// function saveAlterationItem() {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
     
-    $.ajax({
-        type: "post",
-        url: "save-alteration-item",
-        // data: {alteration_voucher_id,item_qty,product_id},
-        data: JSON.stringify(sendData),
-        contentType: "application/json; charset=utf-8",
-        // dataType: "json",
-        
-        success: function (response) {
-            console.log(response);
-            if (response.status === 400) {
-                $('#alteration_item_err').html('');
-                $('#alteration_item_err').addClass('alert alert-danger');
-                var count = 1;
-                $.each(response.errors, function (key, err_value) {
-                    $('#alteration_item_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                });
+//     var alteration_voucher_id = $('#alteration_voucher_id').val();
+//     var product_id = $('.product_id').val();
+//     // alert(product_id);
+//     var item_qty = $('#item_qty').val();
 
-            } else {
-                    $('#alteratio_item_err').html('');
-                window.location.reload();
-            }
-        }
-    });
-}
+//         var checked_product_ids = [];
+//         $(".product_id").each(function () {
+//             var self = $(this);
+//             if (self.is(':checked')) {
+//                 checked_product_ids.push(self.val()); 
+//                 // alert(checked_product_ids);
+//             }
+//         });
+
+//     var sendData = { 
+//         product_id: checked_product_ids,
+//         alteration_voucher_id: alteration_voucher_id,
+//         item_qty: item_qty
+//     };
+    
+//     $.ajax({
+//         type: "post",
+//         url: "save-alteration-item",
+//         // data: {alteration_voucher_id,item_qty,product_id},
+//         data: JSON.stringify(sendData),
+//         contentType: "application/json; charset=utf-8",
+//         // dataType: "json",
+        
+//         success: function (response) {
+//             console.log(response);
+//             if (response.status === 400) {
+//                 $('#alteration_item_err').html('');
+//                 $('#alteration_item_err').addClass('alert alert-danger');
+//                 var count = 1;
+//                 $.each(response.errors, function (key, err_value) {
+//                     $('#alteration_item_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+//                 });
+
+//             } else {
+//                     $('#alteratio_item_err').html('');
+//                 window.location.reload();
+//             }
+//         }
+//     });
+// }
 
 </script>
 

@@ -21,10 +21,11 @@ class CustomerBillInvoiceController extends Controller
         $products = PurchaseEntry::all();
         $product_barcode = PurchaseEntryItem::all();
         $sizes = Size::all();
-        // $customers_billing = Customer::all();
-        $customers_billing = Customer::join('customer_bills','customer_bills.id','=','customers.id')->get([
+        // $customers_billing = CustomerBill::all();
+        $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')->get([
             'customers.*','customer_bills.*'
         ]);
+        
         $months = Month::all();
         $cities = City::all();
         $users = User::all();
@@ -199,39 +200,25 @@ class CustomerBillInvoiceController extends Controller
 
     }
 
-    public function generateInvoice($customer_id)
+    public function generateInvoice($bill_id)
     {
         
+                $bills = CustomerBill::join('customers','customer_bills.customer_id','=','customers.id')
+                    ->where('customer_bills.id',$bill_id)
+                    ->select(['customer_bills.*','customers.customer_name','customers.mobile_no'])
+                    ->first(); 
 
-                 $get_cutomer_data =Customer::find($customer_id);
-        
-                $order_items =CustomerBillInvoice::join('customers','customers.id','=','customer_bill_invoices.bill_id')->
-                                    // join('purchase_entries','purchase_entries.id','=','customer_bill_invoices.product_id')
-                                    join('customer_bills','customer_bills.id','=','customer_bill_invoices.bill_id')
-                                    // join('sizes','sizes.id','=','customer_bill_invoices.size_id')
-                                    // join('colors','colors.id','=','customer_bill_invoices.color_id')
+                $bill_invoise = CustomerBillInvoice::where(['bill_id'=>$bill_id])->get(); 
 
-                                    ->where('customer_bill_invoices.bill_id',$get_cutomer_data->id)
-                            ->select(['customer_bill_invoices.*','customer_bills.total_amount'])->get(); 
+                    
 
-                            
-                    //  print_r($order_items);
-                    // dd($order_items);  
-                    // print_r($order_items);    
-        //         ->get(['order_items.*','items.item_name','items.price' ]);
-
-        //         if($order->payment_mode == MyApp::ONLINE){
-        //             $payment_mode = "Online";
-        //         }else{
-        //             $payment_mode = "Cash";
-        //         }
-
+                    
 
         $html = "";
         $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$get_cutomer_data->customer_name</b></h5>";
+                    // $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$bills->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
 
@@ -267,20 +254,24 @@ class CustomerBillInvoiceController extends Controller
                         // $html .="<hr>";
 
                         $html .="<div class='row '>";
-                            $html .="<div class='col-md-6' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small>".$get_cutomer_data->customer_name."</small></span><br>";
+                            $html .="<div class='col-md-7' style='border:1px solid black'>";
+                            $html .="<span>Customer name: <small>".$bills->customer_name."</small></span><br>";
                             $html .="<span>Location : <small>Jabalpur</small></span><br>";
-                            $html .="<span>Mobile no : <small>".$get_cutomer_data->mobile_no."</small></span><br>";
-                            $html .="<span>State code  : <small>0761</small></span><br>";
+                            $html .="<span>Mobile no : <small>".$bills->mobile_no."</small></span><br>";
+                            // $html .="<span>State code  : <small>0761</small></span><br>";
                             // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
                             $html .="</div>";
-                            $html .="<div class='col-md-2' style='border:1px solid black'>";
-                            $html .="<span class=''>CASH :<br/> <small><b>10000</b></small></span> ";
-                            $html .="</div>";
-                            $html .="<div class='col-md-4' style='border:1px solid black'>";
-                            $html .="<span>Invoicen No : <small class='float-end'>".$get_cutomer_data->invoice_no."</small></span><br>";
-                                $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($get_cutomer_data->date))."</small></span><br>";
-                                $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
+                            // $html .="<div class='col-md-2' style='border:1px solid black'>";
+                            // // $html .="<span class=''>Payment :<br/>";
+                            // $html .="<span class=''>online :<br/>";
+                            // $html .="<span class=''>cash :<br/>";
+                            // $html .="<span class=''>card :<br/>";
+                            // $html .="<span class=''>credit :<br/>";
+                            // $html .="</div>";
+                            $html .="<div class='col-md-5' style='border:1px solid black'>";
+                            $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($bills->bill_date))."</small></span><br>";
+                            $html .="<span>Invoicen No : <small class='float-end'>".$bills->invoice_no."</small></span><br>";
+                                // $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
                             $html .="</div>";
                         $html .="</div>";
                         // $html .="<hr>";
@@ -297,7 +288,7 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<th>Size</th>";
                                         // $html .="<th>Color</th>";
                                         $html .="<th>MRP</th>";
-                                        $html .="<th>Rate</th>";
+                                        // $html .="<th>Rate</th>";
                                         $html .="<th>Disc</th>";
                                         $html .="<th>Total</th>";
                                         $html .="<th>Taxable</th>";
@@ -307,12 +298,12 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="</tr>";
                                 $html .="</thead>";
                                 $html .="<tbody>";
-                                $total_amount = 0;
+                                // $total_amount = 0;
                                 $total_cgst = 0;
                                 $total_sgst = 0;
                                 $total_igst = 0;
                                 $taxfree_amount =0;
-                                foreach ($order_items as $key => $list) {
+                                foreach ($bill_invoise as $key => $list) {
                                     // dd($list);
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
@@ -321,7 +312,7 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<td>".$list->size."</td>";
                                         // $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->price."</td>";
+                                        // $html .="<td>".$list->price."</td>";
                                         $html .="<td>0.00</td>";
                                         $html .="<td>".$list->amount."</td>";
                                         $html .="<td>".$list->taxfree_amount."</td>";
@@ -329,7 +320,7 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<td>".$list->sgst."</td>";
                                         $html .="<td>".$list->igst."</td>";
                                     $html .="</tr>";
-                                $total_amount =  $list->total_amount;
+                                // $total_amount =  $list->total_amount;
                               
                                 $total_cgst =  $total_cgst + $list->cgst;
                                 $total_sgst =  $total_sgst+ $list->sgst;
@@ -343,9 +334,9 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<tr>";
                                     $html .="<td colspan='2'></td>";
                                     $html .="<td>".$key."</td>";
-                                        $html .="<td colspan='3'></td>";
+                                        $html .="<td colspan='2'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        $html .="<td>".$total_amount."</td>";
+                                        $html .="<td>".$bills->total_amount."</td>";
                                         $html .="<td>".$taxfree_amount."</td>";
                                         $html .="<td>".$total_sgst."</td>";
                                         $html .="<td>".$total_cgst."</td>";
@@ -359,6 +350,12 @@ class CustomerBillInvoiceController extends Controller
                         $html .="<div class='row'>";
                         $html .="<div class='col-md-8'>";
                         $html .="<span class='float-start'>Amount of Tax Subject to Reverse Change :</span><br>";
+                        $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
+                        $html .="<span class='ml-2'>Online :</span><br>";
+                        $html .="<span class='ml-2'>Cash :</span><br>";
+                        $html .="<span class='ml-2'>Card :</span><br>";
+                        $html .="<span class='ml-2'>Credit :</span><br>";
+                        $html.="</div>";
                            
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
@@ -375,14 +372,14 @@ class CustomerBillInvoiceController extends Controller
                         $html .="</div>";
                         $html .="<div class='col-md-2'>";
 
-                            $html .="<b class='text-center'>".$total_amount."</b><br>";
+                            $html .="<b class='text-center'>".$taxfree_amount."</b><br>";
                             $html .="<b class='text-center'>0.00</b><br>";
                             $html .="<b class='text-center'>".$total_cgst."</b><br>";
                             $html .="<b class='text-center'>".$total_sgst."</b><br>";
                             $html .="<b class='text-center'>".$total_igst."</b><br>";
                             // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
                             // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
-                            $html .="<b class='text-center'>".$total_amount."</b><br>";
+                            $html .="<b class='text-center'>".$bills->total_amount."</b><br>";
 
                     $html .="</div>";
                     $html .="</div>";
@@ -402,7 +399,7 @@ class CustomerBillInvoiceController extends Controller
 
                 $html .="<div class='modal-footer'>";
                     $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button>";
-                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$get_cutomer_data->id."'>Print</button>";
+                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$bills->id."'>Print</button>";
                 $html .="</div>";
 
             $html .="</div>";
@@ -410,6 +407,8 @@ class CustomerBillInvoiceController extends Controller
 
         return response()->json([
             'status'=>200,
+            'bills'=>$bills,
+            'bill_invoise'=>$bill_invoise,
             'html'=>$html
         ]);
   }   

@@ -209,48 +209,7 @@ a {
                 
             });
         
-            $(document).on('click','#addBrandBtn',function(e)
-            {
-                e.preventDefault();
-                $('#brandModal').modal('show');
-                $('#brand_err').html('');
-                $('#brand_err').removeClass('alert alert-danger');
-                $('#brandForm').trigger('reset');
-                $('#saveBrandBtn').removeClass('hide');
-                $('#updateBrandBtn').addClass('hide');
-            });
-
-            $(document).on('click','#saveBrandBtn', function (e) {
-                e.preventDefault();
-                // alert('dd')
-                saveBrand();
-            });
-
-            $(document).on('click','.editBrandBtn', function (e) {
-                e.preventDefault();
-                const brand_id = $(this).val();
-                editDepartment(brand_id);
-            });
-
-            $(document).on('click','#updateBrandBtn', function (e) {
-                e.preventDefault();
-                const brand_id = $(this).val();
-                updateDepartment(brand_id);
-            });
-
-            $(document).on('click','.deleteBrandBtn', function (e) {
-                e.preventDefault();
-                const brand_id = $(this).val();
-                // alert(brand_id)
-                $('#deleteBrandModal').modal('show');
-                $('#yesdeleteBrandBtn').val(brand_id);
-            });
-
-            $(document).on('click','#yesdeleteBrandBtn', function (e) {
-                e.preventDefault();
-                const brand_id = $(this).val();
-                deleteBrand(brand_id);
-            });
+            
 
             $(document).on('click','#addItemBtn', function (e) {
                 e.preventDefault();
@@ -450,16 +409,51 @@ a {
             });
         
             $(document).on('click','#subCategoryBtn', function () {
+                var category_id = $('#category_id').val();
+                if (category_id == null) {
+                    alert('Please select category first');
+                    return false;
+                    // $('#subCategoryModal').find('#subcategoryForm').find('#category_id').val(category_id);
+                }
                 $('#subCategoryModal').modal('show');
+                // $("#subCategoryModal").trigger("reset"); 
+                $('#subcategoryForm')[0].reset();
+                $('#subCategoryModal').find('#subcategoryForm').find('#category_row').addClass('hide');
+                $('#subCategoryModal').find('#subcategoryForm').find('#category_id').val(category_id);
+
             });
+
             // save sub category
             $(document).on('click','#savesubCategoryBtn', function (e) {
                 e.preventDefault();
                 saveSubCategory();
             });
 
+            $(document).on('click','#addBrandBtn',function(e)
+            {
+                e.preventDefault();
+                $('#brandModal').modal('show');
+                $('#brand_err').html('');
+                $('#brand_err').removeClass('alert alert-danger');
+                $('#brandForm').trigger('reset');
+            });
+
+            $(document).on('click','#saveBrandBtn', function (e) {
+                e.preventDefault();
+                saveBrand();
+            });
+
             $(document).on('click','#styleNoBtn', function () {
+                var supplier_id = $('#supplier_id').val();
+                if (supplier_id == null) {
+                    alert('Please select supplier first');
+                    return false;
+                    // $('#subCategoryModal').find('#subcategoryForm').find('#category_id').val(category_id);
+                }
                 $('#styleNoModal').modal('show');
+                $('#styleNoForm')[0].reset();
+                $('#styleNoModal').find('#styleNoForm').find('#supplier_row').addClass('hide');
+                $('#styleNoModal').find('#styleNoForm').find('#supplier_id').val(supplier_id);
             });
 
             // save style no

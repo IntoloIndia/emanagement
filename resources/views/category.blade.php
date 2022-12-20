@@ -187,7 +187,7 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-4 col-md-12 col-sm-12">
+  <div class="col-lg-6 col-md-12 col-sm-12">
     <div class="card">
       <div class="card-header">
         {{-- <div class="row">
@@ -197,8 +197,8 @@
           
         {{-- </div> --}}
       </div>
-      <div class="card-body">
-        <table class="table">
+      <div class="card-body table-responsive p-0" style="height: 500px;">
+        <table class="table table-head-fixed text-nowrap">
           <thead>
             <tr>
               <th scope="col">Sno</th>

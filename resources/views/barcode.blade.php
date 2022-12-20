@@ -22,12 +22,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                     <span class="tect-center business_title ml-5"><b>MANGALDEEP CLOTHS LLP</b></span><br/>
-                                    <span class="product_detail">Prod</span> <small  class="ml-5"> Jeans</small> <br/>
-                                    <span class="product_detail" >Sec </span> <small  class="ml-5"> Super Slim (DD) J</small> <br/>
-                                    <span class="product_detail" >Sty </span> <small  class="ml-5"> MFT-28457-P</small> <br/>
-                                    <span class="product_detail" >Clr </span> <small class="ml-5"> 134-Blue Black</small> <br/>
-                                    <span class="product_detail" >Size </span> <small  class="ml-5"> 34</small> <br/>
-                                    <span class="product_detail" style="font-size: 20px;">MRP </span>: <b  class="ml-3" style="font-size: 20px;"> 1250</b> <br/>
+                                    <span class="product_detail">Product : </span> <small  class="ml-5"> Jeans</small> <br/>
+                                    <span class="product_detail">Brand : </span> <small class="ml-5"> MUFTI</small> <br/>
+                                    <span class="product_detail">Style No : </span> <small  class="ml-3"> MFT-28457-P</small> <br/>
+                                    <span class="product_detail">Color : </span> <small class="ml-5"> Blue Black</small> <br/>
+                                    <span class="product_detail" >Size : </span> <small  class="ml-5"> X</small> <br/>
+                                    <span class="product_detail" style="font-size: 20px;">MRP </span>: <b  class="ml-4" style="font-size: 20px;"> 1250</b> <br/>
                                 </div>
                                     <div class="col-md-12" >
                                         <img src="{{$list->barcode_img}}" class="barcode_image barcode img-fluid"><br/>

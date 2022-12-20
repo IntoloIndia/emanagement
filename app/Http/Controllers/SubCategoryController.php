@@ -53,9 +53,10 @@ class SubCategoryController extends Controller
             
            
             if($model->save()){
+                $data = $this->getSubCategoryByCategory($req->input('category_id'));
                 return response()->json([   
                     'status'=>200,
-
+                    'sub_category_html'=>$data['html']
                 ]);
                 // return redirect('category');
             }
@@ -137,10 +138,14 @@ class SubCategoryController extends Controller
         {
             $html.= "<option value='" . $list->id . "'>" . ucwords($list->sub_category) . "</option>";
         }
-        return response()->json([
-            'status'=> 200,
-            'html'=> $html,
-        ]);
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+        // return response()->json([
+        //     'status'=> 200,
+        //     'html'=> $html,
+        // ]);
     }
 
 }

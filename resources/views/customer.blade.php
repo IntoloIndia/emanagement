@@ -78,6 +78,14 @@
             
              
         });
+        $(document).on('click','#showGenerateInvoiceModal', function (e) {
+                e.preventDefault();
+                var bill_id = $(this).attr('bill-id');
+                alert(bill_id);
+                // const customer_id = $(this).val();
+                // generateInvoice(bill_id);
+            });
+
 
         // $(document).on('click','#client_project_row', function(e){
         //     e.preventDefault();
@@ -118,6 +126,25 @@
             }
         });
     } 
+
+    function generateInvoice(customer_id) {
+         $.ajax({
+        type: "get",
+        url: "generate-invoice/"+customer_id,
+        dataType: "json",
+        success: function (response) {
+            //console.log(response);
+            if (response.status == 200) {
+                $('#generateInvoiceModal').html(response.html);
+                $('#generateInvoiceModal').modal('show');
+                
+            }
+        }
+    });
+    
+}
+
+
 </script>
 
 @endsection

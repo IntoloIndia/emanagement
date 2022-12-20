@@ -101,6 +101,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         // Route::get('admin/get-customer/{customer_id}','getCustomerData');
         Route::get('admin/customer-detail/{customer_id}','CustomerDetail');
     //  Route::get('admin/get-customer-points/{customer_id}','getCustomerPoints');
+        // Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+    
     });
 
 
@@ -156,7 +158,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-order', 'saveOrder');
         Route::get('admin/get-item-price/{product_code}', 'getItemData');
         Route::get('admin/get-customer-data/{mobile_no}', 'getCumosterData');
-        Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+        Route::get('admin/generate-invoice/{bill_id}','generateInvoice');
     });
 
     // Alteration voucher 
@@ -164,7 +166,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(AlterationVoucherController::class)->group(function () {
         Route::get('admin/alteration_voucher','index');
         Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
-        Route::post('admin/save-alteration-item','saveAlterationItem');
+        Route::get('admin/alter-voucher/{bill_id}','alterVoucher');
+        // Route::post('admin/save-alteration-item','saveAlterationItem');
         // Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
         Route::get('admin/generate-alteration-Item/{bill_id}','generateAlerationItem');
       
@@ -253,12 +256,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
         // category of purchase entry
         // Route::post('admin/save-category', 'saveCategory');
-        Route::post('admin/save-sub-category', 'saveSubCategory');
-        Route::post('admin/save-style-no','manageStyleNo');
+        // Route::post('admin/save-sub-category', 'saveSubCategory');
+        // Route::post('admin/save-brand','saveBrand');
+        // Route::post('admin/save-style-no','manageStyleNo');
 
-        Route::post('admin/save-brand','saveBrand');
         Route::get('admin/get-purchase-entry/{supplier_id}/{bill_no}','getPurchaseEntry');
-
         Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
 
     });

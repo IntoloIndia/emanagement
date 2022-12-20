@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="row  mb-2  justify-content-end">
+                            <div class="row  mb-2 ">
                                 <div class="col-md-4">
                                     <select name="city_id" id="city_id" class="form-select" >
                                         <option selected disabled>City</option>
@@ -80,6 +80,9 @@
                                 <div class="col-md-4">
                                     {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
                                     <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="date" placeholder=""  class="form-control form-control-sm ">
                                 </div>
                                 {{-- <div class="col-md-4">
                                     <select name="employee_id" id="employee_id" class="form-select" >
@@ -102,6 +105,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <b>Items</b>
+                                {{-- <button onclick="calculateTotalAllGst();">total gst</button> --}}
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 {{-- <input type="text" id="addItemBtn"> --}}
@@ -140,20 +144,20 @@
                        </div>
                     </div>
                     <div class="card-footer ">
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-10 text-end">
                                 <b>GROSS AMOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="item_total_amount" class="form-control form-control-sm" value="0" readonly>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-md-10 text-end">
                                 <b>LESS DISCOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm dis_amount">
+                                <input type="text" name="" id="" class="form-control form-control-sm dis_amount" value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -161,7 +165,7 @@
                                 <b>CGST AMOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="item_cgst" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -169,7 +173,7 @@
                                 <b>SGST AMOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="item_sgst" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -177,7 +181,7 @@
                                 <b>IGST AMOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="item_igst" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -185,7 +189,7 @@
                                 <b>OTHER ADJ :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="" class="form-control form-control-sm " readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -193,7 +197,7 @@
                                 <b>G TOTAL :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm ">
+                                <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         {{-- <div class="row text-end">
@@ -241,7 +245,8 @@
                         <span>Payment :</span>
                     </div>
                 </div>
-                <div class="row">
+            <div class="row">
+                {{-- <div class="row"> --}}
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
@@ -250,8 +255,8 @@
                         <div class="col-md-2">
                             <input type="text" name="online_payment" id="online_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
-                </div>
-                <div class="row">
+                {{-- </div> --}}
+                {{-- <div class="row"> --}}
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
@@ -260,8 +265,8 @@
                     <div class="col-md-2">
                         <input type="text" name="cash_payment" id="cash_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
-                </div>
-                <div class="row">
+                {{-- </div> --}}
+                {{-- <div class="row"> --}}
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
@@ -270,8 +275,8 @@
                     <div class="col-md-2">
                         <input type="text" name="card_payment" id="card_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
-                </div>
-                <div class="row">
+                {{-- </div> --}}
+                {{-- <div class="row"> --}}
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
@@ -280,8 +285,10 @@
                     <div class="col-md-2">
                             <input type="text" name="credit_payment" id="credit_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
-                </div>
-                    <div class="row">
+            </div>
+                {{-- </div> --}}
+                    <div class="row mt-2">
+                        <div class="col-md-4"></div>
                         <div class="col-md-4"></div>
                         <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -319,8 +326,9 @@
                         <tr>
                             <th scope="col">Sno</th>
                             {{-- <th scope="col">Name</th> --}}
-                            <th scope="col">Mobile</th>
+                            <th scope="col">Bill no</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Print</th>
                             </tr>
                     </thead>
@@ -332,8 +340,9 @@
                         <tr>
                             <td>{{++$count}}</td>
                             {{-- <td>{{ucwords($item->customer_name)}}</td> --}}
-                            <td>{{$item->mobile_no}}</td>
+                            <td>{{$item->invoice_no}}</td>
                             <td>{{$item->total_amount}}</td>
+                            <td>{{$item->bill_date}}</td>
 
                             <td> 
                                 {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
@@ -435,7 +444,7 @@
                 <input type="text" name="price[]" class="form-control form-control-sm price" id="price" >
             </td>
             <td style="width: 50px;">
-                <input type="text" name="discount[]" class="form-control form-control-sm discount" id="" value="" >
+                <input type="text" name="discount[]" class="form-control form-control-sm discount" id="discount_price" value="" >
             </td>
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" >
@@ -500,19 +509,7 @@
                 saveOrder();
             });
 
-            // $(document).on('click','#getGst', function (e) {
-            //     e.preventDefault();
-            //     var price =$("#price").val();
-            //     // alert("call");
-            //     // alert(price);
-            //     // calculateGst(price);
-            // });
-
-            // $(document).on('click','.price', function (e) {
-            //     var price = $(this).val();
-            //     $('#getGst').val(price);
-              
-            // });
+           
 
 
             
@@ -596,7 +593,7 @@
                         
                         calculateAmount(object);
                         calculateGst(object);
-                        
+                        calculateTotalAllGst();
 
                     }
                 });
@@ -710,10 +707,12 @@
                 calculateAmount($(this));
                 // var price =$(".price").val();
                 calculateGst($(this));
+                calculateTotalAllGst();
                 
             });
             $(document).on('keyup','.price', function () {
                 calculateGst($(this));
+                calculateTotalAllGst();
             });
            
            
@@ -734,9 +733,9 @@
            
             $(document).on('click','.orderInvoiceBtn', function (e) {
                 e.preventDefault();
-                const customer_id = $(this).val();
-                // alert(billing_id);
-                generateInvoice(customer_id);
+                const bill_id = $(this).val();
+                // alert(bill_id);
+                generateInvoice(bill_id);
             });
 
             $(document).on('click','#printBtn', function () {
@@ -775,6 +774,8 @@
                 var sgst = 0;
                 var cgst = 0;
                 var igst = 0;
+                var total_cgst =0;
+                var total_sgst =0;
                 // var taxablePrice = price;
                 // var qty;
 
@@ -795,34 +796,38 @@
                         
                         sgst = parseFloat((price * 2.5) / 100);
                         cgst = parseFloat((price * 2.5) / 100);
-                        // sgst = qty*sgst;
-                        // alert(sgst);
-                        // alert(cgst);
-                        // $('.sgst').val(sgst);
-                        // $('.cgst').val(cgst);
-                        $(object).parent().parent().find(".sgst").val(sgst*qty);
-                        $(object).parent().parent().find(".cgst").val(cgst*qty);
+                       
+                        $(object).parent().parent().find(".sgst").val(sgst.toFixed(2)*qty);
+                        $(object).parent().parent().find(".cgst").val(cgst.toFixed(2)*qty);
+                        // calculateTotalAllGst();
+                        
+                        
+                       
+
                     }else{
                         sgst = parseFloat(price * 6) / 100 ;
                         cgst = parseFloat(price * 6) / 100 ;
-                        // alert(sgst);
-                        // alert(cgst);
-                        // $('.sgst').val(sgst);
-                        // $('.cgst').val(cgst);
-                        $(object).parent().parent().find(".sgst").val(sgst*qty);
-                        $(object).parent().parent().find(".cgst").val(cgst*qty);
+                       
+                        $(object).parent().parent().find(".sgst").val(sgst.toFixed(2)*qty);
+                        $(object).parent().parent().find(".cgst").val(cgst.toFixed(2)*qty);
+                        // calculateTotalAllGst();
+                       
+
+
                     }
                 }else{
                     if (price < '{{MyApp::THOUSAND}}') {
                         igst = parseFloat(price * 5 / 100);
                         // alert(igst);
                         // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst*qty);
+                        $(object).parent().parent().find(".igst").val(igst.toFixed(2)*qty);
+                        $("#item_igst").val(igst*qty);
                     }else{
                         igst = parseFloat(price * 12 / 100);
                         // alert(igst);
                         // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst*qty);
+                        $(object).parent().parent().find(".igst").val(igst.toFixed(2)*qty);
+                        $("#item_igst").val(igst*qty);
                     }
                 }
         
@@ -854,6 +859,7 @@
             $(object).parent().parent().find(".amount").val(amount);
             $('.discount').val();
             calculateTotalAmount();
+            // calculateTotalCgst();
             
         }
 
@@ -866,10 +872,60 @@
                 {
                     item_total_amount +=  total_amount;
                 }  
+                // alert(item_total_amount);
             });
             $("#item_total_amount").text(item_total_amount);
+            $("#item_total_amount").val(item_total_amount);
             $("#total_amount").val(item_total_amount);
             returnAmount();
+            calculateTotalAllGst();
+        }
+
+
+        function calculateTotalAllGst(){
+            var item_total_sgst = 0;
+            var item_total_cgst = 0;
+            var item_total_igst = 0;
+            var item_total_discount = 0;
+        
+            $(".sgst").each(function(){
+                item_sgst = parseFloat($(this).val());
+                if (!isNaN(item_sgst))
+                {
+                    item_total_sgst +=  item_sgst;
+                }  
+                
+            });
+            $(".cgst").each(function(){
+                item_cgst = parseFloat($(this).val());
+                if (!isNaN(item_cgst))
+                {
+                    item_total_cgst +=  item_cgst;
+                }  
+                
+            });
+            $(".igst").each(function(){
+                item_igst = parseFloat($(this).val());
+                if (!isNaN(item_igst))
+                {
+                    item_total_igst +=  item_igst;
+                }  
+                
+            });
+            // $(".discount").each(function(){
+            //     item_discount = parseFloat($(this).val());
+            //     if (!isNaN(item_discount))
+            //     {
+            //         item_total_discount +=  item_discount;
+            //     }  
+                
+            // });
+            // $("#item_total_amount").text(item_total_amount);
+            $("#item_sgst").val(item_total_sgst);
+            $("#item_cgst").val(item_total_cgst);
+            $("#item_igst").val(item_total_igst);
+            // $("#discount").val(item_total_discount);
+            
         }
 
         function returnAmount(){
@@ -955,13 +1011,14 @@
                
         }
 
-        function generateInvoice(customer_id) {
+        function generateInvoice(bill_id) {
          $.ajax({
         type: "get",
-        url: "generate-invoice/"+customer_id,
+        url: "generate-invoice/"+bill_id,
         dataType: "json",
         success: function (response) {
-            //console.log(response);
+            console.log(response);
+
             if (response.status == 200) {
                 $('#generateInvoiceModal').html(response.html);
                 $('#generateInvoiceModal').modal('show');
@@ -969,6 +1026,7 @@
             }
         }
     });
+    
 }
 
 
