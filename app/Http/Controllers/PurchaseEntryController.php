@@ -264,6 +264,10 @@ class PurchaseEntryController extends Controller
             $size = "";
             $price = 0;
             $mrp = 0;
+            $discount = 0 ;
+            if ($req->input('discount') > 0) {
+                $discount = $req->input('discount');
+            }
 
             if ($xs_qty > 0) {
                 $qty = $xs_qty;
@@ -313,39 +317,6 @@ class PurchaseEntryController extends Controller
                 $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
             }
             
-
-            // $qty = $req->input('qty');
-            // for ($i=0; $i < $qty; $i++) 
-            // { 
-            //     $product_code = rand(000001,999999);
-               
-            //     $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-               
-            //     $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-                
-            //     $model = new PurchaseEntry;
-            //     $model->product_code = $product_code;
-            //     $model->category_id = $req->input('category_id');
-            //     $model->supplier_id = $req->input('supplier_id');
-            //     $model->sub_category_id = $req->input('sub_category_id');
-            //     $model->product = $req->input('product_name');
-            //     $model->qty = 1;
-            //     $model->sales_price = $req->input('sales_price');
-            //     $model->purchase_price = $req->input('purchase_price');
-            //     $model->bill_no = $req->input('bill_no');
-            //     $model->size = $req->input('size');
-            //     $model->color = $req->input('color');
-            //     $model->barcode = $barcode;
-            //     $model->date = date('Y-m-d');
-            //     $model->time = date('g:i A');
-
-            //     if ($model->save()) {
-            //         $imageModal = new ProductImage;
-            //         $imageModal->product_id = $model->id;
-            //         $imageModal->product_image = $req->input('product_image');
-            //         $imageModal->save();
-            //     }
-            // }
 
             $purchase_entry_html = $this->getPurchaseEntry($req->input('supplier_id'), $req->input('bill_no'));
 
@@ -401,45 +372,117 @@ class PurchaseEntryController extends Controller
                 'status'=>200,
                 'html'=>$html
             ] ;
-        }                       
+        }  
 
+            // $purchase_entry_items = array();
             $purchase_entry = PurchaseEntry::Join('style_nos','style_nos.id','=','purchase_entries.style_no_id')
                 // ->Join('categories','categories.id','=','purchase_entries.category_id')
                 // ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
                 ->where('purchase_entries.purchase_id', '=', $data->id)
                 ->get(['purchase_entries.*','style_nos.style_no']);
 
-                $html .="<table class='table table-bordered'>";
-                    $html .="<thead>";
-                    $html .="<tr>";
-                        $html .="<th>SN</th>";
-                        $html .="<th>Style</th>";
-                        $html .="<th>Color</th>";
-                        // $html .="<th>Qty</th>";
-                        $html .="<th>Action</th>";
+                
+
+                // $purchase_entry_items = PurchaseEntryItem::
+
+                // $html .="<table class='table table-bordered'>";
+                //     $html .="<thead>";
+                //     $html .="<tr>";
+                //         $html .="<th>SN</th>";
+                //         $html .="<th>Style</th>";
+                //         $html .="<th>Color</th>";
                         
-                    $html .="</tr>";
-                $html .="</thead>";
-                $html .="<tbody>";
+                        
+                //     $html .="</tr>";
+                // $html .="</thead>";
+                // $html .="<tbody>";
+                //     foreach ($purchase_entry as $key => $list) {
+                //         $html .="<tr>";
+                //             $html .="<td>".++$key."</td>";
+                //             $html .="<td>".ucwords($list->style_no)."</td>";
+                //             $html .="<td>".ucwords($list->color)."</td>";
+                //             // $html .="<td><button type='button' class='btn btn-info btn-sm ' value=''><i class='fas fa-eye'></i></button></td>";
+                           
+                //         $html .="</tr>";
+                //     }
+                // $html .="</tbody>";
+                // $html .="</table>";
+
+
+
+                $html .="<div class='accordion accordion-flush' id='accordionFlushExample'>";
+                $html .="<table class='table table-striped'>";
+                    $html .="<thead>";
+                        $html .="<tr style='position: sticky;z-index: 1;'>";
+                            $html .="<th>SN</th>";
+                            $html .="<th>Style</th>";
+                            $html .="<th>Color</th>";
+                            
+                        $html .="</tr>";
+                    $html .="</thead>";
+                    $html .="<tbody >";
+                        
                     foreach ($purchase_entry as $key => $list) {
-                        // dd($list);
-                        $html .="<tr>";
+                               
+                        $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
                             $html .="<td>".ucwords($list->color)."</td>";
-                            $html .="<td><button type='button' class='btn btn-info btn-sm ' value=''><i class='fas fa-eye'></i></button></td>";
-                           
+                        $html .="</tr> ";
+
+                        $html .="<tr>";
+                            $html .="<td colspan='3'>";
+                                $html .="<div id='collapse_".$list->id."' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>";
+                                    $html .="<div class='accordion-body table-responsive' >";
+                                        $html .="<table class='table  '>";
+                                            $html .="<thead>";
+                                                $html .="<tr>";
+                                                    $html .="<th> SN</th>";
+                                                    $html .="<th> Size</th>";
+                                                    $html .="<th> Qty</th>";
+                                                    $html .="<th> Price</th>";
+                                                $html .="</tr>";
+                                            $html .="</thead>";
+                                            $html .="<tbody>";
+                                            $purchase_entry_items = $this->getPurchaseEntryItems($list->id);
+
+                                            foreach ($purchase_entry_items['items'] as $key1 => $item) {
+                                                $html .="<tr>";
+                                                    $html .="<td>".++$key1."</td>";
+                                                    $html .="<td>".$item->size."</td>";
+                                                    $html .="<td>".$item->qty."</td>";
+                                                    $html .="<td>".$item->price."</td>";
+                                                $html .="</tr>";
+                                            }
+
+                                            $html .="</tbody>";
+                                        $html .="</table>";
+                                    $html .="</div>";
+                                $html .="</div>";
+                            $html .="</td>";
                         $html .="</tr>";
-                    }
-                $html .="</tbody>";
-                $html .="</table>";
-
-                return $result = [
-                    'status'=>200,
-                    'html'=>$html
-                ] ;
+                    }                                               
+                    $html .="</tbody>";
+                $html .="</table>";  
+            $html .="</div>"; 
 
 
+        return $result = [
+            'status'=>200,
+            'html'=>$html,
+        ] ;
+
+
+    }
+
+    public function getPurchaseEntryItems($purchase_entry_id)
+    {
+        $items = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get();
+
+        return $result = [
+            'status'=>200,
+            'items'=>$items
+        ] ;
     }
 
     public function generatePurchaseInvoice($purchase_id)

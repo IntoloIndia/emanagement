@@ -137,6 +137,41 @@
                         </div>
 
                         <div class="row">
+
+                            <div class="div col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <b>Details</b>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="card-tools">
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                                        <button type="button" class="btn  btn-sm" data-card-widget="collapse" title="Collapse" style="background-color: #ABEBC6;">
+                                                          <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="card-body table-responsive" style="height: 350px;" >
+                                        <table class="table table-head-fixed text-nowrap" id="show_purchase_entry">
+                                            
+                                        </table>
+
+                                    </div>
+                                    {{-- <div class="card-footer text-muted">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                            <button type="button" id="viewPurchaseBtn" class="btn btn-info btn-sm "> View Purchase </button>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+
                             <div class="col-md-8">
                                 {{-- <div class="card"> --}}
                                     
@@ -229,31 +264,6 @@
                                                                             <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
                                                                         </tr>
-                                                                        {{-- <tr>
-                                                                            <th>Total</th>
-                                                                            <td colspan="3">
-                                                                                <div class="input-group input-group-sm mb-1">
-                                                                                    <span class="input-group-text" ><b>Qty</b></span>
-                                                                                    <input type="text" id="total_qty" class="form-control" placeholder="Qty" value="0" readonly disabled>
-                                                                                </div>
-                                                                                <div class="input-group input-group-sm mb-1">
-                                                                                    <span class="input-group-text" ><b>Discount</b></span>
-                                                                                    <input type="text" id="total_qty" class="form-control" placeholder="Discount" value="0" >
-                                                                                </div>
-
-                                                                            </td>
-                                                                            <td colspan="3">
-                                                                                <div class="input-group input-group-sm mb-1">
-                                                                                    <span class="input-group-text" ><b>Value</b></span>
-                                                                                    <input type="text" id="total_price" class="form-control" placeholder="Value" value="0" readonly disabled>
-                                                                                </div>
-                                                                                <div class="input-group input-group-sm mb-1">
-                                                                                    <span class="input-group-text" ><b>Amount</b></span>
-                                                                                    <input type="text" id="total_amount" class="form-control" placeholder="Total Amount" value="0" readonly disabled>
-                                                                                </div>
-                                                                            </td>
-                                                                            
-                                                                        </tr> --}}
                                                                         
                                                                     </tbody>
                                                                 </table>
@@ -273,38 +283,38 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <small  ><b>Qty</b> </small>
-                                                        <input type="text" name="" id="total_qty" class="form-control form-control-sm" placeholder="QTY" readonly>
+                                                        <input type="text" name="" id="total_qty" class="form-control form-control-sm" placeholder="QTY" readonly disabled>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <small  ><b>Value</b> </small>
-                                                        <input type="text" name="" id="total_price" class="form-control form-control-sm" placeholder="Value" readonly>
+                                                        <input type="text" name="" id="total_price" class="form-control form-control-sm" placeholder="Value" readonly disabled>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <small  ><b>Discount</b> </small>
-                                                        <input type="text" name="" id="discount" class="form-control form-control-sm" placeholder="Discount" value="0">
+                                                        <input type="text" name="discount" id="discount" class="form-control form-control-sm" placeholder="Discount" value="0">
                                                     </div>
                                                     <div class="col-md-4">
                                                         <small  ><b>Taxable</b> </small>
-                                                        <input type="text" name="" id="taxable" class="form-control form-control-sm" placeholder="Taxable" value="0" readonly>
+                                                        <input type="text" name="" id="taxable" class="form-control form-control-sm" placeholder="Taxable" value="0" readonly disabled>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-md-3">
                                                         <small  ><b>SGST</b> </small>
-                                                        <input type="text" name="" id="total_sgst" class="form-control form-control-sm sgst" placeholder="SGST" value="0"  readonly>
+                                                        <input type="text" name="" id="total_sgst" class="form-control form-control-sm sgst" placeholder="SGST" value="0"  readonly disabled>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <small  ><b>CGST</b> </small>
-                                                        <input type="text" name="" id="total_cgst" class="form-control form-control-sm cgst" placeholder="CGST" value="0" readonly>
+                                                        <input type="text" name="" id="total_cgst" class="form-control form-control-sm cgst" placeholder="CGST" value="0" readonly disabled>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <small ><b>IGST</b> </small>
-                                                        <input type="text" name="" id="total_igst" class="form-control form-control-sm igst" placeholder="IGST" value="0" readonly>
+                                                        <input type="text" name="" id="total_igst" class="form-control form-control-sm igst" placeholder="IGST" value="0" readonly disabled>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <small ><b>Amount</b> </small>
-                                                        <input type="text" name="" id="total_amount" class="form-control form-control-sm total_amount" placeholder="Amount" readonly>
+                                                        <input type="text" name="" id="total_amount" class="form-control form-control-sm total_amount" placeholder="Amount" readonly disabled>
                                                     </div>
                                                 </div>
                                                 
@@ -360,38 +370,7 @@
                                 {{-- </div> --}}
                                 
                             </div>
-                            <div class="div col-md-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <b>Details</b>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="card-tools">
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                                                        <button type="button" class="btn  btn-sm" data-card-widget="collapse" title="Collapse" style="background-color: #ABEBC6;">
-                                                          <i class="fas fa-minus"></i>
-                                                        </button>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                           
-                                        </div>
-                                    </div>
-                                    <div class="card-body table-responsive p-0 " style="height: 300px;" >
-                                        <table class="table table-head-fixed text-nowrap" id="show_purchase_entry">
-                                            
-                                        </table>
-                                    </div>
-                                    {{-- <div class="card-footer text-muted">
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                                            <button type="button" id="viewPurchaseBtn" class="btn btn-info btn-sm "> View Purchase </button>
-                                        </div>
-                                    </div> --}}
-                                </div>
-                            </div>
+                            
 
                         </div>
 
@@ -474,23 +453,82 @@
         </div>
         <form id="purchaseExcelEntryForm" action="{{url('admin/export-excel-data')}}" method="post" enctype="multipart/form-data">
             <div class="modal-body">
-                    @csrf
-                        <div id="purchase_entry_err"></div>
-                            <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="file"name="file" id="file" class="form-control form-control-sm">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-primary btn-sm mt-1">Save</button>
-                                    </div>
+                @csrf
+                    <div id="purchase_entry_err"></div>
+                        <div class="row">
+                                <div class="col-md-6">
+                                    <input type="file"name="file" id="file" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-sm mt-1">Save</button>
                                 </div>
                             </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success btn-sm" href="{{url('admin/import-data')}}">Download Excel File</button>
-                    </div>
+                        </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn-sm" href="{{url('admin/import-data')}}">Download Excel File</button>
+                </div>
             </form>
          </div>
         </div>
     </div>
 {{-- excel data entry modal end --}}
+
+
+
+{{-- <div class='accordion accordion-flush' id='accordionFlushExample'>
+    <table class='table table-striped'>
+        <thead>
+            <tr style='position: sticky;z-index: 1;'>
+                <th>SN</th>
+                <th>Style</th>
+                <th>Color</th>
+                
+            </tr>
+        </thead>
+        <tbody >
+            @php
+               $count = 0; 
+               $orders = 5;
+               @endphp
+               @for ($i = 0; $i < $orders; $i++)
+                   
+               
+                <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$i}}' aria-expanded='false' aria-controls='flush-collapseOne'>
+                    
+                    <td>sfjsf</td>
+                    <td>sfjsf</td>
+                    <td>sfjsf</td>
+                    
+                </tr> 
+                <tr>
+                    <td colspan='3'>
+                        <div id='collapse_{{$i}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
+                            <div class='accordion-body'>
+                                <table class="table table-striped table-hover ">
+                                    <thead>
+                                        <tr>
+                                            <th> SN</th>
+                                            <th> Size</th>
+                                            <th> Qty</th>
+                                            <th> Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>XXL</td>
+                                            <td>5</td>
+                                            <td>1299</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endfor                                               
+            </tbody>
+    </table>  
+</div> --}}
 

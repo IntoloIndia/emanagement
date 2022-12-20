@@ -2,8 +2,10 @@
 @php
     use App\Models\Category;
     use App\Models\Country;
+    use App\Models\Supplier;
     $countries = Country::all();
     $categories = Category::all();
+    $suppliers = Supplier::all();
 
 @endphp
 
@@ -65,7 +67,8 @@
               @csrf
               <div class="modal-body">
                   <div id="subcategory_err"></div>
-                    <div class="row mt-1">
+                    <input type="hidden" name="category_id" id="category_id">
+                    <div class="row mt-1" id="category_row">
                         <div class="col-md-4">
                             <label for="select_category" class="form-label">Category</label>
                         </div>
@@ -109,52 +112,7 @@
       </div>
     </div>
 </div>
-{{-- style no modal of purchase entry --}}
-<div class="modal fade" id="styleNoModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Style No</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="styleNoForm">
-                    @csrf
-                    <div class="modal-body">
-                        <div id="style_no_err"></div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="Supplier" class="form-label">Supplier</label>
-                            </div>
-                            <div class="col-md-8">
-                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
-                                    <option selected disabled >Select...</option>
-                                    {{-- @foreach ($suppliers as $list)
-                                        <option value="{{$list->id}}">{{ucwords($list->supplier_name)}}</option>
-                                    @endforeach --}}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-1">
-                            <div class="col-md-4">
-                                <label for="styleNo" class="form-label">Style No</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" name="style_no" id="style_no" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="style_id" id="style_id" value="">
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="saveStyleNoBtn" class="btn btn-primary btn-sm ">Save</button>
-                        <button type="button" id="updateStyleNoBtn" class="btn btn-primary btn-sm hide">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 {{-- brnad modal --}}
 
@@ -189,6 +147,88 @@
           </form>
       </div>
       </div>
+    </div>
+</div>
+
+<div class="modal fade" id="colorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="colorForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div id="size_err"></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="Color" class="form-label">Color</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{-- <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color"> --}}
+                                <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="saveColorBtn" class="btn btn-primary btn-sm ">Save</button>
+                        <button type="button" id="updateColorBtn" class="btn btn-primary btn-sm hide">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- style no modal of purchase entry --}}
+<div class="modal fade" id="styleNoModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Style No</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="styleNoForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div id="style_no_err"></div>
+                        <input type="hidden" name="supplier_id" id="supplier_id">
+                        <div class="row " id="supplier_row">
+                            <div class="col-md-4">
+                                <label for="Supplier" class="form-label">Supplier</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
+                                    <option selected disabled >Select...</option>
+                                    @foreach ($suppliers as $list)
+                                        <option value="{{$list->id}}">{{ucwords($list->supplier_name)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-md-4">
+                                <label for="styleNo" class="form-label">Style No</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="style_no" id="style_no" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="style_id" id="style_id" value="">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="saveStyleNoBtn" class="btn btn-primary btn-sm ">Save</button>
+                        <button type="button" id="updateStyleNoBtn" class="btn btn-primary btn-sm hide">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -316,35 +356,3 @@
 </div>
 
 
-<div class="modal fade" id="colorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Color</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="colorForm">
-                    @csrf
-                    <div class="modal-body">
-                        <div id="size_err"></div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="Color" class="form-label">Color</label>
-                            </div>
-                            <div class="col-md-9">
-                                {{-- <input type="color" name="color" id="color" class="form-control form-control-sm" placeholder="Color"> --}}
-                                <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="Color">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="saveColorBtn" class="btn btn-primary btn-sm ">Save</button>
-                        <button type="button" id="updateColorBtn" class="btn btn-primary btn-sm hide">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>

@@ -31,8 +31,8 @@ class CustomerController extends Controller
         // $customer_detail = Customer::join('states','customers.state_type','=','states.id')->join('cities','customers.city_id','=','cities.id')
         // ->where(['customers.id'=>$customer_id])->select('customers.*','states.state','cities.city')->get();
         $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
-        ->orderBy('bill_date','DESC')
-        ->orderBy('bill_time','DESC')->get();
+            ->orderBy('bill_date','DESC')
+            ->orderBy('bill_time','DESC')->get();
 
         // $customer_bills = CustomerBill::join('customer_bill_invoices','customer_bills.id','=','customer_bill_invoices.bill_id')
         // ->where(['customer_bills.customer_id'=>$customer_id])
@@ -55,16 +55,8 @@ class CustomerController extends Controller
                     $html .="<th>Date</th>";
                     $html .="<th>Time</th>";
                     $html .="<th>Invoice No</th>";
-                    // $html .="<th>Product Code</th>";
-                    // $html .="<th>Product Id</th>";
-                    // $html .="<th>Qty</th>";
-                    // $html .="<th>Size</th>";
-                    // $html .="<th>Price</th>";
-                    // $html .="<th>taxfree_amount</th>";
-                    // $html .="<th>Sgst</th>";
-                    // $html .="<th>Cgst</th>";
-                    // $html .="<th>Igst</th>";
                     $html .="<th>Total amount</th>";
+                    $html .="<th>Action</th>";
                 
                 $html .="</tr>";
             $html .="</thead>";
@@ -76,16 +68,8 @@ class CustomerController extends Controller
                             $html .="<td>".date('d-m-Y',strtotime($bills->bill_date))."</td>";
                             $html .="<td>".$bills->bill_time."</td>";
                             $html .="<td>".$bills->invoice_no."</td>";
-                            // $html .="<td>".$bills->product_code."</td>";
-                            // $html .="<td>".$bills->product_id."</td>";
-                            // $html .="<td>".$bills->qty."</td>";
-                            // $html .="<td>".$bills->size."</td>";
-                            // $html .="<td>".$bills->price."</td>";
-                            // $html .="<td>".$bills->taxfree_amount."</td>";
-                            // $html .="<td>".$bills->sgst."</td>";
-                            // $html .="<td>".$bills->cgst."</td>";
-                            // $html .="<td>".$bills->igst."</td>";
                             $html .="<td>".$bills->total_amount."</td>";
+                            $html .="<td ><i class='fas fa-file-invoice' id='showGenerateInvoiceModal' bill-id='".$bills->id."' style='font-size:24px'></i></td>";
                             
                         $html .="</tr>";
                     }

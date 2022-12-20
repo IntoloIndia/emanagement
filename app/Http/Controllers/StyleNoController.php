@@ -45,20 +45,39 @@ class StyleNoController extends Controller
                 'errors'=>$validator->messages(),
             ]);
         }else{
-            $model->supplier_id = $req->input('supplier_id');
+            $supplier_id = $req->input('supplier_id');
+            $model->supplier_id = $supplier_id;
             $model->style_no = strtoupper($req->input('style_no'));
 
-
             if($model->save()){
+                $data = $this->getStyleNo($supplier_id);
                 return response()->json([
                     'status'=>200,
+                    'style_no_html'=>$data['html']
                 ]);
             }
 
         }
     }
 
-     public function styleNoBySupplier($supplier_id)
+    public function getStyleNo($supplier_id)
+    {
+        $styles_no = StyleNo::where(['supplier_id'=>$supplier_id])->get();
+
+        $html = "";
+        $html .= "<option selected disabled value='0'>Category</option>";
+        foreach ($styles_no as $key => $list) {
+            $html .= "<option value='".$list->id."' selected>" . ucwords($list->style_no)  . "</option>" ;
+        }
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+
+    }
+
+    public function styleNoBySupplier($supplier_id)
     {
         $styles_no = StyleNo::where(['supplier_id'=>$supplier_id])->get();
         

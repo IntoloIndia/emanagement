@@ -1,45 +1,5 @@
 //Purchase 
 
-    function saveBrand() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var formData = new FormData($("#brandForm")[0]);
-        $.ajax({
-            type: "post",
-            url: "save-brand",
-            data: formData,
-            dataType: "json",
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                // console.log(response);
-                if (response.status === 400) {
-                    $('#brand_err').html('');
-                    $('#brand_err').addClass('alert alert-danger');
-                    var count = 1;
-                    $.each(response.errors, function (key, err_value) {
-                        $('#brand_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                    });
-
-                } else {
-                    $('#brand_err').html('');
-                    $('#brandModal').modal('hide');
-                    window.location.reload();
-                    // $.each(response.brands, function (key, list) {
-                    //     // $('#brand_id').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                    //     // $('#brand_id').append('<select >' + count++ + '. ' + err_value + '</select></br>');
-                    //     console.log(list.id);
-                    // });
-                }
-            }
-        });
-    }
-
     function calculateQtyPrice() { 
 
         var total_qty = 0;
@@ -214,11 +174,12 @@
         var taxable = 0;
         if (discount > 0) {
             var discount_amount = price * discount / 100 ;
-            taxable = price - discount_amount ;
+            taxable = (price - discount_amount) * qty  ;
         }else{
-            taxable = price;
+            taxable = price * qty;
         }
-        return parseFloat(taxable * qty);
+
+        return parseFloat(taxable.toFixed(2));
        
     }
 
@@ -414,7 +375,7 @@
             url: "get-purchase-entry/"+supplier_id+'/'+bill_no,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
+                console.log(response);
                 if (response.status == 200) {
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
@@ -672,7 +633,43 @@
         window.location.reload();
     }
 
-    // save category of purchase entry
+// save category of purchase entry
+function saveCategory() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var formData = new FormData($("#categoryForm")[0]);
+    $.ajax({
+        type: "post",
+        url: "save-category",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            // console.log(response);
+            if (response.status === 400) {
+                $('#category_err').html('');
+                $('#category_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#category_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
+            } else {
+                $('#category_err').html('');
+                $('#categoryModal').modal('hide');
+                $('#category_id').html('');
+                $('#category_id').append(response.category_html); 
+                $("#category_id").trigger("chosen:updated");  
+                // window.location.reload();
+            }
+        }
+    });
+}
 
 // save subcategory of purchase entry
 function saveSubCategory() {
@@ -692,7 +689,7 @@ function saveSubCategory() {
         contentType: false,
         processData: false,
         success: function (response) {
-            // console.log(response);
+            console.log(response);
             if (response.status === 400) {
                 $('#subcategory_err').html('');
                 $('#subcategory_err').addClass('alert alert-danger');
@@ -703,11 +700,52 @@ function saveSubCategory() {
             } else {
                 $('#subcategory_err').html('');
                 $('#subCategoryModal').modal('hide');
-                window.location.reload();
+                $('#sub_category_id').html('');
+                $('#sub_category_id').append(response.sub_category_html); 
+                $("#sub_category_id").trigger("chosen:updated"); 
+                // window.location.reload();
             }
         }
     });
 }
+
+function saveBrand() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var formData = new FormData($("#brandForm")[0]);
+    $.ajax({
+        type: "post",
+        url: "save-brand",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response.status === 400) {
+                $('#brand_err').html('');
+                $('#brand_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#brand_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
+
+            } else {
+                $('#brand_err').html('');
+                $('#brandModal').modal('hide');
+                $('#brand_id').html('');
+                $('#brand_id').append(response.brand_html); 
+                $("#brand_id").trigger("chosen:updated");
+                // window.location.reload();
+            }
+        }
+    });
+}
+
 // save style no
 function manageStyleNo(){
     $.ajaxSetup({
@@ -726,7 +764,7 @@ function manageStyleNo(){
         contentType: false, 
         processData: false, 
         success: function (response) {
-               console.log(response);
+            //    console.log(response);
             if(response.status === 400)
             {
                 $('#style_no_err').html('');
@@ -738,8 +776,12 @@ function manageStyleNo(){
 
             }else{
                 $('#style_no_err').html('');
+                $('#style_no_err').removeClass('alert alert-danger');
                 $('#styleNoModal').modal('hide');
-                window.location.reload();
+                $('#style_no_id').html('');
+                $('#style_no_id').append(response.style_no_html); 
+                $("#style_no_id").trigger("chosen:updated");
+                // window.location.reload();
             }
         }
     });

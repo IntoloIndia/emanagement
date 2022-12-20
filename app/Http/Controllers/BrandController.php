@@ -35,13 +35,30 @@ class BrandController extends Controller
             $model = new Brand;
             $model->brand_name = $req->input('brand_name');         
             if($model->save()){
-                $brands = Brand::all();
+                $data = $this->getBrand();
                 return response()->json([   
                     'status'=>200,
-                    'brands'=>$brands,
+                    'brand_html'=>$data['html']
                 ]);
             }
         }
+    }
+
+    public function getBrand()
+    {
+        $brands = Brand::all();
+
+        $html = "";
+        $html .= "<option selected disabled value='0'>Brand</option>";
+        foreach ($brands as $key => $list) {
+            $html .= "<option value='".$list->id."' selected>" . ucwords($list->brand_name)  . "</option>" ;
+        }
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+
     }
 
     public function editBrand($brand_id)
