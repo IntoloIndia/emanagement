@@ -163,8 +163,9 @@ class CustomerBillInvoiceController extends Controller
                 } 
 
                 return response()->json([   
+                    'bill_id'=>$billmodel->id,
                     'status'=>200
-                    
+
 
                 ]);
             }

@@ -24,6 +24,9 @@ class SupplierController extends Controller
                         ->join('cities','cities.id','=','suppliers.city_id')
                         ->select('suppliers.*','countries.country','states.state','cities.city','cities.city_short')->get();
                         // print_r($suppliers);
+
+                        // return(supplierCode());
+
         return view('supplier',[
             'countries' => $countries,
             'states' => $states,

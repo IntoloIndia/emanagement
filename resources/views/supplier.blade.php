@@ -386,6 +386,8 @@
                 e.preventDefault();
                 var supplier_id = $('#updateSupplierBtn').val();
                 var supplier_latest_id = '{{$supplier_code}}';
+
+                
                 if (supplier_id > 0) {
                     supplier_latest_id = supplier_id;
                 } 

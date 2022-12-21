@@ -240,29 +240,22 @@
                 </div>
                 <div class="modal-body">
                     <form id="alterVoucherForm">
+                      <div class='alterationvoucher_err'></div>
                         @csrf
-                    <div id="show_alteration_items"></div>
+                        <div id="show_alteration_items"></div>
 
-                    <div class='card'>
-                        <div class='card-body'>
-                          <h5 class='card-title'>Special title treatment</h5>
-                          <p class='card-text'>With supporting text below as a natural lead-in to additional content.</p>
-                        </div>
-                    </div>
-
-
-                </form>
-
+                    
+                        
+                    </form>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary btn-sm">Submit</button>
+                  <button type="button" class="btn btn-primary btn-sm saveAlterVoucherBtn">Save</button>
                 </div>
               </div>
             </div>
           </div>
     </section>
-           
    
 <div class="row">
     <div class="col-md-5">
@@ -282,7 +275,6 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12 table-responsive" style="height: 200px;">
-                        {{-- <table class="table table-striped table-head-fixed " id="customer_list" > --}}
                         <table class="table table-striped table-head-fixed " id="customer_bills" >
                             
                         </table>    
@@ -297,140 +289,59 @@
             <b>Invoice</b>
         </div>
         <div class="card-body">
-          {{-- previous table --}}
-                {{-- <div class='row mt-2'>
-                    <div class='table-responsive'>
-                        <table class='table table-bordered'>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                <th>Customer</th>
-                                <th>Invoice No</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($alteration_items as $list)
-                                <tr>
-                                    <td>{{$list->alteration_date}}</td>
-                                    <td>{{$list->alteration_time}}</td>
-                                    <td>{{$list->customer_id}}</td>
-                                    <td>{{$list->invoice_no}}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div> --}}
 
-
-                {{-- new expand --}}
-              
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item">
-                    <table class="table table-striped">
-                        <tr>
-                            <th class="col-md-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"  data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne"style="border-style:none;">
-                                    date
-                                </button>
-                                {{-- <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne"> --}}
-                                    {{-- Date
-                                </button> --}}
-                            </th>
-                            <th class="col-md-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                    Time
-                                </button>
-                            </th>
-                            <th class="col-md-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                    Customer
-                                </button>
-                            </th>
-                            <th class="col-md-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                    Invoice
-                                </button>
-                            </th>
+            <div class='accordion accordion-flush' id='accordionFlushExample'>
+                <table class='table table-striped'>
+                    <thead>
+                        <tr style='position: sticky;z-index: 1;'>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Bill No</th>
+                            <th>Customer</th>
                         </tr>
-                    </table>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                        <table class="table">
-                            <thead>
+                    </thead>
+                    <tbody >
+                            @foreach ($alteration_vouchers as $key => $vouchers)
+                           
+                                <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$key}}' aria-expanded='false' aria-controls='flush-collapseOne'>
+                                    
+                                    <td>{{$vouchers->alteration_date}}</td>
+                                    <td>{{$vouchers->alteration_time}}</td>
+                                    <td>{{$vouchers->bill_id}}</td>
+                                    <td>{{$vouchers->customer_name}}</td>
+                                    
+                                </tr> 
                                 <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                    <td colspan='3'>
+                                        <div id='collapse_{{$key}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
+                                            <div class='accordion-body'>
+                                                <table class="table table-striped table-hover ">
+                                                    <thead>
+                                                            <tr>
+                                                                <th> SN</th>
+                                                                <th> Size</th>
+                                                                <th> Qty</th>
+                                                                <th> Price</th>
+                                                            </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($alteration_items as $key => $items)
+                                                            <tr>
+                                                                <td>{{$items->product_id}}</td>
+                                                                <td>XXL</td>
+                                                                <td>5</td>
+                                                                <td>1299</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                </tr>
-                                <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                    Accordion Item #2
-                    </button>
-                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                </tr>
-                                <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                <div class="accordion-item">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Accordion Item #3
-                    </button>
-                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                    </div>
-                </div>
+                            @endforeach                                               
+                        </tbody>
+                </table>  
             </div>
         </div>
     </div>
@@ -453,10 +364,28 @@
         //         e.preventDefault();
         //          saveAlterationVoucher();
         // });
-        $(document).on('click','#generateAltertionVoucher',function(e){
-                e.preventDefault();
-                saveAlterationVoucher();
-                // saveAlterationItem();
+        // $(document).on('click','#generateAltertionVoucher',function(e){
+        //         e.preventDefault();
+        //         saveAlterationVoucher();
+        //    
+        // });
+
+
+        $(document).on('click','.product_id', function (e) {
+            $(".product_id").each(function () {
+                var check_prod= $(this).is(':checked');
+                if ($(this).is(':checked')) {
+                    var product_id = $(this).val();
+                    // alert($('#item_qty_'+ product_id).val());
+                    $('#item_qty_'+ product_id).prop("disabled", false);
+                }
+                else{
+                    if(!check_prod){
+                        var product_id = $(this).val();
+                        $('#item_qty_'+ product_id).prop("disabled", true);
+                    }
+                }
+            });
         });
         
         // $(document).on('click','#leaveVerifyBtn', function (e) {
@@ -471,6 +400,8 @@
         //     });
 
 
+
+
      
         // $(document).on('click','.orderInvoiceBtn',function(e){
         //         e.preventDefault();
@@ -478,20 +409,29 @@
         //         const customer_id = $(this).val();
         //         generateAlerationVoucher(customer_id);
         //     });
+
+        // final alter function
             $(document).on('click','.alterBillsBtn',function(e){
                 e.preventDefault();
-
                 var bill_id = $(this).val();
-                // alterVoucher(bill_id);
+                alterVoucher(bill_id);
+            });
 
-                $('#alterVoucherModal').modal('show');
-                
-                // const bill_id = $(this).val();
-                // $('#generateAltertionVoucher').val(bill_id);
-                // generateAlerationItem(bill_id);
+            $(document).on('click','.saveAlterVoucherBtn',function(e){
+                e.preventDefault();
+                saveAlterationVoucher();
             });
          
-            
+            // $(document).on('keyup','.item_qty', function(e){
+            //     var item_qty = $(this) .val();
+            // if($('.item_qty').val() > item_qty ){
+            //     alert("no");
+            // }
+            // else{
+            //     // $('#errorMsg').hide();
+            //     alert("yes");
+            // }
+            // });
 
            
     });
@@ -511,7 +451,7 @@
     // } 
 
 // get customer bills
-        function getCustomerBills(customer_id) {
+    function getCustomerBills(customer_id) {
         $.ajax({
             type: "get",
             url: `get-customers-bills/${customer_id}`,
@@ -525,84 +465,28 @@
             }
         });
     } 
-    function generateAlerationItem(bill_id) {
-         $.ajax({
-        type: "get",
-        url: "generate-alteration-Item/"+bill_id,
-        dataType: "json",
-        success: function (response) {
-            // console.log(response);
-            if (response.status == 200) {
-                // $('#generateInvoiceModal').html(response.html);
-                // $('#generateInvoiceModal').modal('show');
-                 $('#alterBillModal').html(response.html);
-                $('#alterBillModal').modal('show');
-                // $('#box').html(response.html);
-               
+    // function generateAlerationItem(bill_id) {
+    //     $.ajax({
+    //     type: "get",
+    //     url: "generate-alteration-Item/"+bill_id,
+    //     dataType: "json",
+    //         success: function (response) {
+    //             // console.log(response);
+    //             if (response.status == 200) {
+    //                 // $('#generateInvoiceModal').html(response.html);
+    //                 // $('#generateInvoiceModal').modal('show');
+    //                 $('#alterBillModal').html(response.html);
+    //                 $('#alterBillModal').modal('show');
+    //                 // $('#box').html(response.html);
                 
-            }
-        }
-    });
-}
+                    
+    //             }
+    //         }
+    //     });
+    // }
 
 
-function saveAlterationVoucher() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    var customer_id = $('#customer_id').val();
-    var bill_id = $('#bill_id').val();
-    // alter item
-    var alteration_voucher_id = $('#alteration_voucher_id').val(); 
-    var item_qty = $('#item_qty').val();
-    // alert(item_qty);
-    
-    var product_id = [];
-    // var item_qty = [];
-    $(".product_id").each(function () {
-        var self = $(this);
-        if (self.is(':checked')) {
-            product_id.push(self.val());
-            // item_qty.push(self.attr('item-qty'));
-        }
-    });
-    // alert(product_id);   
-    var sendData = { 
-        customer_id: customer_id,
-        bill_id: bill_id,
-        product_id: product_id,
-        alteration_voucher_id: alteration_voucher_id,
-        item_qty: item_qty
-    };
-    
-
-    $.ajax({
-        type: "post",
-        url: "save-alteration-voucher",
-        // data: JSON.stringify(sendData),
-        data:{customer_id,bill_id, product_id,alteration_voucher_id,item_qty},
-        dataType: "json",
-        
-        success: function (response) {
-            if (response.status === 400) {
-                $('#alterationvoucher_err').html('');
-                $('#alterationvoucher_err').addClass('alert alert-danger');
-                var count = 1;
-                $.each(response.errors, function (key, err_value) {
-                    $('#alterationvoucher_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                });
-
-            } else {
-                    $('#alterationvoucher_err').html('');
-                // window.location.reload();
-            }
-        }
-    });
-}
-
- function alterVoucher(bill_id) {
+    function alterVoucher(bill_id) {
         $.ajax({
             type: "get",
             url: "alter-voucher/"+bill_id,
@@ -618,59 +502,43 @@ function saveAlterationVoucher() {
         });
     }
 
+    function saveAlterationVoucher() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var formData = new FormData($("#alterVoucherForm")[0]);
+        $.ajax({
+            type: "post",
+            url: "save-alteration-voucher",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false, 
+            processData: false, 
+            success: function (response) {
+                console.log(response);
+                if(response.status === 400)
+                {
+                    $('#alterationvoucher_err').html('');
+                    $('#alterationvoucher_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) { 
+                        $('#alterationvoucher_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                    });
 
-// function saveAlterationItem() {
-//     $.ajaxSetup({
-//         headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         }
-//     });
-    
-//     var alteration_voucher_id = $('#alteration_voucher_id').val();
-//     var product_id = $('.product_id').val();
-//     // alert(product_id);
-//     var item_qty = $('#item_qty').val();
+                }else{
+                    $('#alterationvoucher_err').html('');
+                    $('#alterVoucherModal').modal('hide');
+                
+                    window.location.reload();
+                }
+            }
+        });
+    }
 
-//         var checked_product_ids = [];
-//         $(".product_id").each(function () {
-//             var self = $(this);
-//             if (self.is(':checked')) {
-//                 checked_product_ids.push(self.val()); 
-//                 // alert(checked_product_ids);
-//             }
-//         });
 
-//     var sendData = { 
-//         product_id: checked_product_ids,
-//         alteration_voucher_id: alteration_voucher_id,
-//         item_qty: item_qty
-//     };
-    
-//     $.ajax({
-//         type: "post",
-//         url: "save-alteration-item",
-//         // data: {alteration_voucher_id,item_qty,product_id},
-//         data: JSON.stringify(sendData),
-//         contentType: "application/json; charset=utf-8",
-//         // dataType: "json",
-        
-//         success: function (response) {
-//             console.log(response);
-//             if (response.status === 400) {
-//                 $('#alteration_item_err').html('');
-//                 $('#alteration_item_err').addClass('alert alert-danger');
-//                 var count = 1;
-//                 $.each(response.errors, function (key, err_value) {
-//                     $('#alteration_item_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-//                 });
-
-//             } else {
-//                     $('#alteratio_item_err').html('');
-//                 window.location.reload();
-//             }
-//         }
-//     });
-// }
 
 </script>
 

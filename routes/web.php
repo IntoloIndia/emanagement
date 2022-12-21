@@ -167,7 +167,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/alteration_voucher','index');
         Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
         Route::get('admin/alter-voucher/{bill_id}','alterVoucher');
-        // Route::post('admin/save-alteration-item','saveAlterationItem');
         // Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
         Route::get('admin/generate-alteration-Item/{bill_id}','generateAlerationItem');
       
@@ -262,6 +261,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
         Route::get('admin/get-purchase-entry/{supplier_id}/{bill_no}','getPurchaseEntry');
         Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
+        Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
     });
     

@@ -20,6 +20,8 @@
         <link rel="stylesheet" href="{{ asset('public/assets/css/summernote-bs4.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/style.css') }}" />
 
+
+
         
         <script src="{{ asset('public/assets/js/jquery.min.js') }}"></script>
         <script src="{{ asset('public/assets/js/webcam.js') }}"></script>
@@ -72,7 +74,14 @@
     <script src="{{ asset('public/assets/js/jquery-ui.min.js') }}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button)
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
     </script>
+
+
     
     <script src="{{ asset('public/assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('public/assets/js/chosen.jquery.min.js')}}"></script>

@@ -4,6 +4,7 @@
     use App\Models\SubCategory;
     use App\Models\PurchaseEntry;
     use App\Models\Supplier;
+    // use App\MyApp;
 
     function subCategoryItems($category_id){
         $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
@@ -18,13 +19,46 @@
     }
 
     function supplierCode(){
-        // $supplier_count = Supplier::count();
-        $supplier_count = Supplier::latest()->first()->id;
-
-        $count = $supplier_count + 1 ;
-        // $supplier_code = "SH".$count ."D";
-        $supplier_code = $count;
+        $suppliers = Supplier::all();
+        // $count = count($suppliers);
+        if (count($suppliers) == 0) {
+            $supplier_code = 1;
+        }else{
+            $supplier = Supplier::latest('id')->first();
+            $count = $supplier->id ;
+            $supplier_code = ($count + 1);
+        }
+        
         return $supplier_code;
+    }
+
+    function calculateGst($state_type, $taxable){
+
+        $sgst = 0;
+        $cgst = 0;
+        $igst = 0;
+        
+        if ($state_type == 1) {
+            if ($taxable < 1000) {
+                $sgst = ($taxable * 2.5 / 100);
+                $cgst = ($taxable * 2.5 / 100);
+            }else{
+                $sgst = ($taxable * 6 / 100) ;
+                $cgst = ($taxable * 6 / 100) ;
+            }
+        }else{
+            if ($taxable < 1000) {
+                $igst = ($taxable * 5 / 100) ;
+            }else{
+                $igst = ($taxable * 12 / 100) ;
+            }
+        }
+
+        return $result = [
+            'sgst'=>round($sgst ,2 , PHP_ROUND_HALF_EVEN),
+            'cgst'=>round($cgst ,2 , PHP_ROUND_HALF_EVEN),
+            'igst'=>round($igst ,2 , PHP_ROUND_HALF_EVEN)
+        ] ;
     }
 
 

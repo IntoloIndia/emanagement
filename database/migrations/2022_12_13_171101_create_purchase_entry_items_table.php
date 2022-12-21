@@ -21,9 +21,11 @@ class CreatePurchaseEntryItemsTable extends Migration
             $table->string('price')->nullable();
             $table->string('mrp')->nullable();
             $table->integer('discount')->default(0);
+            $table->float('taxable')->default(0);
             $table->float('sgst')->default(0);
             $table->float('cgst')->default(0);
             $table->float('igst')->default(0);
+            $table->float('amount')->default(0);
             $table->string('barcode')->nullable();
             $table->longtext('barcode_img')->nullable();
             $table->timestamps();

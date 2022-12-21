@@ -149,7 +149,7 @@
         }
 
         total_taxable = xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable;
-        $('#taxable').val(total_taxable);
+        $('#taxable').val(total_taxable.toFixed(2));
 
         total_sgst = parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst);
         total_cgst = parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst);
@@ -189,8 +189,6 @@
         var sgst = 0;
         var cgst = 0;
         var igst = 0;
-
-        console.log(state_type);
         
         if (state_type == 1) {
             if (price < 1000) {
@@ -213,8 +211,6 @@
             "cgst":cgst,
             "igst":igst,
         }
-
-        console.log(data);
 
         return(data);
 
@@ -496,7 +492,7 @@
 
                 } else {
                     $('#purchase_entry_err').html('');
-                    alert("Save purchase entry successfully");
+                    // alert("Save purchase entry successfully");
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('').trigger('chosen:updated');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');
@@ -507,13 +503,36 @@
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").addClass('hide');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_qty").val('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#total_price").val('');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find("#discount").val('0');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
-                    // $('#productModal').modal('hide');
+                    
+                    setTimeout(() => {
+                        
+                        calculateQtyPrice();
+                    }, 200);
+
                     // window.location.reload();
                 }
             }
         });
+    }
+
+    function viewPurchaseEntry(purchase_id) {
+
+        $.ajax({
+            type: "get",
+            url: "view-purchase-entry/"+purchase_id,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    $('#view_purchase_entry').html('');
+                    $('#view_purchase_entry').append(response.html);
+                }
+            }
+        });
+
     }
     
     function editProduct(product_id){
@@ -786,4 +805,6 @@ function manageStyleNo(){
         }
     });
 }
+
+
 

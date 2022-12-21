@@ -58,26 +58,6 @@ class PurchaseEntryController extends Controller
                     'suppliers.supplier_name',
                 ]);
 
-
-        // $first = rand(001,999);
-        // $second = rand(001,999);
-
-        // $month = date('m');
-        // $year = date('y');
-
-        // $product_code = $month . $first . '99999' . $second . $year;
-        // dd($product_code);
-
-
-        // return view('purchase_entry',[
-        //     'suppliers' => $suppliers,
-        //     "categories"=>$categories,
-        //     'sizes' => $sizes,
-        //     'colors'=> $colors,
-        //     'brands'=> $brands,
-        //     'purchases' => $purchases,
-        // ]);
-
         return view('purchase.index',[
             'suppliers' => $suppliers,
             "categories"=>$categories,
@@ -90,6 +70,7 @@ class PurchaseEntryController extends Controller
 
     function savePurchaseEntry(Request $req)
     {
+
         if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
         {
             $xs_qty_validation = '';
@@ -192,14 +173,16 @@ class PurchaseEntryController extends Controller
             ]);
         }else{
             $purchase_id = 0;
+            $supplier_id = $req->input('supplier_id');
+            $bill_no = $req->input('bill_no');
 
-            $data = Purchase::where(['supplier_id'=>$req->input('supplier_id'),'bill_no'=>$req->input('bill_no')])->first('id');
+            $data = Purchase::where(['supplier_id'=>$supplier_id,'bill_no'=>$bill_no])->first('id');
             
             if ($data == null) {
                 $model = new Purchase;
                 
-                $model->supplier_id = $req->input('supplier_id');
-                $model->bill_no = $req->input('bill_no');
+                $model->supplier_id = $supplier_id;
+                $model->bill_no = $bill_no;
                 $model->bill_date = $req->input('bill_date');
                 $model->payment_days = $req->input('payment_days');
                 $model->time = date('g:i A');
@@ -274,7 +257,7 @@ class PurchaseEntryController extends Controller
                 $size = 'xs';
                 $price = $xs_price;
                 $mrp = $xs_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp);                
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);                
             }
 
             if ($s_qty > 0) {
@@ -282,7 +265,7 @@ class PurchaseEntryController extends Controller
                 $size = 's';
                 $price = $s_price;
                 $mrp = $s_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp);             
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);             
             }
 
             if ($m_qty > 0) {
@@ -290,7 +273,7 @@ class PurchaseEntryController extends Controller
                 $size = 'm';
                 $price = $m_price;
                 $mrp = $m_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
 
             if ($l_qty > 0) {
@@ -298,7 +281,7 @@ class PurchaseEntryController extends Controller
                 $size = 'l';
                 $price = $l_price;
                 $mrp = $l_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
 
             if ($xl_qty > 0) {
@@ -306,7 +289,7 @@ class PurchaseEntryController extends Controller
                 $size = 'xl';
                 $price = $xl_price;
                 $mrp = $xl_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
 
             if ($xxl_qty > 0) {
@@ -314,7 +297,7 @@ class PurchaseEntryController extends Controller
                 $size = 'xxl';
                 $price = $xxl_price;
                 $mrp = $xxl_mrp;
-                $result = $this->saveItem($purchase_entry_id, $qty, $size, $price, $mrp); 
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
             
 
@@ -327,7 +310,7 @@ class PurchaseEntryController extends Controller
         }
     }
 
-    public function saveItem($purchase_entry_id, $qty, $size, $price, $mrp){
+    public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
 
         $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 
@@ -335,13 +318,32 @@ class PurchaseEntryController extends Controller
         $second = rand(001,999);
         $month = date('m');
         $year = date('y');
+
+        $taxable = 0;
+        if ($discount > 0) {
+           $discount_amount = ($price * $discount) / 100;
+           $taxable = ($price - $discount_amount) * $qty;
+        }else{
+            $taxable = $price * $qty;
+        }
+        $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
         
+        $gst = calculateGst($supplier->state_type, $taxable);
+        $total_gst = $gst['sgst'] + $gst['cgst'] + $gst['igst'];
+        $amount = $taxable + $total_gst ;
+
         $purchase_item = new PurchaseEntryItem;
         $purchase_item->purchase_entry_id = $purchase_entry_id;
         $purchase_item->size = $size;
         $purchase_item->qty = $qty;
         $purchase_item->price = $price;
         $purchase_item->mrp = $mrp;
+        $purchase_item->discount = $discount;
+        $purchase_item->taxable = $taxable;
+        $purchase_item->sgst = $gst['sgst'];
+        $purchase_item->cgst = $gst['cgst'];
+        $purchase_item->igst = $gst['igst'];
+        $purchase_item->amount = $amount;
         // $purchase_item->time = date('g:i A');
         // $purchase_item->save();
 
@@ -357,6 +359,8 @@ class PurchaseEntryController extends Controller
 
         return 'ok';
     }
+
+    
 
     public function getPurchaseEntry($supplier_id, $bill_no){
 
@@ -380,34 +384,6 @@ class PurchaseEntryController extends Controller
                 // ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
                 ->where('purchase_entries.purchase_id', '=', $data->id)
                 ->get(['purchase_entries.*','style_nos.style_no']);
-
-                
-
-                // $purchase_entry_items = PurchaseEntryItem::
-
-                // $html .="<table class='table table-bordered'>";
-                //     $html .="<thead>";
-                //     $html .="<tr>";
-                //         $html .="<th>SN</th>";
-                //         $html .="<th>Style</th>";
-                //         $html .="<th>Color</th>";
-                        
-                        
-                //     $html .="</tr>";
-                // $html .="</thead>";
-                // $html .="<tbody>";
-                //     foreach ($purchase_entry as $key => $list) {
-                //         $html .="<tr>";
-                //             $html .="<td>".++$key."</td>";
-                //             $html .="<td>".ucwords($list->style_no)."</td>";
-                //             $html .="<td>".ucwords($list->color)."</td>";
-                //             // $html .="<td><button type='button' class='btn btn-info btn-sm ' value=''><i class='fas fa-eye'></i></button></td>";
-                           
-                //         $html .="</tr>";
-                //     }
-                // $html .="</tbody>";
-                // $html .="</table>";
-
 
 
                 $html .="<div class='accordion accordion-flush' id='accordionFlushExample'>";
@@ -464,7 +440,7 @@ class PurchaseEntryController extends Controller
                     }                                               
                     $html .="</tbody>";
                 $html .="</table>";  
-            $html .="</div>"; 
+                $html .="</div>"; 
 
 
         return $result = [
@@ -473,6 +449,100 @@ class PurchaseEntryController extends Controller
         ] ;
 
 
+    }
+
+    public function viewPurchaseEntry($purchase_id)
+    {
+        $purchase_entry = PurchaseEntry::Join('style_nos','style_nos.id','=','purchase_entries.style_no_id')
+                ->Join('categories','categories.id','=','purchase_entries.category_id')
+                ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
+                ->join('brands','brands.id','=','purchase_entries.brand_id')
+                ->where('purchase_entries.purchase_id', $purchase_id)
+                ->get(['purchase_entries.*','style_nos.style_no', 'categories.category','sub_categories.sub_category','brands.brand_name']);
+
+            $html = "";
+            $html .= "<div class='card'>";
+
+                $html .= "<div class='card-header'>";
+                $html .= "<div class='row'>";
+                    $html .= "<div class='col-md-8 col-lg-8 col-xl-8'>";
+                        $html .= "<h3 class='card-title'>Purchase Entry</h3>";
+                    $html .= "</div>";
+                $html .= "</div>";
+                $html .= "</div>";
+    
+                $html .= "<div class='ard-body table-responsive p-0'style='height: 450px;' >";
+                $html .="<div class='accordion accordion-flush' id='accordionFlushExample'>";
+                $html .="<table class='table table-striped'>";
+                    $html .="<thead>";
+                        $html .="<tr style='position: sticky;z-index: 1;'>";
+                            $html .="<th>SN</th>";
+                            // $html .="<th>Category</th>";
+                            $html .="<th>Product</th>";
+                            $html .="<th>Brand</th>";
+                            $html .="<th>Style No</th>";
+                            $html .="<th>Color</th>";
+                            $html .="<th>Action</th>";
+                        $html .="</tr>";
+                    $html .="</thead>";
+                    $html .="<tbody >";
+                        
+                    foreach ($purchase_entry as $key => $list) {
+                               
+                        $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
+                            $html .="<td>".++$key."</td>";
+                            // $html .="<td>".ucwords($list->category)."</td>";
+                            $html .="<td>".ucwords($list->sub_category)."</td>";
+                            $html .="<td>".ucwords($list->brand_name)."</td>";
+                            $html .="<td>".ucwords($list->style_no)."</td>";
+                            $html .="<td>".ucwords($list->color)."</td>";
+                            $html .="<td><button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' ><i class='far fa-edit'></i></button></td>";
+                        $html .="</tr> ";
+
+                        $html .="<tr>";
+                            $html .="<td colspan='6'>";
+                                $html .="<div id='collapse_".$list->id."' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>";
+                                    $html .="<div class='accordion-body table-responsive' >";
+                                        $html .="<table class='table  '>";
+                                            $html .="<thead>";
+                                                $html .="<tr>";
+                                                    $html .="<th> SN</th>";
+                                                    $html .="<th> Size</th>";
+                                                    $html .="<th> Qty</th>";
+                                                    $html .="<th> Price</th>";
+                                                $html .="</tr>";
+                                            $html .="</thead>";
+                                            $html .="<tbody>";
+                                            $purchase_entry_items = $this->getPurchaseEntryItems($list->id);
+
+                                            foreach ($purchase_entry_items['items'] as $key1 => $item) {
+                                                $html .="<tr>";
+                                                    $html .="<td>".++$key1."</td>";
+                                                    $html .="<td>".$item->size."</td>";
+                                                    $html .="<td>".$item->qty."</td>";
+                                                    $html .="<td>".$item->price."</td>";
+                                                $html .="</tr>";
+                                            }
+
+                                            $html .="</tbody>";
+                                        $html .="</table>";
+                                    $html .="</div>";
+                                $html .="</div>";
+                            $html .="</td>";
+                        $html .="</tr>";
+                    }                                               
+                    $html .="</tbody>";
+                $html .="</table>";  
+                $html .="</div>"; 
+                $html .= "</div>";
+
+            $html .= "</div>";
+
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html,
+        ] ;
     }
 
     public function getPurchaseEntryItems($purchase_entry_id)
@@ -496,6 +566,7 @@ class PurchaseEntryController extends Controller
             ->select('suppliers.*','cities.city')
             ->first();
 
+        
 
         $html = "";
 
@@ -554,32 +625,56 @@ class PurchaseEntryController extends Controller
             $html .= "<table class='table table-bordered border-dark'>";
                 $html .= "<thead>";
                     $html .= "<tr>";
-                        $html .= "<th>SN</th>";
+                        $html .= "<th >SN</th>";
                         $html .= "<th>Description</th>";
                         $html .= "<th>Style No</th>";
-                        $html .= "<th>Size</th>";
-                        $html .= "<th>Qty</th>";
+                        $html .= "<th colspan='7'>Size</th>";
+                        // $html .= "<th>Price</th>";
+                        // $html .= "<th>SGST</th>";
+                        // $html .= "<th>CGST</th>";
+                        // $html .= "<th>IGST</th>";
+                        // $html .= "<th>Amount</th>";
+                    $html .= "</tr>";
+                $html .= "</thead>";
+    
+                $html .= "<tbody>";
+                for ($i=0; $i <5 ; $i++) { 
+                    $html .= "<tr >";
+                        $html .= "<td>1</td>";
+                        $html .= "<td>Jeans</td>";
+                        $html .= "<td>A-125-AK</td>";
+                        $html .= "<td>";
+                            
+                        $html .= "<table class='table'>";
+                        $html .= "<tr>";
+                            
+                        $html .= "<th >Size</th>";
+                        $html .= "<th >Qty</th>";
                         $html .= "<th>Price</th>";
                         $html .= "<th>SGST</th>";
                         $html .= "<th>CGST</th>";
                         $html .= "<th>IGST</th>";
                         $html .= "<th>Amount</th>";
                     $html .= "</tr>";
-                $html .= "</thead>";
-    
-                $html .= "<tbody>";
-                for ($i=0; $i <5 ; $i++) { 
-                    $html .= "<tr>";
-                        $html .= "<td>1</td>";
-                        $html .= "<td>Jeans</td>";
-                        $html .= "<td>A-125-AK</td>";
-                        $html .= "<td>S</td>";
-                        $html .= "<td>4</td>";
-                        $html .= "<td>799</td>";
-                        $html .= "<td>0</td>";
-                        $html .= "<td>0</td>";
-                        $html .= "<td>0</td>";
-                        $html .= "<td>3196</td>";
+                        for ($j=0; $j < 3 ; $j++) {
+                            $html .= "<tr>"; 
+                            $html .= "<td>XXL</td>";
+                            $html .= "<td>5</td>";
+                            $html .= "<td>200</td>";
+                            $html .= "<td>10</td>";
+                            $html .= "<td>10</td>";
+                            $html .= "<td>0</td>";
+                            $html .= "<td>220</td>";
+                            $html .= "</tr>";
+                        }
+                        $html .= "</table>";
+                        $html .= "</td>";
+                        // $html .= "<td>4</td>";
+                        // $html .= "<td>799</td>";
+                        // $html .= "<td>0</td>";
+                        // $html .= "<td>0</td>";
+                        // $html .= "<td>0</td>";
+                        // $html .= "<td>3196</td>";
                     $html .= "</tr>";
                 }
                 $html .= "</tbody>";
