@@ -1,7 +1,36 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
 
+
+
+
 @section('content')
+
+
+{{-- delete modal start  --}}
+
+<div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                {{-- <h5 class="modal-title" id="exampleModalLabel"> Delete Brand </h5> --}}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5>Do you want print bill received</h5>
+                        <button type="button" id="yesdeleteBrandBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    {{-- <hr> --}}
+                </center>
+            </div>
+        </div>
+    </div>
+  </div>
+
+{{-- delete modal end  --}}
+
+
 <div class="row">
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="card">
@@ -105,7 +134,9 @@
                         <div class="row">
                             <div class="col-6">
                                 <b>Items</b>
-                                {{-- <button onclick="calculateTotalAllGst();">total gst</button> --}}
+                                {{-- <button onclick="discountTotalAmount();">total gst</button> --}}
+                                
+                                {{-- <button class="deleteBrandBtn">print</button> --}}
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 {{-- <input type="text" id="addItemBtn"> --}}
@@ -124,7 +155,7 @@
                                         <th scope="col">Sno</th>
                                         <th scope="col">Emp</th>
                                         <th scope="col">Code</th>
-                                        <th scope="col">Category</th>
+                                        <th scope="col">Product</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
@@ -157,7 +188,7 @@
                                 <b>LESS DISCOUNT :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm dis_amount" value="0" readonly>
+                                <input type="text" name="" id="dis_amount" class="form-control form-control-sm dis_amount" value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -429,7 +460,7 @@
                         <option value="{{$item->id}}">{{ucwords($item->product)}}</option>
                     @endforeach
                 </select> --}}
-                <input type="text"  name="product[]" class="form-control form-control-sm product" >
+                <input type="text"  name="product[]" class="form-control form-control-sm product" readonly >
                 <input type="hidden" name="product_id[]" class="product_id">
             </td>
            
@@ -437,29 +468,30 @@
                 <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty" min="1" value="0">
             </td>
             <td style="width: 80px;">
-                <input type="text"  name="size[]" class="form-control form-control-sm size">
+                <input type="text"  name="size[]" class="form-control form-control-sm size" readonly>
                 <input type="hidden" name="size_id[]" class="size_id">
             </td>
             <td style="width: 100px;">
-                <input type="text" name="price[]" class="form-control form-control-sm price" id="price" >
+                <input type="text" name="price[]" class="form-control form-control-sm price" id="price" readonly>
             </td>
             <td style="width: 50px;">
-                <input type="text" name="discount[]" class="form-control form-control-sm discount" id="discount_price" value="" >
+                <input type="text"  class="form-control form-control-sm discount" id="discount">
+                <input type="hidden" name="discount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
             </td>
              <td style="width: 150px;">
-                 <input type="text" name="amount[]" class="form-control form-control-sm amount" >
+                 <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
                  <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"  style="width: 150px;">
             </td> 
              {{-- <td style="width: 150px;"> --}}
             {{-- </td>  --}}
              <td style="width: 80px;" class="sgst_show_hide">
-                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0">
+                 <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0" readonly>
             </td> 
             <td style="width: 80px;" class="cgst_show_hide">
-                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0">
+                 <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0" readonly>
             </td> 
             <td style="width: 80px;" class="igst_show_hide hide">
-                 <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0">
+                 <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0" readonly>
             </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
@@ -486,6 +518,25 @@
     
     $(document).ready(function () {
 
+        // print modal open
+
+
+        $(document).on('click','.deleteBrandBtn', function (e) {
+                e.preventDefault();
+                const brand_id = $(this).val();
+                // alert(brand_id)
+                $('#printModal').modal('show');
+                $('#yesdeleteBrandBtn').val(brand_id);
+            });
+
+            $(document).on('click','#yesdeleteBrandBtn', function (e) {
+                e.preventDefault();
+                const brand_id = $(this).val();
+                deleteBrand(brand_id);
+            });
+
+            // closed print modal 
+
         $(".select_chosen").chosen({ width: '100%' });
      
         
@@ -510,10 +561,6 @@
             });
 
            
-
-
-            
-
             $(document).on("keypress",".qty, #given_amount",function(e){
                 if(!(e.which>=48 && e.which<=57 ))
                 {
@@ -544,39 +591,9 @@
                 calculateTotalAmount();
             });
 
-            // $(document).on('keyup','.amount', function () {
-            //     var amount = $(this).val();
-            //     alert(amount);
-            //     $('.discount').val(amount);
-            // });
-            
-            $(document).on('keyup','.discount', function () {
-                var discount = parseFloat($(this).val());
-                var amount = parseFloat($(".amount").val());
-                // alert(amount);
-                
-                var dis_amount = ((amount * discount)/100).toFixed(2);
-                if(discount == "" || discount == isNaN){
-                    $('.dis_amount').val(0);
-                }
-                else{
 
-                    $('.dis_amount').val(dis_amount);
-                }
-
-                    // console.log(dis_amount);
-               
-            });
-
-
-            
             $(document).on('change','.product_code', function () {
                 const product_code = $(this).val();
-            
-
-                // alert(product_code);
-
-                // if(product_code==product_code){
                 var object = $(this);
                 $.ajax({
                     type: "get",
@@ -594,6 +611,7 @@
                         calculateAmount(object);
                         calculateGst(object);
                         calculateTotalAllGst();
+
 
                     }
                 });
@@ -618,6 +636,7 @@
                 $('.igst_show_hide').removeClass('hide');
 
             });
+
 
             $('#online').change(function(){
                 if($(this).is(":checked")) {
@@ -648,13 +667,6 @@
                 }
             });
 
-           
-
-            
-
-                // if(mobile_no==mobile_no){
-                //     alert(true);
-                // }
             $(document).on('keyup','.mobile_no', function () {
                 const mobile_no = $(this).val();
                 
@@ -686,35 +698,36 @@
 
                     });
                 }else{
-                        $('#customer_name').val('');
-                        $('#birthday_date').val('');
-                        $('#month_id').val('');
-                        $('#city_id').val('');
-                        $('#gst_no').val('');
-                        // $('#employee_id').val('');
-                        $('#with_in_state').prop('checked',false);
-                        $('#inter_state').prop('checked',false);
-                               
+                    $('#customer_name').val('');
+                    $('#birthday_date').val('');
+                    $('#month_id').val('');
+                    $('#city_id').val('');
+                    $('#gst_no').val('');
+                    // $('#employee_id').val('');
+                    $('#with_in_state').prop('checked',false);
+                    $('#inter_state').prop('checked',false);
                 }
                 
-                
-                
             });
+            
             
             
             $(document).on('keyup','.qty', function () {
-                
                 calculateAmount($(this));
-                // var price =$(".price").val();
                 calculateGst($(this));
                 calculateTotalAllGst();
-                
+                // totalDiscountAmount($(this));
             });
+            
             $(document).on('keyup','.price', function () {
                 calculateGst($(this));
+                // totalDiscountAmount($(this));
                 calculateTotalAllGst();
             });
            
+            $(document).on('keyup','.discount', function () {
+                totalDiscountAmount($(this));
+            });
            
             $(document).on('keyup','#given_amount', function () {
                 returnAmount();
@@ -742,18 +755,73 @@
                 printInvoice();
             });
 
-
-            
         });
 
         function addItem() {
             $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
             $("#item_list tr").find(".item").chosen();
-            
         }
 
+        function calculateAmount(object){
+
+            var total_amount = 0;
+            var sgst = 0;
+            var cgst = 0;
+            var price = parseFloat($(object).parent().parent().find(".price").val());
+            var qty = parseFloat($(object).parent().parent().find(".qty").val());
+          
+            if(qty == "" || isNaN(qty))
+            {
+                qty = 0;   
+            }
+            var amount = parseFloat(price * qty);
+            $(object).parent().parent().find(".amount").val(amount);
+
+            calculateTotalAmount();
+
+        }
+
+        function calculateTotalAmount(){
+            var item_total_amount = 0;
+
+            $(".amount").each(function(){
+                total_amount = parseFloat($(this).val());
+                if (!isNaN(total_amount))
+                {
+                    item_total_amount +=  total_amount;
+                }  
+                // alert(item_total_amount);
+            });
+            $("#item_total_amount").text(item_total_amount);
+            $("#item_total_amount").val(item_total_amount);
+            $("#total_amount").val(item_total_amount);
+            returnAmount();
+            calculateTotalAllGst();
+            discountTotalAmount();
+           
+        }
+
+
+        function totalDiscountAmount(object){
+                        var discount = parseFloat($(object).val());
+                        // var amount = parseFloat($(".amount").val());
+                        var amount = parseFloat($(object).parent().parent().find(".amount").val());
+
+                        var dis_amount = ((amount * discount)/100).toFixed(2);
+                        if(discount == "" || discount == isNaN){
+                            // $('.discount_amount').val(0);
+                            $(object).parent().parent().find(".discount_amount").val(0);
+                        }
+                        else{
+                            // $('.discount_amount').val(dis_amount);
+                            $(object).parent().parent().find(".discount_amount").val(dis_amount);
+                        }
+                        discountTotalAmount();
+
+                    }
         // gst funcation 
+
 
         function calculateGst(object,price)  
         {
@@ -835,52 +903,7 @@
         // PL6o2XQKFKClsqHz
             // end gst funcation
 
-        function calculateAmount(object){
-            var total_amount = 0;
-            var sgst = 0;
-            var cgst = 0;
-            var price = parseFloat($(object).parent().parent().find(".price").val());
-            var qty = parseFloat($(object).parent().parent().find(".qty").val());
-            // var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
-            // var cgst = parseFloat($(object).parent().parent().find(".cgst").val());
-
-
-            if(qty == "" || isNaN(qty))
-            {
-                qty = 0;   
-            }
-
-
-            var amount = parseFloat(price * qty);
-            // alert(amount);
-            // var sgst = parseFloat(sgst * qty);
-            // var cgst = parseFloat(cgst * qty);
-            
-            $(object).parent().parent().find(".amount").val(amount);
-            $('.discount').val();
-            calculateTotalAmount();
-            // calculateTotalCgst();
-            
-        }
-
-        function calculateTotalAmount(){
-            var item_total_amount = 0;
-
-            $(".amount").each(function(){
-                total_amount = parseFloat($(this).val());
-                if (!isNaN(total_amount))
-                {
-                    item_total_amount +=  total_amount;
-                }  
-                // alert(item_total_amount);
-            });
-            $("#item_total_amount").text(item_total_amount);
-            $("#item_total_amount").val(item_total_amount);
-            $("#total_amount").val(item_total_amount);
-            returnAmount();
-            calculateTotalAllGst();
-        }
-
+        
 
         function calculateTotalAllGst(){
             var item_total_sgst = 0;
@@ -912,20 +935,11 @@
                 }  
                 
             });
-            // $(".discount").each(function(){
-            //     item_discount = parseFloat($(this).val());
-            //     if (!isNaN(item_discount))
-            //     {
-            //         item_total_discount +=  item_discount;
-            //     }  
-                
-            // });
-            // $("#item_total_amount").text(item_total_amount);
-            $("#item_sgst").val(item_total_sgst);
-            $("#item_cgst").val(item_total_cgst);
-            $("#item_igst").val(item_total_igst);
-            // $("#discount").val(item_total_discount);
-            
+        
+            $("#item_sgst").val(item_total_sgst.toFixed(2));
+            $("#item_cgst").val(item_total_cgst.toFixed(2));
+            $("#item_igst").val(item_total_igst.toFixed(2));
+
         }
 
         function returnAmount(){
@@ -933,6 +947,22 @@
             const total_amount = parseFloat($("#total_amount").val());
             const return_amount = parseFloat(given_amount - total_amount) ; 
             $("#return_amount").val(return_amount);
+        }
+
+        function discountTotalAmount(){
+            var discount_total_amount = 0;
+
+            $(".discount_amount").each(function(){
+                discount_amount = parseFloat($(this).val());
+                if (!isNaN(discount_amount))
+                {
+                    discount_total_amount +=  discount_amount;
+                }  
+                // alert(discount_total_amount);
+            });
+           
+            $("#dis_amount").val(discount_total_amount);
+          
         }
 
         function validateForm() {
@@ -951,13 +981,13 @@
                 return false;
             }
 
-            // $(".item").each(function (){
-            //     msg = "Please select item";
-            //     validateModal(msg);
-            //     return false;
+            $(".item").each(function (){
+                msg = "Please select item";
+                validateModal(msg);
+                return false;
                 
                 
-            // });
+            });
 
             // saveOrder();
         }
@@ -989,9 +1019,12 @@
                         });
 
                     } else {
-                        $('#order_err').html('');
-                        // $('#productModal').modal('hide');
-                        window.location.reload();
+                        // console.log(response.bill_id);
+                        if(response.status === 200){
+                            generateInvoice(response.bill_id);
+                        }
+                            // $('#order_err').html('');
+                            // window.location.reload();
                     }
                 }
             });
@@ -1017,21 +1050,18 @@
         url: "generate-invoice/"+bill_id,
         dataType: "json",
         success: function (response) {
-            console.log(response);
+            // console.log(response);
 
             if (response.status == 200) {
                 $('#generateInvoiceModal').html(response.html);
                 $('#generateInvoiceModal').modal('show');
-                
+                // window.location.reload();
             }
         }
     });
     
 }
 
-
-
-           
     </script>
     <script>
         function myFun(params) {

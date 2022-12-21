@@ -15,6 +15,8 @@ class CreateAlterationVouchersTable extends Migration
     {
         Schema::create('alteration_vouchers', function (Blueprint $table) {
             $table->id();
+            $table->date('alteration_date')->default(0);
+            $table->string('alteration_time')->nullable();
             $table->integer('customer_id')->nullable();
             $table->integer('bill_id')->nullable();
             // $table->integer('product_id')->nullable();

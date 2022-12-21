@@ -84,7 +84,7 @@ a {
 @section('content')
     <div class="row">
 
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="card">
     
                 <div class="card-header">
@@ -125,14 +125,14 @@ a {
                                 {{$count = "";}}
                                 @foreach ($purchases as $list)
                                     <tr>
-                                        <td>{{++$count}}</td>
-                                        <td>{{date('d-m-Y', strtotime($list->bill_date))}}</td>
-                                        <td>{{strtoupper($list->bill_no)}}</td>
-                                        <td>{{ucwords($list->supplier_name)}}</td>
-                                        <td>{{$list->payment_days}}</td>
+                                        <td >{{++$count}}</td>
+                                        <td >{{date('d-m-Y', strtotime($list->bill_date))}}</td>
+                                        <td >{{strtoupper($list->bill_no)}}</td>
+                                        <td >{{ucwords($list->supplier_name)}}</td>
+                                        <td >{{$list->payment_days}}</td>
                                         <td>
-                                            {{-- <button type="button" class="btn btn-info btn-sm " value="{{$list->id}}"><i class="fas fa-eye"></i></button> --}}
-                                            <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button>
+                                            <button type="button" class="btn btn-info btn-sm viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                         </td>
                                     </tr>
@@ -140,18 +140,58 @@ a {
                             @endif 
                         </tbody>
                     </table>
-                    {{-- <br>
-                    <div class="row">
-                        <div class="col-md-12 table-responsive" style="height: 200px;">
-                            <table class="table table-striped table-head-fixed" id="customer_list" >
-                                
-                            </table>    
-                        </div>
-                    </div> --}}
+                    
+                </div>
             </div>
+        </div>
+        <div class="col-md-5">
+            <div id="view_purchase_entry"></div>
         </div>
 
     </div>
+
+    {{-- dummy --}}
+
+    <div class="row mb-5">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">size</th>
+                <th scope="col">qty</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td colspan="2">
+                    <table class="table">
+                        <tr>
+                            <td>hfdsj</td>
+                            <td>hfdsj</td>
+                        </tr>
+                        <tr>
+                            <td>hfdsj</td>
+                            <td>hfdsj</td>
+                        </tr>
+                        <tr>
+                            <td>hfdsj</td>
+                            <td>hfdsj</td>
+                        </tr>
+                    </table>
+
+                </td>
+                <td>Otto</td>
+              </tr>
+              
+             
+            </tbody>
+          </table>
+    </div>
+
 @endsection
 
 
@@ -202,6 +242,7 @@ a {
                 
                 supplierDetail(supplier_id);
                 $('#bill_no').val('');
+                $('#discount').val('0');
                 $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
                 // getPurchaseEntry(supplier_id, bill_no);
 
@@ -294,11 +335,14 @@ a {
                 
             });
         
-            $(document).on('click','.editProductBtn', function (e) {
+            $(document).on('click','.editPurchaseEntryBtn', function (e) {
                 e.preventDefault();
                 const product_id = $(this).val();
                 // alert(product_id);
-                editProduct(product_id);
+                $('#purchaseEntryModal').modal('show');
+
+                // alert(product_id);
+                // editProduct(product_id);
             });
 
             $(document).on('click','#updateProductBtn', function (e) {
@@ -475,6 +519,15 @@ a {
                 e.preventDefault();
                 var purchase_id = $(this).val();
                 generatePurchaseInvoice(purchase_id);
+            });
+
+            $(document).on('click','.viewPurchaseEntry', function (e) {
+                e.preventDefault();
+                var purchase_id = $(this).val();
+
+                viewPurchaseEntry(purchase_id);
+
+                // generatePurchaseInvoice(purchase_id);
             });
 
             // $(document).on("click",".price", function(e){
