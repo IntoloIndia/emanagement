@@ -47,6 +47,22 @@ function getCityByState(state_id) {
     });
 }
 
+function generateInvoice(bill_id) {
+    $.ajax({
+       type: "get",
+       url: "generate-invoice/"+bill_id,
+       dataType: "json",
+       success: function (response) {
+        //    console.log(response);
+
+           if (response.status == 200) {
+               $('#generateInvoiceModal').html(response.html);
+               $('#generateInvoiceModal').modal('show');
+               // window.location.reload();
+           }
+       }
+   });
+}
 
 
 

@@ -165,16 +165,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(AlterationVoucherController::class)->group(function () {
         Route::get('admin/alteration_voucher','index');
-        Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
         Route::get('admin/alter-voucher/{bill_id}','alterVoucher');
-        // Route::get('admin/generate-invoice-voucher/{customer_id}','generateAlerationVoucher');
-        Route::get('admin/generate-alteration-Item/{bill_id}','generateAlerationItem');
-      
-        // Route::get('admin/get-customer-data-bill/{customer_id}', 'getCumosterDataBills');
-        // Route::get('admin/get-customers-bills/{customer_id}','getCustomerBillData');
+        Route::post('admin/save-alteration-voucher','saveAlterationVoucher');
         Route::get('admin/get-customers-bills/{customer_id}','getCustomerBills');
+        Route::get('admin/get-alter-item/{alteration_voucher_id}','getAlterItem');
+        Route::get('admin/update-delivery-status/{alteration_voucher_id}','updateDeliveryStatus');
 
-          
     });
 
     Route::controller(AdminController::class)->group(function () {
@@ -234,6 +230,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(PurchaseReturnController::class)->group(function () {
         Route::get('admin/purchase-return', 'index');
+        Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
+        Route::post('admin/save-return-item', 'saveReturnProduct');
         
     });
 
@@ -241,8 +239,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(PurchaseEntryController::class)->group(function () {
         Route::get('admin/purchase-entry', 'index');
         Route::post('admin/save-purchase-entry', 'savePurchaseEntry');
-        Route::get('admin/edit-purchase-entry/{product_id}', 'editPurchaseEntry');
-        Route::post('admin/update-purchase-entry/{product_id}', 'updatePurchaseEntry');
+        Route::get('admin/edit-purchase-entry/{purchase_entry_id}', 'editPurchaseEntry');
+        Route::post('admin/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
+
         Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
 
         // Route::get('admin/barcode', 'getBarcode');

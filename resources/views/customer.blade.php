@@ -3,30 +3,23 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="card">
 
             <div class="card-header">
                 <h3 class="card-title">Customer</h3>
             </div>
-            <div class="card-body table-responsive p-0" style="height: 350px;">
-                {{-- <div class="col-md-12 mt-2">
-                    <select class="form-select form-select-sm" name="customer_id" id="customer_id" >
-                        <option selected="" disabled=""> Select name </option>
-                        @foreach ($customers as $item)
-                            <option value="{{$item->id}}">{{$item->mobile_no}}-{{$item->customer_name}}</option> 
-                        @endforeach
-                    </select>
-                </div>
-                <br> --}}
+            <div class="card-body " style="height: 500px;">
                 <div class="row">
-                    <div class="col-md-12 table-responsive" style="height: 200px;">
-                        <table class="table table-striped table-head-fixed" id="customer_list" >
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-striped table-head-fixed" id="customer_list">
                             <thead>
                                 <tr>
                                     <th>SN</th>
                                     <th>Customer</th>
                                     <th>Mobile</th>
+                                    <th>City</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -35,6 +28,7 @@
                                         <td>{{++$key}}</td>
                                         <td>{{ucwords($list->customer_name)}}</td>
                                         <td>{{$list->mobile_no}}</td>
+                                        <td>{{$list->city}}</td>
                                         <td id="customer_row_id" customer-id="{{$list->id}}"><i class="fas fa-lg fa-file" ></i></td>
                                     </tr>
                                 @endforeach
@@ -45,12 +39,12 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Customer Detail</h3>
             </div>
-            <div class="card-body table-responsive p-0" style="height: 350px;">
+            <div class="card-body" style="height:500px;">
                 <div class="col-md-12 mt-2">
                     <div id="customer_detail_list"></div>
                 </div>
@@ -58,6 +52,14 @@
         </div>
     </div>
 </div>
+
+<section>
+    <div id="newcontent">
+        <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                
+        </div>
+    </div>
+</section>
 
 @endsection
 @section('script')
@@ -75,15 +77,11 @@
             var customer_id = $(this).attr('customer-id');
             // alert(customer_id);
             CustomerDetail(customer_id);
-            
-             
         });
         $(document).on('click','#showGenerateInvoiceModal', function (e) {
                 e.preventDefault();
                 var bill_id = $(this).attr('bill-id');
-                alert(bill_id);
-                // const customer_id = $(this).val();
-                // generateInvoice(bill_id);
+                generateInvoice(bill_id);              
             });
 
 

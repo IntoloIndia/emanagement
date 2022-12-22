@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePurchaseReturnsTable extends Migration
+class CreatePurchaseReturnItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreatePurchaseReturnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_returns', function (Blueprint $table) {
+        Schema::create('purchase_return_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('supplier_id')->default(0);
+            $table->integer('sub_category_id')->default(0);
+            $table->integer('purchase_return_id')->default(0);
+            $table->integer('qty')->default(0);
+            $table->string('size')->nullable();
+            $table->string('color')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->timestamps();
@@ -29,6 +33,6 @@ class CreatePurchaseReturnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_returns');
+        Schema::dropIfExists('purchase_return_items');
     }
 }

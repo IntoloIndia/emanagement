@@ -12,7 +12,9 @@ use Validator;
 class CustomerController extends Controller
 {
     public function index(){
-        $customers = Customer::all();
+        $customers = Customer::join('cities','customers.city_id','=','cities.id')
+        ->select('customers.*','cities.city')
+        ->get();
         $customer_points = CustomerPoint::all();
         
         return view('customer',[
@@ -47,8 +49,8 @@ class CustomerController extends Controller
             $html .= "<div class='col-md-9 text-end'>".ucwords($customer_detail->state).", ".ucwords($customer_detail->city). "</br>GST No - ".$customer_detail->gst_no. "</div></br>";
         $html .= "</div>";
         $html .= "<hr>";
-        $html .="<div class='table-responsive'>";
-        $html .="<table class='table table-bordered'>";
+        $html .="<div class='table-responsive p-0' style='height:300px;'>";
+        $html .="<table class='table  table-striped table-head-fixed text-nowrap'>";
             $html .="<thead>";
                 $html .="<tr>";
                     $html .="<th>S No</th>";

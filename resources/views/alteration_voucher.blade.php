@@ -26,226 +26,21 @@
 
 @endsection
 @section('content')
-{{-- <div class="row">
-    <h1>alteration voucher</h1>
-    <div class="col-md-3">
-        <input type="text" name="bill_no" id="bill_no" class="form-control form-control-sm" placeholder="bill no" >
-       </div>
-    <div class="col-md-3">
-        <button class="btn btn-primary btn-sm orderInvoiceBtn" id="btn">show</button>
-        @foreach ($customers_billing as $item)
-        <input type="text" name="bill_no" id="bill_no" class="form-control form-control-sm orderInvoiceBtn"  value="{{$item->id}}" >
-        {{-- <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
-        {{-- @endforeach
-
-       </div>
-    </div> --}} 
-    {{-- <h2>Bill</h2> --}}
-{{-- <div id="box">
-    <div class="row">
-            <div class='col-md-3'>
-                <span>GST NO: <small>4125666</small></span><br>
-            </div>
-            <div class='col-md-6 text-center'>
-                <span>SALES INVOICE</span><br>
-                <span>ERENOWN CLOTHING CO </span><br>
-                <span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>
-                <span>Jabalpur -482002 </span><br>
-            </div>
-            <div class='col-md-3' >
-                <span>Phone no: 0761-4047699</span><br>
-                <span></span><br>
-                <span>Mobile no : 09826683399<small></small></span><br>
-                <span></span><br>
-            </div>
-        </div>
-        <div class='row' style="padding: 10px;">
-            <div class='col-md-6' style='border:1px solid black'>
-            <span>Customer name: <small></small></span><br>
-            <span>Location : <small>Jabalpur</small></span><br/>
-            <span>State code  : <small>0761</small></span><br>
-        </div>
-        <div class='col-md-2' style='border:1px solid black'>
-            <span class=''>CASH :<br/> <small><b>10000</b></small></span>
-        </div>
-            <div class='col-md-4' style='border:1px solid black'>
-                <span>Invoicen No : <small class='float-end'></small></span><br>
-                <span class=''>Date : <small class='float-end'></small></span><br>
-                <span class=''>Attent By : <small class='float-end'></small></span>
-            </div>
-         </div>
-         <div class='row mt-2'>
-            <div class='table-responsive'>
-                <table class='table table-bordered'>
-                <thead>
-                <tr>
-                <th>#</th>
-                <th></th>
-                <th>Item Name</th>
-                <th>Qty</th>
-                <th>Size</th>
-                <th>Color</th>
-                <th>MRP</th>
-                <th>Rate</th>
-                <th>Disc</th>
-                <th>Total</th>
-                <th>Taxable</th>
-                <th>CGST%</th>
-                <th>SGST%</th>
-                </tr>
-                </thead>
-                <tbody>
-                    @foreach ($order_items as $key => $list) 
-                        <tr>
-                            <td>{{++$key}}</td>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </label>
-                                  </div>
-                            </td>
-                            <td>{{$list->product}}</td>
-                            <td>{{$list->qty}}</td>
-                            <td>{{$list->size}}</td>
-                            <td>{{$list->red}}</td>
-                            <td>{{$list->price}}</td>
-                            <td>{{$list->price}}</td>
-                            <td>{{$list->price}}</td>
-                            <td>{{$list->amount}}</td>
-                            <td>{{$list->amount}}</td>
-                            <td>{{$list->amount}}</td>
-                            <td>{{$list->amount}}</td>
-                           
-                        </tr>
-                    @endforeach
-                </tbody> 
-                 <tfoot>
-                    <tr>
-                        <td colspan='3'></td>
-                         <td>{{$key}}</td>
-                        <td colspan='5'></td>
-                        <td><b>Total :</b></td>
-                        <td>{{$list->amount}}</td>
-                        <td>{{$list->amount}}</td>
-                        <td>{{$list->amount}}</td>
-                    </tr>
-                 </tfoot>
-                </table>
-            </div>
-         </div>
-         <div class='row'>
-            <div class='col-md-8'>
-            <span class='float-start'>Amount of Tax Subject to Recvers Change :</span><br>
-            </div>
-            <div class='col-md-2'>
-                <span class='float-end'>GROSS AMOUNT:</span><br>
-                <span class='float-end'>LESS DISCOUNT:</span><br>
-                <span class='float-end'>ADD CGST :</span> <br>
-                <span class='float-end'>ADD SGST : </span><br>
-                <span class='float-end'>OTHER ADJ :</span> <br>
-                <span class='float-end'>R/OFF AMT :</span> <br>
-                <span class='float-end'>G.TOTAL : </span><br>
-                </div>
-                <div class='col-md-2'>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                    <small class='text-center'>{{$list->total_amount}}</small><br>
-                </div>
-            </div>
-            <hr>
-                <div class='row text-center'>
-                <h6><b>Thank  Have a Nice Day </b></h6>
-                <small>Visit Again !</small>
-                </div>
-                           
-               <div class='modal-footer'>
-                <button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Close</button> 
-                <button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$order->id."'>Print</button> 
-               </div>
-                
-        
-            </div>
-               <div class="row mb-3">
-                    <div class="col-3">
-                         <button class="btn btn-primary btn-sm">save</button>
-                    </div>
-               </div>
-</div> --}}
-
-    {{-- <section>
-        <div id="newcontent">
-            <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    
-            </div>
-        </div>
-    </section> --}}
-    <section>
-        <div class="modal fade" id="alterBillModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            {{-- <div class="modal-dialog modal-lg">
-                <div class="modal-content"> --}}
-                    {{-- <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div> --}}
-                    {{-- <div class="modal-body">
-                        <div class='row mt-2'>
-                            <div class='table-responsive'>
-                                <table class='table'>
-                                    <thead>
-                                        <tr>
-                                        <th>Bill No</th>
-                                        <th>Item Name</th>
-                                        <th>Qty</th>
-                                        <th>Size</th>
-                                        <th>Price</th>
-                                        <th>Amount</th>
-                                        <th>CGST%</th>
-                                        <th>SGST%</th>
-                                        <th>IGST</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send message</button>
-                    </div> --}}
-                {{-- </div>
-            </div> --}}
-        </div>
-    </section>
-
 {{-- alter voucher modal --}}
     <section>
         <div class="modal fade" id="alterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                  <h5 class="modal-title" id="staticBackdropLabel">Alter Item</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="alterVoucherForm">
-                      <div class='alterationvoucher_err'></div>
                         @csrf
+                      <div class='alterationvoucher_err'></div>
+                       
                         <div id="show_alteration_items"></div>
-
-                    
-                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -256,6 +51,40 @@
             </div>
           </div>
     </section>
+    <section>
+        <div class="modal fade" id="viewAlterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="height: 550px;">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Alter Voucher</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="print_alter_voucher">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h6><b>Mangaldeep (Jabalpur)<br>
+                                Samdariya Mall Jabalpur-482002</b></h6>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
+                            <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div>
+                        </div>
+                        <hr>
+                        <div id='alter_item_list'></div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <p>Thankyou! Visit Again</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </section>
    
 <div class="row">
     <div class="col-md-5">
@@ -263,7 +92,7 @@
             <div class="card-header">
                 <h3 class="card-title">Customer bills</h3>
             </div>
-            <div class="card-body table-responsive p-0" style="height: 350px;">
+            <div class="card-body table-responsive p-0" style="height: 300px;">
                 <div class="col-md-12 mt-2">
                     <select class="form-select form-select-sm" name="customer_id" id="customer_id" >
                         <option selected="" disabled=""> Select name </option>
@@ -276,7 +105,6 @@
                 <div class="row">
                     <div class="col-md-12 table-responsive" style="height: 200px;">
                         <table class="table table-striped table-head-fixed " id="customer_bills" >
-                            
                         </table>    
                     </div>
                 </div>
@@ -286,7 +114,12 @@
 <div class="col-md-7">
     <div class="card">
         <div class="card-header">
-            <b>Invoice</b>
+            <div class="row">
+                <div class="col-md-6"> <b>Alter Voucher</b></div>
+                <div class="offset-2 col-md-4">
+                    <input type="text" id="filter_voucher" class="form-control form-control-sm" placeholder="Search voucher" >
+                </div>
+            </div>
         </div>
         <div class="card-body">
 
@@ -294,43 +127,47 @@
                 <table class='table table-striped'>
                     <thead>
                         <tr style='position: sticky;z-index: 1;'>
+                            <th>SNo</th>
                             <th>Date</th>
                             <th>Time</th>
                             <th>Bill No</th>
                             <th>Customer</th>
+                            <th colspan="2" class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody id="filter_alter_voucher">
                             @foreach ($alteration_vouchers as $key => $vouchers)
                            
                                 <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$key}}' aria-expanded='false' aria-controls='flush-collapseOne'>
-                                    
-                                    <td>{{$vouchers->alteration_date}}</td>
+                                    <td>{{++$key}}</td>
+                                    <td>{{date('d-m-Y',strtotime($vouchers->alteration_date))}}</td>
                                     <td>{{$vouchers->alteration_time}}</td>
                                     <td>{{$vouchers->bill_id}}</td>
                                     <td>{{$vouchers->customer_name}}</td>
-                                    
+                                    <td>  <button type="button" class="btn btn-dark btn-sm deliveryStatusBtn" value="{{$vouchers->id}}">Delivery</button></td>
+                                    <td>  <button type="button" class="btn btn-dark btn-sm viewAlterVoucherBtn" value="{{$vouchers->id}}"><i class="fas fa-file-invoice"></i></button></td>
                                 </tr> 
+                                {{-- @php
+                                    $alteration_items = getAlterationItem($vouchers->id);// show voucher item
+                                @endphp
                                 <tr>
                                     <td colspan='3'>
                                         <div id='collapse_{{$key}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
                                             <div class='accordion-body'>
-                                                <table class="table table-striped table-hover ">
+                                                <table class="table table-striped table-hover table-info">
                                                     <thead>
                                                             <tr>
                                                                 <th> SN</th>
-                                                                <th> Size</th>
+                                                                <th> Item</th>
                                                                 <th> Qty</th>
-                                                                <th> Price</th>
                                                             </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($alteration_items as $key => $items)
                                                             <tr>
-                                                                <td>{{$items->product_id}}</td>
-                                                                <td>XXL</td>
-                                                                <td>5</td>
-                                                                <td>1299</td>
+                                                                <td>{{++$key}}</td>
+                                                                <td>{{$items->sub_category}}</td>
+                                                                <td>{{$items->item_qty}}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -338,13 +175,54 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             @endforeach                                               
                         </tbody>
                 </table>  
             </div>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Delivered Item</h3>
+            </div>
+            <div class="card-body table-responsive p-0"  style="height: 300px;">
+                <div class="row">
+                    <div class="col-md-12 mt-2">
+                        <div class="table-responsive">
+                        <table class='table table-striped'>
+                            <thead>
+                                <tr style='position: sticky;'>
+                                    <th>SNo</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Bill</th>
+                                    <th>Customer</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                                @foreach ($delivered_vouchers as $key => $list)
+                                    <tr>
+                                        <td>{{++$key}}</td>
+                                        <td>{{date('d-m-Y',strtotime($list->alteration_date))}}</td>
+                                        <td>{{$list->alteration_time}}</td>
+                                        <td>{{$list->bill_id}}</td>
+                                        <td>{{$list->customer_name}}</td>
+                                        <td> <button type="button" class="btn btn-dark btn-sm viewAlterVoucherBtn" value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
 </div>
 
 
@@ -358,25 +236,11 @@
             var customer_id = $(this).val();
             getCustomerBills(customer_id);
         });
-
-        // save alterration bill 
-        // $(document).on('click','#saveAltertion',function(e){
-        //         e.preventDefault();
-        //          saveAlterationVoucher();
-        // });
-        // $(document).on('click','#generateAltertionVoucher',function(e){
-        //         e.preventDefault();
-        //         saveAlterationVoucher();
-        //    
-        // });
-
-
         $(document).on('click','.product_id', function (e) {
             $(".product_id").each(function () {
                 var check_prod= $(this).is(':checked');
                 if ($(this).is(':checked')) {
                     var product_id = $(this).val();
-                    // alert($('#item_qty_'+ product_id).val());
                     $('#item_qty_'+ product_id).prop("disabled", false);
                 }
                 else{
@@ -387,29 +251,6 @@
                 }
             });
         });
-        
-        // $(document).on('click','#leaveVerifyBtn', function (e) {
-        //     var emp_id = $(this).val();
-        //     var leave_ids = [];
-        //     $(".leave_checkbox").each(function () {
-        //         var self = $(this);
-        //         if (self.is(':checked')) {
-        //             leave_ids.push(self.attr("get-leave-id")); 
-        //             alert(leave_ids);
-        //         }
-        //     });
-
-
-
-
-     
-        // $(document).on('click','.orderInvoiceBtn',function(e){
-        //         e.preventDefault();
-        //         // $('#generateInvoiceModal').modal('show');
-        //         const customer_id = $(this).val();
-        //         generateAlerationVoucher(customer_id);
-        //     });
-
         // final alter function
             $(document).on('click','.alterBillsBtn',function(e){
                 e.preventDefault();
@@ -421,34 +262,47 @@
                 e.preventDefault();
                 saveAlterationVoucher();
             });
-         
-            // $(document).on('keyup','.item_qty', function(e){
-            //     var item_qty = $(this) .val();
-            // if($('.item_qty').val() > item_qty ){
-            //     alert("no");
-            // }
-            // else{
-            //     // $('#errorMsg').hide();
-            //     alert("yes");
-            // }
+            $(document).on('click','.viewAlterVoucherBtn',function(e){
+                e.preventDefault();
+                var alteration_voucher_id = $(this).val();
+              $('#viewAlterVoucherModal').modal('show');
+              getAlterItem(alteration_voucher_id);
+
+            });
+            $(document).on('click','.deliveryStatusBtn',function(e){
+                e.preventDefault();
+                var alteration_voucher_id = $(this).val();
+                updateDeliveryStatus(alteration_voucher_id);
+            });
+          
+            $(document).on('keyup','#filter_voucher',function(e){
+                var value = $(this).val().toLowerCase();
+                $("#filter_alter_voucher tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+            $(document).on('click','#printAlterReceiptBrn', function () {
+                // var modal_data = $('#barcode_body').html();
+                // $('#print_alter_voucher').html('');
+                // $('#print_alter_voucher').append(modal_data);
+                $('#viewAlterVoucherModal').modal('show');
+                printAlterReceipt();
+            });
+
+            // $(document).on('click','.item_qty',function(e){
+            //     var item_qty = $(this).val();
+            //     // alert($item_qty)
+            //     $('.item_qty').keyup(function(event) {
+            //         var qty = $(this).val();
+            //         // alert(qty);
+            //         if(qty>item_qty)
+            //         {
+            //             alert("np");
+            //         }
+            //     });
             // });
-
-           
+               
     });
-
-    // function getCustomerBillData(customer_id) {
-    //     $.ajax({
-    //         type: "get",
-    //         url: `get-customers-bills/${customer_id}`,
-    //         dataType: "json",
-    //         success: function (response) {
-    //             if(response.status == 200){
-    //                 $('#customer_list').html("");
-    //                 $('#customer_list').append(response.html);
-    //             }
-    //         }
-    //     });
-    // } 
 
 // get customer bills
     function getCustomerBills(customer_id) {
@@ -465,27 +319,7 @@
             }
         });
     } 
-    // function generateAlerationItem(bill_id) {
-    //     $.ajax({
-    //     type: "get",
-    //     url: "generate-alteration-Item/"+bill_id,
-    //     dataType: "json",
-    //         success: function (response) {
-    //             // console.log(response);
-    //             if (response.status == 200) {
-    //                 // $('#generateInvoiceModal').html(response.html);
-    //                 // $('#generateInvoiceModal').modal('show');
-    //                 $('#alterBillModal').html(response.html);
-    //                 $('#alterBillModal').modal('show');
-    //                 // $('#box').html(response.html);
-                
-                    
-    //             }
-    //         }
-    //     });
-    // }
-
-
+  
     function alterVoucher(bill_id) {
         $.ajax({
             type: "get",
@@ -537,9 +371,43 @@
             }
         });
     }
-
-
-
+    
+    function getAlterItem(alteration_voucher_id) {
+        $.ajax({
+            type: "get",
+            url: `get-alter-item/${alteration_voucher_id}`,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if(response.status == 200){
+                    $('#alter_item_list').html("");
+                    $('#alter_item_list').append(response.html);
+                }
+            }
+        });
+    } 
+    function updateDeliveryStatus(alteration_voucher_id) {
+        $.ajax({
+            type: "get",
+            url: `update-delivery-status/${alteration_voucher_id}`,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if(response.status == 200){
+                }
+                window.location.reload();
+            }
+        });
+    } 
+    function printAlterReceipt(){
+        var backup = document.body.innerHTML;
+        var div_content = document.getElementById("print_alter_voucher").innerHTML;
+        document.body.innerHTML = div_content;
+        window.print();
+        document.body.innerHTML = backup;
+        window.location.reload();
+    }
+   
 </script>
 
 @endsection

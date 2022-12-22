@@ -21,14 +21,15 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12" id="supplier_div">
                                                         {{-- <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);"> --}}
-                                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" >
+                                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
                                                             <option selected disabled value="0">Supplier</option>                                          
                                                             @foreach ($suppliers as $list)
                                                             <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
                                                             @endforeach
-                                                        </select>                                                    
+                                                        </select>  
+
                                                     </div>
                                                     
                                                 </div>
@@ -262,14 +263,14 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <th>MRP</th>
-                                                                            <td><input type="text" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td >
-                                                                                <input type="text" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value="">
+                                                                                <input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value="">
                                                                             </td>
-                                                                            <td ><input type="text" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td ><input type="text" id="l_mrp" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td ><input type="text" id="xl_mrp" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td ><input type="text" id="xxl_mrp" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
                                                                         </tr>
                                                                         
                                                                     </tbody>
@@ -367,9 +368,13 @@
                                         {{-- </div> --}}
                                     {{-- </div> --}}
 
+                                    <input type="hidden" name="purchase_id" id="purchase_id">
+                                    <input type="hidden" name="purchase_entry_id" id="purchase_entry_id">
+
                                     <div class="card-footer ">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
                                             <button type="button" id="savePurchaseEntryBtn" class="btn btn-primary btn-sm ">Save </button>
+                                            <button type="button" id="updatePurchaseEntryBtn" class="btn btn-primary btn-sm hide">Update</button>
                                         </div>
                                     </div>
                                         

@@ -42,6 +42,8 @@ class MyApp {
     const WITH_IN_STATE = 1;
     const INTER_STATE = 2;
     const THOUSAND = 1000;
+    
+    const DELIVERY = 1;
 
 
 }

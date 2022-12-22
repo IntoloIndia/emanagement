@@ -337,19 +337,19 @@ a {
         
             $(document).on('click','.editPurchaseEntryBtn', function (e) {
                 e.preventDefault();
-                const product_id = $(this).val();
-                // alert(product_id);
-                $('#purchaseEntryModal').modal('show');
+                const purchase_entry_id = $(this).val();
+                // alert(purchase_entry_id);
+                // alert(purchase_id);
 
-                // alert(product_id);
-                // editProduct(product_id);
+                editPurchaseEntry(purchase_entry_id);
             });
 
-            $(document).on('click','#updateProductBtn', function (e) {
+            $(document).on('click','#updatePurchaseEntryBtn', function (e) {
                 e.preventDefault();
-                const product_id = $(this).val();
-                // alert(product_id);
-                updateProduct(product_id);
+                const purchase_id = $('#purchase_id').val();
+                const purchase_entry_id = $('#purchase_entry_id').val();
+
+                updatePurchaseEntry(purchase_id, purchase_entry_id);
             });
             
             $(document).on('click','.deleteProductBtn', function (e) {

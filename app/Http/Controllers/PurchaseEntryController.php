@@ -58,6 +58,8 @@ class PurchaseEntryController extends Controller
                     'suppliers.supplier_name',
                 ]);
 
+
+
         return view('purchase.index',[
             'suppliers' => $suppliers,
             "categories"=>$categories,
@@ -68,7 +70,7 @@ class PurchaseEntryController extends Controller
         ]);
     }
 
-    function savePurchaseEntry(Request $req)
+    public function savePurchaseEntry(Request $req)
     {
 
         if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
@@ -360,6 +362,142 @@ class PurchaseEntryController extends Controller
         return 'ok';
     }
 
+    public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
+    {
+
+        if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
+        {
+            $xs_qty_validation = '';
+            $xs_price_validation = '';
+            $xs_mrp_validation = '';
+        }else{
+            $xs_qty_validation = 'required';
+            $xs_price_validation = 'required';
+            $xs_mrp_validation = 'required';
+        }
+
+        if($req->input('s_qty') == "" &&  $req->input('s_price') == "" && $req->input('s_mrp') == "")
+        {
+            $s_qty_validation = '';
+            $s_price_validation = '';
+            $s_mrp_validation = '';
+        }else{
+            $s_qty_validation = 'required';
+            $s_price_validation = 'required';
+            $s_mrp_validation = 'required';
+        }
+
+        if($req->input('m_qty') == "" &&  $req->input('m_price') == "" && $req->input('m_mrp') == "")
+        {
+            $m_qty_validation = '';
+            $m_price_validation = '';
+            $m_mrp_validation = '';
+        }else{
+            $m_qty_validation = 'required';
+            $m_price_validation = 'required';
+            $m_mrp_validation = 'required';
+        }
+        if($req->input('l_qty') == "" &&  $req->input('l_price') == "" && $req->input('l_mrp') == "")
+        {
+            $l_qty_validation = '';
+            $l_price_validation = '';
+            $l_mrp_validation = '';
+        }else{
+            $l_qty_validation = 'required';
+            $l_price_validation = 'required';
+            $l_mrp_validation = 'required';
+        }
+        if($req->input('xl_qty') == "" &&  $req->input('xl_price') == "" && $req->input('xl_mrp') == "")
+        {
+            $xl_qty_validation = '';
+            $xl_price_validation = '';
+            $xl_mrp_validation = '';
+        }else{
+            $xl_qty_validation = 'required';
+            $xl_price_validation = 'required';
+            $xl_mrp_validation = 'required';
+        }
+        if($req->input('xxl_qty') == "" &&  $req->input('xxl_price') == "" && $req->input('xxl_mrp') == "")
+        {
+            $xxl_qty_validation = '';
+            $xxl_price_validation = '';
+            $xxl_mrp_validation = '';
+        }else{
+            $xxl_qty_validation = 'required';
+            $xxl_price_validation = 'required';
+            $xxl_mrp_validation = 'required';
+        }
+
+        $validator = Validator::make($req->all(),[
+            'supplier_id' => 'required|max:191',
+            'bill_no'=>'required|max:191',
+            // 'bill_no'=>'required|unique:purchase_entries,bill_no,'.$req->input('bill_no'),
+            'bill_date'=>'required|max:191',
+            'payment_days'=>'required|max:191',
+            'category_id'=>'required|max:191',
+            'sub_category_id'=>'required|max:191',
+            'brand_id'=>'required|max:191',
+            'style_no_id'=>'required|max:191',
+            'color'=>'required|max:191',
+            'xs_qty'=>$xs_qty_validation,
+            'xs_price'=>$xs_price_validation,
+            'xs_mrp'=>$xs_mrp_validation,
+            's_qty'=>$s_qty_validation,
+            's_price'=>$s_price_validation,
+            's_mrp'=>$s_mrp_validation,
+            'm_qty'=>$m_qty_validation,
+            'm_price'=>$m_price_validation,
+            'm_mrp'=>$m_mrp_validation,
+            'l_qty'=>$l_qty_validation,
+            'l_price'=>$l_price_validation,
+            'l_mrp'=>$l_mrp_validation,
+            'xl_qty'=>$xl_qty_validation,
+            'xl_price'=>$xl_price_validation,
+            'xl_mrp'=>$xl_mrp_validation,
+            'xxl_qty'=>$xxl_qty_validation,
+            'xxl_price'=>$xxl_price_validation,
+            'xxl_mrp'=>$xxl_mrp_validation,
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+
+        }
+        
+        $model = Purchase::find($purchase_id);
+            
+        // $model->supplier_id = $supplier_id;
+        $model->bill_no = $req->input('bill_no');
+        $model->bill_date = $req->input('bill_date');
+        $model->payment_days = $req->input('payment_days');
+        $model->time = date('g:i A');
+        $model->save();
+
+        $category_id = $req->input('category_id');
+        $sub_category_id = $req->input('sub_category_id');
+        $brand_id = $req->input('brand_id');
+        $style_no_id = $req->input('style_no_id');
+        $color = $req->input('color');
+        $product_image = $req->input('product_image');
+        
+        $purchase_entry_data = PurchaseEntry::find($purchase_entry_id);
+            
+           
+
+
+        return response()->json([   
+            'status'=>200,
+        ]);
+
+
+
+    }
+
     
 
     public function getPurchaseEntry($supplier_id, $bill_no){
@@ -496,7 +634,7 @@ class PurchaseEntryController extends Controller
                             $html .="<td>".ucwords($list->brand_name)."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
                             $html .="<td>".ucwords($list->color)."</td>";
-                            $html .="<td><button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' ><i class='far fa-edit'></i></button></td>";
+                            $html .="<td><button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button></td>";
                         $html .="</tr> ";
 
                         $html .="<tr>";
@@ -625,40 +763,30 @@ class PurchaseEntryController extends Controller
             $html .= "<table class='table table-bordered border-dark'>";
                 $html .= "<thead>";
                     $html .= "<tr>";
-                        $html .= "<th >SN</th>";
+                        $html .= "<th>SN</th>";
                         $html .= "<th>Description</th>";
                         $html .= "<th>Style No</th>";
-                        $html .= "<th colspan='7'>Size</th>";
-                        // $html .= "<th>Price</th>";
-                        // $html .= "<th>SGST</th>";
-                        // $html .= "<th>CGST</th>";
-                        // $html .= "<th>IGST</th>";
-                        // $html .= "<th>Amount</th>";
-                    $html .= "</tr>";
-                $html .= "</thead>";
-    
-                $html .= "<tbody>";
-                for ($i=0; $i <5 ; $i++) { 
-                    $html .= "<tr >";
-                        $html .= "<td>1</td>";
-                        $html .= "<td>Jeans</td>";
-                        $html .= "<td>A-125-AK</td>";
-                        $html .= "<td>";
-                            
-                        $html .= "<table class='table'>";
-                        $html .= "<tr>";
-                            
-                        $html .= "<th >Size</th>";
-                        $html .= "<th >Qty</th>";
+                        $html .= "<th>Size</th>";
+                        $html .= "<th>Qty</th>";
                         $html .= "<th>Price</th>";
                         $html .= "<th>SGST</th>";
                         $html .= "<th>CGST</th>";
                         $html .= "<th>IGST</th>";
                         $html .= "<th>Amount</th>";
                     $html .= "</tr>";
+                $html .= "</thead>";
+    
+                $html .= "<tbody>";
+                for ($i=0; $i <5 ; $i++) { 
+                    $html .= "<tr >";
+                        $html .= "<td rowspan='4'>1</td>";
+                        $html .= "<td rowspan='4'>Jeans</td>";
+                        $html .= "<td rowspan='4'>A-125-AK</td>";
+                        $html .= "<td >";
+                                                    
                         for ($j=0; $j < 3 ; $j++) {
                             $html .= "<tr>"; 
-                            $html .= "<td>XXL</td>";
+                            $html .= "<td >XXL</td>";
                             $html .= "<td>5</td>";
                             $html .= "<td>200</td>";
                             $html .= "<td>10</td>";
@@ -667,14 +795,8 @@ class PurchaseEntryController extends Controller
                             $html .= "<td>220</td>";
                             $html .= "</tr>";
                         }
-                        $html .= "</table>";
                         $html .= "</td>";
-                        // $html .= "<td>4</td>";
-                        // $html .= "<td>799</td>";
-                        // $html .= "<td>0</td>";
-                        // $html .= "<td>0</td>";
-                        // $html .= "<td>0</td>";
-                        // $html .= "<td>3196</td>";
+                        
                     $html .= "</tr>";
                 }
                 $html .= "</tbody>";
@@ -719,95 +841,48 @@ class PurchaseEntryController extends Controller
             'supplier'=>$supplier
         ]);
     }
-
-    // function saveProduct(Request $req)
-    // {
-
-    //     $validator = Validator::make($req->all(),[
-    //         'category_id' => 'required|max:191',
-    //         'supplier_id' => 'required|max:191',
-    //         'sub_category_id'=>'required|max:191',
-    //         'product_name'=>'required|max:191',
-    //         'qty'=>'required|max:191',
-    //         'purchase_price'=>'required|max:191',
-    //         'sales_price'=>'required|max:191',
-    //         'bill_no'=>'required|max:191',
-    //         'size'=>'required|max:191',
-    //         'color'=>'required|max:191',
-    //     ]);
-
-    //     if($validator->fails())
-    //     {
-    //         return response()->json([
-    //             'status'=>400,
-    //             'errors'=>$validator->messages(),
-    //         ]);
-    //     }else{
-
-    //         $qty = $req->input('qty');
-    //         for ($i=0; $i < $qty; $i++) 
-    //         { 
-    //             $product_code = rand(000001,999999);
-    //             //------------------------------------------------------
-    //             // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();//commented
-    //             // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);//commented
-    //             //-----------------------------------------------
-    //             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-                
-    //             //------------------------------------------------------
-    //             // $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode('081231723897', $generator::TYPE_CODE_128)) . '">';//commented
-    //             //------------------------------------------------------
-    //             $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-                
-    //             $model = new PurchaseEntry;
-    //             $model->product_code = $product_code;
-    //             $model->category_id = $req->input('category_id');
-    //             $model->supplier_id = $req->input('supplier_id');
-    //             $model->sub_category_id = $req->input('sub_category_id');
-    //             $model->product = $req->input('product_name');
-    //             $model->qty = 1;
-    //             $model->sales_price = $req->input('sales_price');
-    //             $model->purchase_price = $req->input('purchase_price');
-    //             $model->bill_no = $req->input('bill_no');
-    //             $model->size = $req->input('size');
-    //             $model->color = $req->input('color');
-    //             $model->barcode = $barcode;
-    //             $model->date = date('Y-m-d');
-    //             $model->time = date('g:i A');
-    //             if ($model->save()) {
-    //                 $imageModal = new ProductImage;
-    //                 $imageModal->product_id = $model->id;
-    //                 $imageModal->product_image = $req->input('product_image');
-    //                 $imageModal->save();
-    //             }
-    //         }
-
-    //         return response()->json([   
-    //             'status'=>200
-    //         ]);
-    //     }
-    // }
-
     
-    public function editProduct($product_id)
+    public function editPurchaseEntry($purchase_entry_id)
     {
-        $product = PurchaseEntry::find($product_id);
-        $sub_category = SubCategory::where(['category_id'=>$product->category_id])->get();
+        $purchase_entry = PurchaseEntry::find($purchase_entry_id);
+        $purchase = Purchase::join('suppliers','purchases.supplier_id','=','suppliers.id')
+            ->where('purchases.id', $purchase_entry->purchase_id)
+            ->first(['purchases.*','suppliers.supplier_name','suppliers.state_type','suppliers.supplier_code','suppliers.gst_no','suppliers.address']);
 
-        $html = "";
-        $html .= "<option disabled>Choose...</option>";
-        foreach ($sub_category as $key => $list) {
-            if ($list->id == $product->sub_category_id) {
-                $html .= "<option selected value='".$list->id."'>".ucwords($list->sub_category)."</option>";
+        $purchase_entry_items = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get();
+
+        $sub_category_data = SubCategory::where(['category_id'=>$purchase_entry->category_id])->get(['id' , 'category_id', 'sub_category']);
+
+        $sub_category_html = "";
+        $sub_category_html .= "<option disabled>Choose...</option>";
+        foreach ($sub_category_data as $key => $list) {
+            if ($list->id == $purchase_entry->sub_category_id) {
+                $sub_category_html .= "<option selected value='".$list->id."'>".ucwords($list->sub_category)."</option>";
             } else {
-                $html .= "<option value='".$list->id."'>".ucwords($list->sub_category)."</option>";
+                $sub_category_html .= "<option value='".$list->id."'>".ucwords($list->sub_category)."</option>";
             }
         }
 
+        $styles_no = StyleNo::where(['supplier_id'=>$purchase->supplier_id])->get();
+
+        $style_no_html = "";
+        $style_no_html .= "<option selected disabled value='0'>Category</option>";
+        foreach ($styles_no as $key => $list) {
+            if ($list->id == $purchase_entry->style_no_id) {
+                $style_no_html .= "<option value='".$list->id."' selected>" . ucwords($list->style_no)  . "</option>" ;
+            }else{
+                $style_no_html .= "<option value='".$list->id."' >" . ucwords($list->style_no)  . "</option>" ;
+            }
+        }
+
+
         return response()->json([
             'status'=>200,
-            'product'=>$product,
-            'html'=>$html
+            'purchase'=>$purchase,
+            'purchase_entry'=>$purchase_entry,
+            'purchase_entry_items'=>$purchase_entry_items,
+            'sub_category_html'=>$sub_category_html,
+            'style_no_html'=>$style_no_html,
         ]);
     }
 
