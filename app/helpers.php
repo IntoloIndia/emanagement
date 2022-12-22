@@ -4,11 +4,19 @@
     use App\Models\SubCategory;
     use App\Models\PurchaseEntry;
     use App\Models\Supplier;
+    use App\Models\AlterationItem;
+    use App\Models\PurchaseReturnItem;
+
     // use App\MyApp;
 
     function subCategoryItems($category_id){
         $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
         return $subCategory_item; 
+    }
+
+    function purchaseReturnItems($supplier_id){
+        $purchase_return_item = PurchaseReturnItem::where(['supplier_id'=>$supplier_id])->get();
+        return $purchase_return_item; 
     }
 
     function updateProductStatus($product_id){
@@ -60,6 +68,12 @@
             'igst'=>round($igst ,2 , PHP_ROUND_HALF_EVEN)
         ] ;
     }
+    // show alter item
+    // function getAlterationItem($alteration_voucher_id){
+    //     $alteration_items = AlterationItem::join('sub_categories','alteration_items.product_id','=','sub_categories.id')
+    //         ->where(['alteration_voucher_id'=>$alteration_voucher_id])->get(['sub_categories.sub_category','alteration_items.item_qty']);
+    //     return $alteration_items;
+    // }
 
 
     // function invoiceNo(){

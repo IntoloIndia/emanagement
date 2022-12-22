@@ -476,7 +476,7 @@
             </td>
             <td style="width: 50px;">
                 <input type="text"  class="form-control form-control-sm discount" id="discount">
-                <input type="hidden" name="discount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
+                <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
             </td>
              <td style="width: 150px;">
                  <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
@@ -1044,23 +1044,23 @@
                
         }
 
-        function generateInvoice(bill_id) {
-         $.ajax({
-        type: "get",
-        url: "generate-invoice/"+bill_id,
-        dataType: "json",
-        success: function (response) {
-            // console.log(response);
+        // function generateInvoice(bill_id) {
+        //  $.ajax({
+        //     type: "get",
+        //     url: "generate-invoice/"+bill_id,
+        //     dataType: "json",
+        //     success: function (response) {
+        //         // console.log(response);
 
-            if (response.status == 200) {
-                $('#generateInvoiceModal').html(response.html);
-                $('#generateInvoiceModal').modal('show');
-                // window.location.reload();
-            }
-        }
-    });
+        //         if (response.status == 200) {
+        //             $('#generateInvoiceModal').html(response.html);
+        //             $('#generateInvoiceModal').modal('show');
+        //             // window.location.reload();
+        //         }
+        //     }
+        // });
     
-}
+        // }
 
     </script>
     <script>

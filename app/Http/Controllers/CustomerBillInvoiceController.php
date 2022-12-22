@@ -122,6 +122,7 @@ class CustomerBillInvoiceController extends Controller
                 $qty = $req->input('qty');
                 $size = $req->input('size');
                 $amount = $req->input('amount');
+                $discount_amount = $req->input('discount_amount');
                 $taxfree_amount = $req->input('taxfree_amount');
                 $sgst = $req->input('sgst');
                 $cgst = $req->input('cgst');
@@ -146,6 +147,7 @@ class CustomerBillInvoiceController extends Controller
                     $item->qty = $qty[$key];
                     $item->size = $size[$key];
                     $item->amount = $amount[$key];
+                    $item->discount_amount = $discount_amount[$key];
                     $item->taxfree_amount = $taxfree_amount[$key];
                     $item->sgst = $sgst[$key];
                     $item->cgst = $cgst[$key];
@@ -210,6 +212,10 @@ class CustomerBillInvoiceController extends Controller
                     ->first(); 
 
                 $bill_invoise = CustomerBillInvoice::where(['bill_id'=>$bill_id])->get(); 
+                // $bill_invoise = CustomerBillInvoice::join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
+                // ->where(['bill_id'=>$bill_id])
+                // ->select('customer_bill_invoices.*','sub_categories.sub_category'); 
+
 
                     
 
