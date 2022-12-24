@@ -44,6 +44,8 @@ class MyApp {
     const THOUSAND = 1000;
     
     const DELIVERY = 1;
-
+   
+    const RELEASE_STATUS = 1;
+    const RELEASE_PANDDING_STATUS = 0;
 
 }

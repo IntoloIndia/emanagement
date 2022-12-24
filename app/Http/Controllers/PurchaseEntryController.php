@@ -213,7 +213,7 @@ class PurchaseEntryController extends Controller
                 $purchase_entry->brand_id = $brand_id;
                 $purchase_entry->style_no_id = $style_no_id;
                 $purchase_entry->color = $color;
-                if ($product_image != " ") {
+                if ($product_image) {
                     $purchase_entry->img = $product_image;
                 }
 
@@ -303,7 +303,7 @@ class PurchaseEntryController extends Controller
             }
             
 
-            $purchase_entry_html = $this->getPurchaseEntry($req->input('supplier_id'), $req->input('bill_no'));
+            $purchase_entry_html = $this->getPurchaseEntry($supplier_id, $bill_no);
 
             return response()->json([   
                 'status'=>200,
@@ -312,58 +312,15 @@ class PurchaseEntryController extends Controller
         }
     }
 
-    public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
-
-        $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-
-        $first = rand(001,999);
-        $second = rand(001,999);
-        $month = date('m');
-        $year = date('y');
-
-        $taxable = 0;
-        if ($discount > 0) {
-           $discount_amount = ($price * $discount) / 100;
-           $taxable = ($price - $discount_amount) * $qty;
-        }else{
-            $taxable = $price * $qty;
-        }
-        $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
-        
-        $gst = calculateGst($supplier->state_type, $taxable);
-        $total_gst = $gst['sgst'] + $gst['cgst'] + $gst['igst'];
-        $amount = $taxable + $total_gst ;
-
-        $purchase_item = new PurchaseEntryItem;
-        $purchase_item->purchase_entry_id = $purchase_entry_id;
-        $purchase_item->size = $size;
-        $purchase_item->qty = $qty;
-        $purchase_item->price = $price;
-        $purchase_item->mrp = $mrp;
-        $purchase_item->discount = $discount;
-        $purchase_item->taxable = $taxable;
-        $purchase_item->sgst = $gst['sgst'];
-        $purchase_item->cgst = $gst['cgst'];
-        $purchase_item->igst = $gst['igst'];
-        $purchase_item->amount = $amount;
-        // $purchase_item->time = date('g:i A');
-        // $purchase_item->save();
-
-        if ($purchase_item->save()) {
-            $model = PurchaseEntryItem::find($purchase_item->id);
-
-            $product_code = $month . $first . $purchase_item->id . $second . $year;               
-            $barcode_img = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
-            $model->barcode = $product_code;
-            $model->barcode_img = $barcode_img;
-            $model->save();
-        }
-
-        return 'ok';
-    }
-
     public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
     {
+        if(( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") ){
+            
+            return response()->json([
+                'status'=>400,
+                'errors'=>['Please enter atleast 1 product detail'],
+            ]);
+        }
 
         if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
         {
@@ -467,38 +424,182 @@ class PurchaseEntryController extends Controller
             ]);
         }else{
 
+            $supplier_id = $req->input('supplier_id');
+
+            $model = Purchase::find($purchase_id);
+                
+            // $model->supplier_id = $supplier_id;
+            $model->bill_no = $req->input('bill_no');
+            $model->bill_date = $req->input('bill_date');
+            $model->payment_days = $req->input('payment_days');
+            $model->time = date('g:i A');
+            // $model->save();
+            if ($model->save()) {
+
+                $category_id = $req->input('category_id');
+                $sub_category_id = $req->input('sub_category_id');
+                $brand_id = $req->input('brand_id');
+                $style_no_id = $req->input('style_no_id');
+                $color = $req->input('color');
+                $product_image = $req->input('product_image');
+                
+                $purchase_entry = PurchaseEntry::find($purchase_entry_id);
+                
+                $purchase_entry->category_id = $category_id;
+                $purchase_entry->sub_category_id = $sub_category_id;
+                $purchase_entry->brand_id = $brand_id;
+                $purchase_entry->style_no_id = $style_no_id;
+                $purchase_entry->color = $color;
+
+                if ($product_image) {
+                    $purchase_entry->img = $product_image;
+                }
+                $purchase_entry->save();
+
+                //delete purchase entry items
+                $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
+                $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+
+                // if ($items_deleted > 0) {
+
+                    $xs_qty = $req->input('xs_qty');
+                    $s_qty = $req->input('s_qty');
+                    $m_qty = $req->input('m_qty');
+                    $l_qty = $req->input('l_qty');
+                    $xl_qty = $req->input('xl_qty');
+                    $xxl_qty = $req->input('xxl_qty');
+
+                    $xs_price = $req->input('xs_price');
+                    $s_price = $req->input('s_price');
+                    $m_price = $req->input('m_price');
+                    $l_price = $req->input('l_price');
+                    $xl_price = $req->input('xl_price');
+                    $xxl_price = $req->input('xxl_price');
+
+                    $xs_mrp = $req->input('xs_mrp');
+                    $s_mrp = $req->input('s_mrp');
+                    $m_mrp = $req->input('m_mrp');
+                    $l_mrp = $req->input('l_mrp');
+                    $xl_mrp = $req->input('xl_mrp');
+                    $xxl_mrp = $req->input('xxl_mrp');
+
+                    $qty = 0;
+                    $size = "";
+                    $price = 0;
+                    $mrp = 0;
+                    $discount = 0 ;
+
+                    if ($xs_qty > 0) {
+                        $qty = $xs_qty;
+                        $size = 'xs';
+                        $price = $xs_price;
+                        $mrp = $xs_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);                
+                    }
+        
+                    if ($s_qty > 0) {
+                        $qty = $s_qty;
+                        $size = 's';
+                        $price = $s_price;
+                        $mrp = $s_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);             
+                    }
+        
+                    if ($m_qty > 0) {
+                        $qty = $m_qty;
+                        $size = 'm';
+                        $price = $m_price;
+                        $mrp = $m_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+        
+                    if ($l_qty > 0) {
+                        $qty = $l_qty;
+                        $size = 'l';
+                        $price = $l_price;
+                        $mrp = $l_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+        
+                    if ($xl_qty > 0) {
+                        $qty = $xl_qty;
+                        $size = 'xl';
+                        $price = $xl_price;
+                        $mrp = $xl_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+        
+                    if ($xxl_qty > 0) {
+                        $qty = $xxl_qty;
+                        $size = 'xxl';
+                        $price = $xxl_price;
+                        $mrp = $xxl_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+
+                // }
+
+                // $purchase_entry_html = $this->viewPurchaseEntry($purchase_id);
+            }
+
         }
         
-        $model = Purchase::find($purchase_id);
-            
-        // $model->supplier_id = $supplier_id;
-        $model->bill_no = $req->input('bill_no');
-        $model->bill_date = $req->input('bill_date');
-        $model->payment_days = $req->input('payment_days');
-        $model->time = date('g:i A');
-        $model->save();
-
-        $category_id = $req->input('category_id');
-        $sub_category_id = $req->input('sub_category_id');
-        $brand_id = $req->input('brand_id');
-        $style_no_id = $req->input('style_no_id');
-        $color = $req->input('color');
-        $product_image = $req->input('product_image');
-        
-        $purchase_entry_data = PurchaseEntry::find($purchase_entry_id);
-            
-           
-
 
         return response()->json([   
             'status'=>200,
+            // 'html'=>$purchase_entry_html['html'],
         ]);
-
-
-
     }
 
-    
+    public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
+
+        $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+
+        $first = rand(001,999);
+        $second = rand(001,999);
+        $month = date('m');
+        $year = date('y');
+
+        $taxable = 0;
+        if ($discount > 0) {
+           $discount_amount = ($price * $discount) / 100;
+           $taxable = ($price - $discount_amount) * $qty;
+        }else{
+            $taxable = $price * $qty;
+        }
+        $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
+        
+        $gst = calculateGst($supplier->state_type, $taxable);
+        $total_gst = $gst['sgst'] + $gst['cgst'] + $gst['igst'];
+        $amount = $taxable + $total_gst ;
+
+        $purchase_item = new PurchaseEntryItem;
+        $purchase_item->purchase_entry_id = $purchase_entry_id;
+        $purchase_item->size = $size;
+        $purchase_item->qty = $qty;
+        $purchase_item->price = $price;
+        $purchase_item->mrp = $mrp;
+        $purchase_item->discount = $discount;
+        $purchase_item->taxable = $taxable;
+        $purchase_item->sgst = $gst['sgst'];
+        $purchase_item->cgst = $gst['cgst'];
+        $purchase_item->igst = $gst['igst'];
+        $purchase_item->amount = $amount;
+        // $purchase_item->time = date('g:i A');
+        // $purchase_item->save();
+
+        if ($purchase_item->save()) {
+            $model = PurchaseEntryItem::find($purchase_item->id);
+
+            $product_code = $month . $first . $purchase_item->id . $second . $year;               
+            $barcode_img = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+            $model->barcode = $product_code;
+            $model->barcode_img = $barcode_img;
+            $model->save();
+        }
+
+        return 'ok';
+    }
 
     public function getPurchaseEntry($supplier_id, $bill_no){
 
@@ -704,7 +805,18 @@ class PurchaseEntryController extends Controller
             ->select('suppliers.*','cities.city')
             ->first();
 
-        
+        $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+            // ->join('brands','purchase_entries.brand_id','=','brands.id')
+            ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
+            ->where(['purchase_id'=> $purchase_id])
+            ->get(['purchase_entries.*','sub_categories.sub_category','style_nos.style_no' ]);
+
+        // $purchase_entry_items = $this->getPurchaseEntryItems()
+        // $purchase_entry_items = array();
+        // foreach ($purchase_entry as $key1 => $list) {
+        //     $purchase_entry_items[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get();
+        // }
+
 
         $html = "";
 
@@ -763,67 +875,89 @@ class PurchaseEntryController extends Controller
             $html .= "<table class='table table-bordered border-dark'>";
                 $html .= "<thead>";
                     $html .= "<tr>";
-                        $html .= "<th>SN</th>";
-                        $html .= "<th>Description</th>";
-                        $html .= "<th>Style No</th>";
-                        $html .= "<th>Size</th>";
-                        $html .= "<th>Qty</th>";
-                        $html .= "<th>Price</th>";
-                        $html .= "<th>SGST</th>";
-                        $html .= "<th>CGST</th>";
-                        $html .= "<th>IGST</th>";
-                        $html .= "<th>Amount</th>";
+                        $html .= "<th style='width: 5%;'>SN</th>";
+                        $html .= "<th style='width: 25%;'>Description</th>";
+                        $html .= "<th style='width: 20%;'>Style No</th>";
+                        $html .= "<th style='width: 10%;'>Color</th>";
+
+                        $html .= "<th style='width: 5%;'>Size</th>";
+                        $html .= "<th style='width: 5%;'>Qty</th>";
+                        $html .= "<th >Price</th>";
+                        $html .= "<th >Dis.</th>";
+                        $html .= "<th >Taxable</th>";
+                        $html .= "<th >SGST</th>";
+                        $html .= "<th >CGST</th>";
+                        $html .= "<th >IGST</th>";
+                        $html .= "<th >Amount</th>";
                     $html .= "</tr>";
                 $html .= "</thead>";
     
                 $html .= "<tbody>";
-                for ($i=0; $i <5 ; $i++) { 
+                foreach ($purchase_entry as $key => $list) {
+                    
+                    $data = $this->getPurchaseEntryItems($list->id);
+                    $row_count = count($data['items']);
+
                     $html .= "<tr >";
-                        $html .= "<td rowspan='4'>1</td>";
-                        $html .= "<td rowspan='4'>Jeans</td>";
-                        $html .= "<td rowspan='4'>A-125-AK</td>";
+                        
+                        $html .= "<td rowspan='". ($row_count + 1) ."'>".++$key."</td>";
+                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->sub_category)."</td>";
+                        $html .= "<td rowspan='". ($row_count + 1) ."'>".$list->style_no."</td>";
+                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->color)."</td>";
                         $html .= "<td >";
-                                                    
-                        for ($j=0; $j < 3 ; $j++) {
+                          
+                        foreach ($data['items'] as $item) {
+                               
                             $html .= "<tr>"; 
-                            $html .= "<td >XXL</td>";
-                            $html .= "<td>5</td>";
-                            $html .= "<td>200</td>";
-                            $html .= "<td>10</td>";
-                            $html .= "<td>10</td>";
-                            $html .= "<td>0</td>";
-                            $html .= "<td>220</td>";
+                                $html .= "<td >".$item->size."</td>";
+                                $html .= "<td >".$item->qty."</td>";
+                                $html .= "<td >".$item->price."</td>";
+                                $html .= "<td >".$item->discount."</td>";
+                                $html .= "<td >".$item->taxable."</td>";
+                                $html .= "<td >".$item->sgst."</td>";
+                                $html .= "<td >".$item->cgst."</td>";
+                                $html .= "<td >".$item->igst."</td>";
+                                $html .= "<td >".$item->amount."</td>";
                             $html .= "</tr>";
                         }
+
                         $html .= "</td>";
                         
                     $html .= "</tr>";
                 }
+
                 $html .= "</tbody>";
     
                 $html .= "<tfoot>";
+
+                    // $html .= "<tr>";
+                    //     $html .= "<td colspan='5' class='align-top'></td>";
+                    //     $html .= "<td  >Total Qty</td>";
+                    //     $html .= "<td  >Total Price</td>";
+                    // $html .= "</tr> ";
+
                     $html .= "<tr>";
-                        $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
+                        $html .= "<td colspan='9' rowspan='6'  class='align-top'> Amount in Words : ";
                             $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>";
                         $html .= "</td>  ";
                         $html .= "<td  class='col-sm-2'>Subtotal :</td>";
-                        $html .= "<td  class='col-sm-2'><input type='text' name='sub_total' id='sub_total' class='form-control form-control-sm' placeholder='' readonly></td>";
+                        $html .= "<td  colspan='2'><input type='text' name='sub_total' id='sub_total' class='form-control form-control-sm' placeholder='' readonly></td>";
                     $html .= "</tr> ";
                     $html .= "<tr>";
                         $html .= "<td>SGST :</td>";
-                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr> ";
                         $html .= "<td>CGST : </td>";
-                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='cgst_amount' id='cgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='cgst_amount' id='cgst_amount' type='text' placeholder='' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr>";
                         $html .= "<td>IGST :</td>";
-                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr>";
                         $html .= "<td>Grand Total :</td>";
-                        $html .= "<td  class='col-sm-2'><input class='form-control form-control-sm' name='grand_total' id='grand_total' type='text' readonly ></td>";
+                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='grand_total' id='grand_total' type='text' readonly ></td>";
                     $html .= "</tr>";
                     
                 $html .= "</tfoot>";
@@ -838,7 +972,8 @@ class PurchaseEntryController extends Controller
             'status'=>200,
             'html'=>$html,
             'purchase'=>$purchase,
-            'supplier'=>$supplier
+            'supplier'=>$supplier,
+            // 'purchase_entry_items'=>$purchase_entry_items
         ]);
     }
     

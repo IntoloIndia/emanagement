@@ -232,6 +232,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/purchase-return', 'index');
         Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
         Route::post('admin/save-return-item', 'saveReturnProduct');
+        Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
         
     });
 

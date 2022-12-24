@@ -6,6 +6,7 @@
     use App\Models\Supplier;
     use App\Models\AlterationItem;
     use App\Models\PurchaseReturnItem;
+    use App\Models\CustomerPoint;
 
     // use App\MyApp;
 
@@ -14,10 +15,10 @@
         return $subCategory_item; 
     }
 
-    function purchaseReturnItems($supplier_id){
-        $purchase_return_item = PurchaseReturnItem::where(['supplier_id'=>$supplier_id])->get();
-        return $purchase_return_item; 
-    }
+    // function purchaseReturnItemsdata($supplier_id){
+    //     $purchase_return_item_data = PurchaseReturnItem::where(['supplier_id'=>$supplier_id])->get();
+    //     return $purchase_return_item_data; 
+    // }
 
     function updateProductStatus($product_id){
         $purchase = PurchaseEntry::find($product_id);
@@ -67,6 +68,21 @@
             'cgst'=>round($cgst ,2 , PHP_ROUND_HALF_EVEN),
             'igst'=>round($igst ,2 , PHP_ROUND_HALF_EVEN)
         ] ;
+    }
+
+    function manageCustomerPoint($customer_id, $redeem_point,$total_amount)
+    {
+        $data = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
+        // return $data;
+
+        // if($data->$total_point > 0)
+        // {
+        //     $redeem_point = $redeem_point - $total_point;
+        // }
+        // $cutomer_point = new CustomerPoint;
+        // $cutomer_point->$customer_id = $customer_id;
+        // $cutomer_point->$customer_points = $points;
+        // $cutomer_point->save();
     }
     // show alter item
     // function getAlterationItem($alteration_voucher_id){

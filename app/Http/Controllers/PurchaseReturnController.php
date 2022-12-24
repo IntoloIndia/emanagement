@@ -10,17 +10,37 @@ use App\Models\Size;
 use App\Models\Color;
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnItem;
+use App\MyApp;
 use Validator;
 
 class PurchaseReturnController extends Controller
 {
     public function index()
     {
-        $returnItems = PurchaseReturnItem::all();
-        $allSupliers = PurchaseReturn::all();
+        // $purchase_return = PurchaseReturn::all();
+        $purchase_return = PurchaseReturn::join('suppliers','suppliers.id','=','purchase_returns.supplier_id')
+                                        ->where(['purchase_returns.release_status' => MyApp::RELEASE_PANDDING_STATUS])
+                                        ->select('suppliers.supplier_name','purchase_returns.*')->get();
+        $purchase_return_items = array();
+        foreach ($purchase_return as $key => $list) {
+            $purchase_return_items[] = PurchaseReturnItem::join('sub_categories','sub_categories.id','=','purchase_return_items.sub_category_id')
+                                ->where(['purchase_return_id'=>$list->id])
+                                ->select('purchase_return_items.*','sub_categories.sub_category')->get();     
+        }
+
+
+        $purchase_return_data = PurchaseReturn::join('suppliers','suppliers.id','=','purchase_returns.supplier_id')
+                                        ->where(['purchase_returns.release_status' => MyApp::RELEASE_STATUS])
+                                        ->select('suppliers.supplier_name','purchase_returns.*')->get();
+                
+
+
+
+
         return view('purchase-return',[
-            'returnItems' =>$returnItems,
-            'allSupliers' =>$allSupliers
+            'purchase_return' =>$purchase_return,
+            'purchase_return_items' =>$purchase_return_items,
+            'purchase_return_data' =>$purchase_return_data
 
         ]);
     }
@@ -42,23 +62,25 @@ class PurchaseReturnController extends Controller
         }else{
 
             $supplier_id = 0;
-            $data = PurchaseReturn::where(['supplier_id'=>$req->input('supplier_id')])->first('id');
+            $data = PurchaseReturn::where(['supplier_id'=>$req->input('supplier_id')])->first(['id','release_status']);
             if ($data == null) {
+                // if($release_status > 0){
 
-            $model = new PurchaseReturn;
-            $model->supplier_id = $req->input('supplier_id');
-            $model->date = date('Y-m-d');
-            $model->time = date('g:i A');
-            $model->save();
-
-            $supplier_id = $model->id;
-            }else{
-                $supplier_id = $data->id;
-            }
+                    $model = new PurchaseReturn;
+                    $model->supplier_id = $req->input('supplier_id');
+                    $model->create_date = date('Y-m-d');
+                    $model->create_time = date('g:i A');
+                    $model->save();
+        
+                    $supplier_id = $model->id;
+                    }else{
+                        $supplier_id = $data->id;
+                    }
+                // }
 
 
             $returnitemmodel = new PurchaseReturnItem;
-            $returnitemmodel->purchase_return_id = $model->id;
+            $returnitemmodel->purchase_return_id = $supplier_id;
             $returnitemmodel->sub_category_id = $req->input('sub_category_id');
             $returnitemmodel->color = $req->input('color');
             $returnitemmodel->size = $req->input('size');
@@ -96,6 +118,19 @@ class PurchaseReturnController extends Controller
                         
         return response()->json([
             'return_product'=>$return_product
+        ]);
+    }
+
+    function updateReleaseStatus($supplier_id)
+    {
+        $release_status_data =PurchaseReturn::find($supplier_id);
+        $release_status_data->release_status = MyApp::RELEASE_STATUS;
+        $release_status_data->release_date = date('Y-m-d');
+        $release_status_data->release_time = date('g:i A');
+        $release_status_data->save();
+        
+        return response()->json([
+            'status'=>200
         ]);
     }
 }

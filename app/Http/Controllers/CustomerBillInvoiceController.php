@@ -13,6 +13,7 @@ use App\Models\Customer;
 use App\Models\Month;
 use App\Models\City;
 use App\Models\User;
+use App\Models\CustomerPoint;
 use Validator;
 
 class CustomerBillInvoiceController extends Controller
@@ -80,7 +81,7 @@ class CustomerBillInvoiceController extends Controller
             $customer_id = 0;
             
             $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first('id');
-            // alert($data);
+            // $total_points = 
             
             if ($data == null) {
 
@@ -103,18 +104,23 @@ class CustomerBillInvoiceController extends Controller
                 $customer_id = $data->id;
                 
             }
-           
+                
+            $total_pointt =0;
+            $total_amountt =0;
+            $total_amount = $req->input('total_amount');
+
+
               // customer bills tables insert
               $invoice_no = rand(000001,999999);
               $billmodel = new CustomerBill;
               $billmodel->invoice_no = $invoice_no;
               $billmodel->customer_id = $customer_id;   
-              $billmodel->total_amount = $req->input('total_amount');
+              $billmodel->total_amount = $total_amount;
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
            
-
+             
                
                 $product_id = $req->input('product_id');
                 $product_code = $req->input('product_code');
@@ -127,17 +133,28 @@ class CustomerBillInvoiceController extends Controller
                 $sgst = $req->input('sgst');
                 $cgst = $req->input('cgst');
                 $igst = $req->input('igst');
+                $redeem_point = $req->input('redeem_point');
             // $alteration_voucher = $req->input('alteration_voucher');
 
+                $result = manageCustomerPoint($customer_id, $redeem_point,$total_amount);
+                $data = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
+        
+                // if($data->total_points > 0)
+                // {
+                //     $total_pointt = $data->total_points - $redeem_point +  $total_amountt;
+                //     $total_amountt = ($total_pointt * 10)/100;
+                // }
+                // // else if($data->total_points == 0){
+                //     // }
+                //     else{
+                //         $total_amountt = ($total_amount * 10)/100;
+                    
+                // }
             // }
 
             if($billmodel->save()){
-            
-
                 foreach ($product_id as $key => $list) {
-                    
                     // $categories = Customer::find($product_code[$key]);
-
                     $item = new CustomerBillInvoice;
 
                     $item->bill_id = $billmodel->id;
@@ -147,6 +164,8 @@ class CustomerBillInvoiceController extends Controller
                     $item->qty = $qty[$key];
                     $item->size = $size[$key];
                     $item->amount = $amount[$key];
+                    $item->earned_point = 0;
+                    $item->redeem_point =$redeem_point[$key];
                     $item->discount_amount = $discount_amount[$key];
                     $item->taxfree_amount = $taxfree_amount[$key];
                     $item->sgst = $sgst[$key];
@@ -156,17 +175,22 @@ class CustomerBillInvoiceController extends Controller
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();
-                    if ($item->save()) {
-                        // updateProductStatus($product_id[$key]);
+                    // if ($item->save()) {
+                    // //     // updateProductStatus($product_id[$key]);
 
-                       
-                    }
-
+                    //     $cutomer_point = new CustomerPoint;
+                    //     $cutomer_point->$customer_id = $customer_id;
+                    //     $cutomer_point->$customer_points = $points;
+                    //     $cutomer_point->save();
+                    // }
                 } 
 
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
-                    'status'=>200
+                    'status'=>200,
+                    // 'result'=>$result
+                    'total_pointt'=>$total_pointt,
+                    'total_amountt'=>$total_amountt
 
 
                 ]);
@@ -194,12 +218,28 @@ class CustomerBillInvoiceController extends Controller
     public function getCumosterData($mobile_no)
     {
         $customersData = Customer::where(['mobile_no'=>$mobile_no])->first();
-        // $customersData = Customer::find($mobile_no);
+        if($customersData){
+
+            $customer_id =  $customersData->id;
+            $points =  CustomerPoint::where(['customer_id'=>$customer_id])->first('total_points');
+            $total_points = 0;
+            if($points != "")
+            {
+                $total_points = $points->total_points; 
+            }
+            return response()->json([
+                'status'=>200,
+                'customersData'=>$customersData,
+                'total_points'=> $total_points
+            ]);
+        }else{
+            return response()->json([
+                'status'=>404,
+                'msg'=>"Data not found"
+            ]);
+        }
+        
      
-        return response()->json([
-            'status'=>200,
-            'customersData'=>$customersData
-        ]);
 
     }
 
@@ -210,34 +250,17 @@ class CustomerBillInvoiceController extends Controller
                     ->where('customer_bills.id',$bill_id)
                     ->select(['customer_bills.*','customers.customer_name','customers.mobile_no'])
                     ->first(); 
-
-                $bill_invoise = CustomerBillInvoice::where(['bill_id'=>$bill_id])->get(); 
-                // $bill_invoise = CustomerBillInvoice::join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
-                // ->where(['bill_id'=>$bill_id])
-                // ->select('customer_bill_invoices.*','sub_categories.sub_category'); 
-
-
-                    
-
-                    
-
+                $bill_invoise = CustomerBillInvoice::join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
+                    ->where('bill_id' ,$bill_id)
+                    ->select('customer_bill_invoices.*','sub_categories.sub_category')
+                    ->get(); 
         $html = "";
         $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    // $html .="<h5 class='modal-title' id='staticBackdropLabel'><b>$bills->customer_name</b></h5>";
                     $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
-
-                //  $html .="<div class='modal-body-wrapper'>";
-
-
                     $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
-
-                        // $html .="<div class='row text-center'>";
-                        //     $html .="<h5><b>Mangaldeep </b></h5>";
-                        //     $html .="<small>Jabalpur</small>";
-                        // $html .="</div>";
 
                         $html .="<div class='row mb-1'>";
                                 $html .="<div class='col-md-3 '>";
@@ -258,8 +281,6 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<span></span><br>";
                             $html .="</div>";
                         $html .="</div>";
-                        // $html .="<hr>";
-
                         $html .="<div class='row '>";
                             $html .="<div class='col-md-7' style='border:1px solid black'>";
                             $html .="<span>Customer name: <small>".$bills->customer_name."</small></span><br>";
@@ -314,7 +335,7 @@ class CustomerBillInvoiceController extends Controller
                                     // dd($list);
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
-                                        $html .="<td>".ucwords($list->product)."</td>";
+                                        $html .="<td>".ucwords($list->sub_category)."</td>";
                                         $html .="<td>".$list->qty."</td>";
                                         $html .="<td>".$list->size."</td>";
                                         // $html .="<td>".$list->color."</td>";

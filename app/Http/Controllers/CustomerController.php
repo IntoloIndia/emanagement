@@ -29,24 +29,19 @@ class CustomerController extends Controller
         ->where(['customers.id'=>$customer_id])
         ->first(['customers.customer_name' ,'customers.date','customers.birthday_date','customers.month_id','states.state','cities.city','customers.gst_no']);
         
-        
-        // $customer_detail = Customer::join('states','customers.state_type','=','states.id')->join('cities','customers.city_id','=','cities.id')
-        // ->where(['customers.id'=>$customer_id])->select('customers.*','states.state','cities.city')->get();
         $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
             ->orderBy('bill_date','DESC')
             ->orderBy('bill_time','DESC')->get();
 
-        // $customer_bills = CustomerBill::join('customer_bill_invoices','customer_bills.id','=','customer_bill_invoices.bill_id')
-        // ->where(['customer_bills.customer_id'=>$customer_id])
-        // ->select('customer_bills.*','customer_bill_invoices.product_code','customer_bill_invoices.product_id','customer_bill_invoices.qty','customer_bill_invoices.size','customer_bill_invoices.price','customer_bill_invoices.taxfree_amount','customer_bill_invoices.sgst','customer_bill_invoices.cgst','customer_bill_invoices.igst','customer_bill_invoices.amount')->get();
+    
 
         $html = "";
         $html .= "<div class='row'>";
             $html .= "<div class='col-md-12 text-center'><b>".ucwords($customer_detail->customer_name)."</b></div>";
             $html .= "</div>";
         $html .= "<div class='row'>";
-            $html .= "<div class='col-md-3'>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."</div>";
-            $html .= "<div class='col-md-9 text-end'>".ucwords($customer_detail->state).", ".ucwords($customer_detail->city). "</br>GST No - ".$customer_detail->gst_no. "</div></br>";
+            $html .= "<div class='col-md-3'><b>DOB : </b>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."<br><b>Point : </b></div>";
+            $html .= "<div class='col-md-9 text-end'>".ucwords($customer_detail->state).", ".ucwords($customer_detail->city). "</br><b>GST N</b> : ".$customer_detail->gst_no. "</div></br>";
         $html .= "</div>";
         $html .= "<hr>";
         $html .="<div class='table-responsive p-0' style='height:300px;'>";
@@ -63,26 +58,33 @@ class CustomerController extends Controller
                 $html .="</tr>";
             $html .="</thead>";
                 $html .="<tbody>";
+                $total_amount = 0; 
                     foreach ($customer_bills as $key => $bills) {
-                    
+                        $total_amount =  $total_amount + $bills->total_amount;
                         $html .="<tr>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".date('d-m-Y',strtotime($bills->bill_date))."</td>";
                             $html .="<td>".$bills->bill_time."</td>";
                             $html .="<td>".$bills->invoice_no."</td>";
                             $html .="<td>".$bills->total_amount."</td>";
-                            $html .="<td ><i class='fas fa-file-invoice' id='showGenerateInvoiceModal' bill-id='".$bills->id."' style='font-size:24px'></i></td>";
-                            
+                            $html .="<td><i class='fas fa-file-invoice' id='showGenerateInvoiceModal' bill-id='".$bills->id."' style='font-size:24px'></i></td>";
                         $html .="</tr>";
                     }
+                        $html .="<tr>";
+                        $html .=" <td colspan='3'></td>";
+                        $html .=" <td><b>Grand Total</b></td>";
+                        $html .=" <td>$total_amount</td>";
+                        $html .=" <td> </td>";
+                        $html .="</tr>";
                 $html .="</tbody>";
             $html .="<tfoot>";
                 $html .="<tr>";
-               
                 $html .="</tr>";
             $html .="</tfoot>";
         $html .="</table>";
     $html .="</div>";
+
+    
 
         return response()->json([
             'status'=>200,

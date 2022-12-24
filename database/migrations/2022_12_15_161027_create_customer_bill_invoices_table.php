@@ -22,6 +22,8 @@ class CreateCustomerBillInvoicesTable extends Migration
             $table->string('size')->nullable();
             $table->string('price')->nullable();
             $table->float('amount')->nullable();
+            $table->float('earned_point')->nullable();
+            $table->float('redeem_point')->nullable();
             $table->float('discount_amount')->nullable();
             $table->float('taxfree_amount')->nullable();
             $table->float('sgst')->default(0);

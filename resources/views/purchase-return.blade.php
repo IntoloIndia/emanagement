@@ -2,6 +2,29 @@
 @section('page_title', 'Dashboard')
 
 @section('content')
+
+ {{-- delete modal start  --}}
+
+ <div class="modal fade" id="releaseStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                {{-- <h5 class="modal-title" id="exampleModalLabel"> Delete Brand </h5> --}}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5> Do you want to release purchase return item?</h5>
+                        <button type="button" id="yesReleaseStatusBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    <hr>
+                </center>
+            </div>
+        </div>
+    </div>
+  </div>
+
+{{-- delete modal end  --}}
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="card">
@@ -11,8 +34,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-12">
-                        <label for="exampleFormControlInput1" class="form-label">Barcode</label>
-                        <input type="text" name="" id="barcode" class="form-control form-control-sm">
+                        <label for="exampleFormControlInput1" class="form-label" >Barcode</label>
+                        <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode">
                     </div>
                     <div class="col-md-2">
                        {{-- <button class="btn btn-primary btn-sm">show</button> --}}
@@ -55,11 +78,12 @@
                 </div>
             </div>
         </div>
-           {{-- @foreach ($allSupliers as $returnItems) --}}
-            <div class="col-md-6">
+
+        <div class="col-md-6">
+           @foreach ($purchase_return as $key1 => $list)
                 <div class="card">
                     <div class="card-header">
-                        {{-- <h3 class="card-title"> <b>{{ucwords($allSupliers->id)}}</b></h3> --}}
+                        <h3 class="card-title"> <b>{{ucwords($list->supplier_name)}}</b></h3>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -73,79 +97,88 @@
                                     <th scope="col">Color</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">Time</th>
+                                    {{-- <th scope="col">Action</th> --}}
                                   </tr>
                                 </thead>
                                  @php
+                                //  $purchase_return_item_data = purchaseReturnItemsdata($purchase_returns->supplier_id);   
                                      $count =0
                                  @endphp
                                 <tbody>
-                                 @foreach ($returnItems as $list)
+                                    {{-- @if (MyApp::RELEASE_STATUS){
+
+                                    }
+                                        
+                                    @endif --}}
+                                 @foreach ($purchase_return_items[$key1] as $item)
                                      <tr>
                                         <td>{{++$count}}</td>
-                                        <td>{{$list->sub_category_id}}</td>
-                                        <td>{{$list->qty}}</td>
-                                        <td>{{$list->size}}</td>
-                                        <td>{{$list->color}}</td>
-                                        <td>{{$list->date}}</td>
-                                        <td>{{$list->time}}</td>
+                                        <td>{{$item->sub_category}}</td>
+                                        <td>{{$item->qty}}</td>
+                                        <td>{{$item->size}}</td>
+                                        <td>{{$item->color}}</td>
+                                        <td>{{date('d-m-Y',strtotime($item->date))}}</td>
+                                        <td>{{$item->time}}</td>
                                      </tr>
                                  @endforeach
                                 </tbody>
+                                
                               </table>
                         </div>
                     </div>
+                        {{-- <hr/> --}}
+                         {{-- card footer  --}}
+                        <div class="card-footer">
+                            <button class="btn btn-warning btn-sm float-right releaseStatusBtn" id="release_date" value="{{$list->id}}">Relese</button>
+                        </div>
+                          {{-- card footer  --}}
                 </div>
-            </div>
-            {{-- @endforeach --}}
+            @endforeach
+        </div>
     </div>
 
-    <div class="row">
-        {{-- @foreach ($SubCategories as $categories) --}}
-            
-            <div class="col-sm-6 col-md-4 mt-1">
-                <div class="card">
-                    <div class="card-header">
-                        {{-- <h3 class="card-title"> <b>{{ucwords($categories->category)}}</b></h3> --}}
-                    </div>
-                    <div class="card-body table-responsive p-0" style="height: 250px;">
-                        <table class="table table-head-fixed text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th>SN</th>
-                                    <th>Image</th>
-                                    <th>Sub category</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                // $category_items = subCategoryItems($categories->category_id);   
-                                // {{$count =0;}}
-                            @endphp
-                            <tbody>
-                            {{-- @foreach ($category_items as $list)
-                                <tr>
-                                  <td>{{++$count}}</td>
-                                  <td>
-                                      {{-- <a href="{{asset('/storage/app/public/'.$list->sub_category_img)}}" target="_blank"> --}}
-                                      {{-- <img src="{{asset('/storage/app/public/'.$list->sub_category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></td>
-                                      <td>{{ucwords($list->sub_category)}}</td>
-                                    <td>
-                                      <button type="button" class="btn btn-info btn-sm editsubCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                      <button type="button" class="btn btn-danger btn-sm deletesubCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
-                                  </td>
-                                </tr>
-                            @endforeach --}} 
-                            </tbody>                   
-                         </table>
-                    </div>
-    
-                </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <b>table</b>
             </div>
-    
-        {{-- @endforeach --}}
-    
+           <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Supplier name</th>
+                            <th scope="col">Relese date</th>
+                            <th scope="col">Relese time</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        @php
+                            $count = 0;
+                        @endphp
+                        <tbody>
+                            @foreach ($purchase_return_data as $list)
+                            <tr>
+                                <td>{{++$count}}</td>
+                                <td>{{$list->supplier_name}}</td>   
+                                <td>{{date('d-m-Y',strtotime($list->release_date))}}</td>
+                                <td>{{$list->release_time}}</td>
+                                <td>
+                                <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+        </div>
     </div>
+</div>
+
+    
 
     <table class="hide">
         <tbody id="item_row">
@@ -191,6 +224,25 @@
             // alert("call");
             saveReturnProduct();
         });
+        // $(document).on('click','#release_date',function(){
+        //   var supplier_id = $(this).val();
+        //     // alert(supplier_id);
+        //     updateReleaseStatus(supplier_id);
+            
+        // });
+
+        $(document).on('click','.releaseStatusBtn', function (e) {
+                e.preventDefault();
+                const supplier_id = $(this).val();
+                $('#releaseStatusModal').modal('show');
+                $('#yesReleaseStatusBtn').val(supplier_id);
+            });
+
+            $(document).on('click','#yesReleaseStatusBtn', function (e) {
+                e.preventDefault();
+                const supplier_id = $(this).val();
+                updateReleaseStatus(supplier_id);
+            });
     });
 
     // function start 
@@ -256,6 +308,20 @@
                 }
             });
         }
+
+        function updateReleaseStatus(supplier_id) {
+        $.ajax({
+            type: "get",
+            url: `update-release-status/${supplier_id}`,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if(response.status == 200){
+                }
+                window.location.reload();
+            }
+        });
+    } 
 
 </script>
 @endsection

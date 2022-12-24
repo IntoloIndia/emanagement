@@ -16,11 +16,10 @@ class CreateCustomerPointsTable extends Migration
         Schema::create('customer_points', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id')->defalut(0);
-            $table->integer('bill_id')->defalut(0);
-            $table->integer('customer_points')->defalut(0);
+            $table->integer('total_points')->defalut(0);
             $table->timestamps();
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.

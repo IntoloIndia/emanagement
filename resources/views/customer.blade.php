@@ -7,7 +7,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h3 class="card-title">Customer</h3>
+                <h3 class="card-title">Customers</h3>
             </div>
             <div class="card-body " style="height: 500px;">
                 <div class="row">
@@ -47,6 +47,28 @@
             <div class="card-body" style="height:500px;">
                 <div class="col-md-12 mt-2">
                     <div id="customer_detail_list"></div>
+
+                    {{-- <table class="table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <th>Expense</th>
+                        </tr>
+                        <tr>
+                            <td>Arun</td>
+                            <td>$10</td>
+                        </tr>
+                        <tr>
+                            <td>Priya</td>
+                            <td>$8</td>
+                        </tr>
+             
+                        <!-- The last row -->
+                        <tr>
+                            <!-- This td will span two columns, that is a
+                            single column will take up the space of 2 -->
+                            <td colspan="3  ">Sum: $18</td>
+                        </tr>
+                    </table> --}}
                 </div>
             </div>
         </div>

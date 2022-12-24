@@ -42,28 +42,28 @@
                     @csrf
                 <div class="order_err"></div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="mb-3">
                             <label for="moblie_no" class="form-label" >Moblie no</label>
                             {{-- <input type="number"  class="form-control form-control-sm" name="mobile_no" min="10" max="10" value="" required id="moblie_no" placeholder="Enter mobile number"> --}}
-                            <input type="number"  class="form-control form-control-sm mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="Enter mobile number">
+                            <input type="number"  class="form-control form-control-sm mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="mobile number">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="row">
-                            <div class="col-6">
-                                <label for="moblie_no" class="form-label" >Birth Date</label>
+                            <div class="col-5">
+                                <label for="moblie_no" class="form-label" >DOB</label>
                                 <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1">
                             </div>
                             <div class="col-6">
                                 <label for="moblie_no" class="form-label" >Months</label>
-                                <select class="form-select form-select-sm" name="month_id" id="month_id">
+                                <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
                                     <option selected>Select...</option>
                                     @foreach ($months as $item)
                                         <option value="{{$item->id}}">{{$item->month}}</option>
@@ -72,78 +72,62 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="row mb-2">
-                                <div class="col-md-6 col-sm-6">
-                                        <div class="form-check">
-                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
-                                        <label class="form-check-label" for="flexRadioDefault1">With in State</label>
-                                    </div>
-                                </div>  
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                          Inter State
-                                        </label>
-                                      </div>
-                                </div>
-                               
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="row  mb-2 ">
-                                <div class="col-md-4">
-                                    <select name="city_id" id="city_id" class="form-select" >
-                                        <option selected disabled>City</option>
-                                       @foreach($cities as $item)
-                                           <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
-                                       @endforeach
-                                      </select>
-                                </div>
-                                <div class="col-md-4">
-                                    {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
-                                    <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="date" placeholder=""  class="form-control form-control-sm ">
-                                </div>
-                                {{-- <div class="col-md-4">
-                                    <select name="employee_id" id="employee_id" class="form-select" >
-                                        <option selected disabled>code</option>
-                                       @foreach($users as $item)
-                                           <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
-                                       @endforeach
-                                      </select>
-                                </div> --}}
-                            </div>
-                        </div>
-
+                    <div class="col-md-2">
+                        <label class="form-label" >Anniversary</label>
+                        <input type="date" placeholder=""  class="form-control form-control-sm ">
                     </div>
-
-                    
+                    <div class="col-md-2">
+                        <label class="form-label" >Total Points</label>
+                        <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <div class="col-md-6 col-sm-6">
+                                    <div class="form-check">
+                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                </div>
+                            </div>  
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Inter State
+                                    </label>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row  justify-content-end mb-2">
+                            <div class="col-md-5">
+                                <select name="city_id" id="city_id" class="form-select" >
+                                    <option selected disabled>City</option>
+                                    @foreach($cities as $item)
+                                        <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                    
                 {{-- </div> --}}
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-8">
                                 <b>Items</b>
-                                {{-- <button onclick="discountTotalAmount();">total gst</button> --}}
-                                
-                                {{-- <button class="deleteBrandBtn">print</button> --}}
-                            </div>
-                            <div class="col-6 d-flex justify-content-end">
-                                {{-- <input type="text" id="addItemBtn"> --}}
+                            </div>                           
+                            <div class="col-4 d-flex justify-content-end">
                                 <button class="btn btn-primary btn-sm "  id="addItemBtn"> Add item</button>
                             </div>
                         </div>
-                        {{-- <button class="btn btn-primary btn-sm "  id="getGst">gst</button> --}}
                     </div>
                     <div class="card-body"style="max-height:400px;">
                        <div class="row">
@@ -217,10 +201,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>OTHER ADJ :</b>
+                                <b>Points :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm " readonly>
+                                <input type="text" name="redeem_point" id="redeem_point" class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="row">
@@ -595,6 +579,7 @@
             $(document).on('change','.product_code', function () {
                 const product_code = $(this).val();
                 var object = $(this);
+              
                 $.ajax({
                     type: "get",
                     url: "get-item-price/"+product_code,
@@ -606,11 +591,17 @@
                         $(object).parent().parent().find(".product_id").val(response.product.id);
                         $(object).parent().parent().find(".size").val(response.product.size);
                         $(object).parent().parent().find(".size_id").val(response.product.size.id);
-                        // $(object).parent().parent().find(".qty").val(response.product.qty+1);
                         
                         calculateAmount(object);
                         calculateGst(object);
                         calculateTotalAllGst();
+                        
+                        // var g_total = $('#item_total_amount').val(); //getting grand total
+                        //         // alert(g_total);
+                        // var earned_point =  (g_total * 10)/100;    
+                        // // alert(earned_point);
+                        // $('#earned_point').val(earned_point);
+                        
 
 
                     }
@@ -618,6 +609,8 @@
             // }
                 
             });
+
+          
 
             $(document).on('click','#with_in_state', function (e) {
                 // $('#gst_no').addClass('hide');
@@ -686,13 +679,13 @@
                                 $('#month_id').val(response.customersData.month_id);
                                 $('#city_id').val(response.customersData.city_id);
                                 $('#gst_no').val(response.customersData.gst_no);
-                                // $('#employee_id').val(response.customersData.employee_id);
+                                $('#total_points').val(response.total_points);
+                              
                                 if(response.customersData.state_type==1){
                                     $('#with_in_state').prop('checked',true);
                                 }else{
                                     $('#inter_state').prop('checked',true);
                                 }
-
                             }
                         }
 
