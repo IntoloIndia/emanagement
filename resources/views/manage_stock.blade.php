@@ -12,7 +12,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <b>Category </b>
@@ -59,21 +59,21 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th scope="col">Sno</th>
-                                <th scope="col">Sub Categoty</th>
-                                <th scope="col">Qty</th>
+                                <th >Sno</th>
+                                <th >Sub Categoty</th>
+                                <th >Qty</th>
                             </tr>
                         </thead>
                         <tbody >
 
-                            {{-- {{$count = "";}}
+                            {{$count = "";}}
                             @foreach ($sub_category_qty as $item)
                                 <tr class="row_filter" category-id="{{$item['category_id']}}">
                                     <th scope="row">{{++$count}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
                                     <td>{{$item['count']}}</td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                             
                         </tbody>
                     </table>
@@ -82,30 +82,28 @@
 
         </div>
 
-        <div class="col-lg-9">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-2"><b>Products</b></div>
                         <div class="col-md-2">
-                            <select id="category_id" name="category_id" class="form-select form-select-sm" >
-                                <option selected disabled >Choose...</option>
-                                {{-- @foreach ($categories as $key => $list)
-                                    <option value="{{$list->id}}" >{{$list->name}}</option>
-                                @endforeach --}}
+                            <select id="category_id" name="category_id" class="form-select form-select-sm select_chosen" >
+                                <option selected disabled >Category</option>
+                                @foreach ($categories as $key => $list)
+                                    <option value="{{$list->id}}" >{{$list->category}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-3">
                             <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm" >
                                 <option selected disabled >Choose...</option>
-                                {{-- @foreach ($categories as $key => $list)
-                                    <option value="{{$list->id}}" >{{$list->name}}</option>
-                                @endforeach --}}
+                                
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <select id="size_id" name="size_id" class="form-select form-select-sm" >
-                                <option selected disabled >Choose...</option>
+                        <div class="col-md-3">
+                            <select id="style_no_id" name="style_no_id" class="form-select form-select-sm" >
+                                <option selected disabled >Style No</option>
                                 {{-- @foreach ($categories as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->name}}</option>
                                 @endforeach --}}
@@ -115,42 +113,74 @@
                             <button id="assign_work_reset" class="btn btn-dark btn-sm mt-1" disabled>Reset</button>
                         </div>
                         <div class="col-md-1" >
-                            <b><span id="assign_work_count" >450</span></b>
+                            <b><span id="assign_work_count" >450000</span></b>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="responsiv-table">
-                        <table class="table">
+                    
+                    <div class='accordion accordion-flush table-responsive' id='accordionFlushExample' style="height: 500px;">
+                        <table class='table table-striped table-head-fixed'>
                             <thead>
-                                <tr>
-                                    <th scope="col">Sno</th>
+                                <tr style='position: sticky;z-index: 1;'>
+                                    <th scope="col">SN</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Sub Category</th>
-                                    <th scope="col">Supplier</th>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Size</th>
+                                    <th scope="col">Style No</th>
                                     <th scope="col">Color</th>
-                                    {{-- <th scope="col">Handle</th> --}}
+                                    
                                 </tr>
                             </thead>
-                            <tbody>
-                                {{-- @foreach ($stock as $key => $list)
+                            <tbody >
+                                @foreach ($purchase_entry as $key => $list)
+                                       
+                                    <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$list->id}}' aria-expanded='false' aria-controls='flush-collapseOne'>
+                                        <td>{{++$key}}</td>
+                                        <td>{{ucwords($list->category)}}</td>
+                                        <td>{{ucwords($list->sub_category)}}</td>
+                                        <td>{{ucwords($list->style_no)}}</td>
+                                        <td>{{ucwords($list->color)}}</td>
+                                    </tr> 
+
+                                    @php
+                                        $purchase_entry_item = getPurchaseEntryItems($list->id)
+                                    @endphp
                                     <tr>
-                                        <td scope="row">{{++$key}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{ ucwords($list->supplier_name)}}</td>
-                                        <td>{{ ucwords($list->product) }}</td>
-                                        <td>{{ strtoupper($list->size) }}</td>
-                                        <td > 
-                                            <div style="width:15px; height:15px; background-color:{{$list->color}};"></div>
+                                        <td colspan='5'>
+                                            <div id='collapse_{{$list->id}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
+                                                <div class='accordion-body'>
+                                                    <table class="table ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> SN</th>
+                                                                <th> Size</th>
+                                                                <th> Qty</th>
+                                                                <th> Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($purchase_entry_item['items'] as $key1 => $item)
+                                                                
+                                                                <tr>
+                                                                    <td>{{++$key1}}</td>
+                                                                    <td>{{$item->size}}</td>
+                                                                    <td>{{$item->qty}}</td>
+                                                                    <td>{{$item->price}}</td>
+                                                                </tr>
+                                                            @endforeach
+                    
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
-                                @endforeach --}}
+                                    
+                                @endforeach                                               
                             </tbody>
-                        </table>
-                    </div>  
+                        </table>  
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -163,6 +193,8 @@
     <script>
 
         $(document).ready(function () {
+            $(".select_chosen").chosen({ width: '100%' });
+
             $(document).on('change','#category_id', function (e) {
                 e.preventDefault();
                 const category_id = $(this).val();

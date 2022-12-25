@@ -82,6 +82,7 @@ class AdminController extends Controller
             if($req->input('password') !=""){
                 $model->password = Hash::make($req->input('password')); 
             }
+        
             
             if($model->save()){
                 return response()->json([

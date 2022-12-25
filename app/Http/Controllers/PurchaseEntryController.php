@@ -52,8 +52,8 @@ class PurchaseEntryController extends Controller
 
 
         $purchases = Purchase::Join('suppliers','suppliers.id','=','purchases.supplier_id')
-                ->orderBy('purchases.bill_date', 'desc')
-                // ->orderBy('purchases.time', 'asc')
+                // ->orderBy('purchases.bill_date', 'desc')
+                ->orderBy('purchases.id', 'desc')
                 ->get(['purchases.*',
                     'suppliers.supplier_name',
                 ]);
@@ -561,9 +561,11 @@ class PurchaseEntryController extends Controller
         $year = date('y');
 
         $taxable = 0;
+        $total_discount_amount = 0;
         if ($discount > 0) {
            $discount_amount = ($price * $discount) / 100;
            $taxable = ($price - $discount_amount) * $qty;
+           $total_discount_amount = ($discount_amount * $qty);
         }else{
             $taxable = $price * $qty;
         }
@@ -580,6 +582,7 @@ class PurchaseEntryController extends Controller
         $purchase_item->price = $price;
         $purchase_item->mrp = $mrp;
         $purchase_item->discount = $discount;
+        $purchase_item->discount_amount = $total_discount_amount;
         $purchase_item->taxable = $taxable;
         $purchase_item->sgst = $gst['sgst'];
         $purchase_item->cgst = $gst['cgst'];
@@ -861,8 +864,8 @@ class PurchaseEntryController extends Controller
                         $html .= "</div>";
                         $html .= "<div class='col-md-6'>";
                         $html .= "<small class='modal-title'>";
-                            $html .= "<b>Invoice No -  </b> 1245GDFTE4587<br>";
-                            $html .= "<b>Invoice Date -  </b> 17-12-22<br>";
+                            $html .= "<b>Bill No -  </b> ".$purchase->bill_no." <br>";
+                            $html .= "<b>Bill Date -  </b> ". date('d-m-Y', strtotime($purchase->bill_date)) ."<br>";
                         $html .= "</small>";
                         $html .= "</div>";
                     $html .= "</div>";
@@ -893,6 +896,14 @@ class PurchaseEntryController extends Controller
                 $html .= "</thead>";
     
                 $html .= "<tbody>";
+
+                $total_sgst = 0;
+                $total_cgst = 0;
+                $total_igst = 0;
+                $discount_amount = 0;
+                $total_taxable = 0;
+                $grand_total = 0;
+
                 foreach ($purchase_entry as $key => $list) {
                     
                     $data = $this->getPurchaseEntryItems($list->id);
@@ -905,7 +916,14 @@ class PurchaseEntryController extends Controller
                         $html .= "<td rowspan='". ($row_count + 1) ."'>".$list->style_no."</td>";
                         $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->color)."</td>";
                         $html .= "<td >";
-                          
+
+                        $sgst = 0;
+                        $cgst = 0;
+                        $igst = 0;
+                        $discount = 0;
+                        $taxable = 0;
+                        $amount = 0;
+                        
                         foreach ($data['items'] as $item) {
                                
                             $html .= "<tr>"; 
@@ -919,7 +937,21 @@ class PurchaseEntryController extends Controller
                                 $html .= "<td >".$item->igst."</td>";
                                 $html .= "<td >".$item->amount."</td>";
                             $html .= "</tr>";
+
+                            $sgst = $sgst + $item->sgst;
+                            $cgst = $cgst + $item->cgst;
+                            $igst = $igst + $item->igst;
+                            $discount = $discount + $item->discount_amount;
+                            $taxable = $taxable + $item->taxable;
+                            $amount = $amount + $item->amount;
                         }
+
+                        $total_sgst = $total_sgst + $sgst ;
+                        $total_cgst = $total_cgst + $cgst ;
+                        $total_igst = $total_igst + $igst ;
+                        $discount_amount = $discount_amount + $discount ;
+                        $grand_total = $grand_total + $amount ;
+                        $total_taxable = $total_taxable + $taxable ;
 
                         $html .= "</td>";
                         
@@ -937,27 +969,31 @@ class PurchaseEntryController extends Controller
                     // $html .= "</tr> ";
 
                     $html .= "<tr>";
-                        $html .= "<td colspan='9' rowspan='6'  class='align-top'> Amount in Words : ";
+                        $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
                             $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>";
                         $html .= "</td>  ";
-                        $html .= "<td  class='col-sm-2'>Subtotal :</td>";
-                        $html .= "<td  colspan='2'><input type='text' name='sub_total' id='sub_total' class='form-control form-control-sm' placeholder='' readonly></td>";
+                        $html .= "<td colspan='3' ><b>Total Amount :</b></td>";
+                        $html .= "<td colspan='2'><input type='text' class='form-control form-control-sm' value='".$total_taxable."' readonly></td>";
                     $html .= "</tr> ";
                     $html .= "<tr>";
-                        $html .= "<td>SGST :</td>";
-                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td colspan='3'><b>Discount :</b></td>";
+                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$discount_amount."' readonly></td>";
+                    $html .= "</tr>";
+                    $html .= "<tr>";
+                        $html .= "<td colspan='3'><b>SGST : </b></td>";
+                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_sgst."' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr> ";
-                        $html .= "<td>CGST : </td>";
-                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='cgst_amount' id='cgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td colspan='3'><b>CGST : </b></td>";
+                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_cgst."' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr>";
-                        $html .= "<td>IGST :</td>";
-                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='sgst_amount' id='sgst_amount' type='text' placeholder='' readonly></td>";
+                        $html .= "<td colspan='3'><b>IGST : </b></td>";
+                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_igst."' readonly></td>";
                     $html .= "</tr>";
                     $html .= "<tr>";
-                        $html .= "<td>Grand Total :</td>";
-                        $html .= "<td  colspan='2'><input class='form-control form-control-sm' name='grand_total' id='grand_total' type='text' readonly ></td>";
+                        $html .= "<td colspan='3'><b>Grand Total : </b></td>";
+                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$grand_total."' readonly ></td>";
                     $html .= "</tr>";
                     
                 $html .= "</tfoot>";
@@ -1085,6 +1121,30 @@ class PurchaseEntryController extends Controller
         return response()->json([
             'status'=>200
         ]);
+    }
+
+    public function getProductDetail($product_code)
+    {
+
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp']);
+
+        $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+                ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
+                ->first(['purchase_entries.id','purchase_entries.sub_category_id','sub_categories.sub_category']);
+                
+        $result = collect([
+            'product_id' => $purchase_entry->sub_category_id,
+            'product' => $purchase_entry->sub_category,
+            'size' => $purchase_entry_item->size,
+            'mrp' => $purchase_entry_item->mrp,
+        ]);
+      
+                        
+        return response()->json([
+            'status'=>200,
+            'product_detail'=>$result,
+        ]);
+
     }
 
     public function getBarcode()

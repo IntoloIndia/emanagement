@@ -29,7 +29,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <b>Purchase Return</b>
+                    <b>Purchase Return / Debit Note</b>
                 </div>
                 <div class="card-body">
                   <div class="row">
@@ -37,13 +37,10 @@
                         <label for="exampleFormControlInput1" class="form-label" >Barcode</label>
                         <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode">
                     </div>
-                    <div class="col-md-2">
-                       {{-- <button class="btn btn-primary btn-sm">show</button> --}}
-                    </div>
                   </div>
                   <div class="card mt-2">
                       <div class="card-header">
-                          <b>product Dateils</b>
+                          <b>Product Details</b>
                           <button class="btn-primary btn-sm float-right" id="saveReturnItem">Add</button>
                        </div> 
                         <div class="card-body">
@@ -57,8 +54,8 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">supplier name</th>
-                                                <th scope="col">product name</th>
+                                                <th scope="col">Supplier name</th>
+                                                <th scope="col">Product name</th>
                                                 <th scope="col">Qty</th>
                                                 <th scope="col">Size</th>
                                                 <th scope="col">Color</th>
@@ -141,7 +138,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <b>table</b>
+                <b>Supplier Details</b>
             </div>
            <div class="card-body">
                 <div class="table-responsive">
@@ -166,7 +163,7 @@
                                 <td>{{date('d-m-Y',strtotime($list->release_date))}}</td>
                                 <td>{{$list->release_time}}</td>
                                 <td>
-                                <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -211,7 +208,43 @@
                 </td>
             </tr>
         </tbody>
-    </table> 
+    </table>
+    
+    <section>
+        <div class="modal fade" id="viewAlterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="height: 550px;">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Supplier Details / Debit Note</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="print_alter_voucher">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h6><b>Mangaldeep (Jabalpur)<br>
+                                Samdariya Mall Jabalpur-482002</b></h6>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            {{-- <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
+                            <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div> --}}
+                        </div>
+                        <hr>
+                        <div id='alter_item_list'></div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <p>Thankyou! Visit Again</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </section>
+   
 
 @section('script')
 <script>
@@ -224,12 +257,14 @@
             // alert("call");
             saveReturnProduct();
         });
-        // $(document).on('click','#release_date',function(){
-        //   var supplier_id = $(this).val();
-        //     // alert(supplier_id);
-        //     updateReleaseStatus(supplier_id);
+
+        $(document).on('click','.returnproductBtn',function(){
+          var purchase_return_id = $(this).val();
+            $('#viewAlterVoucherModal').modal('show');
+            purchaseReturnInvoice(purchase_return_id);
+    
             
-        // });
+        });
 
         $(document).on('click','.releaseStatusBtn', function (e) {
                 e.preventDefault();
@@ -243,7 +278,13 @@
                 const supplier_id = $(this).val();
                 updateReleaseStatus(supplier_id);
             });
+
+            $(document).on('click','#printAlterReceiptBrn', function () {
+                // $('#viewAlterVoucherModal').modal('show');
+                printAlterReceipt();
+            });
     });
+    
 
     // function start 
         function addItem() {
@@ -322,6 +363,32 @@
             }
         });
     } 
+
+
+    
+    function purchaseReturnInvoice(purchase_return_id) {
+        $.ajax({
+            type: "get",
+            url: `purchase-return-invoice/${purchase_return_id}`,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if(response.status == 200){
+                    $('#alter_item_list').html("");
+                    $('#alter_item_list').append(response.html);
+                }
+            }
+        });
+    } 
+
+    function printAlterReceipt(){
+        var backup = document.body.innerHTML;
+        var div_content = document.getElementById("print_alter_voucher").innerHTML;
+        document.body.innerHTML = div_content;
+        window.print();
+        document.body.innerHTML = backup;
+        window.location.reload();
+    }
 
 </script>
 @endsection

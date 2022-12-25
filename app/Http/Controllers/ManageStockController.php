@@ -29,16 +29,21 @@ class ManageStockController extends Controller
             ]);
         }
 
-        // $sub_category_qty = array();
-        // foreach ($sub_categories as $key => $list) {
-        //     $count = PurchaseEntry::where(['sub_category_id'=> $list->id])->get()->count();
-        //     $sub_category_qty[] = collect([
-        //         'id' => $list->id,
-        //         'category_id' => $list->category_id,
-        //         'sub_category' => $list->sub_category,
-        //         'count' => $count,
-        //     ]);
-        // }
+        $sub_category_qty = array();
+        foreach ($sub_categories as $key => $list) {
+            $count = PurchaseEntry::where(['sub_category_id'=> $list->id])->get()->count();
+            $sub_category_qty[] = collect([
+                'id' => $list->id,
+                'category_id' => $list->category_id,
+                'sub_category' => $list->sub_category,
+                'count' => $count,
+            ]);
+        }
+
+        $purchase_entry = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
+            ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+            ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
+            ->get(['purchase_entries.*','categories.category','sub_categories.sub_category','style_nos.style_no' ]);
 
         // $stock = PurchaseEntry::join('suppliers','purchase_entries.supplier_id','=','suppliers.id')
         // ->where(['status'=> MyApp::AVAILABLE])
@@ -47,8 +52,8 @@ class ManageStockController extends Controller
         return view('manage_stock', [
             'categories'=>$categories,
             'category_qty'=>$category_qty,
-            // 'sub_category_qty'=>$sub_category_qty,
-            // 'stock'=>$stock
+            'sub_category_qty'=>$sub_category_qty,
+            'purchase_entry'=>$purchase_entry
         ]);
     }
 }

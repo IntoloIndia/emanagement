@@ -25,6 +25,7 @@ use App\Http\Controllers\AlterationVoucherController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\SalesReturnController;
 
 use App\MyApp;
 /*
@@ -156,7 +157,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
      Route::controller(CustomerBillInvoiceController::class)->group(function () {
         Route::get('admin/customer_bill_invoices','index');
         Route::post('admin/save-order', 'saveOrder');
-        Route::get('admin/get-item-price/{product_code}', 'getItemData');
         Route::get('admin/get-customer-data/{mobile_no}', 'getCumosterData');
         Route::get('admin/generate-invoice/{bill_id}','generateInvoice');
     });
@@ -233,7 +233,17 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
         Route::post('admin/save-return-item', 'saveReturnProduct');
         Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
-        
+        Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
+    });
+
+    // sales return 
+    Route::controller(SalesReturnController::class)->group(function () {
+        Route::get('admin/sales-return', 'index');
+        Route::get('admin/sales-return-item/{barcode_code}', 'getSalesReturnData');
+        // Route::post('admin/save-return-item', 'saveReturnProduct');
+        // Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
+        // Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
+
     });
 
 
@@ -243,7 +253,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-purchase-entry/{purchase_entry_id}', 'editPurchaseEntry');
         Route::post('admin/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
 
-        Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
+        // Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
+
+        Route::get('admin/get-product-detail/{product_code}', 'getProductDetail');
 
         // Route::get('admin/barcode', 'getBarcode');
         Route::get('admin/get-color_code/{color_code}','getcolorcode');

@@ -3,6 +3,7 @@
     // use App\Models\Order;
     use App\Models\SubCategory;
     use App\Models\PurchaseEntry;
+    use App\Models\PurchaseEntryItem;
     use App\Models\Supplier;
     use App\Models\AlterationItem;
     use App\Models\PurchaseReturnItem;
@@ -83,6 +84,15 @@
         // $cutomer_point->$customer_id = $customer_id;
         // $cutomer_point->$customer_points = $points;
         // $cutomer_point->save();
+    }
+
+    function getPurchaseEntryItems($purchase_entry_id)
+    {
+        $items = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get();
+        return $result = [
+            'status'=>200,
+            'items'=>$items
+        ] ;
     }
     // show alter item
     // function getAlterationItem($alteration_voucher_id){

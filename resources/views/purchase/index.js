@@ -576,12 +576,15 @@
                         
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'"/>');
                     }
-                    
+                    var discount = 0;
                     $.each(response.purchase_entry_items, function (key, list) {
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_qty').val(list.qty);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_price').val(list.price);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_mrp').val(list.mrp);
+                        discount = list.discount;
                     });
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#discount').val(discount);
+                    // alert(discount);
                     
                     calculateQtyPrice();
                     

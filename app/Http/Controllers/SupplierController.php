@@ -22,6 +22,7 @@ class SupplierController extends Controller
         $suppliers = Supplier::join('countries','countries.id','=','suppliers.country_id')
                         ->join('states','states.id','=','suppliers.state_id')
                         ->join('cities','cities.id','=','suppliers.city_id')
+                        ->orderBy('suppliers.id', 'DESC')
                         ->select('suppliers.*','countries.country','states.state','cities.city','cities.city_short')->get();
                         // print_r($suppliers);
 

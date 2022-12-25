@@ -152,7 +152,7 @@ a {
 
     {{-- dummy --}}
 
-    <div class="row mb-5">
+    {{-- <div class="row mb-5">
         <table class="table">
             <thead>
               <tr>
@@ -190,7 +190,7 @@ a {
              
             </tbody>
           </table>
-    </div>
+    </div> --}}
 
 @endsection
 
