@@ -96,6 +96,14 @@
                                     <input type="password" name="password" id="password" class="form-control form-control-sm">
                                 </div>
                             </div>
+                            <div class="row mt-1">
+                                <div class="col-md-4">
+                                    <label class="form-label">Percentage</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="percentage" id="percentage" class="form-control form-control-sm">
+                                </div>
+                            </div>
                         </div>
                         {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
                         <div class="modal-footer">
@@ -147,6 +155,7 @@
                                 <th>Name</th>
                                 <th>Code</th>
                                 <th>Email</th>
+                                <th>Percentage</th>
                                 <th>QR</th>
                                 <th>Action</th>
                             </tr>
@@ -163,6 +172,7 @@
                                     <td>{{ucwords($list->name)}}</td>
                                     <td>{{ucwords($list->code)}}</td>
                                     <td>{{$list->email}}</td>
+                                    <td>{{$list->percentage}}</td>
                                     <td><img src="{{$list->qrcode}}" width="40px" height="40px"><br/></td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
@@ -303,8 +313,7 @@
                         $('#name').val(response.user.name);
                         $('#code').val(response.user.code);
                         $('#email').val(response.user.email);
-                        // $('#password').val(response.user.password);
-
+                        $('#percentage').val(response.user.percentage);
                         $('#updateUserBtn').val(response.user.id);
                     }
                 }

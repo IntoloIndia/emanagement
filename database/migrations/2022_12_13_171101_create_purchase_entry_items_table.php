@@ -21,6 +21,7 @@ class CreatePurchaseEntryItemsTable extends Migration
             $table->string('price')->nullable();
             $table->string('mrp')->nullable();
             $table->integer('discount')->default(0);
+            $table->float('discount_amount')->default(0);
             $table->float('taxable')->default(0);
             $table->float('sgst')->default(0);
             $table->float('cgst')->default(0);

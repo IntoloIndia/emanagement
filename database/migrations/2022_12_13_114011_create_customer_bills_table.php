@@ -20,6 +20,8 @@ class CreateCustomerBillsTable extends Migration
             $table->integer('bill_time')->default(0);
             $table->integer('invoice_no')->default(0);
             $table->integer('total_amount')->default(0);
+            $table->float('earned_point')->default(0);
+            $table->float('redeem_point')->default(0);
             $table->timestamps();
         });
     }

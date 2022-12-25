@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title', 'Dashboard')
+@section('page_title', 'Customers')
 
 @section('content')
 <div class="row">
@@ -7,11 +7,11 @@
         <div class="card">
 
             <div class="card-header">
-                <h3 class="card-title">Customer</h3>
+                <h3 class="card-title">Customers</h3>
             </div>
-            <div class="card-body " style="height: 500px;">
+            <div class="card-body " >
                 <div class="row">
-                    <div class="col-md-12 table-responsive">
+                    <div class="col-md-12 table-responsive p-0" style="height: 550px;">
                         <table class="table table-striped table-head-fixed" id="customer_list">
                             <thead>
                                 <tr>
@@ -28,7 +28,7 @@
                                         <td>{{++$key}}</td>
                                         <td>{{ucwords($list->customer_name)}}</td>
                                         <td>{{$list->mobile_no}}</td>
-                                        <td>{{$list->city}}</td>
+                                        <td>{{ucwords($list->city)}}</td>
                                         <td id="customer_row_id" customer-id="{{$list->id}}"><i class="fas fa-lg fa-file" ></i></td>
                                     </tr>
                                 @endforeach
@@ -44,9 +44,11 @@
             <div class="card-header">
                 <h3 class="card-title">Customer Detail</h3>
             </div>
-            <div class="card-body" style="height:500px;">
+            <div class="card-body" style="height:550px;">
                 <div class="col-md-12 mt-2">
                     <div id="customer_detail_list"></div>
+
+                    
                 </div>
             </div>
         </div>

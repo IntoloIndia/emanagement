@@ -152,7 +152,7 @@ a {
 
     {{-- dummy --}}
 
-    <div class="row mb-5">
+    {{-- <div class="row mb-5">
         <table class="table">
             <thead>
               <tr>
@@ -190,7 +190,7 @@ a {
              
             </tbody>
           </table>
-    </div>
+    </div> --}}
 
 @endsection
 
@@ -214,12 +214,14 @@ a {
 
             $(document).on('click','#purchaseEntry', function (e) {
                 e.preventDefault();
+                
                 $('#purchaseEntryModal').modal('show');
                 $('#purchase_entry_err').html('');
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
+                $('#purchaseEntryForm')[0].reset();
                 $("#supplier_id").chosen({ width: '100%' });
-            
+
                 $('#savePurchaseEntryBtn').removeClass('hide');
                 $('#updatePurchaseEntryBtn').addClass('hide');
             });
@@ -274,6 +276,10 @@ a {
                 //     return false;
                 // }
                 $(this).parent().parent().remove();
+            });
+
+            $(document).on('click','#purchase_entry_close', function () {
+                window.location.reload();
             });
 
             $(document).on('keyup','.qty', function () {

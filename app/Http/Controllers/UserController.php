@@ -53,6 +53,7 @@ class UserController extends Controller
             $model->name = $req->input('name');
             $model->email = $req->input('email');
             $model->password = Hash::make($req->input('password')); 
+            $model->percentage = $req->input('percentage');
             
             if($model->save()){
 
@@ -107,6 +108,7 @@ class UserController extends Controller
                 $model->password = Hash::make($req->input('password')); 
             }
             $model->qrcode = $qrcode;
+            $model->percentage = $req->input('percentage');
             
             if($model->save()){
                 return response()->json([

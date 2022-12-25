@@ -157,6 +157,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="sales-return" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Return</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="alteration_voucher" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
                 </a>

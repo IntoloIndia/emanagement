@@ -525,7 +525,7 @@
             url: "view-purchase-entry/"+purchase_id,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     $('#view_purchase_entry').html('');
                     $('#view_purchase_entry').append(response.html);
@@ -552,6 +552,8 @@
                     $('#savePurchaseEntryBtn').addClass('hide');
                     $('#updatePurchaseEntryBtn').removeClass('hide');
 
+                    // $('#supplier_id').trigger("chosen:updated");
+
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_id').html('');
                     $("#supplier_id").append('<option value="'+response.purchase.supplier_id+'" state-type="'+response.purchase.state_type+'"> '+response.purchase.supplier_name+' </option>');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_code').val(response.purchase.supplier_code);
@@ -570,14 +572,19 @@
                     
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').find(".after_capture_frame").removeAttr('src');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").addClass('hide');
-                    
-                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'"/>');
-                    
+                    if (response.purchase_entry.img) {
+                        
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'"/>');
+                    }
+                    var discount = 0;
                     $.each(response.purchase_entry_items, function (key, list) {
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_qty').val(list.qty);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_price').val(list.price);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_mrp').val(list.mrp);
+                        discount = list.discount;
                     });
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#discount').val(discount);
+                    // alert(discount);
                     
                     calculateQtyPrice();
                     
@@ -614,20 +621,23 @@
             processData: false, 
             success: function (response) {
                 console.log(response);
-                // if(response.status === 400)
-                // {
-                //     $('#product_err').html('');
-                //     $('#product_err').addClass('alert alert-danger');
-                //     var count = 1;
-                //     $.each(response.errors, function (key, err_value) { 
-                //         $('#product_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
-                //     });
+                if(response.status === 400)
+                {
+                    $('#purchase_entry_err').html('');
+                    $('#purchase_entry_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) { 
+                        $('#purchase_entry_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                    });
 
-                // }else{
-                //     $('#product_err').html('');
-                //     $('#purchaseEntryModal').modal('hide');
-                //     window.location.reload();
-                // }
+                }else{
+                    $('#purchase_entry_err').html('');
+                    $('#purchaseEntryModal').modal('hide');
+                    window.location.reload();
+                        
+                    // $('#view_purchase_entry').html('');
+                    // $('#view_purchase_entry').append(response.html);
+                }
             }
         });
     }

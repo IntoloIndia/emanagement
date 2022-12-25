@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->text('qrcode')->nullable();
+            $table->integer('percentage')->default(0);
             $table->timestamps();
         });
     }

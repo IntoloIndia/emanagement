@@ -42,28 +42,28 @@
                     @csrf
                 <div class="order_err"></div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="mb-3">
                             <label for="moblie_no" class="form-label" >Moblie no</label>
                             {{-- <input type="number"  class="form-control form-control-sm" name="mobile_no" min="10" max="10" value="" required id="moblie_no" placeholder="Enter mobile number"> --}}
-                            <input type="number"  class="form-control form-control-sm mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="Enter mobile number">
+                            <input type="number"  class="form-control form-control-sm " id="mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="mobile number">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="row">
-                            <div class="col-6">
-                                <label for="moblie_no" class="form-label" >Birth Date</label>
+                            <div class="col-5">
+                                <label for="moblie_no" class="form-label" >DOB</label>
                                 <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1">
                             </div>
                             <div class="col-6">
                                 <label for="moblie_no" class="form-label" >Months</label>
-                                <select class="form-select form-select-sm" name="month_id" id="month_id">
+                                <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
                                     <option selected>Select...</option>
                                     @foreach ($months as $item)
                                         <option value="{{$item->id}}">{{$item->month}}</option>
@@ -72,78 +72,68 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="row mb-2">
-                                <div class="col-md-6 col-sm-6">
-                                        <div class="form-check">
-                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
-                                        <label class="form-check-label" for="flexRadioDefault1">With in State</label>
-                                    </div>
-                                </div>  
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                          Inter State
-                                        </label>
-                                      </div>
-                                </div>
-                               
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="row  mb-2 ">
-                                <div class="col-md-4">
-                                    <select name="city_id" id="city_id" class="form-select" >
-                                        <option selected disabled>City</option>
-                                       @foreach($cities as $item)
-                                           <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
-                                       @endforeach
-                                      </select>
-                                </div>
-                                <div class="col-md-4">
-                                    {{-- <label for="gst_no" class="form-label" >GST IN</label> --}}
-                                    <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="date" placeholder=""  class="form-control form-control-sm ">
-                                </div>
-                                {{-- <div class="col-md-4">
-                                    <select name="employee_id" id="employee_id" class="form-select" >
-                                        <option selected disabled>code</option>
-                                       @foreach($users as $item)
-                                           <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
-                                       @endforeach
-                                      </select>
-                                </div> --}}
-                            </div>
-                        </div>
-
+                    <div class="col-md-2">
+                        <label class="form-label" >Anniversary</label>
+                        <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
                     </div>
-
-                    
+                    <div class="col-md-2">
+                        <label class="form-label" >Total Points</label>
+                        <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <div class="col-md-6 col-sm-6">
+                                    <div class="form-check">
+                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                </div>
+                            </div>  
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Inter State
+                                    </label>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row  justify-content-end mb-2">
+                            <div class="col-md-5">
+                                <select name="city_id" id="city_id" class="form-select" >
+                                    <option selected disabled>City</option>
+                                    @foreach($cities as $item)
+                                        <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                    
                 {{-- </div> --}}
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-2">
                                 <b>Items</b>
-                                {{-- <button onclick="discountTotalAmount();">total gst</button> --}}
+                            </div>                           
+                            <div class="col-3">
+                                <input type="text" name="product_code" id="product_code" class="form-control form-control-sm">
                                 
-                                {{-- <button class="deleteBrandBtn">print</button> --}}
-                            </div>
-                            <div class="col-6 d-flex justify-content-end">
-                                {{-- <input type="text" id="addItemBtn"> --}}
-                                <button class="btn btn-primary btn-sm "  id="addItemBtn"> Add item</button>
+                            </div>                           
+                            <div class="col-md-7 ">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                    <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
+                                </div>
                             </div>
                         </div>
-                        {{-- <button class="btn btn-primary btn-sm "  id="getGst">gst</button> --}}
                     </div>
                     <div class="card-body"style="max-height:400px;">
                        <div class="row">
@@ -168,6 +158,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="item_list">
+
                                 </tbody>
                             </table>  
                             </div>
@@ -217,10 +208,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>OTHER ADJ :</b>
+                                <b>Points :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="" class="form-control form-control-sm " readonly>
+                                <input type="text" name="redeem_point" id="redeem_point" class="form-control form-control-sm" value="0">
                             </div>
                         </div>
                         <div class="row">
@@ -351,8 +342,8 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive" style="max_height: 300px;">
-                <table class="table">
+                <div class="col-md-12 table-responsive p-0" style="height: 550px;">
+                <table class="table table-head-fixed">
                     <thead>
                         <tr>
                             <th scope="col">Sno</th>
@@ -443,14 +434,14 @@
                     {{-- </td> --}}
             <td style="width: 200px;">
                 <select name="employee_id" id="employee_id" class="form-select" >
-                    <option selected disabled>code</option>
+                    <option selected disabled>Emp</option>
                     @foreach($users as $item)
                         <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
                     @endforeach
                 </select>
             </td>
             <td style="width: 200px;">
-                <input type="text" name="product_code[]" id="product_code" class="form-control form-control-sm product_code">
+                <input type="text" name="product_code[]"  class="form-control form-control-sm product_code">
             </td>
 
             <td style="width:150px;">
@@ -592,32 +583,35 @@
             });
 
 
-            $(document).on('change','.product_code', function () {
-                const product_code = $(this).val();
-                var object = $(this);
-                $.ajax({
-                    type: "get",
-                    url: "get-item-price/"+product_code,
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response);
-                        $(object).parent().parent().find(".price").val(response.product.mrp);
-                        $(object).parent().parent().find(".product").val(response.product.sub_category);
-                        $(object).parent().parent().find(".product_id").val(response.product.id);
-                        $(object).parent().parent().find(".size").val(response.product.size);
-                        $(object).parent().parent().find(".size_id").val(response.product.size.id);
-                        // $(object).parent().parent().find(".qty").val(response.product.qty+1);
+            $(document).on('change','#product_code', function () {
+
+                getProductDetail();
+
+                // const product_code = $(this).val();
+                // var object = $(this);
+              
+                // $.ajax({
+                //     type: "get",
+                //     url: "get-item-price/"+product_code,
+                //     dataType: "json",
+                //     success: function (response) {
+                //         console.log(response);
+                //         $(object).parent().parent().find(".price").val(response.product.mrp);
+                //         $(object).parent().parent().find(".product").val(response.product.sub_category);
+                //         $(object).parent().parent().find(".product_id").val(response.product.id);
+                //         $(object).parent().parent().find(".size").val(response.product.size);
+                //         $(object).parent().parent().find(".size_id").val(response.product.size.id);
                         
-                        calculateAmount(object);
-                        calculateGst(object);
-                        calculateTotalAllGst();
+                //         calculateAmount(object);
+                //         calculateGst(object);
+                //         calculateTotalAllGst();
 
-
-                    }
-                });
-            // }
+                //     }
+                // });
                 
             });
+
+          
 
             $(document).on('click','#with_in_state', function (e) {
                 // $('#gst_no').addClass('hide');
@@ -667,45 +661,11 @@
                 }
             });
 
-            $(document).on('keyup','.mobile_no', function () {
+            $(document).on('keyup','#mobile_no', function () {
                 const mobile_no = $(this).val();
                 
-                //digit count if
                 if( mobile_no.length == 10 ) {
-                    $.ajax({
-                        type: "get",
-                        url: "get-customer-data/"+mobile_no,
-                        dataType: "json",
-                        success: function(response) {
-                            console.log(response);
-
-                            if (response.status == 200) {
-
-                                $('#customer_name').val(response.customersData.customer_name);
-                                $('#birthday_date').val(response.customersData.birthday_date);
-                                $('#month_id').val(response.customersData.month_id);
-                                $('#city_id').val(response.customersData.city_id);
-                                $('#gst_no').val(response.customersData.gst_no);
-                                // $('#employee_id').val(response.customersData.employee_id);
-                                if(response.customersData.state_type==1){
-                                    $('#with_in_state').prop('checked',true);
-                                }else{
-                                    $('#inter_state').prop('checked',true);
-                                }
-
-                            }
-                        }
-
-                    });
-                }else{
-                    $('#customer_name').val('');
-                    $('#birthday_date').val('');
-                    $('#month_id').val('');
-                    $('#city_id').val('');
-                    $('#gst_no').val('');
-                    // $('#employee_id').val('');
-                    $('#with_in_state').prop('checked',false);
-                    $('#inter_state').prop('checked',false);
+                    getCustomerData(mobile_no)
                 }
                 
             });
@@ -736,13 +696,7 @@
             $(document).on('click','#saveOrderBtn', function (e) {
                 e.preventDefault();
                 validateForm();
-            });
-
-            // $(document).on('click','.orderDetailBtn', function () {
-            //     const order_id = $(this).val();
-            //     orderDetail(order_id);
-            // });
-            
+            });            
            
             $(document).on('click','.orderInvoiceBtn', function (e) {
                 e.preventDefault();
@@ -754,14 +708,88 @@
             $(document).on('click','#printBtn', function () {
                 printInvoice();
             });
+            $(document).on('click','#reload_invoice_print', function () {
+              window.location.reload();
+            });
+
+            
 
         });
+
+        function getCustomerData(mobile_no) {
+            $.ajax({
+                type: "get",
+                url: "get-customer-data/"+mobile_no,
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+
+                    if (response.status == 200) {
+
+                        $('#customer_name').val(response.customersData.customer_name);
+                        $('#birthday_date').val(response.customersData.birthday_date);
+                        $('#month_id').val(response.customersData.month_id);
+                        $('#city_id').val(response.customersData.city_id);
+                        $('#gst_no').val(response.customersData.gst_no);
+                        $('#total_points').val(response.total_points);
+                        
+                        if(response.customersData.state_type==1){
+                            $('#with_in_state').prop('checked',true);
+                        }else{
+                            $('#inter_state').prop('checked',true);
+                        }
+                    }else{
+                        $('#customer_name').val('');
+                        $('#birthday_date').val('');
+                        $('#month_id').val('');
+                        $('#city_id').val('');
+                        $('#gst_no').val('');
+                        $('#with_in_state').prop('checked',false);
+                        $('#inter_state').prop('checked',false);
+                        $('#total_points').val('0');
+                    }
+                }
+
+            });
+
+        }
 
         function addItem() {
             $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
-            $("#item_list tr").find(".item").chosen();
+            // $("#item_list tr").find(".item").chosen();
         }
+
+        function getProductDetail(){
+
+            var product_code = $('#product_code').val();
+            $.ajax({
+                type: "get",
+                url: "get-product-detail/"+product_code,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        addItem();
+                        $('.price').val(response.product_detail.mrp);
+                        // $(object).parent().parent().find(".price").val(response.product.mrp);
+                        // $(object).parent().parent().find(".product").val(response.product.sub_category);
+                        // $(object).parent().parent().find(".product_id").val(response.product.id);
+                        // $(object).parent().parent().find(".size").val(response.product.size);
+                        // $(object).parent().parent().find(".size_id").val(response.product.size.id);
+                    }
+
+                    
+                    // calculateAmount(object);
+                    // calculateGst(object);
+                    // calculateTotalAllGst();
+
+                }
+            });
+
+        }
+
+
 
         function calculateAmount(object){
 
@@ -985,8 +1013,6 @@
                 msg = "Please select item";
                 validateModal(msg);
                 return false;
-                
-                
             });
 
             // saveOrder();

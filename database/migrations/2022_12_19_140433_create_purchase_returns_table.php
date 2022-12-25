@@ -16,8 +16,11 @@ class CreatePurchaseReturnsTable extends Migration
         Schema::create('purchase_returns', function (Blueprint $table) {
             $table->id();
             $table->integer('supplier_id')->default(0);
-            $table->date('date')->nullable();
-            $table->string('time')->nullable();
+            $table->date('create_date')->nullable();
+            $table->string('create_time')->nullable();
+            $table->date('release_date')->nullable();
+            $table->string('release_time')->nullable();
+            $table->integer('release_status')->default(0);
             $table->timestamps();
         });
     }
