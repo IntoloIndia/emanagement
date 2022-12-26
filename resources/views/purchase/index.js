@@ -180,7 +180,6 @@
         }
 
         return parseFloat(taxable.toFixed(2));
-       
     }
 
     function calculateGst(price) {

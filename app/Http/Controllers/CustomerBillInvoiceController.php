@@ -316,7 +316,7 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
                                         $html .="<td>".ucwords($list->sub_category)."</td>";
-                                        $html .="<td>".$list->qty."</td>";
+                                        $html .="<td><b>".$list->qty."</b></td>";
                                         $html .="<td>".$list->size."</td>";
                                         // $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
@@ -344,11 +344,11 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<td>".$key."</td>";
                                         $html .="<td colspan='2'></td>";
                                         $html .="<td><b>Total :</b></td>";
-                                        $html .="<td>".$taxfree_amount."</td>";
-                                        $html .="<td>".$total_sgst."</td>";
-                                        $html .="<td>".$total_cgst."</td>";
-                                        $html .="<td>".$total_igst."</td>";
-                                        $html .="<td>".$bills->total_amount."</td>";
+                                        $html .="<td><b>".$taxfree_amount."</b></td>";
+                                        $html .="<td><b>".$total_sgst."</b></td>";
+                                        $html .="<td><b>".$total_cgst."</b></td>";
+                                        $html .="<td><b>".$total_igst."</b></td>";
+                                        $html .="<td><b>".$bills->total_amount."</b></td>";
                                     $html .="</tr>";
                                 $html .="</tfoot>";
                             $html .="</table>";
@@ -357,7 +357,7 @@ class CustomerBillInvoiceController extends Controller
 
                         $html .="<div class='row'>";
                         $html .="<div class='col-md-8'>";
-                        $html .="<span class='float-start'>Amount of Tax Subject to Reverse Change :</span><br>";
+                        $html .="<span class='float-start'><b>Amount of Tax Subject to Reverse Charge :</b></span><br>";
                         $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
                         $html .="<span class='ml-2'>Online : 100</span><br>";
                         $html .="<span class='ml-2'>Cash :   100</span><br>";

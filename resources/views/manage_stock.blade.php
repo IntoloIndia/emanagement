@@ -24,15 +24,22 @@
                                 <th scope="col">SN</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">Qty</th>
+                                <th scope="col">Qty</th>
                             </tr>
                         </thead>
                         <tbody>
                             {{$count = "";}}
                             @foreach ($category_qty as $item)
-                            <tr>
-                                <th scope="row">{{++$count}}</th>
-                                <td>{{ucwords($item['category'])}}</td>
-                                <td>{{$item['count']}}</td>
+                                @php 
+                                    $qty = ManageStockItemQty($item['id']);
+                                    print_r($qty);
+                                @endphp
+                                    
+                                    <tr>
+                                        <th scope="row">{{++$count}}</th>
+                                        <td>{{ucwords($item['category'])}}</td>
+                                        <td>{{$item['count']}}</td>
+                                {{-- <td>{{$qty}}</td> --}}
                             </tr>
                             @endforeach
                             

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
+use App\Models\CustomerBillInvoice;
+use App\Models\CustomerBill;
+use App\Models\Customer;
 
 class SalesReturnController extends Controller
 {
@@ -12,24 +15,40 @@ class SalesReturnController extends Controller
         return view('sales-return',[]);
     }
 
+    public function getCustomerDetails($bill_no){
+        $customer_details = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')
+                        ->where(['customer_bills.id'=>$bill_no])
+                        ->select(['customer_bills.*','customers.customer_name','customers.mobile_no'])
+                        ->first();
+                if($customer_details){
+                    return response()->json([
+                       'status'=> 200,
+                       'customer_details'=>$customer_details
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'=> 400,
+                        'customer_details'=>"data no found"
+                     ]);
+                }
+    }
+    
     public function getSalesReturnData($barcode_code)
     {
-        $return_product = PurchaseEntryItem::join('purchase_entries','purchase_entries.purchase_id','=','purchase_entry_items.id')->
-                                        join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')->
-                                        join('purchases','purchases.id','=','purchase_entries.purchase_id')->
-                                        join('suppliers','suppliers.id','=','purchases.supplier_id')->
-                                        where(['purchase_entry_items.barcode'=>$barcode_code])
-                                       ->select('purchase_entry_items.*','purchase_entries.id',
-                                       'purchase_entries.sub_category_id','purchase_entries.color',
-                                       'sub_categories.sub_category',
-                                       'suppliers.supplier_name','suppliers.id')
-                                        ->first();
-                // dd($return_product);  
-        // print_r($product);
-        // $product = Product::find($product_code);
-                        
+        $customer_return_product = CustomerBillInvoice::where(['customer_bill_invoices.product_code'=>$barcode_code])
+                                        ->select(['customer_bill_invoices.*'])->first();
+                                       
+             
+                        dd($customer_return_product);
         return response()->json([
-            'return_product'=>$return_product
+            'customer_return_product'=>$customer_return_product
         ]);
     }
+
+    public function getSalesProductDetail()
+    {
+        
+    }
+
+
 }

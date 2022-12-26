@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page_title', 'Customers')
+@section('page_title', '    ')
 
 @section('content')
 <div class="row">
@@ -19,16 +19,27 @@
                                     <th>Customer</th>
                                     <th>Mobile</th>
                                     <th>City</th>
+                                    <th>Member</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($customers as $key => $list)
+                                @php
+                                    $member = getMemberShip($list->id)
+                                @endphp
                                     <tr >
                                         <td>{{++$key}}</td>
                                         <td>{{ucwords($list->customer_name)}}</td>
                                         <td>{{$list->mobile_no}}</td>
                                         <td>{{ucwords($list->city)}}</td>
+                                        @if($member == MyApp::SILVER)
+                                            <td style='color:#454545';><b>{{MyApp::SILVER}}</b></td>
+                                        @elseif($member == MyApp::GOLDEN)
+                                            <td style='color:#D35400';><b>{{MyApp::GOLDEN}}</b></td>
+                                        @else
+                                            <td style='color:#5D6D7E';><b>{{MyApp::PLATINUM}}</b></td>
+                                        @endif 
                                         <td id="customer_row_id" customer-id="{{$list->id}}"><i class="fas fa-lg fa-file" ></i></td>
                                     </tr>
                                 @endforeach
