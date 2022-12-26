@@ -85,6 +85,25 @@
             </div>
         </div> 
     </section>
+{{-- delivery modal --}}
+    <div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delivery Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <h5>Want to delivered Item?</h5>
+                            <button type="button" id="yesDeliveredItemBtn" class="btn btn-primary btn-sm mx-1" value="" >Yes</button>
+                            <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                        <hr>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
    
 <div class="row">
     <div class="col-md-5">
@@ -187,7 +206,12 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Delivered Item</h3>
+                <div class="row">
+                    <div class="col-md-6"> <b>Delivered Item</b></div>
+                    <div class="offset-2 col-md-4">
+                        <input type="text" id="filter_item" class="form-control form-control-sm" placeholder="Search voucher" >
+                    </div>
+                </div>
             </div>
             <div class="card-body table-responsive p-0"  style="height: 300px;">
                 <div class="row">
@@ -204,7 +228,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="">
+                            <tbody id="filter_alter_item">
                                 @foreach ($delivered_vouchers as $key => $list)
                                     <tr>
                                         <td>{{++$key}}</td>
@@ -272,12 +296,27 @@
             $(document).on('click','.deliveryStatusBtn',function(e){
                 e.preventDefault();
                 var alteration_voucher_id = $(this).val();
+                $('#deliveryModal').modal('show');
+                $('#yesDeliveredItemBtn').val(alteration_voucher_id);
+                // updateDeliveryStatus(alteration_voucher_id);
+            });
+            $(document).on('click','#yesDeliveredItemBtn',function(e){
+                e.preventDefault();
+                var alteration_voucher_id = $(this).val();
                 updateDeliveryStatus(alteration_voucher_id);
             });
+            
           
             $(document).on('keyup','#filter_voucher',function(e){
                 var value = $(this).val().toLowerCase();
                 $("#filter_alter_voucher tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $(document).on('keyup','#filter_item',function(e){
+                var value = $(this).val().toLowerCase();
+                $("#filter_alter_item tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });

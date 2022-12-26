@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="{{ asset('public/assets/css/fontawesome-free/css/all.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/tempusdominus-bootstrap-4.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/icheck-bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('public/assets/css/jqvmap.min.css') }}" />
+        {{-- <link rel="stylesheet" href="{{ asset('public/assets/css/jqvmap.min.css') }}" /> --}}
         <link rel="stylesheet" href="{{ asset('public/assets/css/adminlte.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/chosen.min.css')}}" />
         <link rel="stylesheet" href="{{ asset('public/assets/css/OverlayScrollbars.min.css') }}" />
@@ -75,10 +75,10 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
 
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        // return new bootstrap.Tooltip(tooltipTriggerEl)
+        // })
     </script>
 
 
@@ -87,9 +87,9 @@
     <script src="{{ asset('public/assets/js/chosen.jquery.min.js')}}"></script>
     <script src="{{ asset('public/assets/js/Chart.min.js') }}"></script>
     <script src="{{ asset('public/assets/js/sparkline.js') }}"></script>
-    <script src="{{ asset('public/assets/js/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('public/assets/js/jquery.vmap.usa.js') }}"></script>
-    <script src="{{ asset('public/assets/js/jquery.knob.min.js') }}"></script>
+    {{-- <script src="{{ asset('public/assets/js/jquery.vmap.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('public/assets/js/jquery.vmap.usa.js') }}"></script> --}}
+    {{-- <script src="{{ asset('public/assets/js/jquery.knob.min.js') }}"></script> --}}
     <script src="{{ asset('public/assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('public/assets/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('public/assets/js/tempusdominus-bootstrap-4.min.js') }}"></script>
@@ -98,7 +98,7 @@
     <script src="{{ asset('public/assets/js/adminlte.js') }}"></script>
     {{-- <script src="{{ asset('assets/user/js/demo.js') }}"></script> --}}
     
-    <script src="{{ asset('public/assets/js/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('public/assets/js/dashboard.js') }}"></script> --}}
     <script src="{{ asset('public/assets/js/master.js') }}" ></script>
 
 

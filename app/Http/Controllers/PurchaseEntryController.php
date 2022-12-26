@@ -1138,8 +1138,7 @@ class PurchaseEntryController extends Controller
             'size' => $purchase_entry_item->size,
             'mrp' => $purchase_entry_item->mrp,
         ]);
-      
-                        
+                       
         return response()->json([
             'status'=>200,
             'product_detail'=>$result,

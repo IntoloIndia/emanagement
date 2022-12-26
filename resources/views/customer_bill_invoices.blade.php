@@ -85,18 +85,18 @@
                     <div class="col-md-6">
                         <div class="row mb-2">
                             <div class="col-md-6 col-sm-6">
-                                    <div class="form-check">
-                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
-                                    <label class="form-check-label" for="flexRadioDefault1">With in State</label>
-                                </div>
+                                <div class="form-check state_type">
+                                <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                            </div>
                             </div>  
                             <div class="col-md-6 col-sm-6">
-                                <div class="form-check">
-                                    <input class="form-check-input state_type" type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                <div class="form-check state_type">
+                                    <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         Inter State
                                     </label>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                                 <b>Items</b>
                             </div>                           
                             <div class="col-3">
-                                <input type="text" name="product_code" id="product_code" class="form-control form-control-sm">
+                                {{-- <input type="text" name="product_code" id="product_code" class="form-control form-control-sm"> --}}
                                 
                             </div>                           
                             <div class="col-md-7 ">
@@ -149,11 +149,11 @@
                                         <th scope="col">Qty</th>
                                         <th scope="col">Size</th>
                                         <th scope="col">MRP</th>
-                                        <th scope="col">Dis%</th>
+                                        <th scope="col">Dis.</th>
+                                        <th scope="col" class="sgst_show_hide">SGST</th>
+                                        <th scope="col" class="cgst_show_hide">CGST</th>
+                                        <th scope="col" class="igst_show_hide hide">IGST</th>
                                         <th scope="col">Amount</th>
-                                        <th scope="col" class="sgst_show_hide">SGST%</th>
-                                        <th scope="col" class="cgst_show_hide">CGST%</th>
-                                        <th scope="col" class="igst_show_hide hide">IGST%</th>
                                         <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
@@ -166,44 +166,45 @@
                        </div>
                     </div>
                     <div class="card-footer ">
-                        {{-- <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>GROSS AMOUNT :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="item_total_amount" class="form-control form-control-sm" value="0" readonly>
-                            </div>
-                        </div> --}}
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>LESS DISCOUNT :</b>
+                                <b>Total Amount :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="dis_amount" class="form-control form-control-sm dis_amount" value="0" readonly>
+                                <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>CGST AMOUNT :</b>
+                                <b>Discount :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="item_cgst" class="form-control form-control-sm " value="0" readonly>
+                                <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>SGST AMOUNT :</b>
+                                <b>SGST :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="item_sgst" class="form-control form-control-sm " value="0" readonly>
+                                <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>IGST AMOUNT :</b>
+                                <b>CGST :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="item_igst" class="form-control form-control-sm " value="0" readonly>
+                                <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-10 text-end">
+                                <b>IGST :</b>
+                            </div>
+                            <div class="col-md-2 justify-content-end">
+                                <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -211,15 +212,16 @@
                                 <b>Points :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="redeem_point" id="redeem_point" class="form-control form-control-sm" value="0">
+                                <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 text-end">
-                                <b>G TOTAL :</b>
+                                <b>Gross Amount :</b>
                             </div>
                             <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly>
+                                {{-- <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly> --}}
+                                <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
                         {{-- <div class="row text-end">
@@ -342,7 +344,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="col-md-12 table-responsive p-0" style="height: 550px;">
+                <div class="col-md-12 table-responsive p-0" style="height: 50px;">
                 <table class="table table-head-fixed">
                     <thead>
                         <tr>
@@ -463,16 +465,13 @@
                 <input type="hidden" name="size_id[]" class="size_id">
             </td>
             <td style="width: 100px;">
-                <input type="text" name="price[]" class="form-control form-control-sm price" id="price" readonly>
+                <input type="text" name="price[]" class="form-control form-control-sm price" >
             </td>
             <td style="width: 50px;">
-                <input type="text"  class="form-control form-control-sm discount" id="discount">
+                <input type="text" class="form-control form-control-sm discount" value="0">
                 <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
             </td>
-             <td style="width: 150px;">
-                 <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
-                 <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"  style="width: 150px;">
-            </td> 
+             
              {{-- <td style="width: 150px;"> --}}
             {{-- </td>  --}}
              <td style="width: 80px;" class="sgst_show_hide">
@@ -484,6 +483,10 @@
             <td style="width: 80px;" class="igst_show_hide hide">
                  <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0" readonly>
             </td> 
+            <td style="width: 150px;">
+                <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
+                <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable" style="width: 150px;">
+           </td> 
             <td>
                 <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
             </td>
@@ -510,7 +513,7 @@
     $(document).ready(function () {
 
         // print modal open
-
+        addItem();
 
         $(document).on('click','.deleteBrandBtn', function (e) {
                 e.preventDefault();
@@ -538,16 +541,13 @@
             if (state_type == '{{MyApp::WITH_IN_STATE}}') {
                 
             }
-            // alert(state_type);
-
-                addItem();
+            addItem();
              
             // $(".product_code").focus();
-            });
+        });
 
             $(document).on('click','#saveOrderBtn', function (e) {
                 e.preventDefault();
-                // alert("call");
                 saveOrder();
             });
 
@@ -583,31 +583,10 @@
             });
 
 
-            $(document).on('change','#product_code', function () {
+            $(document).on('change','.product_code', function () {
 
-                getProductDetail();
-
-                // const product_code = $(this).val();
-                // var object = $(this);
-              
-                // $.ajax({
-                //     type: "get",
-                //     url: "get-item-price/"+product_code,
-                //     dataType: "json",
-                //     success: function (response) {
-                //         console.log(response);
-                //         $(object).parent().parent().find(".price").val(response.product.mrp);
-                //         $(object).parent().parent().find(".product").val(response.product.sub_category);
-                //         $(object).parent().parent().find(".product_id").val(response.product.id);
-                //         $(object).parent().parent().find(".size").val(response.product.size);
-                //         $(object).parent().parent().find(".size_id").val(response.product.size.id);
-                        
-                //         calculateAmount(object);
-                //         calculateGst(object);
-                //         calculateTotalAllGst();
-
-                //     }
-                // });
+                var object = $(this);
+                getProductDetail(object);
                 
             });
 
@@ -670,24 +649,22 @@
                 
             });
             
-            
-            
+            $(document).on('keyup','.discount', function () {
+                var object = $(this);
+                calculateAmount(object);
+            });
+             
             $(document).on('keyup','.qty', function () {
-                calculateAmount($(this));
-                calculateGst($(this));
-                calculateTotalAllGst();
-                // totalDiscountAmount($(this));
+                var object = $(this);
+                calculateAmount(object);
             });
             
             $(document).on('keyup','.price', function () {
-                calculateGst($(this));
-                // totalDiscountAmount($(this));
-                calculateTotalAllGst();
+                var object = $(this);
+                calculateAmount(object);
             });
            
-            $(document).on('keyup','.discount', function () {
-                totalDiscountAmount($(this));
-            });
+            
            
             $(document).on('keyup','#given_amount', function () {
                 returnAmount();
@@ -712,6 +689,12 @@
               window.location.reload();
             });
 
+            $(document).on('keyup','#redeem_points', function (e) {
+                e.preventDefault();
+                // redeemPoint();
+                calculateTotalAmount();
+            });
+
             
 
         });
@@ -722,7 +705,6 @@
                 url: "get-customer-data/"+mobile_no,
                 dataType: "json",
                 success: function(response) {
-                    console.log(response);
 
                     if (response.status == 200) {
 
@@ -755,220 +737,230 @@
         }
 
         function addItem() {
-            $(".product_code").focus();
             $('#item_list').append($('#item_row').html());
+            $(".product_code").focus();
             // $("#item_list tr").find(".item").chosen();
         }
 
-        function getProductDetail(){
+        function getProductDetail(object){
 
-            var product_code = $('#product_code').val();
+            // var product_code = $('#product_code').val();
+            const product_code = $(object).val();
             $.ajax({
                 type: "get",
                 url: "get-product-detail/"+product_code,
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
                     if (response.status == 200) {
-                        addItem();
-                        $('.price').val(response.product_detail.mrp);
-                        // $(object).parent().parent().find(".price").val(response.product.mrp);
-                        // $(object).parent().parent().find(".product").val(response.product.sub_category);
-                        // $(object).parent().parent().find(".product_id").val(response.product.id);
-                        // $(object).parent().parent().find(".size").val(response.product.size);
-                        // $(object).parent().parent().find(".size_id").val(response.product.size.id);
+                        // addItem();
+                        $(object).parent().parent().find(".price").val(response.product_detail.mrp);
+                        $(object).parent().parent().find(".product").val(response.product_detail.product);
+                        $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
+                        $(object).parent().parent().find(".size").val(response.product_detail.size);
+                        $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
+
+                        // $('.price').val(response.product_detail.mrp);
+                        // $(object).parent().parent().find(".size_id").val(response.product_detail.size.id);
                     }
-
-                    
-                    // calculateAmount(object);
-                    // calculateGst(object);
-                    // calculateTotalAllGst();
-
+                    calculateAmount(object);
                 }
             });
 
         }
 
-
+        
 
         function calculateAmount(object){
-
-            var total_amount = 0;
-            var sgst = 0;
-            var cgst = 0;
+            
             var price = parseFloat($(object).parent().parent().find(".price").val());
             var qty = parseFloat($(object).parent().parent().find(".qty").val());
+
+            var discount = parseFloat($(object).parent().parent().find(".discount").val());
           
             if(qty == "" || isNaN(qty))
             {
                 qty = 0;   
             }
+
+            if(discount == "" || isNaN(discount))
+            {
+                discount = 0;   
+            }
             var amount = parseFloat(price * qty);
-            $(object).parent().parent().find(".amount").val(amount);
+            
+            var taxable = 0;
+            var discount_amount = 0 ;
+            taxable = calculateTaxable(discount, amount);
+            discount_amount = ( amount - taxable );
+            var gst = calculateGst(taxable)
+
+            $(object).parent().parent().find(".discount_amount").val(discount_amount.toFixed(2));
+            $(object).parent().parent().find(".sgst").val(gst.sgst);
+            $(object).parent().parent().find(".cgst").val(gst.cgst);
+            $(object).parent().parent().find(".igst").val(gst.igst);
+            $(object).parent().parent().find(".amount").val(taxable);
+            $(object).parent().parent().find(".taxable").val(taxable);
+
 
             calculateTotalAmount();
 
         }
 
+        function calculateTaxable(discount, amount) {
+            var taxable = 0;
+            if (discount > 0) {
+                var discount_amount = amount * discount / 100 ;
+                taxable = (amount - discount_amount)  ;
+            }else{
+                taxable = amount;
+            }
+
+            return parseFloat(taxable.toFixed(2));
+        }
+
+        function calculateGst(taxable) {
+            var state_type = $('input[name=state_type]:checked', '.state_type').val();
+            var sgst = 0;
+            var cgst = 0;
+            var igst = 0;
+
+            if (state_type == 1) {
+                if (taxable < 1000) {
+                    sgst = parseFloat(taxable * 2.5 / 100);
+                    cgst = parseFloat(taxable * 2.5 / 100);
+                }else{
+                    sgst = parseFloat(taxable * 6 / 100) ;
+                    cgst = parseFloat(taxable * 6 / 100) ;
+                }
+            }else{
+                if (taxable < 1000) {
+                    igst = parseFloat(taxable * 5 / 100) ;
+                }else{
+                    igst = parseFloat(taxable * 12 / 100) ;
+                }
+            }
+
+            data = {
+                "sgst":sgst.toFixed(2),
+                "cgst":cgst.toFixed(2),
+                "igst":igst.toFixed(2),
+            }
+
+            return(data);
+        }
+
         function calculateTotalAmount(){
             var item_total_amount = 0;
+            var gross_amount = 0;
 
             $(".amount").each(function(){
-                total_amount = parseFloat($(this).val());
+                var total_amount = parseFloat($(this).val());
                 if (!isNaN(total_amount))
                 {
                     item_total_amount +=  total_amount;
                 }  
-                // alert(item_total_amount);
             });
-            $("#item_total_amount").text(item_total_amount);
-            $("#item_total_amount").val(item_total_amount);
-            $("#total_amount").val(item_total_amount);
-            returnAmount();
-            calculateTotalAllGst();
-            discountTotalAmount();
-           
-        }
+            $("#item_total_amount").val(item_total_amount.toFixed(2));
 
-
-        function totalDiscountAmount(object){
-                        var discount = parseFloat($(object).val());
-                        // var amount = parseFloat($(".amount").val());
-                        var amount = parseFloat($(object).parent().parent().find(".amount").val());
-
-                        var dis_amount = ((amount * discount)/100).toFixed(2);
-                        if(discount == "" || discount == isNaN){
-                            // $('.discount_amount').val(0);
-                            $(object).parent().parent().find(".discount_amount").val(0);
-                        }
-                        else{
-                            // $('.discount_amount').val(dis_amount);
-                            $(object).parent().parent().find(".discount_amount").val(dis_amount);
-                        }
-                        discountTotalAmount();
-
-                    }
-        // gst funcation 
-
-
-        function calculateGst(object,price)  
-        {
             
-            if($("input[type='radio'].state_type").is(':checked')) {
-                var selected_value =  $("input[type='radio'].state_type:checked").val();
-                // alert(selected_value);
+            // returnAmount();
+            
+            calculateTotalDiscount();
+            calculateTotalGst();
+
+            var redeem_points = redeemPoint();
+            if (redeem_points > 0) {
+                gross_amount = (item_total_amount - redeem_points) ;
             }else{
-                alert("Plz select with in state or inter state");
-                return false;
+                gross_amount = item_total_amount ;
             }
-            var price = parseFloat($(object).parent().parent().find(".price").val());
-            var qty = parseFloat($(object).parent().parent().find(".qty").val());
-            // alert(qty);
-                var price = price;
-                // var purchase_amount = 0;
-                var  amount = 0;
-                var sgst = 0;
-                var cgst = 0;
-                var igst = 0;
-                var total_cgst =0;
-                var total_sgst =0;
-                // var taxablePrice = price;
-                // var qty;
-
-                // var price =1499
-
-                        
-                if (price < '{{MyApp::THOUSAND}}') {
-                    price = parseFloat(price / 1.05);
-                    $(object).parent().parent().find(".taxable").val(price*qty);
-                    }else{
-                        price = parseFloat(price / 1.12);
-                        $(object).parent().parent().find(".taxable").val(price*qty);
-                }
-                    
-           
-                if (selected_value == '{{MyApp::WITH_IN_STATE}}') {
-                    if (price < '{{MyApp::THOUSAND}}') {
-                        
-                        sgst = parseFloat((price * 2.5) / 100);
-                        cgst = parseFloat((price * 2.5) / 100);
-                       
-                        $(object).parent().parent().find(".sgst").val(sgst.toFixed(2)*qty);
-                        $(object).parent().parent().find(".cgst").val(cgst.toFixed(2)*qty);
-                        // calculateTotalAllGst();
-                        
-                        
-                       
-
-                    }else{
-                        sgst = parseFloat(price * 6) / 100 ;
-                        cgst = parseFloat(price * 6) / 100 ;
-                       
-                        $(object).parent().parent().find(".sgst").val(sgst.toFixed(2)*qty);
-                        $(object).parent().parent().find(".cgst").val(cgst.toFixed(2)*qty);
-                        // calculateTotalAllGst();
-                       
-
-
-                    }
-                }else{
-                    if (price < '{{MyApp::THOUSAND}}') {
-                        igst = parseFloat(price * 5 / 100);
-                        // alert(igst);
-                        // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst.toFixed(2)*qty);
-                        $("#item_igst").val(igst*qty);
-                    }else{
-                        igst = parseFloat(price * 12 / 100);
-                        // alert(igst);
-                        // $('.igst').val(igst);
-                        $(object).parent().parent().find(".igst").val(igst.toFixed(2)*qty);
-                        $("#item_igst").val(igst*qty);
-                    }
-                }
-        
+            
+            $("#gross_amount").val(gross_amount.toFixed(2));
         }
+
+        function calculateTotalDiscount(){
+            var total_discount = 0;
+
+            $(".discount_amount").each(function(){
+                discount_amount = parseFloat($(this).val());
+                if (!isNaN(discount_amount))
+                {
+                    total_discount +=  discount_amount;
+                }  
+            });
+           
+            $("#total_discount").val(total_discount.toFixed(2));
+        }
+
+        function calculateTotalGst(){
+            var total_sgst = 0;
+            var total_cgst = 0;
+            var total_igst = 0;
+
+            $(".sgst").each(function(){
+                sgst = parseFloat($(this).val());
+                if (!isNaN(sgst))
+                {
+                    total_sgst += sgst;
+                }  
+            });
+
+            $(".cgst").each(function(){
+                cgst = parseFloat($(this).val());
+                if (!isNaN(cgst))
+                {
+                    total_cgst += cgst;
+                }  
+            });
+
+            $(".igst").each(function(){
+                igst = parseFloat($(this).val());
+                if (!isNaN(igst))
+                {
+                    total_igst += igst;
+                }  
+            });
+        
+            $("#total_sgst").val(total_sgst.toFixed(2));
+            $("#total_cgst").val(total_cgst.toFixed(2));
+            $("#total_igst").val(total_igst.toFixed(2));
+        }
+        
+
         // PL6o2XQKFKClsqHz
             // end gst funcation
 
-        
+        function redeemPoint(){
+            var total_points = parseFloat($('#total_points').val());
+            var redeem_points = parseFloat($('#redeem_points').val());
 
-        function calculateTotalAllGst(){
-            var item_total_sgst = 0;
-            var item_total_cgst = 0;
-            var item_total_igst = 0;
-            var item_total_discount = 0;
-        
-            $(".sgst").each(function(){
-                item_sgst = parseFloat($(this).val());
-                if (!isNaN(item_sgst))
-                {
-                    item_total_sgst +=  item_sgst;
-                }  
-                
-            });
-            $(".cgst").each(function(){
-                item_cgst = parseFloat($(this).val());
-                if (!isNaN(item_cgst))
-                {
-                    item_total_cgst +=  item_cgst;
-                }  
-                
-            });
-            $(".igst").each(function(){
-                item_igst = parseFloat($(this).val());
-                if (!isNaN(item_igst))
-                {
-                    item_total_igst +=  item_igst;
-                }  
-                
-            });
-        
-            $("#item_sgst").val(item_total_sgst.toFixed(2));
-            $("#item_cgst").val(item_total_cgst.toFixed(2));
-            $("#item_igst").val(item_total_igst.toFixed(2));
+            if(total_points == "" || isNaN(total_points))
+            {
+                total_points = 0;   
+            }
+            if(redeem_points == "" || isNaN(redeem_points))
+            {
+                redeem_points = 0;   
+            }
 
+            // if (total_points < redeem_points) {
+            //     $('#redeem_points').val('0');
+            //     alert('Points not available');
+            //     return false;
+            // }
+
+            if(redeem_points > total_points)
+            {
+                $('#redeem_points').val('0');
+                alert('Your total points ' + total_points + ' and redeem points ' + redeem_points + ' not allowed.');
+                return false;
+            }
+
+            return redeem_points;
+            
         }
+
+        
 
         function returnAmount(){
             const given_amount = parseFloat($('#given_amount').val());
@@ -977,21 +969,7 @@
             $("#return_amount").val(return_amount);
         }
 
-        function discountTotalAmount(){
-            var discount_total_amount = 0;
-
-            $(".discount_amount").each(function(){
-                discount_amount = parseFloat($(this).val());
-                if (!isNaN(discount_amount))
-                {
-                    discount_total_amount +=  discount_amount;
-                }  
-                // alert(discount_total_amount);
-            });
-           
-            $("#dis_amount").val(discount_total_amount);
-          
-        }
+        
 
         function validateForm() {
             var msg = "";
@@ -1035,7 +1013,6 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);
                     if (response.status === 400) {
                         $('#order_err').html('');
                         $('#order_err').addClass('alert alert-danger');
@@ -1045,7 +1022,6 @@
                         });
 
                     } else {
-                        // console.log(response.bill_id);
                         if(response.status === 200){
                             generateInvoice(response.bill_id);
                         }
@@ -1076,7 +1052,6 @@
         //     url: "generate-invoice/"+bill_id,
         //     dataType: "json",
         //     success: function (response) {
-        //         // console.log(response);
 
         //         if (response.status == 200) {
         //             $('#generateInvoiceModal').html(response.html);

@@ -8,6 +8,7 @@ use App\Models\CustomerBill;
 use App\Models\CustomerBillInvoice;
 use App\Models\CustomerPoint;
 use Validator;
+use App\MyApp;
 
 class CustomerController extends Controller
 {
@@ -22,28 +23,38 @@ class CustomerController extends Controller
             'customer_points' => $customer_points
         ]);
     }
+    
     public function CustomerDetail($customer_id)
     {
         $customer_detail = Customer::join('cities','customers.city_id','=','cities.id')
         ->join('customer_points','customers.id','=','customer_points.customer_id')
         ->where(['customers.id'=>$customer_id])
-        ->first(['customers.customer_name' ,'customers.date','customers.birthday_date','customers.month_id','cities.city','customers.gst_no','customers.anniversary_date','customer_points.total_points']);
+        ->first(['customers.id','customers.customer_name' ,'customers.date','customers.birthday_date','customers.month_id','cities.city','customers.gst_no','customers.anniversary_date','customer_points.total_points']);
         
         $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
             ->orderBy('bill_date','DESC')
             ->orderBy('bill_time','DESC')->get();
-        
-        // $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
-        //     ->orderBy('bill_date','DESC')
-        //     ->orderBy('bill_time','DESC')->get(['id','bill_time','invoice_no','total_amount','bill_date']);
        
+           
 
-    
-        // $customer_type = ""; 
-        // $total_amount = 0; 
+
         $html = "";
         $html .= "<div class='row'>";
             $html .= "<div class='col-md-12 text-center'><b>".ucwords($customer_detail->customer_name)."</b><br></div>";
+            $member = getMemberShip($customer_detail->id);
+            if($member == MyApp::SILVER)
+            {
+                $html .= "<div class='col-md-12 text-center' style='color:#454545';><b>".MyApp::SILVER."</b><br></div>";
+            }
+            else if($member == MyApp::GOLDEN)
+            {
+                $html .= "<div class='col-md-12 text-center' style='color:#D35400';><b>".MyApp::GOLDEN."</b><br></div>";
+            }
+            else{
+                $html .= "<div class='col-md-12 text-center' style='color:#5D6D7E';><b>".MyApp::PLATINUM."</b><br></div>";
+                
+            }
+            // $html .= "<div class='col-md-12 text-center text-red'><b>".($member)."</b><br></div>";
             $html .= "</div>";
         $html .= "<div class='row'>";
             $html .= "<div class='col-md-4'><b>Point : </b>$customer_detail->total_points<br><b>DOB : </b>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."<br><b>Anniversary : </b>".date('d-m-Y',strtotime($customer_detail->anniversary_date))."</div>";
@@ -66,18 +77,6 @@ class CustomerController extends Controller
                 $html .="<tbody>";
                 $total_amount = 0; 
                     foreach ($customer_bills as $key => $bills) {
-                        
-
-                        
-                        // if($bills->total_amount < 300000){
-                        //     $customer_type = "Silver";
-                        // }elseif($bills->total_amount >= 300000 && $bills->total_amount < 500000)
-                        // {
-                        //     $customer_type = "Golden";
-                        // }else{
-                        //     $customer_type = "Platinum";
-                        // }
-
                         $html .="<tr>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".date('d-m-Y',strtotime($bills->bill_date))."</td>";
@@ -93,7 +92,7 @@ class CustomerController extends Controller
                         $html .="<tr>";
                         $html .=" <td colspan='3'></td>";
                         $html .=" <td><b>Grand Total</b></td>";
-                        $html .=" <td>$total_amount</td>";
+                        $html .=" <td><b>$total_amount<b></td>";
                         $html .=" <td> </td>";
                         $html .="</tr>";
                 $html .="</tbody>";
@@ -110,7 +109,7 @@ class CustomerController extends Controller
             'status'=>200,
             'customer_detail'=>$customer_detail,
             'customer_bills'=>$customer_bills,
-            'html'=>$html
+            'html'=>$html,
         ]);
     }
 

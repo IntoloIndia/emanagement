@@ -47,5 +47,10 @@ class MyApp {
    
     const RELEASE_STATUS = 1;
     const RELEASE_PANDDING_STATUS = 0;
+    const SILVER_AMOUNT = 300000;
+    const GOLDEN_AMOUNT = 500000;
+    const SILVER = 'SILVER';
+    const GOLDEN = 'GOLDEN';
+    const PLATINUM = 'PLATINUM';
 
 }

@@ -8,6 +8,7 @@
     use App\Models\AlterationItem;
     use App\Models\PurchaseReturnItem;
     use App\Models\CustomerPoint;
+    use App\Models\CustomerBill;
 
     // use App\MyApp;
 
@@ -71,21 +72,6 @@
         ] ;
     }
 
-    function manageCustomerPoint($customer_id, $redeem_point,$total_amount)
-    {
-        $data = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
-        // return $data;
-
-        // if($data->$total_point > 0)
-        // {
-        //     $redeem_point = $redeem_point - $total_point;
-        // }
-        // $cutomer_point = new CustomerPoint;
-        // $cutomer_point->$customer_id = $customer_id;
-        // $cutomer_point->$customer_points = $points;
-        // $cutomer_point->save();
-    }
-
     function getPurchaseEntryItems($purchase_entry_id)
     {
         $items = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get();
@@ -94,6 +80,41 @@
             'items'=>$items
         ] ;
     }
+
+    function getMemberShip($customer_id)
+    {
+        $total_amount = CustomerBill::where(['customer_id'=>$customer_id])->sum('total_amount');
+
+        if($total_amount  <= MyApp::SILVER_AMOUNT){
+            $membership = MyApp::SILVER;
+        }elseif($total_amount > MyApp::SILVER_AMOUNT && $total_amount  <= MyApp::GOLDEN_AMOUNT){
+            $membership = MyApp::GOLDEN;
+        }else{
+            $membership = MyApp::PLATINUM;
+        } 
+        return $membership;
+    }
+
+    function ManageStockItemQty($id)
+    {
+        $purchase_entry = PurchaseEntry::where(['category_id'=>$id])->get('id');
+        $manage_stock_qty = array();
+        foreach ($purchase_entry as $key => $list) {
+            
+            $manage_stock_qty[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('qty');
+        
+            // $manage_stock_qty[]->id;
+        }
+
+
+        // return $result = [
+        // 'status'=>200,
+        // 'items'=>$items
+        // ] ;
+             return $manage_stock_qty;
+            //  return $purchase_entry;
+    }
+
     // show alter item
     // function getAlterationItem($alteration_voucher_id){
     //     $alteration_items = AlterationItem::join('sub_categories','alteration_items.product_id','=','sub_categories.id')

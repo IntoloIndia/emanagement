@@ -25,7 +25,7 @@ class ManageStockController extends Controller
             $category_qty[] = collect([
                 'id' => $list->id,
                 'category' => $list->category,
-                'count' => $count,
+                'count' => $count
             ]);
         }
 
@@ -39,6 +39,8 @@ class ManageStockController extends Controller
                 'count' => $count,
             ]);
         }
+
+     
 
         $purchase_entry = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
             ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
