@@ -321,7 +321,7 @@ class CustomerBillInvoiceController extends Controller
                                         // $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         // $html .="<td>".$list->price."</td>";
-                                        $html .="<td>0.00</td>";
+                                        $html .="<td>".$list->discount_amount."</td>";
                                         $html .="<td>".$list->taxfree_amount."</td>";
                                         $html .="<td>".$list->cgst."</td>";
                                         $html .="<td>".$list->sgst."</td>";

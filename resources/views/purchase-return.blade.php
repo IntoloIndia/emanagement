@@ -175,8 +175,6 @@
     </div>
 </div>
 
-    
-
     <table class="hide">
         <tbody id="item_row">
             <tr>

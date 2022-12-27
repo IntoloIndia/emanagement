@@ -9,6 +9,7 @@ use App\Http\Controllers\API\AuthAPIController;
 use App\Http\Controllers\API\UserAPIController;
 use App\Http\Controllers\API\MasterAPIController;
 use App\Http\Controllers\API\ProductAPIController;
+use App\Http\Controllers\API\CustomerAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,11 @@ Route::controller(ProductAPIController::class)->group(function () {
     // Route::get('filter-available-stock/{category_id?}/{sub_category_id?}/{size?}/{color?}', 'filterAvailableStock');
     Route::post('filter-available-stock', 'filterAvailableStock');
     Route::post('filter-sales-invoice', 'filterSalesInvoice');
+});
+
+Route::controller(CustomerAPIController::class)->group(function () {
+    Route::get('customer', 'getCustomer');
+    Route::get('customer-bill/{customer_id}', 'getCustomerBill');
 });
 
 Route::get('/admin', [AdminController::class, 'index']);

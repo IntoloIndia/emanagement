@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\PurchaseEntry;
+use App\Models\PurchaseEntryItem;
 use App\Models\CustomerBillInvoice;
 use App\MyApp;
 
@@ -17,10 +18,17 @@ class ProductAPIController extends Controller
     //
     public function availableStock()
     {
-        $products = PurchaseEntry::join('categories', 'purchase_entries.category_id','=','categories.id')
-            ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
-            ->where('purchase_entries.status', MyApp::AVAILABLE)
-            ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price', 'purchase_entries.size', 'purchase_entries.color','categories.category', 'sub_categories.sub_category']);
+        $products = PurchaseEntryItem::all(['id','purchase_entry_id','size','qty']);
+
+        // $products = PurchaseEntryItem::join(['id','purchase_entry_id','size','qty']);
+
+            // ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price', 'purchase_entries.size', 'purchase_entries.color','categories.category', 'sub_categories.sub_category']);
+       
+        // $products = PurchaseEntry::join('categories', 'purchase_entries.category_id','=','categories.id')
+        //     ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+        //     ->where('purchase_entries.status', MyApp::AVAILABLE)
+        //     ->get(['purchase_entries.id','purchase_entries.product_code', 'purchase_entries.product', 'purchase_entries.sales_price', 'purchase_entries.size', 'purchase_entries.color','categories.category', 'sub_categories.sub_category']);
+
 
         return response()->json([
             'data'=>$products,
@@ -75,11 +83,35 @@ class ProductAPIController extends Controller
     public function salesInvoice()
     {
         $date = date('Y-m-d');
+        // $date = "2022-12-26";
         // $sales = CustomerBillInvoice::where('date', $date)->get();
 
-        $sales = CustomerBillInvoice::join('purchase_entries', 'customer_bill_invoices.product_id','=','purchase_entries.id')
-            ->where('customer_bill_invoices.date', $date)
-            ->get(['customer_bill_invoices.*','purchase_entries.product']);
+
+        // $SubCategories = SubCategory::join('categories','categories.id','=','sub_categories.category_id')
+        //         ->select('sub_categories.category_id','categories.category')
+        //             ->groupBy('sub_categories.category_id','categories.category')
+        //             ->get();
+
+        // join('sub_categories','sub_categories.id','=','customer_bill_invoices.product_id')
+
+        $sales = CustomerBillInvoice::join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
+                ->groupBy(['customer_bill_invoices.product_id', 'sub_categories.sub_category', 'customer_bill_invoices.product_code', 'customer_bill_invoices.qty','customer_bill_invoices.size'])
+                ->where('customer_bill_invoices.date', $date)
+                ->selectRaw('customer_bill_invoices.product_id,customer_bill_invoices.product_code,sum(customer_bill_invoices.qty) as qty,customer_bill_invoices.size,sub_categories.sub_category')
+                ->get();
+
+        // $sales = CustomerBillInvoice::groupBy(['product_code','size','price','product_id'])
+        //     ->where('date', $date)
+        //     ->selectRaw('sum(qty) as qty,price,product_id, product_code, size')
+        //     ->get();
+
+        // $sales = CustomerBillInvoice::groupBy(['product_code','size'])
+        //     ->where('date', $date)
+        //     ->selectRaw('sum(qty) as qty, product_code, size')
+        //     ->get();
+
+      
+
 
         return response()->json([
             'data'=>$sales,

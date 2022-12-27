@@ -23,7 +23,7 @@
                             <tr>
                                 <th scope="col">SN</th>
                                 <th scope="col">Category</th>
-                                <th scope="col">Qty</th>
+                                {{-- <th scope="col">Qty</th> --}}
                                 <th scope="col">Qty</th>
                             </tr>
                         </thead>
@@ -32,15 +32,15 @@
                             @foreach ($category_qty as $item)
                                 @php 
                                     $qty = ManageStockItemQty($item['id']);
-                                    print_r($qty);
-                                @endphp
-                                    
+                                    // print_r($qty);
+                                @endphp 
+                                     
                                     <tr>
                                         <th scope="row">{{++$count}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
-                                        <td>{{$item['count']}}</td>
-                                {{-- <td>{{$qty}}</td> --}}
-                            </tr>
+                                        {{-- <td>{{$item['count']}}</td> --}}
+                                        <td>{{$qty}}</td>
+                                        </tr>
                             @endforeach
                             
                         </tbody>
@@ -75,13 +75,16 @@
 
                             {{$count = "";}}
                             @foreach ($sub_category_qty as $item)
+                                @php 
+                                    $manage_sub_category_qty = ManageSubCategoryQty($item['id']);
+                                // print_r($qty);
+                                @endphp 
                                 <tr class="row_filter" category-id="{{$item['category_id']}}">
                                     <th scope="row">{{++$count}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
-                                    <td>{{$item['count']}}</td>
+                                    <td>{{$manage_sub_category_qty}}</td>
                                 </tr>
                             @endforeach
-                            
                         </tbody>
                     </table>
                 </div>
@@ -94,8 +97,9 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-2"><b>Products</b></div>
+                     
                         <div class="col-md-2">
-                            <select id="category_id" name="category_id" class="form-select form-select-sm select_chosen" >
+                            <select id="category_id" name="category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                                 <option selected disabled >Category</option>
                                 @foreach ($categories as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->category}}</option>
@@ -103,17 +107,19 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm" >
+                            <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm" onchange="getstyleNo(this.value);">
                                 <option selected disabled >Choose...</option>
-                                
+                                {{-- @foreach ($sub_categories as $items)
+                                    <option value="{{$items->id}}">{{$items->sub_category}}</option>
+                                @endforeach --}}
                             </select>
                         </div>
                         <div class="col-md-3">
                             <select id="style_no_id" name="style_no_id" class="form-select form-select-sm" >
                                 <option selected disabled >Style No</option>
-                                {{-- @foreach ($categories as $key => $list)
+                                @foreach ($categories as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->name}}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-1">
@@ -125,8 +131,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    
-                    <div class='accordion accordion-flush table-responsive' id='accordionFlushExample' style="height: 500px;">
+                    <div id="show_product"></div>
+                    {{-- <div class='accordion accordion-flush table-responsive' id='accordionFlushExample' style="height: 500px;">
                         <table class='table table-striped table-head-fixed'>
                             <thead>
                                 <tr style='position: sticky;z-index: 1;'>
@@ -138,8 +144,8 @@
                                     
                                 </tr>
                             </thead>
-                            <tbody >
-                                @foreach ($purchase_entry as $key => $list)
+                            <tbody > --}}
+                                {{-- @foreach ($purchase_entry as $key => $list)
                                        
                                     <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$list->id}}' aria-expanded='false' aria-controls='flush-collapseOne'>
                                         <td>{{++$key}}</td>
@@ -151,7 +157,9 @@
 
                                     @php
                                         $purchase_entry_item = getPurchaseEntryItems($list->id)
+                                     
                                     @endphp
+                                   
                                     <tr>
                                         <td colspan='5'>
                                             <div id='collapse_{{$list->id}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
@@ -186,7 +194,7 @@
                                 @endforeach                                               
                             </tbody>
                         </table>  
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
@@ -205,7 +213,7 @@
             $(document).on('change','#category_id', function (e) {
                 e.preventDefault();
                 const category_id = $(this).val();
-
+                // const sub_category_id = $("#sub_category_id").val();
                 var row = $('.row_filter');
                 row.hide()
                 row.each(function(i, el) {
@@ -213,6 +221,8 @@
                         $(el).show();
                     }
                 })
+                showProduct(category_id);
+
 
                 // $(".iform_row_filter ").each(function () {
                 //     if ($(this).text().toLowerCase().search(value) > -1) {
@@ -238,6 +248,37 @@
                 
             });
         });
+
+        function showProduct(category_id)
+        {
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                url: "show-product/"+ category_id,
+                success: function (response) {
+                    console.log(response);
+                    if(response.status == 200){
+                        $('#show_product').html("");
+                        $('#show_product').append(response.html)
+                    }
+                }
+            });
+        }
+        // function getstyleNo(sub_category_id)
+        // {
+        //     $.ajax({
+        //         type: "get",
+        //         dataType: "json",
+        //         url: "get-style-no/"+ sub_category_id,
+        //         success: function (response) {
+        //             console.log(response);
+        //             // if(response.status == 200){
+        //             //     $('#show_product').html("");
+        //             //     $('#show_product').append(response.html)
+        //             // }
+        //         }
+        //     });
+        // }
 
     </script>
 @endsection

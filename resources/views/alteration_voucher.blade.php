@@ -327,7 +327,7 @@
                 $('#viewAlterVoucherModal').modal('show');
                 printAlterReceipt();
             });
-
+           
             // $(document).on('click','.item_qty',function(e){
             //     var item_qty = $(this).val();
             //     // alert($item_qty)
