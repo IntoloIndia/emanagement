@@ -344,7 +344,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="col-md-12 table-responsive p-0" style="height: 50px;">
+                <div class="col-md-12 table-responsive p-0" style="height: 150px;">
                 <table class="table table-head-fixed">
                     <thead>
                         <tr>
@@ -791,6 +791,7 @@
             var taxable = 0;
             var discount_amount = 0 ;
             taxable = calculateTaxable(discount, amount);
+
             discount_amount = ( amount - taxable );
             var gst = calculateGst(taxable)
 
@@ -824,19 +825,25 @@
             var cgst = 0;
             var igst = 0;
 
+            if (taxable < 1000) {
+                base_amount = parseFloat(taxable / 1.05);
+            }else{
+                base_amount = parseFloat(taxable / 1.12);
+            }
+
             if (state_type == 1) {
-                if (taxable < 1000) {
-                    sgst = parseFloat(taxable * 2.5 / 100);
-                    cgst = parseFloat(taxable * 2.5 / 100);
+                if (base_amount < 1000) {
+                    sgst = parseFloat(base_amount * 2.5 / 100);
+                    cgst = parseFloat(base_amount * 2.5 / 100);
                 }else{
-                    sgst = parseFloat(taxable * 6 / 100) ;
-                    cgst = parseFloat(taxable * 6 / 100) ;
+                    sgst = parseFloat(base_amount * 6 / 100) ;
+                    cgst = parseFloat(base_amount * 6 / 100) ;
                 }
             }else{
-                if (taxable < 1000) {
-                    igst = parseFloat(taxable * 5 / 100) ;
+                if (base_amount < 1000) {
+                    igst = parseFloat(base_amount * 5 / 100) ;
                 }else{
-                    igst = parseFloat(taxable * 12 / 100) ;
+                    igst = parseFloat(base_amount * 12 / 100) ;
                 }
             }
 
@@ -876,6 +883,7 @@
             }
             
             $("#gross_amount").val(gross_amount.toFixed(2));
+            $("#total_amount").val(gross_amount.toFixed(2));
         }
 
         function calculateTotalDiscount(){

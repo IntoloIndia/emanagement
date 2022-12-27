@@ -98,7 +98,6 @@ class AlterationVoucherController extends Controller
                     $html .="<div class='row mt-3'>";
                         $html .="<div class='col-md-12'>";
                         $html .= "<table class='table table-striped'>";
-
                         $html .= "<thead>";
                             $html .= "<tr>";
                                 $html .= "<th></th>";

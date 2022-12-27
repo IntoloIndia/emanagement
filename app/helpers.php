@@ -9,6 +9,7 @@
     use App\Models\PurchaseReturnItem;
     use App\Models\CustomerPoint;
     use App\Models\CustomerBill;
+    use App\Models\Purchase;
 
     // use App\MyApp;
 
@@ -100,20 +101,24 @@
         $purchase_entry = PurchaseEntry::where(['category_id'=>$id])->get('id');
         $manage_stock_qty = array();
         foreach ($purchase_entry as $key => $list) {
-            
             $manage_stock_qty[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('qty');
-        
-            // $manage_stock_qty[]->id;
         }
-
-
-        // return $result = [
-        // 'status'=>200,
-        // 'items'=>$items
-        // ] ;
-             return $manage_stock_qty;
-            //  return $purchase_entry;
+        $total_qty = array_sum($manage_stock_qty);
+        return $total_qty;
     }
+
+    function ManageSubCategoryQty($id)
+    {
+        $purchase_entry = PurchaseEntry::where(['sub_category_id'=>$id])->get('id');
+        $manage_sub_category_qty = array();
+        foreach ($purchase_entry as $key => $list) {
+            $manage_sub_category_qty[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('qty');
+        }
+        $total_qty = array_sum($manage_sub_category_qty);
+        return $total_qty;
+    }
+
+
 
     // show alter item
     // function getAlterationItem($alteration_voucher_id){
