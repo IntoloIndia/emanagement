@@ -14,6 +14,7 @@ use App\Models\Size;
 use App\Models\Color;
 use App\Models\Supplier;
 use App\Models\Brand;
+use App\MyApp;
 
 use Validator;
 use Picqer;
@@ -308,6 +309,7 @@ class PurchaseEntryController extends Controller
             return response()->json([   
                 'status'=>200,
                 'html'=>$purchase_entry_html['html'],
+                '$result'=>$result, //dummy
             ]);
         }
     }
@@ -588,8 +590,7 @@ class PurchaseEntryController extends Controller
         $purchase_item->cgst = $gst['cgst'];
         $purchase_item->igst = $gst['igst'];
         $purchase_item->amount = $amount;
-        // $purchase_item->time = date('g:i A');
-        // $purchase_item->save();
+        
 
         if ($purchase_item->save()) {
             $model = PurchaseEntryItem::find($purchase_item->id);
@@ -599,7 +600,13 @@ class PurchaseEntryController extends Controller
             $model->barcode = $product_code;
             $model->barcode_img = $barcode_img;
             $model->save();
+
+            $voucher_type = MyApp::PURCHASE_ENTRY;
+            $res = manageStock($voucher_type, $purchase_entry_id, $size, $qty);
+        
         }
+            // $voucher_type = MyApp::PURCHASE_ENTRY;
+            // $res = manageStock($voucher_type, $purchase_entry_id, $size, $qty);
 
         return 'ok';
     }

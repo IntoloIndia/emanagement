@@ -53,4 +53,9 @@ class MyApp {
     const GOLDEN = 'GOLDEN';
     const PLATINUM = 'PLATINUM';
 
+    const PURCHASE_ENTRY = 'PURCHASE_ENTRY';
+    const PURCHASE_RETURN = 'PURCHASE_RETURN';
+    const SALES_INVOICE = 'SALES_INVOICE';
+    const SALES_RETURN = 'SALES_RETURN';
+
 }

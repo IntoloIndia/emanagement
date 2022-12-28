@@ -176,11 +176,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
                 </a>
             </li>
-            <li class="nav-item">      
+            {{-- <li class="nav-item">      
                 <a href="" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a href="barcode" class="nav-link">
@@ -188,22 +188,22 @@
                 </a>
             </li>
             
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="business-details" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
                 </a>
-            </li>
+            </li> --}}
             
             {{-- <li class="nav-item">
                 <a href="excel_data" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
                 </a>
             </li> --}}
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="discount" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
                 </a>
-            </li>
+            </li> --}}
             
                 
         </ul>

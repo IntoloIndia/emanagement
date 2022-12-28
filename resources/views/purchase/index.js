@@ -481,6 +481,7 @@
             processData: false,
             success: function (response) {
                 // console.log(response);
+
                 if (response.status === 400) {
                     $('#purchase_entry_err').html('');
                     $('#purchase_entry_err').addClass('alert alert-danger');
@@ -491,7 +492,6 @@
 
                 } else {
                     $('#purchase_entry_err').html('');
-                    // alert("Save purchase entry successfully");
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('').trigger('chosen:updated');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');

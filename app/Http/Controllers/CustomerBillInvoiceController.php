@@ -278,7 +278,7 @@ class CustomerBillInvoiceController extends Controller
                             // $html .="</div>";
                             $html .="<div class='col-md-5' style='border:1px solid black'>";
                             $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($bills->bill_date))."</small></span><br>";
-                            $html .="<span>Invoice No : <small class='float-end'>".$bills->invoice_no."</small></span><br>";
+                            $html .="<span>Invoice No : <h5 class='float-end'>".$bills->id."</h5></span><br>";
                                 // $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
                             $html .="</div>";
                         $html .="</div>";
@@ -299,8 +299,8 @@ class CustomerBillInvoiceController extends Controller
                                         // $html .="<th>Rate</th>";
                                         $html .="<th>Disc</th>";
                                         $html .="<th>Taxable</th>";
-                                        $html .="<th>CGST</th>";
                                         $html .="<th>SGST</th>";
+                                        $html .="<th>CGST</th>";
                                         $html .="<th>IGST</th>";
                                         $html .="<th>Total</th>";
                                     $html .="</tr>";
@@ -370,10 +370,10 @@ class CustomerBillInvoiceController extends Controller
 
                                 $html .="<span class='float-end'>TOTAL AMOUNT:</span><br>";
                                 $html .="<span class='float-end'>DISCOUNT:</span><br>";
-                                $html .="<span class='float-end'>CGST :</span> <br>";
                                 $html .="<span class='float-end'>SGST : </span><br>";
+                                $html .="<span class='float-end'>CGST :</span> <br>";
                                 $html .="<span class='float-end'>IGST : </span><br>";
-                                $html .="<span class='float-end'>Point :</span> <br>";
+                                $html .="<span class='float-end'>Points :</span> <br>";
                                 // $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
                                 $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
 

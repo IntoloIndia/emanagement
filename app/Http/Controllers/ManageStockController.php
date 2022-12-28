@@ -18,6 +18,7 @@ class ManageStockController extends Controller
 
         $categories = Category::all();
         $sub_categories = SubCategory::all();
+        $get_style_no = StyleNo::all();
         // $reserve = PurchaseEntry::all()->groupBy('category_id')->count();
 
         $category_qty = array();
@@ -41,35 +42,39 @@ class ManageStockController extends Controller
             ]);
         }
 
-     
-
         $purchase_entry = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
             ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
             ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
             ->get(['purchase_entries.*','categories.category','sub_categories.sub_category','style_nos.style_no' ]);
-
-        // $stock = PurchaseEntry::join('suppliers','purchase_entries.supplier_id','=','suppliers.id')
-        // ->where(['status'=> MyApp::AVAILABLE])
-        // ->get(['purchase_entries.*', 'suppliers.supplier_name']);
-
+        
         return view('manage_stock', [
             'categories'=>$categories,
             'sub_categories'=>$sub_categories,
+            'get_style_no'=>$get_style_no,
             'category_qty'=>$category_qty,
             'sub_category_qty'=>$sub_category_qty,
             'purchase_entry'=>$purchase_entry
         ]);
     }   
 
-    public function showProduct($category_id)
+    public function showProduct($category_id, $sub_category_id="0" , $style_no_id="0" )
     {
-        // $categories = Category::all();
-        $purchase_entry = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
-            ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
-            ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
-            ->where(['purchase_entries.category_id'=>$category_id])
-            ->where(['purchase_entries.category_id'=>$category_id])
-            ->get(['purchase_entries.*','categories.category','sub_categories.sub_category','style_nos.style_no' ]);
+        $data = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
+                ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+                ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
+                ->select('purchase_entries.*','categories.category','sub_categories.sub_category','style_nos.style_no');
+            
+                if($category_id > 0){
+                    $data->where(['purchase_entries.category_id'=>$category_id]);
+                }
+                if($sub_category_id > 0){
+                    $data->where(['purchase_entries.sub_category_id'=>$sub_category_id]);
+                }
+                if($style_no_id > 0 ){
+                    $data->where(['purchase_entries.style_no_id'=>$style_no_id]);
+                }
+
+        $purchase_entry = $data->get();
 
         $html ="";
 
@@ -108,7 +113,7 @@ class ManageStockController extends Controller
                                                 $html .= "<th> SN</th>";
                                                 $html .= "<th> Size</th>";
                                                 $html .= "<th> Qty</th>";
-                                                $html .= "<th> Price</th>";
+                                                // $html .= "<th> Price</th>";
                                             $html .= "</tr>";
                                         $html .= "</thead>";
                                         $html .= "<tbody>";
@@ -117,7 +122,7 @@ class ManageStockController extends Controller
                                                     $html .= "<td>".++$key1."</td>";
                                                     $html .= "<td>".$item->size."</td>";
                                                     $html .= "<td>".$item->qty."</td>";
-                                                    $html .= "<td>".$item->price."</td>";
+                                                    // $html .= "<td>".$item->price."</td>";
                                                 $html .= "</tr>";
                                             }
                                         $html .= "</tbody>";
@@ -134,21 +139,9 @@ class ManageStockController extends Controller
 
         return response()->json([
             'status'=>200,
-            // 'categories'=>$categories,
-            'purchase_entry'=>$purchase_entry,
             'html'=>$html
         ]);
     
     }
-
-    // public function getstyleNo($sub_category_id)
-    // {
-    //     $get_style_no = StyleNo::where(['id'=>$sub_category_id])->get('id','style_no');
-    //     return response()->json([
-    //         'status'=>200,
-    //         'get_style_no'=>$get_style_no
-    //     ]);
-    // }
-
 
 }
