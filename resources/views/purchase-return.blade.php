@@ -264,6 +264,11 @@
             
         });
 
+        $(document).on('click','#printAlterReceiptBrn', function () {
+                // $('#viewAlterVoucherModal').modal('show');
+                printAlterReceipt();
+            });
+
         $(document).on('click','.releaseStatusBtn', function (e) {
                 e.preventDefault();
                 const supplier_id = $(this).val();
@@ -277,10 +282,7 @@
                 updateReleaseStatus(supplier_id);
             });
 
-            $(document).on('click','#printAlterReceiptBrn', function () {
-                // $('#viewAlterVoucherModal').modal('show');
-                printAlterReceipt();
-            });
+          
     });
     
 

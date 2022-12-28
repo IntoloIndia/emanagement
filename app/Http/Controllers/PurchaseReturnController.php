@@ -164,7 +164,7 @@ class PurchaseReturnController extends Controller
            
         $html = "";
          $html .= "<div class='row'>";
-             $html .= "<div class='col-6'><h6>".$purchase_return->supplier_name."</h6></div>";
+             $html .= "<div class='col-6'><h6>".$purchase_return->supplier_name."</h6>  </div>";
              // <h6>GSTNO : ".$supplier_return_item->gst_no."</h6><h6>Mobile No : ".$supplier_return_item->mobile_no."</h6>
              $html .= "<div class='col-6 text-end'><h6>Time : ".$purchase_return->release_time."</h6>
                         <h6>Date : ".date('d-m-Y',strtotime($purchase_return->release_date))."</h6></div>";

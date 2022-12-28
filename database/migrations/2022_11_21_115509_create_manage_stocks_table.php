@@ -15,8 +15,9 @@ class CreateManageStocksTable extends Migration
     {
         Schema::create('manage_stocks', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->default(0);
-            $table->integer('quantity')->default(0);
+            $table->integer('purchase_entry_id')->default(0);
+            $table->string('size')->default(0);
+            $table->integer('total_qty')->default(0);
             $table->timestamps();
         });
     }

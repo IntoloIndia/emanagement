@@ -16,27 +16,29 @@ use Validator;
 class SalesReturnController extends Controller
 {
     public function index(){
-        $sales_return = SalesReturn::join('customer_bills','customer_bills.id','=','sales_returns.bill_id')
-                    ->where(['sales_returns.release_status' => MyApp::RELEASE_PANDDING_STATUS])
-                    ->select('customer_bills.customer_id','sales_returns.*')->get();
+        $sales_return = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
+                                        ->get(['sales_returns.*','customers.customer_name']);
+        // $sales_return = SalesReturn::join('customer_bills','customer_bills.id','=','sales_returns.bill_id')
+        //             ->where(['sales_returns.release_status' => MyApp::RELEASE_PANDDING_STATUS])
+        //             ->select('customer_bills.customer_id','sales_returns.*')->get();
 
-         $sales_return_items = array();
+        //  $sales_return_items = array();
 
-            foreach ($sales_return as $key => $list) {
-                $sales_return_items[] = SalesReturnItem::join('sub_categories','sub_categories.id','=','sales_return_items.sub_category_id')
-                ->where(['sales_return_id'=>$list->id])
-                ->select('sales_return_items.*','sub_categories.sub_category')->get();     
-        }
-        $sales_return_data = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
-                            ->where(['sales_returns.release_status' => MyApp::RELEASE_STATUS])
-                            ->select('customers.customer_name','sales_returns.*')->get();
+        //     foreach ($sales_return as $key => $list) {
+        //         $sales_return_items[] = SalesReturnItem::join('sub_categories','sub_categories.id','=','sales_return_items.sub_category_id')
+        //         ->where(['sales_return_id'=>$list->id])
+        //         ->select('sales_return_items.*','sub_categories.sub_category')->get();     
+        // }
+        // $sales_return_data = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
+        //                     ->where(['sales_returns.release_status' => MyApp::RELEASE_STATUS])
+        //                     ->select('customers.customer_name','sales_returns.*')->get();
 
             // dd($sales_return_data);
 
         return view('sales-return',[
             'sales_return' => $sales_return,
-            'sales_return_items' => $sales_return_items,
-            'sales_return_data' => $sales_return_data,
+            // 'sales_return_items' => $sales_return_items,
+            // 'sales_return_data' => $sales_return_data,
         ]);
     }
 
@@ -69,12 +71,20 @@ class SalesReturnController extends Controller
                                     ->where(['bill_id'=>$bill->id,'product_code'=>$barcode_code ])
                                     ->select(['customer_bill_invoices.*','sub_categories.sub_category'])
                                     ->first();
-                                    
-        return response()->json([
-            'bill'=>$bill,
-            'customer_return_product'=>$customer_return_product
-        ]);
-    }
+
+                if($customer_return_product){
+                    return response()->json([
+                        'status'=>200,
+                        'bill'=>$bill,
+                        'customer_return_product'=>$customer_return_product
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'=>400,
+                        'message'=>"data not found"
+                    ]);
+                }                              
+        }
 
     function saveSalesReturnProduct(Request $req)
         {
@@ -93,11 +103,11 @@ class SalesReturnController extends Controller
             ]);
         }else{
 
-            $bill_id = 0;
-            $release_status = 0;
-            $data = SalesReturn::where(['bill_id'=>$req->input('bill_id'),'release_status'=>0])->first(['id','release_status']);
+            // $bill_id = 0;
+            // $release_status = 0;
+            // $data = SalesReturn::where(['bill_id'=>$req->input('bill_id'),'release_status'=>0])->first(['id','release_status']);
             
-            if ($data == null ) {
+            // if ($data == null ) {
                 
                 $model = new SalesReturn;
                 $model->bill_id = $req->input('bill_id');
@@ -106,21 +116,21 @@ class SalesReturnController extends Controller
                 $model->create_time = date('g:i A');
                 $model->save();
     
-                        $bill_id = $model->id;
-                    }else if($data->release_status > 0){
+                    //     $bill_id = $model->id;
+                    // }else if($data->release_status > 0){
 
-                        $model = SalesReturn::find($data->id);
-                        $model->bill_id = $req->input('bill_id');
-                        $model->customer_id = $req->input('customer_id');
-                        $model->create_date = date('Y-m-d');
-                        $model->create_time = date('g:i A');
-                        $model->save();
+                    //     $model = SalesReturn::find($data->id);
+                    //     $model->bill_id = $req->input('bill_id');
+                    //     $model->customer_id = $req->input('customer_id');
+                    //     $model->create_date = date('Y-m-d');
+                    //     $model->create_time = date('g:i A');
+                    //     $model->save();
 
-                        $bill_id = $model->id;
-                    }else{
+                    //     $bill_id = $model->id;
+                    // }else{
                         
-                        $bill_id = $data->id;
-                    }
+                    //     $bill_id = $data->id;
+                    // }
 
                     $sub_category_id = $req->input('sub_category_id');
                     $barcode = $req->input('barcode');
@@ -131,12 +141,12 @@ class SalesReturnController extends Controller
                     $amount = $req->input('amount');
 
 
-          
+                if($model->save()){
                 foreach ($sub_category_id as $key => $list) {
                    
                     $item = new SalesReturnItem;
 
-                    $item->sales_return_id = $bill_id;
+                    $item->sales_return_id = $model->id;
                     $item->sub_category_id = $sub_category_id[$key];
                     $item->barcode = $barcode[$key];
                     $item->mrp = $mrp[$key];
@@ -151,22 +161,82 @@ class SalesReturnController extends Controller
                 return response()->json([   
                     'status'=>200,
                 ]);
-            
+            }
         }
     }
 
-    function updateSalesReleaseStatus($sales_return_id)
-    {
-        $release_status_data =SalesReturn::find($sales_return_id);
-        $release_status_data->release_status = MyApp::RELEASE_STATUS;
-        $release_status_data->release_date = date('Y-m-d');
-        $release_status_data->release_time = date('g:i A');
-        $release_status_data->save();
+    // function updateSalesReleaseStatus($sales_return_id)
+    // {
+    //     $release_status_data =SalesReturn::find($sales_return_id);
+    //     $release_status_data->release_status = MyApp::RELEASE_STATUS;
+    //     $release_status_data->release_date = date('Y-m-d');
+    //     $release_status_data->release_time = date('g:i A');
+    //     $release_status_data->save();
         
-        return response()->json([
-            'status'=>200
-        ]);
-    }
+    //     return response()->json([
+    //         'status'=>200
+    //     ]);
+    // }
     
+    public function salesReturnInvoice($sales_return_id)
+    {
+        $sales_return = SalesReturn::join('sales_return_items','sales_return_items.sales_return_id','=','sales_returns.id')
+                         ->join('customers','customers.id','=','sales_returns.customer_id')
+                        ->where('sales_returns.id', $sales_return_id)
+                        ->first(['sales_returns.*','customers.customer_name','customers.mobile_no']);
+            // dd($purchase_return);
+
+        $sales_return_item = SalesReturnItem::join('sub_categories','sub_categories.id','=','sales_return_items.sub_category_id')
+                    ->where('sales_return_items.sales_return_id',$sales_return_id)
+                    ->select(['sales_return_items.*','sub_categories.sub_category'])->get();
+
+            // dd($purchase_return_item);
+           
+        $html = "";
+         $html .= "<div class='row'>";
+             $html .= "<div class='col-6'><h6 style='text-transform: capitalize;'>".$sales_return->customer_name."</h6> 
+             <h6>Mobile No : ".$sales_return->mobile_no."</h6>
+              </div>";
+            
+             $html .= "<div class='col-6 text-end'><h6>Time : ".$sales_return->create_time."</h6>
+                        <h6>Date : ".date('d-m-Y',strtotime($sales_return->create_date))."</h6></div>";
+         $html .= "</div>"; 
+         $html .= "<div class='row mt-2'>";
+            $html .= "<table class='table table-striped'>";
+                $html .= "<thead>";
+                    $html .= "<tr>";
+                        $html .= "<th></th>";
+                        $html .= "<th>SN</th>";
+                        $html .= "<th>Item name</th>";
+                        $html .= "<th>Size</th>";
+                        $html .= "<th>Qty</th>";
+                        $html .= "<th>Amount</th>";
+                    $html .= "</tr>";
+                $html .= "</thead>";
+                $html .= "<tbody>";
+                    foreach ($sales_return_item as $key => $list) {
+                        $html .= "<tr>";
+                            $html .= "<td></td>";
+                            $html .= "<td>" . ++$key . "</td>";
+                            $html .= "<td>" . ucwords($list->sub_category)."</td>";
+                            $html .= "<td>" . $list->size ."</td>";
+                            $html .= "<td>" . $list->qty ."</td>";
+                            $html .= "<td>" . $list->amount ."</td>";
+                            // $html .= "<td>" . $list->item_qty ."</td>";
+                        $html .= "</tr>";
+                    }
+                $html .= "<tbody>";
+            $html .= "</table>";
+        $html .= "</div>"; 
+     
+   
+        return response()->json([
+            'status'=>200,
+            'sales_return'=>$sales_return,
+            'sales_return_item'=>$sales_return_item,
+            'html'=>$html
+        ]);
+
+    }
 
 }

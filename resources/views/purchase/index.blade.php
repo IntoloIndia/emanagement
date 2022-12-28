@@ -324,22 +324,21 @@ a {
                 
             });
 
-            $(document).on('change','.color_code', function (e) {
-                e.preventDefault();
-                const color_code = $(this).val();
-                var object = $(this);
-                $.ajax({
-                    type: "get",
-                    url: "get-color_code/"+ color_code,
-                    dataType: "json",
-                    success: function (response) {
-                        $(object).parent().parent().find(".color_name").val(response.color.color);
-                        // $(object).parent().parent().find("#color_name").val(response.color.color).css("background-color".color.color);
+            // $(document).on('change','.color_code', function (e) {
+            //     e.preventDefault();
+            //     const color_code = $(this).val();
+            //     var object = $(this);
+            //     $.ajax({
+            //         type: "get",
+            //         url: "get-color_code/"+ color_code,
+            //         dataType: "json",
+            //         success: function (response) {
+            //             $(object).parent().parent().find(".color_name").val(response.color.color);
             
-                    }
-                });
+            //         }
+            //     });
                 
-            });
+            // });
         
             $(document).on('click','.editPurchaseEntryBtn', function (e) {
                 e.preventDefault();

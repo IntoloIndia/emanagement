@@ -99,7 +99,7 @@
                         <div class="col-md-2"><b>Products</b></div>
                      
                         <div class="col-md-2">
-                            <select id="category_id" name="category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
+                            <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                                 <option selected disabled >Category</option>
                                 @foreach ($categories as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->category}}</option>
@@ -107,7 +107,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="sub_category_id" name="sub_category_id" class="form-select form-select-sm" onchange="getstyleNo(this.value);">
+                            <select id="sub_category_id" class="form-select form-select-sm">
                                 <option selected disabled >Choose...</option>
                                 {{-- @foreach ($sub_categories as $items)
                                     <option value="{{$items->id}}">{{$items->sub_category}}</option>
@@ -115,18 +115,19 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="style_no_id" name="style_no_id" class="form-select form-select-sm" >
+                            {{-- <div id="show_style_no"></div> --}}
+                            <select id="style_no_id" class="form-select form-select-sm" >
                                 <option selected disabled >Style No</option>
-                                @foreach ($categories as $key => $list)
-                                    <option value="{{$list->id}}" >{{$list->name}}</option>
+                                @foreach ($get_style_no as $key => $list)
+                                    <option value="{{$list->id}}" >{{$list->style_no}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-1">
-                            <button id="assign_work_reset" class="btn btn-dark btn-sm mt-1" disabled>Reset</button>
+                            <button type="button" id="reset_products" class="btn btn-dark btn-sm mt-1">Reset</button>
                         </div>
                         <div class="col-md-1" >
-                            <b><span id="assign_work_count" >450000</span></b>
+                            <b><span id="assign_work_count" >100</span></b>
                         </div>
                     </div>
                 </div>
@@ -210,10 +211,9 @@
         $(document).ready(function () {
             $(".select_chosen").chosen({ width: '100%' });
 
-            $(document).on('change','#category_id', function (e) {
+            $(document).on('change','#filter_category_id', function (e) {
                 e.preventDefault();
                 const category_id = $(this).val();
-                // const sub_category_id = $("#sub_category_id").val();
                 var row = $('.row_filter');
                 row.hide()
                 row.each(function(i, el) {
@@ -221,9 +221,10 @@
                         $(el).show();
                     }
                 })
-                showProduct(category_id);
 
+                showProduct();
 
+            
                 // $(".iform_row_filter ").each(function () {
                 //     if ($(this).text().toLowerCase().search(value) > -1) {
                 //         $(this).show();
@@ -247,14 +248,28 @@
                 // });
                 
             });
+            $(document).on('change','#sub_category_id', function (e) {
+                showProduct();
+            });     
+            $(document).on('change','#style_no_id', function (e) {
+                showProduct();
+            });
+            $(document).on('click','#reset_products', function (e) {
+                window.location.reload();
+            });
+
         });
 
-        function showProduct(category_id)
+        function showProduct()
         {
+            var category_id = $('#filter_category_id').val();
+            var sub_category_id = $('#sub_category_id').val();
+            var style_no_id = $('#style_no_id').val();
+
             $.ajax({
                 type: "get",
                 dataType: "json",
-                url: "show-product/"+ category_id,
+                url: "show-product/"+ category_id + "/" + sub_category_id + "/" + style_no_id,
                 success: function (response) {
                     console.log(response);
                     if(response.status == 200){
@@ -264,21 +279,5 @@
                 }
             });
         }
-        // function getstyleNo(sub_category_id)
-        // {
-        //     $.ajax({
-        //         type: "get",
-        //         dataType: "json",
-        //         url: "get-style-no/"+ sub_category_id,
-        //         success: function (response) {
-        //             console.log(response);
-        //             // if(response.status == 200){
-        //             //     $('#show_product').html("");
-        //             //     $('#show_product').append(response.html)
-        //             // }
-        //         }
-        //     });
-        // }
-
     </script>
 @endsection

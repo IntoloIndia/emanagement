@@ -344,7 +344,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="col-md-12 table-responsive p-0" style="height: 150px;">
+                <div class="col-md-12 table-responsive p-0" style="height: 300px;">
                 <table class="table table-head-fixed">
                     <thead>
                         <tr>
@@ -364,7 +364,7 @@
                         <tr>
                             <td>{{++$count}}</td>
                             {{-- <td>{{ucwords($item->customer_name)}}</td> --}}
-                            <td>{{$item->invoice_no}}</td>
+                            <td>{{$item->id}}</td>
                             <td>{{$item->total_amount}}</td>
                             <td>{{$item->bill_date}}</td>
 
@@ -390,7 +390,7 @@
         </div>
 
 
-        <div class="card " >
+        {{-- <div class="card " >
             <div class="card-body page" id="barcode_body" style="max_height: 300px;">
                 @foreach ($product_barcode as $list)
                     <div class="card" >
@@ -398,23 +398,23 @@
                             {{-- <div class="row mb-2">
                                 <span class="tect-center business_title text-center"><b>MANGALDEEP CLOTHS LLP</b></span>
                             </div> --}}
-                            <div class="row" >
+                            {{-- <div class="row" >
                                
                                 <div class="col-md-12" id="div1">
                                     <img src="{{$list->barcode_img}}" class="barcode_image barcode img-fluid" ><br/>
                                     {{-- <img src="{{asset('public/assets/barcodes/barcode.gif')}}" class="img-thumbnail " > --}}
-                                    <span class="product_detail"><b>{{$list->barcode}}</b></span> <br/>
-                                </div>
+                                    {{-- <span class="product_detail"><b>{{$list->barcode}}</b></span> <br/> --}}
+                                {{-- </div>
                             </div>
                             <button class="btn btn-primary btn-sm float-right" onclick="myFun('div1')">print</button>
                         </div>
                     </div>
                 @endforeach
-            </div>
+            </div> --}} 
             
-        </div>
+        {{-- </div> --}} 
 
-    </div>
+    {{-- </div> --}}
 
     
 

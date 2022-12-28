@@ -242,8 +242,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/sales-return-item/{bill_no}/{barcode_code}', 'getSalesReturnData');
         Route::get('admin/get-customer-details/{bill_no}', 'getCustomerDetails');
         Route::post('admin/save-sales-return-item', 'saveSalesReturnProduct');
-        Route::get('admin/update-release-status/{sales_return_id}', 'updateSalesReleaseStatus');
-        Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
+        // Route::get('admin/update-release-status/{sales_return_id}', 'updateSalesReleaseStatus');
+        Route::get('admin/sales-return-invoice/{sales_return_id}','salesReturnInvoice');
 
     });
 
@@ -281,7 +281,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
         Route::get('admin/show-product/{category_id}','showProduct');
-        // Route::get('admin/get-style-no/{sub_category_id}','getstyleNo');
+        Route::get('admin/get-style-no/{style_no_id}','getstyleNo');
     });
 
     Route::controller(DepartmentController::class)->group(function () {

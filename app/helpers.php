@@ -10,6 +10,7 @@
     use App\Models\CustomerPoint;
     use App\Models\CustomerBill;
     use App\Models\Purchase;
+    use App\Models\ManageStock;
 
     // use App\MyApp;
 
@@ -116,6 +117,33 @@
         }
         $total_qty = array_sum($manage_sub_category_qty);
         return $total_qty;
+    }
+
+    function manageStock($voucher_type, $purchase_entry_id, $size, $qty){
+
+        $data = ManageStock::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$size])->first();
+
+        if ($data == null) {
+            $model = new ManageStock;
+            $model->purchase_entry_id = $purchase_entry_id;
+            $model->size = $size;
+            $model->total_qty = $qty;
+
+            $model->save();
+            
+        }else{
+            if ($voucher_type == MyApp::PURCHASE_ENTRY) {
+                
+                $manageStock = ManageStock::find($data->id);
+                $total_qty = ($data->total_qty + $qty);
+                $manageStock->total_qty = $total_qty;
+                $manageStock->save();
+            }
+
+        }
+        
+        return 'ok';
+
     }
 
 
