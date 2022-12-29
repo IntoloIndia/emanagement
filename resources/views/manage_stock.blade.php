@@ -265,7 +265,7 @@
             var category_id = $('#filter_category_id').val();
             var sub_category_id = $('#sub_category_id').val();
             var style_no_id = $('#style_no_id').val();
-
+            
             $.ajax({
                 type: "get",
                 dataType: "json",

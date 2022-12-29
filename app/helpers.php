@@ -119,26 +119,30 @@
         return $total_qty;
     }
 
-    function manageStock($voucher_type, $purchase_entry_id, $size, $qty){
+    function manageStock($stock_type, $purchase_entry_id, $size, $qty){
 
         $data = ManageStock::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$size])->first();
 
-        if ($data == null) {
+        if ($data != null) {
+
+            $manageStock = ManageStock::find($data->id);
+            if ($stock_type == MyApp::PLUS_MANAGE_STOCK) {
+                $total_qty = ($data->total_qty + $qty);
+            }elseif ($stock_type == MyApp::MINUS_MANAGE_STOCK) {
+                $total_qty = ($data->total_qty - $qty);
+            }
+            
+            $manageStock->total_qty = $total_qty;
+            $manageStock->save();
+            
+        }else{
+            
             $model = new ManageStock;
             $model->purchase_entry_id = $purchase_entry_id;
             $model->size = $size;
             $model->total_qty = $qty;
 
             $model->save();
-            
-        }else{
-            if ($voucher_type == MyApp::PURCHASE_ENTRY) {
-                
-                $manageStock = ManageStock::find($data->id);
-                $total_qty = ($data->total_qty + $qty);
-                $manageStock->total_qty = $total_qty;
-                $manageStock->save();
-            }
 
         }
         
