@@ -77,7 +77,7 @@
                         <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label" >Total Points</label>
+                        <label class="form-label">Total Points</label>
                         <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
                     </div>
                 </div>
@@ -270,47 +270,44 @@
                     </div>
                 </div>
             <div class="row">
-                {{-- <div class="row"> --}}
+               
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
                         </div>
                     </div>
                         <div class="col-md-2">
-                            <input type="text" name="online_payment" id="online_payment" class="form-control form-control-sm hide" placeholder="amount">
+                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
-                {{-- </div> --}}
-                {{-- <div class="row"> --}}
+              
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="cash_payment" id="cash_payment" class="form-control form-control-sm hide" placeholder="amount">
+                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
-                {{-- </div> --}}
-                {{-- <div class="row"> --}}
+               
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="card_payment" id="card_payment" class="form-control form-control-sm hide" placeholder="amount">
+                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide" placeholder="amount">
                     </div>
-                {{-- </div> --}}
-                {{-- <div class="row"> --}}
+               
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
                         </div>
                     </div>
                     <div class="col-md-2">
-                            <input type="text" name="credit_payment" id="credit_payment" class="form-control form-control-sm hide" placeholder="amount">
+                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide" placeholder="amount">
                         </div>
             </div>
-                {{-- </div> --}}
+               
                     <div class="row mt-2">
                         <div class="col-md-4"></div>
                         <div class="col-md-4"></div>
@@ -569,7 +566,7 @@
                 }
                 $('#saveOrderBtn').prop("disabled", false);
             }); 
-
+                 
 
 
             $(document).on("click",".delete_item", function(){

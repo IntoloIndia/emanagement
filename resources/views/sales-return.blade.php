@@ -121,7 +121,7 @@
                              $count =0
                          @endphp
                         <tbody>
-                         @foreach ($sales_return  as $item)
+                         @foreach ($sales_return_data  as $item)
                              <tr>
                                 <td>{{++$count}}</td>
                                 <td>{{ucwords($item->customer_name)}}</td>
@@ -129,8 +129,9 @@
                                 <td>{{date('d-m-Y',strtotime($item->create_date))}}</td>
                                 <td>{{$item->create_time}}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm">Pandding</button>
-                                    <button class="btn btn-danger btn-sm">Disabled</button>
+                                    {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                    <button class="btn btn-success btn-sm">Active</button>
+                                    <button class="btn btn-danger btn-sm">Deactive</button>
                                     {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
                                 </td>
                              </tr>
@@ -280,7 +281,7 @@
                    
                      $(document).on('click','.returnproductBtn',function(){
                         var sales_return_id = $(this).val();
-                            alert(sales_return_id);
+                            // alert(sales_return_id);
                             $('#viewAlterVoucherModal').modal('show');
                             salesReturnInvoice(sales_return_id);
                     

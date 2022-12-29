@@ -302,14 +302,20 @@ class PurchaseEntryController extends Controller
                 $mrp = $xxl_mrp;
                 $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
-            
 
             $purchase_entry_html = $this->getPurchaseEntry($supplier_id, $bill_no);
+
+            if ($result['status'] == 400) {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=>['This product is already exists if you want to change detail go to update product.'],
+                ]);
+            }
 
             return response()->json([   
                 'status'=>200,
                 'html'=>$purchase_entry_html['html'],
-                '$result'=>$result, //dummy
+                'result'=>$result, //dummy
             ]);
         }
     }
@@ -459,8 +465,17 @@ class PurchaseEntryController extends Controller
                 $purchase_entry->save();
 
                 //delete purchase entry items
-                $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
-                $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+                // $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
+                // $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+
+                $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id','size','qty']);
+                foreach ($purchase_entry_items as $key => $list) {
+                    $items = PurchaseEntryItem::find($list->id);
+                    $items->delete();
+
+                    $stock_type = MyApp::MINUS_MANAGE_STOCK;
+                    manageStock($stock_type, $purchase_entry_id, $list->size, $list->qty);
+                }
 
                 // if ($items_deleted > 0) {
 
@@ -555,6 +570,14 @@ class PurchaseEntryController extends Controller
 
     public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
 
+
+        $item_exist = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$size])->exists();
+        if ($item_exist == true) {
+            return $result = [
+                'status'=>400
+            ];
+        }
+
         $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 
         $first = rand(001,999);
@@ -601,14 +624,16 @@ class PurchaseEntryController extends Controller
             $model->barcode_img = $barcode_img;
             $model->save();
 
-            $voucher_type = MyApp::PURCHASE_ENTRY;
-            $res = manageStock($voucher_type, $purchase_entry_id, $size, $qty);
+            $stock_type = MyApp::PLUS_MANAGE_STOCK;
+            $res = manageStock($stock_type, $purchase_entry_id, $size, $qty);
         
         }
             // $voucher_type = MyApp::PURCHASE_ENTRY;
             // $res = manageStock($voucher_type, $purchase_entry_id, $size, $qty);
-
-        return 'ok';
+            return $result = [
+                'status'=>200
+            ];
+        // return 'ok';
     }
 
     public function getPurchaseEntry($supplier_id, $bill_no){

@@ -17,7 +17,11 @@ class SalesReturnController extends Controller
 {
     public function index(){
         $sales_return = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
-                                        ->get(['sales_returns.*','customers.customer_name']);
+                                        ->whereDate('sales_returns.create_date',date('Y-m-d'))
+                                        ->select(['sales_returns.*','customers.customer_name'])->get();
+        $sales_return_data = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
+                                        // ->whereDate('sales_returns.create_date',date('Y-m-d'))
+                                        ->select(['sales_returns.*','customers.customer_name'])->get();
         // $sales_return = SalesReturn::join('customer_bills','customer_bills.id','=','sales_returns.bill_id')
         //             ->where(['sales_returns.release_status' => MyApp::RELEASE_PANDDING_STATUS])
         //             ->select('customer_bills.customer_id','sales_returns.*')->get();
@@ -37,6 +41,7 @@ class SalesReturnController extends Controller
 
         return view('sales-return',[
             'sales_return' => $sales_return,
+            'sales_return_data' => $sales_return_data,
             // 'sales_return_items' => $sales_return_items,
             // 'sales_return_data' => $sales_return_data,
         ]);

@@ -132,12 +132,21 @@ class CustomerBillInvoiceController extends Controller
                 $cutomerModal->save();
             }
 
+            // $pay_online = 0;
+            // $pay_cash = 0;
+            // $pay_card = 0;
+            // $pay_credit = 0;
+
               // customer bills tables insert
-              $invoice_no = rand(000001,999999);
+            //   $invoice_no = rand(000001,999999);
               $billmodel = new CustomerBill;
-              $billmodel->invoice_no = $invoice_no;
+            //   $billmodel->invoice_no = $invoice_no;
               $billmodel->customer_id = $customer_id;   
               $billmodel->total_amount = $total_amount;
+              $billmodel->pay_online = $req->input('pay_online');
+              $billmodel->pay_cash = $req->input('pay_cash');
+              $billmodel->pay_card = $req->input('pay_card');
+              $billmodel->pay_credit = $req->input('pay_credit');
               $billmodel->earned_point = $total_new_point;
               $billmodel->redeem_point = $redeem_point;
               $billmodel->bill_date = date('Y-m-d');
@@ -359,7 +368,7 @@ class CustomerBillInvoiceController extends Controller
                         $html .="<div class='col-md-8'>";
                         $html .="<span class='float-start'><b>Amount of Tax Subject to Reverse Charge :</b></span><br>";
                         $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
-                        $html .="<span class='ml-2'>Online : 100</span><br>";
+                        $html .="<span class='ml-2'>Online :</span>".$bills->pay_online."<br>";
                         $html .="<span class='ml-2'>Cash :   100</span><br>";
                         $html .="<span class='ml-2'>Card :   100</span><br>";
                         $html .="<span class='ml-2'>Credit : 100</span><br>";

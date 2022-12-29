@@ -280,7 +280,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
-        Route::get('admin/show-product/{category_id}','showProduct');
+        Route::get('admin/show-product/{category_id}/{sub_category_id?}/{style_no_id?}','showProduct');
         Route::get('admin/get-style-no/{style_no_id}','getstyleNo');
     });
 
