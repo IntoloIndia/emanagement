@@ -69,7 +69,7 @@ class CustomerController extends Controller
                     $html .="<th>S No</th>";
                     $html .="<th>Date</th>";
                     $html .="<th>Time</th>";
-                    $html .="<th>Invoice No</th>";
+                    $html .="<th>Bill No</th>";
                     $html .="<th>Total amount</th>";
                     $html .="<th>Action</th>";
                 $html .="</tr>";
@@ -81,7 +81,7 @@ class CustomerController extends Controller
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".date('d-m-Y',strtotime($bills->bill_date))."</td>";
                             $html .="<td>".$bills->bill_time."</td>";
-                            $html .="<td>".$bills->invoice_no."</td>";
+                            $html .="<td>".$bills->id."</td>";
                             $html .="<td>".$bills->total_amount."</td>";
                             $html .="<td><i class='fas fa-file-invoice' id='showGenerateInvoiceModal' bill-id='".$bills->id."' style='font-size:24px'></i></td>";
                         $html .="</tr>";

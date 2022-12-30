@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Purchase;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
 use App\Models\Size;
@@ -33,9 +34,6 @@ class PurchaseReturnController extends Controller
                                         ->where(['purchase_returns.release_status' => MyApp::RELEASE_STATUS])
                                         ->select('suppliers.supplier_name','purchase_returns.*')->get();
                 
-
-
-
 
         return view('purchase-return',[
             'purchase_return' =>$purchase_return,
@@ -116,22 +114,41 @@ class PurchaseReturnController extends Controller
 
     public function getReturnData($barcode_code)
     {
-        $return_product = PurchaseEntryItem::join('purchase_entries','purchase_entries.purchase_id','=','purchase_entry_items.id')->
-                                        join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')->
-                                        join('purchases','purchases.id','=','purchase_entries.purchase_id')->
-                                        join('suppliers','suppliers.id','=','purchases.supplier_id')->
-                                        where(['purchase_entry_items.barcode'=>$barcode_code])
-                                       ->select('purchase_entry_items.*','purchase_entries.id',
-                                       'purchase_entries.sub_category_id','purchase_entries.color',
-                                       'sub_categories.sub_category',
-                                       'suppliers.supplier_name','suppliers.id')
-                                        ->first();
-                // dd($return_product);  
-        // print_r($product);
-        // $product = Product::find($product_code);
-                        
+       
+        // $return_product = PurchaseEntryItem::join('suppliers','suppliers.id','=','purchases.supplier_id')
+        //                 ->join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
+        //                 ->join('purchases','purchases.id','=','purchase_entries.purchase_id')
+        //                 ->where(['purchase_entry_items.barcode'=> $barcode_code])
+        //                 ->select('purchase_entry_items.*','purchase_entries.id',
+        //                 'purchase_entries.sub_category_id','purchase_entries.color',
+        //                 'sub_categories.sub_category',
+        //                 'suppliers.supplier_name','suppliers.id')
+        //                 ->first();
+
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $barcode_code])->first(['purchase_entry_id','size','qty']);
+
+        $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+                ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
+                ->first(['purchase_entries.id','purchase_entries.purchase_id','purchase_entries.sub_category_id','sub_categories.sub_category','purchase_entries.color']);
+
+        $purchase = Purchase::join('suppliers','suppliers.id','=','purchases.supplier_id')
+                ->where(['purchases.id'=> $purchase_entry->purchase_id])
+                ->first(['purchases.id','purchases.supplier_id','suppliers.supplier_name']);
+
+        $result = collect([
+            'supplier_id' => $purchase->supplier_id,
+            'supplier_name' => $purchase->supplier_name,
+            'sub_category_id' => $purchase_entry->sub_category_id,
+            'sub_category' => $purchase_entry->sub_category,
+            'size' => $purchase_entry_item->size,
+            'qty' => $purchase_entry_item->qty,
+            'color' => $purchase_entry->color,
+        ]);
+               
         return response()->json([
-            'return_product'=>$return_product
+            'status'=>200,
+            'return_product'=>$result
+           
         ]);
     }
 
@@ -177,8 +194,8 @@ class PurchaseReturnController extends Controller
                         $html .= "<th>SN</th>";
                         $html .= "<th>Item name</th>";
                         $html .= "<th>Size</th>";
-                        $html .= "<th>Color</th>";
                         $html .= "<th>Qty</th>";
+                        $html .= "<th>Color</th>";
                     $html .= "</tr>";
                 $html .= "</thead>";
                 $html .= "<tbody>";
@@ -186,10 +203,10 @@ class PurchaseReturnController extends Controller
                         $html .= "<tr>";
                             $html .= "<td></td>";
                             $html .= "<td>" . ++$key . "</td>";
-                            $html .= "<td>" . $list->sub_category."</td>";
-                            $html .= "<td>" . $list->color ."</td>";
+                            $html .= "<td>" . ucwords($list->sub_category)."</td>";
                             $html .= "<td>" . $list->size ."</td>";
                             $html .= "<td>" . $list->qty ."</td>";
+                            $html .= "<td>" . $list->color ."</td>";
                             // $html .= "<td>" . $list->item_qty ."</td>";
                         $html .= "</tr>";
                     }

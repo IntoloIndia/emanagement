@@ -14,6 +14,7 @@ use App\Models\Month;
 use App\Models\City;
 use App\Models\User;
 use App\Models\CustomerPoint;
+use App\MyApp;
 use Validator;
 
 class CustomerBillInvoiceController extends Controller
@@ -57,7 +58,6 @@ class CustomerBillInvoiceController extends Controller
 
      function saveOrder(Request $req)
     {
-        // return $req;
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required|max:191',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
@@ -103,39 +103,38 @@ class CustomerBillInvoiceController extends Controller
             }else{
                 $customer_id = $data->id;
             }
-            $new_point =0;
+            $earn_point =0;
             $total_amount = $req->input('total_amount');
-            $redeem_point = $req->input('redeem_point');
+            $redeem_points = $req->input('redeem_points');
 
-            $customer_point = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
+
+            $customer = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
                 
-            if ($customer_point) {
-                if ( $redeem_point > 0) {
-                    $new_total = ($total_amount - $redeem_point) ; 
-                    $new_point = ($new_total * 10) / 100 ;
-                    $remain_point = $customer_point->total_points - $redeem_point ;
-                    $total_new_point = $remain_point + $new_point ;
+            if ($customer) {
+                if ( $redeem_points > 0) {
+                    $new_total = ($total_amount - $redeem_points) ; 
+                    $earn_point = ($new_total * 10) / 100 ;
+
+                    $remain_point = $customer->total_points - $redeem_points ;
+                    $total_new_point = $remain_point + $earn_point ;
+                }else{
+                    $earn_point = ($total_amount * 10) / 100 ;
+
+                    $total_new_point = $customer->total_points + $earn_point ;
                 }
-             
-                else{
-                    $new_point = ($total_amount * 10) / 100 ;
-                    $total_new_point = $customer_point->total_points + $new_point ;
-                }
-                $cutomerModal = CustomerPoint::find($customer_point->id);
+
+                $cutomerModal = CustomerPoint::find($customer->id);
                 $cutomerModal->total_points = $total_new_point;
                 $cutomerModal->save();
+
             }else{
-                $total_new_point = ($total_amount * 10) / 100 ;
+
+                $earn_point = ($total_amount * 10) / 100 ;
                 $cutomerModal = new CustomerPoint;
                 $cutomerModal->customer_id = $customer_id;
-                $cutomerModal->total_points = $total_new_point;
+                $cutomerModal->total_points = $earn_point;
                 $cutomerModal->save();
             }
-
-            // $pay_online = 0;
-            // $pay_cash = 0;
-            // $pay_card = 0;
-            // $pay_credit = 0;
 
               // customer bills tables insert
             //   $invoice_no = rand(000001,999999);
@@ -147,13 +146,12 @@ class CustomerBillInvoiceController extends Controller
               $billmodel->pay_cash = $req->input('pay_cash');
               $billmodel->pay_card = $req->input('pay_card');
               $billmodel->pay_credit = $req->input('pay_credit');
-              $billmodel->earned_point = $total_new_point;
-              $billmodel->redeem_point = $redeem_point;
+              $billmodel->earned_point = $earn_point;
+              $billmodel->redeem_point = $redeem_points;
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
            
-             
                
                 $product_id = $req->input('product_id');
                 $product_code = $req->input('product_code');
@@ -188,12 +186,16 @@ class CustomerBillInvoiceController extends Controller
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();
+
+                    //get purchase_entry_id for decrease stock - manage stock
+                    $purchase_item = PurchaseEntryItem::where(['barcode'=>$product_code[$key]])->first('purchase_entry_id');
+                    $stock_type = MyApp::MINUS_MANAGE_STOCK;
+                    manageStock($stock_type, $purchase_item->purchase_entry_id, $size[$key], $qty[$key]);
                 } 
 
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
                     'status'=>200,
-                    ' total_new_point'=>$total_new_point
                 ]);
             }
         }
@@ -201,7 +203,7 @@ class CustomerBillInvoiceController extends Controller
             
 
     
-    public function getCumosterData($mobile_no)
+    public function getCustomerData($mobile_no)
     {
         $customersData = Customer::where(['mobile_no'=>$mobile_no])->first();
         if($customersData){
@@ -301,8 +303,8 @@ class CustomerBillInvoiceController extends Controller
                                     $html .="<tr>";
                                         $html .="<th>#</th>";
                                         $html .="<th>Item Name</th>";
-                                        $html .="<th>Qty</th>";
                                         $html .="<th>Size</th>";
+                                        $html .="<th>Qty</th>";
                                         // $html .="<th>Color</th>";
                                         $html .="<th>MRP</th>";
                                         // $html .="<th>Rate</th>";
@@ -320,13 +322,15 @@ class CustomerBillInvoiceController extends Controller
                                 $total_sgst = 0;
                                 $total_igst = 0;
                                 $taxfree_amount =0;
+                                $total_qty = 0;
+
                                 foreach ($bill_invoise as $key => $list) {
                                     // dd($list);
                                     $html .="<tr>";
                                         $html .="<td>".++$key."</td>";
                                         $html .="<td>".ucwords($list->sub_category)."</td>";
-                                        $html .="<td><b>".$list->qty."</b></td>";
                                         $html .="<td>".$list->size."</td>";
+                                        $html .="<td><b>".$list->qty."</b></td>";
                                         // $html .="<td>".$list->color."</td>";
                                         $html .="<td>".$list->price."</td>";
                                         // $html .="<td>".$list->price."</td>";
@@ -338,7 +342,7 @@ class CustomerBillInvoiceController extends Controller
                                         $html .="<td>".$list->amount."</td>";
                                     $html .="</tr>";
                                 // $total_amount =  $list->total_amount;
-                              
+                                $total_qty = $total_qty + $list->qty;
                                 $total_cgst =  $total_cgst + $list->cgst;
                                 $total_sgst =  $total_sgst+ $list->sgst;
                                 $total_igst =  $total_igst+ $list->igst;
@@ -349,10 +353,9 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="</tbody>";
                                 $html .="<tfoot>";
                                     $html .="<tr>";
-                                    $html .="<td colspan='2'></td>";
-                                    $html .="<td>".$key."</td>";
-                                        $html .="<td colspan='2'></td>";
-                                        $html .="<td><b>Total :</b></td>";
+                                    $html .="<td colspan='3'></td>";
+                                    $html .="<td>".$total_qty."</td>";
+                                        $html .="<td colspan='2'><b>Total :</b></td>";
                                         $html .="<td><b>".$taxfree_amount."</b></td>";
                                         $html .="<td><b>".$total_sgst."</b></td>";
                                         $html .="<td><b>".$total_cgst."</b></td>";
