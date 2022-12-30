@@ -157,7 +157,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
      Route::controller(CustomerBillInvoiceController::class)->group(function () {
         Route::get('admin/customer_bill_invoices','index');
         Route::post('admin/save-order', 'saveOrder');
-        Route::get('admin/get-customer-data/{mobile_no}', 'getCumosterData');
+        Route::get('admin/get-customer-data/{mobile_no}', 'getCustomerData');
         Route::get('admin/generate-invoice/{bill_id}','generateInvoice');
     });
 

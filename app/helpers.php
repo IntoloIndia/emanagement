@@ -83,6 +83,15 @@
         ] ;
     }
 
+    function getStockItems($purchase_entry_id)
+    {
+        $items = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get();
+        return $result = [
+            'status'=>200,
+            'items'=>$items
+        ] ;
+    }
+
     function getMemberShip($customer_id)
     {
         $total_amount = CustomerBill::where(['customer_id'=>$customer_id])->sum('total_amount');
@@ -100,11 +109,14 @@
     function ManageStockItemQty($id)
     {
         $purchase_entry = PurchaseEntry::where(['category_id'=>$id])->get('id');
+
         $manage_stock_qty = array();
         foreach ($purchase_entry as $key => $list) {
             $manage_stock_qty[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('qty');
         }
         $total_qty = array_sum($manage_stock_qty);
+
+
         return $total_qty;
     }
 
@@ -118,6 +130,32 @@
         $total_qty = array_sum($manage_sub_category_qty);
         return $total_qty;
     }
+
+    function stockItemQtyByCategory($category_id)
+    {
+        $purchase_entry = PurchaseEntry::where(['category_id'=>$category_id])->get('id');
+        $stock_qty = array();
+        foreach ($purchase_entry as $key => $list) {
+            $stock_qty[] = ManageStock::where(['purchase_entry_id'=>$list->id])->get()->sum('total_qty');
+        }
+        $total_qty = array_sum($stock_qty);
+
+        return $total_qty;
+    }
+
+    function stockItemQtyBySubCategory($sub_category_id)
+    {
+        $purchase_entry = PurchaseEntry::where(['sub_category_id'=>$sub_category_id])->get('id');
+        $stock_qty = array();
+        foreach ($purchase_entry as $key => $list) {
+            $stock_qty[] = ManageStock::where(['purchase_entry_id'=>$list->id])->get()->sum('total_qty');
+        }
+        $total_qty = array_sum($stock_qty);
+
+        return $total_qty;
+    }
+
+    
 
     function manageStock($stock_type, $purchase_entry_id, $size, $qty){
 

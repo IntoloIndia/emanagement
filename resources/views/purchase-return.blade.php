@@ -35,7 +35,7 @@
                   <div class="row">
                     <div class="col-md-12">
                         <label for="exampleFormControlInput1" class="form-label" >Barcode</label>
-                        <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode">
+                        <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode" autocomplete="off">
                     </div>
                   </div>
                   <div class="card mt-2">
@@ -44,7 +44,7 @@
                           <button class="btn-primary btn-sm float-right" id="saveReturnItem">Add</button>
                        </div> 
                         <div class="card-body">
-                            <form id="returnItemsData">
+                            <form id="returnItemsData" >
                                 @csrf
                                 <div class="return_item_err"></div>
                             <div class="row">
@@ -54,10 +54,10 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Supplier name</th>
-                                                <th scope="col">Product name</th>
-                                                <th scope="col">Qty</th>
+                                                <th scope="col">Supplier </th>
+                                                <th scope="col">Product </th>
                                                 <th scope="col">Size</th>
+                                                <th scope="col">Qty</th>
                                                 <th scope="col">Color</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -188,13 +188,12 @@
                     <input type="text" class="form-control form-control-sm" id="sub_category" readonly >
                     <input type="hidden" name="sub_category_id"  id="sub_category_id">
                 </td>
-               
-                <td>
-                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0"readonly>
-                </td>
                 <td>
                     <input type="text"  name="size" class="form-control form-control-sm size" id="size" readonly>
                     {{-- <input type="hidden" name="size_id[]" class="size_id"> --}}
+                </td>
+                <td>
+                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0"readonly>
                 </td>
                 <td>
                     <input type="text"  name="color" class="form-control form-control-sm" id="color" readonly>
@@ -295,20 +294,21 @@
 
         $(document).on('change','#barcode', function () {
                 const barcode_code = $(this).val();
-                // var object = $(this);
                 $.ajax({
                     type: "get",
                     url: "get-return-product-item/"+barcode_code,
                     dataType: "json",
                     success: function (response) {
-                        console.log(response);
-                        $('#supplier_name').val(response.return_product.supplier_name);
-                        $('#supplier_id').val(response.return_product.id);
-                        $('#size').val(response.return_product.size);
-                        $('#sub_category').val(response.return_product.sub_category);
-                        $('#sub_category_id').val(response.return_product.sub_category_id);
-                        $('#qty').val(response.return_product.qty);
-                        $('#color').val(response.return_product.color);
+                        // console.log(response);
+                        if (response.status == 200) {
+                            $('#supplier_id').val(response.return_product.supplier_id);
+                            $('#supplier_name').val(response.return_product.supplier_name);
+                            $('#sub_category').val(response.return_product.sub_category);
+                            $('#sub_category_id').val(response.return_product.sub_category_id);
+                            $('#size').val(response.return_product.size);
+                            $('#qty').val(response.return_product.qty);
+                            $('#color').val(response.return_product.color);
+                        }
                        
                     }
                 });

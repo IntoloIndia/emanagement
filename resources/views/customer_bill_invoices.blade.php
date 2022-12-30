@@ -38,7 +38,7 @@
                 <b>Billing</b>
             </div>
         <div class="card-body">
-            <form id="orderForm">
+            <form id="orderForm" autocomplete="off">
                     @csrf
                 <div class="order_err"></div>
                 <div class="row">
@@ -66,7 +66,7 @@
                                 <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
                                     <option selected>Select...</option>
                                     @foreach ($months as $item)
-                                        <option value="{{$item->id}}">{{$item->month}}</option>
+                                        <option value="{{$item->id}}">{{ucwords($item->month)}}</option>
                                     @endforeach
                                   </select>
                             </div>
@@ -277,7 +277,7 @@
                         </div>
                     </div>
                         <div class="col-md-2">
-                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" placeholder="amount">
+                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
                         </div>
               
                     <div class="col-md-1">
@@ -286,7 +286,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" placeholder="amount">
+                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
                     </div>
                
                     <div class="col-md-1">
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide" placeholder="amount">
+                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
                     </div>
                
                     <div class="col-md-1">
@@ -304,7 +304,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide" placeholder="amount">
+                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
                         </div>
             </div>
                
