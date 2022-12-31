@@ -38,7 +38,7 @@
                 <b>Billing</b>
             </div>
         <div class="card-body">
-            <form id="orderForm" autocomplete="off">
+            <form id="orderForm">
                     @csrf
                 <div class="order_err"></div>
                 <div class="row">
@@ -66,7 +66,7 @@
                                 <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
                                     <option selected>Select...</option>
                                     @foreach ($months as $item)
-                                        <option value="{{$item->id}}">{{ucwords($item->month)}}</option>
+                                        <option value="{{$item->id}}">{{$item->month}}</option>
                                     @endforeach
                                   </select>
                             </div>
@@ -224,28 +224,28 @@
                                 <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
                             </div>
                         </div>
-                        {{-- <div class="row text-end">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6 ">
-                                <b>LESS DISCOUNT : </b>
-                                <b>SGST AMOUNT :</b><br/>
-                                <b>CGST AMOUNT :</b><br/>
-                                <b>IGST AMOUNT :</b><br/>
-                                <b>OTHER ADJ  :</b><br/>
-                               
-                                <b>G.TOTAL  :</b><br/>
-                            </div>
-                            <div class="col-md-2 text-center">
-                                <span id="item_gross_amount"></span><br/>
-                                <span id="item_less_amount"></span><br/>
-                                <span id="item_add_sgst" ></span><br/>
-                                <span id="item_add_cgst" ></span><br/>
-                                <span id="item_add_igst" ></span><br/>
-                                <span id="item_other_adj"></span><br/>
+                            {{-- <div class="row text-end">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6 ">
+                                    <b>LESS DISCOUNT : </b>
+                                    <b>SGST AMOUNT :</b><br/>
+                                    <b>CGST AMOUNT :</b><br/>
+                                    <b>IGST AMOUNT :</b><br/>
+                                    <b>OTHER ADJ  :</b><br/>
                                 
-                                <span id="item_total_amount"></span><br/>
-                            </div>
-                        </div> --}}
+                                    <b>G.TOTAL  :</b><br/>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <span id="item_gross_amount"></span><br/>
+                                    <span id="item_less_amount"></span><br/>
+                                    <span id="item_add_sgst" ></span><br/>
+                                    <span id="item_add_cgst" ></span><br/>
+                                    <span id="item_add_igst" ></span><br/>
+                                    <span id="item_other_adj"></span><br/>
+                                    
+                                    <span id="item_total_amount"></span><br/>
+                                </div>
+                            </div> --}}
                         <div class="row mt-1 hide" id="given_return_amount" >
                             <div class="col-md-4"></div>
                             <div class="col-md-4"></div>
@@ -277,7 +277,7 @@
                         </div>
                     </div>
                         <div class="col-md-2">
-                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
+                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
                         </div>
               
                     <div class="col-md-1">
@@ -286,7 +286,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
+                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
                     </div>
                
                     <div class="col-md-1">
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
+                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
                     </div>
                
                     <div class="col-md-1">
@@ -304,7 +304,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide" value="0" placeholder="Amount">
+                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
                         </div>
             </div>
                
@@ -341,7 +341,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="col-md-12 table-responsive p-0" style="height: 300px;">
+                <div class="col-md-12 table-responsive p-0" style="height: 550px;">
                 <table class="table table-head-fixed">
                     <thead>
                         <tr>
@@ -425,14 +425,14 @@
 
                     {{-- <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="alteration_voucher" value="1" id="alteration_voucher">
-                      <label class="form-check-label" for="flexCheckDefault"> 
+                           <label class="form-check-label" for="flexCheckDefault"> 
                           Default checkbox
                         </label> 
                       </div>
                     </td> --}}
                     {{-- </td> --}}
             <td style="width: 200px;">
-                <select name="employee_id" id="employee_id" class="form-select" >
+                <select name="employee_id[]" id="employee_id" class="form-select" >
                     <option selected disabled>Emp</option>
                     @foreach($users as $item)
                         <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
@@ -680,6 +680,7 @@
             });
 
             $(document).on('click','#printBtn', function () {
+
                 printInvoice();
             });
             $(document).on('click','#reload_invoice_print', function () {
@@ -1038,18 +1039,27 @@
         }
 
 
-        function printInvoice(){
-            //var order_id = $('#printBtn').attr('order-id'); 
-            const section = $("section");
-            const modalBody = $("#invoiceModalPrint").detach();
+        // function printInvoice(){
+        //     //var order_id = $('#printBtn').attr('order-id'); 
+        //     const section = $("section");
+        //     const modalBody = $("#invoiceModalPrint").detach();
 
-            section.empty();
-            section.append(modalBody);
-            window.print();
+        //     section.empty();
+        //     section.append(modalBody);
+        //     window.print();
             
-            window.location.reload();
+        //     window.location.reload();
                
-        }
+        // }
+
+        function printInvoice(){
+        var backup = document.body.innerHTML;
+        var div_content = document.getElementById("invoiceModalPrint").innerHTML;
+        document.body.innerHTML = div_content;
+        window.print();
+        document.body.innerHTML = backup;
+        window.location.reload();
+    }
 
         // function generateInvoice(bill_id) {
         //  $.ajax({

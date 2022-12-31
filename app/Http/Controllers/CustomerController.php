@@ -34,9 +34,6 @@ class CustomerController extends Controller
         $customer_bills = CustomerBill::where(['customer_id'=>$customer_id])
             ->orderBy('bill_date','DESC')
             ->orderBy('bill_time','DESC')->get();
-       
-           
-
 
         $html = "";
         $html .= "<div class='row'>";
@@ -59,7 +56,7 @@ class CustomerController extends Controller
         $html .= "<div class='row'>";
             $html .= "<div class='col-md-4'><b>Point : </b>$customer_detail->total_points<br><b>DOB : </b>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."<br><b>Anniversary : </b>".date('d-m-Y',strtotime($customer_detail->anniversary_date))."</div>";
             // $html .= "<div class='col-md-4'><b>Point : </b><br><b>DOB : </b>".$customer_detail->birthday_date. " " .date('M',strtotime($customer_detail->month_id))."<br><b>Anniversary : </b>$customer_detail->anniversary_date</div>";
-            $html .= "<div class='col-md-8 text-end'><b>City : </b>".ucwords($customer_detail->city). "</br><b>GSTNo :</b>  ".$customer_detail->gst_no. "</div></br>";
+            $html .= "<div class='col-md-8 text-end'><b>City : </b>".ucwords($customer_detail->city). "</br><b>GSTNO :</b>  ".$customer_detail->gst_no. "</div></br>";
         $html .= "</div>";
         $html .= "<hr>";
         $html .="<div class='table-responsive p-0' style='height:300px;'>";

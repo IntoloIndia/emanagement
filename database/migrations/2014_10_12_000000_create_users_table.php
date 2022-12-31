@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->text('qrcode')->nullable();
             $table->integer('percentage')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

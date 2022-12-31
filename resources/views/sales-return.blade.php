@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-3">
                             <label for="exampleFormControlInput1" class="form-label">Mobile no</label>
-                            <input type="text" name="mobile_no" id="mobile_no" class="form-control form-control-sm" placeholder="mobile_no" readonly>
+                            <input type="text" name="mobile_no" id="mobile_no" class="form-control form-control-sm" placeholder="mobile no" readonly>
                         </div>
                         <div class="col-md-5">
                             <label for="exampleFormControlInput1" class="form-label">Customer name</label>
@@ -129,7 +129,7 @@
                                 <td>{{date('d-m-Y',strtotime($item->create_date))}}</td>
                                 <td>{{$item->create_time}}</td>
                                 <td>
-                                    {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                    {{-- <button type="button" class="btn btn   -success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
                                     <button class="btn btn-success btn-sm">Active</button>
                                     <button class="btn btn-danger btn-sm">Deactive</button>
                                     {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
@@ -455,6 +455,9 @@
         document.body.innerHTML = backup;
         window.location.reload();
     }
+
+
+    
 
     </script>
 @endsection

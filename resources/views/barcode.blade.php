@@ -16,10 +16,10 @@
      <div class="card">
         <div class="card-header">
            <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <b>Barcodes</b>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                     <option selected disabled >Category</option>
                     @foreach ($categories as $key => $list)
@@ -27,16 +27,16 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
-                <select id="sub_category_id" class="form-select form-select-sm">
+            <div class="col-md-2">
+                <select id="sub_category_id" class="form-select form-select-sm select_chosen">
                     <option selected disabled >Choose...</option>
                     {{-- @foreach ($sub_categories as $items)
                         <option value="{{$items->id}}">{{$items->sub_category}}</option>
                     @endforeach --}}
                 </select>
             </div>
-            <div class="col-md-3">
-                <select id="style_no_id" class="form-select form-select-sm" >
+            <div class="col-md-2">
+                <select id="style_no_id" class="form-select form-select-sm select_chosen">
                     <option selected disabled >Style No</option>
                     @foreach ($get_style_no as $key => $list)
                         <option value="{{$list->id}}" >{{$list->style_no}}</option>
@@ -168,6 +168,11 @@
 
 @section('script')
 <script>
+
+    $(document).ready(function () {
+        $(".select_chosen").chosen({ width: '100%' });
+        
+    });
     function myFun(params) {
         // alert("call");
         var backup = document.body.innerHTML;

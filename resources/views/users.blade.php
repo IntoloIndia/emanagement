@@ -126,7 +126,7 @@
     </div> --}}
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="card">
 
                 <div class="card-header">
@@ -161,7 +161,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{$count = "";}}
+                            {{$count = "",$status=0;}}
                             @foreach ($Users as $list)
                             
                                 <tr>
@@ -169,14 +169,20 @@
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
                                     <td>{{ucwords($list->role)}}</td>
                                     <td>{{ucwords($list->department)}}</td>
-                                    <td>{{ucwords($list->name)}}</td>
+                                    <td  data-bs-toggle="tooltip" data-bs-placement="top" title="100" style="cursor: pointer">{{ucwords($list->name)}}</td>
                                     <td>{{ucwords($list->code)}}</td>
                                     <td>{{$list->email}}</td>
                                     <td>{{$list->percentage}}</td>
                                     <td><img src="{{$list->qrcode}}" width="40px" height="40px"><br/></td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm deleteUserBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                                      @if ($list->status==MyApp::ACTIVE)
+                                      <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$list->id}}">Active</button>  
+                                      @endif
+                                      @if ($list->status==MyApp::DEACTIVE)
+                                      <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$list->id}}">Deactive</button>
+                                      @endif
+                                      
                                     </td>
                                 </tr>
                             @endforeach
@@ -200,7 +206,7 @@
                 </div>
                 <div class="modal-body">
                     <center>
-                        <h5>Are you sure?</h5>
+                        <h5>Are you sure ?</h5>
                             <button type="button" id="yesDeleteUserBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
                             <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
                         <hr>
@@ -247,6 +253,7 @@
             $(document).on('click','.deleteUserBtn', function (e) {
                 e.preventDefault();
                 const user_id = $(this).val();
+                // alert(user_id);
                 $('#deleteUserModal').modal('show');
                 $('#yesDeleteUserBtn').val(user_id);
             });
@@ -254,7 +261,7 @@
             $(document).on('click','#yesDeleteUserBtn', function (e) {
                 e.preventDefault();
                 const user_id = $(this).val();
-                deleteUser(user_id);
+                updateStatus(user_id);
             });
 
 
@@ -355,18 +362,34 @@
             });
         }
 
-        function deleteUser(user_id){
+        // function deleteUser(user_id){
+        //     $.ajax({
+        //         type: "get",
+        //         url: "delete-user/"+user_id,
+        //         dataType: "json",
+        //         success: function (response) {
+        //             if(response.status == 200){
+        //                 window.location.reload();
+        //             }
+        //         }
+        //     });
+        // }
+
+        function updateStatus(user_id){
             $.ajax({
                 type: "get",
-                url: "delete-user/"+user_id,
+                url: "status-update/"+user_id,
                 dataType: "json",
                 success: function (response) {
+                    console.log(response);
                     if(response.status == 200){
                         window.location.reload();
                     }
                 }
             });
         }
+
+
 
   </script>
 
