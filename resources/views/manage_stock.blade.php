@@ -12,7 +12,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <b>Category </b>
@@ -21,9 +21,10 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th scope="col">SN</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Qty</th>
+                                <th >SN</th>
+                                <th >Category</th>
+                                <th >Qty</th>
+                                <th >Value</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,6 +38,7 @@
                                         <th scope="row">{{++$key}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
                                         <td>{{$qty}}</td>
+                                        <td>Value</td>
                                     </tr>
                             @endforeach
                             
@@ -63,9 +65,10 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th >Sno</th>
+                                <th >SN</th>
                                 <th >Sub Categoty</th>
                                 <th >Qty</th>
+                                <th >Value</th>
                             </tr>
                         </thead>
                         <tbody >
@@ -77,6 +80,7 @@
                                     <th scope="row">{{++$key}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
                                     <td>{{$qty}}</td>
+                                    <td>Value</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -86,21 +90,21 @@
 
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-2"><b>Products</b></div>
+                        <div class="col-md-3"><b>Products</b></div>
                      
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                                 <option selected disabled >Category</option>
                                 @foreach ($categories as $key => $list)
-                                    <option value="{{$list->id}}" >{{$list->category}}</option>
+                                    <option value="{{$list->id}}" >{{ucwords($list->category)}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <select id="sub_category_id" class="form-select form-select-sm select_chosen">
                                 <option selected disabled >Choose...</option>
                                 {{-- @foreach ($sub_categories as $items)
@@ -108,18 +112,28 @@
                                 @endforeach --}}
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <select id="brand_id" class="form-select form-select-sm select_chosen" >
+                                <option selected value="0">Brand</option>
+                                @foreach ($brands as $key => $list)
+                                    <option value="{{$list->id}}">{{ucwords($list->brand_name)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
                             {{-- <div id="show_style_no"></div> --}}
                             <select id="style_no_id" class="form-select form-select-sm select_chosen" >
-                                <option selected value="0" >Select....</option>
+                                <option selected value="0" >Style No</option>
                                 @foreach ($get_style_no as $key => $list)
                                     <option value="{{$list->id}}" >{{$list->style_no}}</option>
                                 @endforeach
                             </select>
                         </div>
                         
-                        <div class="col-md-1" >
-                            <button type="button" id="reset_products" class="btn btn-dark btn-sm mt-1">Reset</button>
+                        <div class="col-md-1 text-end position-relative" >
+                            <i class="fas fa-redo cursor-pointer position-absolute top-50 start-50 translate-middle" id="reset_products"></i>
+                            {{-- <button type="button" id="reset_products" class="btn btn-dark btn-sm mt-1 p-1"> <i class="fas fa-redo"></i> </button> --}}
                         </div>
                     </div>
                 </div>

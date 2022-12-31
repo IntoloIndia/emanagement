@@ -182,6 +182,22 @@ class SalesReturnController extends Controller
     //         'status'=>200
     //     ]);
     // }
+
+    // function updateStatus($user_id)
+    // {
+    //     $status_data =User::find($user_id);
+    //     if($status_data->status){
+    //         $status_data->status = MyApp::DEACTIVE;
+    //     }else{
+    //         $status_data->status = MyApp::ACTIVE;
+    //     }
+    //     $status_data->save();
+        
+    //     return response()->json([
+    //         'status'=>200,
+    //         // 'active'=>$status_data->status
+    //     ]);
+    // }
     
     public function salesReturnInvoice($sales_return_id)
     {

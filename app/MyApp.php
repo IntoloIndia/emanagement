@@ -9,6 +9,7 @@ class MyApp {
     const OTHER = 3;
 
     const ACTIVE = 1;
+    const DEACTIVE = 0;
     const INACTIVE = 0;
 
     const PENDING = 0;

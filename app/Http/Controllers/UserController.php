@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Department;
 use Validator;
+use App\MyApp;
 use DNS2D;
 use QrCode;
 
@@ -18,6 +19,7 @@ class UserController extends Controller
         $department = Department::all();                     
         $Users = User::join('roles','roles.id','=','users.role_id')
                        ->join('departments','departments.id','=','users.department_id')
+                    //    ->where(['users.status' => MyApp::ACTIVE])
                        ->get(['users.*','roles.role','departments.department']);
         // $Users = User::all();
         return view('users',[
@@ -54,6 +56,7 @@ class UserController extends Controller
             $model->email = $req->input('email');
             $model->password = Hash::make($req->input('password')); 
             $model->percentage = $req->input('percentage');
+            $model->status = $req->input('status');
             
             if($model->save()){
 
@@ -118,14 +121,14 @@ class UserController extends Controller
         }
     }
 
-    public function deleteUser($user_id)
-    {
-        $delete_user = User::find($user_id);
-        $delete_user->delete();
-        return response()->json([
-            'status'=>200
-        ]);
-    }
+    // public function deleteUser($user_id)
+    // {
+    //     $delete_user = User::find($user_id);
+    //     $delete_user->delete();
+    //     return response()->json([
+    //         'status'=>200
+    //     ]);
+    // }
 
     public function image()
 
@@ -182,5 +185,31 @@ class UserController extends Controller
         }
     }
 
+    // function updateStatus($user_id)
+    // {
+    //     $status_data =User::find($user_id);
+    //     $status_data->status = MyApp::ACTIVE;
+    //     $status_data->save();
+        
+    //     return response()->json([
+    //         'status'=>200
+    //     ]);
+    // }
+
+    function updateStatus($user_id)
+    {
+        $status_data =User::find($user_id);
+        if($status_data->status){
+            $status_data->status = MyApp::DEACTIVE;
+        }else{
+            $status_data->status = MyApp::ACTIVE;
+        }
+        $status_data->save();
+        
+        return response()->json([
+            'status'=>200,
+            'active'=>$status_data->status
+        ]);
+    }
     
 }

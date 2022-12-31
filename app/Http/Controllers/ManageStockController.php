@@ -9,6 +9,7 @@ use App\Models\SubCategory;
 use App\Models\Purchase;
 use App\Models\PurchaseEntry;
 use App\Models\StyleNo;
+use App\Models\Brand;
 use App\Models\ManageStock;
 use App\MyApp;
 
@@ -20,6 +21,7 @@ class ManageStockController extends Controller
         $categories = Category::all();
         $sub_categories = SubCategory::all();
         $get_style_no = StyleNo::all();
+        $brands = Brand::all();
         // $reserve = PurchaseEntry::all()->groupBy('category_id')->count();
 
         // foreach ($categories as $key => $list) {
@@ -52,6 +54,7 @@ class ManageStockController extends Controller
             'categories'=>$categories,
             'sub_categories'=>$sub_categories,
             'get_style_no'=>$get_style_no,
+            'brands'=>$brands,
         ]);
     }   
 

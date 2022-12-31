@@ -23,7 +23,7 @@ class CreateCustomersTable extends Migration
             $table->integer('state_type')->nullable();
             $table->string('gst_no')->default(0);
             $table->integer('city_id')->default(0);
-            $table->integer('employee_id')->default(0);
+            // $table->integer('employee_id')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->timestamps();

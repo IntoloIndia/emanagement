@@ -20,7 +20,7 @@ class CreateSalesReturnsTable extends Migration
             $table->date('create_date')->nullable();
             $table->string('create_time')->nullable();
             $table->date('release_date')->nullable();
-            $table->string('release_date')->nullable();
+            $table->string('release_time')->nullable();
             $table->integer('release_status')->default(0);
             $table->timestamps();
         });

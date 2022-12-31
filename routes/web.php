@@ -186,7 +186,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-user', 'saveUser');
         Route::get('admin/edit-user/{user_id}', 'editUser');
         Route::post('admin/update-user/{user_id}', 'updateUser');
-        Route::get('admin/delete-user/{user_id}', 'deleteUser');
+        // Route::get('admin/delete-user/{user_id}', 'deleteUser');
+        Route::get('admin/status-update/{user_id}', 'updateStatus');
     });
     
     Route::controller(CategoryController::class)->group(function () {

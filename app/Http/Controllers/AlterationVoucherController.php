@@ -175,7 +175,8 @@ class AlterationVoucherController extends Controller
                 }
                 // if($model->save()){
                     return response()->json([   
-                        'status'=>200
+                        'status'=>200,
+                        'qty'=>$req->item_qty[$i]
                         
                     ]);
                 // }

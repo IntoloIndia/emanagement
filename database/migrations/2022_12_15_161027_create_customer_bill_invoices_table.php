@@ -28,6 +28,7 @@ class CreateCustomerBillInvoicesTable extends Migration
             $table->float('cgst')->default(0);
             $table->float('igst')->nullable(0);
             $table->integer('alteration_voucher')->nullable(0);
+            $table->integer('employee_id')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->integer('status')->default(0);
