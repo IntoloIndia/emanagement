@@ -17,37 +17,57 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="categoryForm">
-              @csrf
-              <div class="modal-body">
-                  <div id="category_err"></div>
-                  <div class="row mt-1">
-                      <div class="col-md-4">
-                          <label for="categoryName" class="form-label">Category</label>
-                      </div>
-                      <div class="col-md-8">
-                          <input type="text" name="category" id="category" placeholder="Category name" class="form-control form-control-sm">
-                      </div>
-                  </div>
-                  <div class="row mt-1">
-                    <div class="col-md-4">
-                        <label for="category_img" class="form-label">image</label>
+            <form id="categoryForm">
+                @csrf
+                <div class="modal-body">
+                    <div id="category_err"></div>
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <label for="categoryName" class="form-label">Category</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="category" id="category" placeholder="Category name" class="form-control form-control-sm">
+                        </div>
                     </div>
-                    <div class="col-md-8">
-                        <input type="file" name="category_img" id="category_img" class="form-control form-control-sm">
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <label for="category_img" class="form-label">image</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="file" name="category_img" id="category_img" class="form-control form-control-sm">
+                        </div>
                     </div>
-                    <div class="row mt-1"></div>
-                      <div class="col-md-4"></div>
-                    <div class="col-md-8">
-                  </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="size_type" id="normal_size" value="{{MyApp::NORMAL_SIZE}}" checked> 
+                            <label class="form-check-label">Normal Size</label>
+                          </div>
+                        </div>
+    
+                        <div class="col-md-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="size_type" id="kids_size" value="{{MyApp::KIDS_SIZE}}"> 
+                            <label class="form-check-label">Kids Size</label>
+                          </div>
+                        </div>
+    
+                        <div class="col-md-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="size_type" id="without_size" value="{{MyApp::WITHOUT_SIZE}}"> 
+                            <label class="form-check-label">Without Size</label>
+                          </div>
+                        </div>
+                    </div>
+
                 </div>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                  <button type="button" id="saveCategoryBtn" class="btn btn-primary btn-sm ">Save </button>
-                  <button type="button" id="updateCategoryBtn" class="btn btn-primary btn-sm hide">Update </button>
-              </div>
-          </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="saveCategoryBtn" class="btn btn-primary btn-sm ">Save </button>
+                    <button type="button" id="updateCategoryBtn" class="btn btn-primary btn-sm hide">Update </button>
+                </div>
+            </form>
         </div>
     </div>
     </div>
@@ -272,10 +292,7 @@
                                 <label for="cityName" class="form-label">City</label>
                                 <input type="text" name="city" id="city" class="form-control form-control-sm" placeholder="City name">
                             </div>
-                            <div class="col-md-4">
-                                <label for="cityShort" class="form-label">Short</label>
-                                <input type="text" name="city_short" id="city_short" class="form-control form-control-sm" placeholder="JBP">
-                            </div>
+                          
                         </div>
 
                         <input type="hidden" name="city_id" id="city_id" value="">
@@ -294,7 +311,7 @@
 
 
 <div class="modal fade" id="cityModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-sm ">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">City</h5>
@@ -331,13 +348,11 @@
                         </div>
 
                         <div class="row mb-2">
-                            <div class="col-md-8">
+                            <div class="col-md-2">
                                 <label for="cityName" class="form-label">City</label>
-                                <input type="text" name="city" id="city" class="form-control form-control-sm" placeholder="City name">
                             </div>
-                            <div class="col-md-4">
-                                <label for="cityShort" class="form-label">Short</label>
-                                <input type="text" name="city_short" id="city_short" class="form-control form-control-sm" placeholder="JBP">
+                            <div class="col-md-10">
+                                <input type="text" name="city" id="city" class="form-control form-control-sm" placeholder="City name">
                             </div>
                         </div>
 

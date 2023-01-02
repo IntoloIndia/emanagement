@@ -23,6 +23,15 @@
         var xxl_qty = parseFloat($('#xxl_qty').val());
         var xxl_price = parseFloat($('#xxl_price').val());
 
+        var three_xl_qty = parseFloat($('#three_xl_qty').val());
+        var three_xl_price = parseFloat($('#three_xl_price').val());
+
+        var four_xl_qty = parseFloat($('#four_xl_qty').val());
+        var four_xl_price = parseFloat($('#four_xl_price').val());
+
+        var five_xl_qty = parseFloat($('#five_xl_qty').val());
+        var five_xl_price = parseFloat($('#five_xl_price').val());
+
         if(xs_qty == "" || isNaN(xs_qty))
         {xs_qty = 0;}
         if(s_qty == "" || isNaN(s_qty))
@@ -35,6 +44,12 @@
         {xl_qty = 0;}
         if(xxl_qty == "" || isNaN(xxl_qty))
         {xxl_qty = 0;}
+        if(three_xl_qty == "" || isNaN(three_xl_qty))
+        {three_xl_qty = 0;}
+        if(four_xl_qty == "" || isNaN(four_xl_qty))
+        {four_xl_qty = 0;}
+        if(five_xl_qty == "" || isNaN(five_xl_qty))
+        {five_xl_qty = 0;}
 
         if(xs_price == "" || isNaN(xs_price))
         {xs_price = 0;}
@@ -48,11 +63,17 @@
         {xl_price = 0;}
         if(xxl_price == "" || isNaN(xxl_price))
         {xxl_price = 0;}
+        if(three_xl_price == "" || isNaN(three_xl_price))
+        {three_xl_price = 0;}
+        if(four_xl_price == "" || isNaN(four_xl_price))
+        {four_xl_price = 0;}
+        if(five_xl_price == "" || isNaN(five_xl_price))
+        {five_xl_price = 0;}
 
-        total_qty = xs_qty + s_qty + m_qty + l_qty + xl_qty + xxl_qty;
+        total_qty = xs_qty + s_qty + m_qty + l_qty + xl_qty + xxl_qty + three_xl_qty + four_xl_qty + five_xl_qty;
         $('#total_qty').val(total_qty);
 
-        total_price = parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) ;
+        total_price = parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) + parseFloat(three_xl_qty * three_xl_price) + parseFloat(four_xl_qty * four_xl_price) + parseFloat(five_xl_qty * five_xl_price);
         $('#total_price').val(total_price);
 
         var total_amount = 0;
@@ -63,6 +84,9 @@
         var l_taxable = 0;
         var xl_taxable = 0;
         var xxl_taxable = 0;
+        var three_xl_taxable = 0;
+        var four_xl_taxable = 0;
+        var five_xl_taxable = 0;
 
         var total_sgst = 0;
         var total_cgst = 0;
@@ -91,6 +115,18 @@
         var xxl_sgst = 0;
         var xxl_cgst = 0;
         var xxl_igst = 0;
+
+        var three_xl_sgst = 0;
+        var three_xl_cgst = 0;
+        var three_xl_igst = 0;
+
+        var four_xl_sgst = 0;
+        var four_xl_cgst = 0;
+        var four_xl_igst = 0;
+
+        var five_xl_sgst = 0;
+        var five_xl_cgst = 0;
+        var five_xl_igst = 0;
 
         if (xs_qty > 0) {
             var xs_taxable = calculateTaxable(xs_qty, xs_price);
@@ -148,12 +184,42 @@
             }
         }
 
-        total_taxable = xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable;
+        if (three_xl_qty > 0) {
+            var three_xl_taxable = calculateTaxable(three_xl_qty, three_xl_price);
+            if (three_xl_taxable > 0) {
+                var three_xl_gst = calculateGst(three_xl_taxable);
+                three_xl_sgst = three_xl_gst.sgst;
+                three_xl_cgst = three_xl_gst.cgst;
+                three_xl_igst = three_xl_gst.igst;
+            }
+        }
+
+        if (four_xl_qty > 0) {
+            var four_xl_taxable = calculateTaxable(four_xl_qty, four_xl_price);
+            if (four_xl_taxable > 0) {
+                var four_xl_gst = calculateGst(four_xl_taxable);
+                four_xl_sgst = four_xl_gst.sgst;
+                four_xl_cgst = four_xl_gst.cgst;
+                four_xl_igst = four_xl_gst.igst;
+            }
+        }
+
+        if (five_xl_qty > 0) {
+            var five_xl_taxable = calculateTaxable(five_xl_qty, five_xl_price);
+            if (five_xl_taxable > 0) {
+                var five_xl_gst = calculateGst(five_xl_taxable);
+                five_xl_sgst = five_xl_gst.sgst;
+                five_xl_cgst = five_xl_gst.cgst;
+                five_xl_igst = five_xl_gst.igst;
+            }
+        }
+
+        total_taxable = xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable + three_xl_taxable + four_xl_taxable + five_xl_taxable;
         $('#taxable').val(total_taxable.toFixed(2));
 
-        total_sgst = parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst);
-        total_cgst = parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst);
-        total_igst = parseFloat(xs_igst) + parseFloat(s_igst) + parseFloat(m_igst) + parseFloat(l_igst) + parseFloat(xl_igst) + parseFloat(xxl_igst);
+        total_sgst = parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst) + parseFloat(three_xl_sgst) + parseFloat(four_xl_sgst) + parseFloat(five_xl_sgst);
+        total_cgst = parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst) + parseFloat(three_xl_cgst) + parseFloat(four_xl_cgst) + parseFloat(five_xl_cgst);
+        total_igst = parseFloat(xs_igst) + parseFloat(s_igst) + parseFloat(m_igst) + parseFloat(l_igst) + parseFloat(xl_igst) + parseFloat(xxl_igst) + parseFloat(three_xl_igst) + parseFloat(four_xl_igst) + parseFloat(five_xl_igst);
 
         
         $('#total_sgst').val(total_sgst.toFixed(2));
@@ -577,9 +643,20 @@
                     }
                     var discount = 0;
                     $.each(response.purchase_entry_items, function (key, list) {
-                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_qty').val(list.qty);
-                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_price').val(list.price);
-                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+list.size+'_mrp').val(list.mrp);
+                        var size = "";
+                        if (list.size == '3xl') {
+                            size = 'three_xl';
+                        }else if(list.size == '4xl'){
+                            size = 'four_xl';
+                        }else if(list.size == '5xl'){
+                            size = 'five_xl';
+                        }else{
+                            size = list.size;
+                        }
+
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+size+'_qty').val(list.qty);
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+size+'_price').val(list.price);
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+size+'_mrp').val(list.mrp);
                         discount = list.discount;
                     });
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#discount').val(discount);

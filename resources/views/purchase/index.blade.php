@@ -320,6 +320,13 @@ a {
             $(document).on('change','#category_id', function (e) {
                 e.preventDefault();
                 const category_id = $(this).val();
+
+                // var supplier_id = $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_id').find("option:selected").val();
+                var size_type = $(this).find("option:selected").attr('size-type');
+
+
+                $('#show_size').append($('#normal_size_type').html());
+
                 getSubCategoryByCategory(category_id);
                 
             });
@@ -513,6 +520,7 @@ a {
 
             $(document).on('click','#addNewColorBtn', function () {
                 $('#colorModal').modal('show');
+                $('#colorForm')[0].reset();
             });
 
             $(document).on('click','#saveColorBtn', function (e) {

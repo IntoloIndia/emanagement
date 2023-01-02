@@ -208,7 +208,7 @@ class UserController extends Controller
         
         return response()->json([
             'status'=>200,
-            'active'=>$status_data->status
+            // 'active'=>$status_data->status
         ]);
     }
     

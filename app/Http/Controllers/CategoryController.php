@@ -9,7 +9,6 @@ class CategoryController extends Controller
     //
 
     public function index(){
-        // return view('category',[]);
         $allCategory = Category::all();
         return view('category',[
             'allCategory' => $allCategory
@@ -18,11 +17,9 @@ class CategoryController extends Controller
 
     function saveCategory(Request $req)
     {
-        // return view('employee');
         $validator = Validator::make($req->all(),[
             "category" => 'required|unique:categories,category,'.$req->input('category'),
-            // 'category_img' => 'required|max:191',
-            
+            'size_type' => 'required|max:191',
         ]);
 
         if($validator->fails())
@@ -34,6 +31,7 @@ class CategoryController extends Controller
         }else{
             $model = new Category;
             $model->category = $req->input('category');
+            $model->size_type = $req->input('size_type');
             // $model->category_img = $req->input('category_img');
             
             // $model->category_name = strtolower($req->input('category_name'));
@@ -61,7 +59,7 @@ class CategoryController extends Controller
         $html = "";
         $html .= "<option selected disabled value='0'>Category</option>";
         foreach ($categories as $key => $list) {
-            $html .= "<option value='".$list->id."' selected>" . ucwords($list->category)  . "</option>" ;
+            $html .= "<option value='".$list->id."' size-type='".$list->size_type."' selected>" . ucwords($list->category)  . "</option>" ;
         }
 
         return $result = [
@@ -85,10 +83,10 @@ class CategoryController extends Controller
     public function updateCategory(Request $req, $category_id)
     {
         $validator = Validator::make($req->all(),[
-            "category" => 'required|max:191',
+            "category" => 'required|unique:categories,category,' . $category_id,
+            'size_type' => 'required|max:191',
             // 'category_img' => 'required|max:191',
             // 'category' => 'required|unique:categories,category,'.$category_id,
-            // $item_name = 'required|unique:items,item_name,'.$item_id;
 
         ]);
         if($validator->fails())
@@ -103,6 +101,7 @@ class CategoryController extends Controller
             // $model->category_img = $req->input('category_img');
             
             $model->category = $req->input('category');
+            $model->size_type = $req->input('size_type');
             if ($req->hasFile('category_img')){
                 if($req->input('category') > 0)
                 {   
@@ -123,13 +122,13 @@ class CategoryController extends Controller
     }
 
 
-    public function deleteCategory($category_id)
-    {
-        $delete_category = Category::find($category_id);
-        $delete_category->delete();
-        return response()->json([
-            'status'=>200
-        ]);
-    }
+    // public function deleteCategory($category_id)
+    // {
+    //     $delete_category = Category::find($category_id);
+    //     $delete_category->delete();
+    //     return response()->json([
+    //         'status'=>200
+    //     ]);
+    // }
 
 }

@@ -24,7 +24,7 @@
                                 <th >SN</th>
                                 <th >Category</th>
                                 <th >Qty</th>
-                                <th >Value</th>
+                                <th >Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,16 +32,15 @@
                             
                             @foreach ($categories as $key => $item)
                                 @php 
-                                    $qty = stockItemQtyByCategory($item['id']);
+                                    $result = stockItemQtyByCategory($item['id']);
                                 @endphp 
                                     <tr>
                                         <th scope="row">{{++$key}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
-                                        <td>{{$qty}}</td>
-                                        <td>Value</td>
+                                        <td>{{$result['total_qty']}}</td>
+                                        <td>{{$result['total_amount']}}</td>
                                     </tr>
                             @endforeach
-                            
                         </tbody>
                     </table>
                 </div>
@@ -68,19 +67,21 @@
                                 <th >SN</th>
                                 <th >Sub Categoty</th>
                                 <th >Qty</th>
-                                <th >Value</th>
+                                <th >Amount</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($sub_categories as $key => $item)
                                 @php 
-                                    $qty = stockItemQtyBySubCategory($item['id']);
+                                    $result = stockItemQtyBySubCategory($item['id']);
+                                 
+                                    
                                 @endphp 
                                 <tr class="row_filter" category-id="{{$item['category_id']}}">
                                     <th scope="row">{{++$key}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
-                                    <td>{{$qty}}</td>
-                                    <td>Value</td>
+                                    <td>{{$result['total_qty']}}</td>
+                                    <td>{{$result['total_amount']}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -94,9 +95,10 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-3"><b>Products</b></div>
-                     
-                        <div class="col-md-2">
+                        <div class="col-md-2 "><b>Products</b></div>
+                    </div>
+                     <div class="row">
+                        <div class="col-md-2  offset-1">
                             <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                                 <option selected disabled >Category</option>
                                 @foreach ($categories as $key => $list)
@@ -122,7 +124,6 @@
                         </div>
 
                         <div class="col-md-2">
-                            {{-- <div id="show_style_no"></div> --}}
                             <select id="style_no_id" class="form-select form-select-sm select_chosen" >
                                 <option selected value="0" >Style No</option>
                                 @foreach ($get_style_no as $key => $list)
@@ -130,10 +131,17 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-2">
+                            <select id="color" data-placeholder='Select color' class="form-select form-select-sm select_chosen" >
+                                <option selected value="" disabled ></option>
+                                @foreach ($colors as $key => $list)
+                                    <option value="{{$list->id}}">{{$list->color}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         
                         <div class="col-md-1 text-end position-relative" >
                             <i class="fas fa-redo cursor-pointer position-absolute top-50 start-50 translate-middle" id="reset_products"></i>
-                            {{-- <button type="button" id="reset_products" class="btn btn-dark btn-sm mt-1 p-1"> <i class="fas fa-redo"></i> </button> --}}
                         </div>
                     </div>
                 </div>
@@ -173,7 +181,13 @@
             $(document).on('change','#sub_category_id', function (e) {
                 showProduct();
             });     
+            $(document).on('change','#brand_id', function (e) {
+                showProduct();
+            });
             $(document).on('change','#style_no_id', function (e) {
+                showProduct();
+            });
+            $(document).on('change','#color', function (e) {
                 showProduct();
             });
             $(document).on('click','#reset_products', function (e) {
@@ -186,14 +200,17 @@
         {
             var category_id = $('#filter_category_id').val();
             var sub_category_id = $('#sub_category_id').val();
+            var brand_id = $('#brand_id').val();
             var style_no_id = $('#style_no_id').val();
-            
+            var color = $('#color option:selected').text();
+          
+
             $.ajax({
                 type: "get",
                 dataType: "json",
-                url: "show-product/"+ category_id + "/" + sub_category_id + "/" + style_no_id,
+                url: "show-product/"+ category_id + "/" + sub_category_id + "/" + brand_id + "/" + style_no_id + "/" + color,
                 success: function (response) {
-                    // console.log(response);
+                    console.log(response);
                     if(response.status == 200){
                         $('#show_product').html("");
                         $('#show_product').append(response.html)
@@ -201,5 +218,7 @@
                 }
             });
         }
+
+            
     </script>
 @endsection

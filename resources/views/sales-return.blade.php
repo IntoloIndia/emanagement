@@ -3,29 +3,28 @@
 
 @section('content')
 
-{{-- delete modal start  --}}
+  {{-- delete user modal  --}}
 
-{{-- <div class="modal fade" id="releaseStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
+  <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Delete Brand </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <center>
-                    <h5> Do you want to release sale return item?</h5>
-                        <button type="button" id="yesReleaseStatusBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                    <h5>Are you sure ?</h5>
+                        <button type="button" id="yesDeleteUserBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
                         <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
                     <hr>
                 </center>
             </div>
         </div>
     </div>
-  </div> --}}
+</div>
 
-{{-- delete modal end  --}}
-
+{{-- end model  --}}
 <div class="row">
     <div class="col-md-7">
         <div class="card">
@@ -129,11 +128,22 @@
                                 <td>{{date('d-m-Y',strtotime($item->create_date))}}</td>
                                 <td>{{$item->create_time}}</td>
                                 <td>
-                                    {{-- <button type="button" class="btn btn   -success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
-                                    <button class="btn btn-success btn-sm">Active</button>
-                                    <button class="btn btn-danger btn-sm">Deactive</button>
-                                    {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                    @if ($item->status==MyApp::ACTIVE)
+                                    <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Active</button>  
+                                    @endif
+                                    @if ($item->status==MyApp::USAGE)
+                                    <button type="button" class="btn btn-info  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Usage</button>
+                                    @endif
+                                    @if ($item->status==MyApp::DEACTIVE)
+                                    <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Deactive</button>
+                                    @endif
                                 </td>
+                                {{-- <td>
+                                    <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Active</button>  
+                                    <button type="button" class="btn btn-info  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Usage</button>
+                                    <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Deactive</button>
+
+                                </td> --}}
                              </tr>
                          @endforeach
                         </tbody>
@@ -294,15 +304,30 @@
                         });
 
 
-                    $(document).on("click",".delete_item", function(){
-                            if($("#item_list tr").length == 0)
-                            {
-                                // alert("Order must have at least 1 item.");
-                                return false;
-                            }
-                            $(this).parent().parent().remove();
-                    });
-        })
+                        $(document).on("click",".delete_item", function(){
+                                if($("#item_list tr").length == 0)
+                                {
+                                    // alert("Order must have at least 1 item.");
+                                    return false;
+                                }
+                                $(this).parent().parent().remove();
+                        });
+
+
+                        $(document).on('click','.deleteUserBtn', function (e) {
+                            e.preventDefault();
+                            const sales_return_id = $(this).val();
+                            // alert(sales_return_id);
+                            $('#deleteUserModal').modal('show');
+                            $('#yesDeleteUserBtn').val(sales_return_id);
+                      });
+
+                        $(document).on('click','#yesDeleteUserBtn', function (e) {
+                            e.preventDefault();
+                            const sales_return_id = $(this).val();
+                            updateSalesReturnStatus(sales_return_id);
+                        });
+                 })
 
 
          // function start 
@@ -457,7 +482,20 @@
     }
 
 
-    
+    function updateSalesReturnStatus(sales_return_id){
+            $.ajax({
+                type: "get",
+                url: "sales_return-status-update/"+sales_return_id,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if(response.status == 200){
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
 
     </script>
 @endsection

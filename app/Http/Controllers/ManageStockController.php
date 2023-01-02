@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseEntry;
 use App\Models\StyleNo;
 use App\Models\Brand;
+use App\Models\Color;
 use App\Models\ManageStock;
 use App\MyApp;
 
@@ -22,6 +23,7 @@ class ManageStockController extends Controller
         $sub_categories = SubCategory::all();
         $get_style_no = StyleNo::all();
         $brands = Brand::all();
+        $colors = Color::all();
         // $reserve = PurchaseEntry::all()->groupBy('category_id')->count();
 
         // foreach ($categories as $key => $list) {
@@ -55,10 +57,11 @@ class ManageStockController extends Controller
             'sub_categories'=>$sub_categories,
             'get_style_no'=>$get_style_no,
             'brands'=>$brands,
+            'colors'=>$colors
         ]);
     }   
 
-    public function showProduct($category_id, $sub_category_id="0" , $style_no_id="0" )
+    public function showProduct($category_id, $sub_category_id="0" ,$brand_id ="0", $style_no_id="0", $color="")
     {
 
         $stock = ManageStock::groupBy(['purchase_entry_id'])
@@ -70,9 +73,10 @@ class ManageStockController extends Controller
         foreach ($stock as $key => $list) {
             $data = PurchaseEntry::join('categories','purchase_entries.category_id','=','categories.id')
                     ->join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+                    ->join('brands','purchase_entries.brand_id','=','brands.id')
                     ->join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
                     ->where('purchase_entries.id', $list->purchase_entry_id)
-                    ->select('purchase_entries.*','categories.category','sub_categories.sub_category','style_nos.style_no');
+                    ->select('purchase_entries.*','categories.category','sub_categories.sub_category','brands.brand_name','style_nos.style_no');
                     // ->first();
 
                     if($category_id > 0){
@@ -81,10 +85,17 @@ class ManageStockController extends Controller
                     if($sub_category_id > 0){
                         $data->where(['purchase_entries.sub_category_id'=> $sub_category_id]);
                     }
+                    if($brand_id > 0 ){
+                        $data->where(['purchase_entries.brand_id'=> $brand_id]);
+                    }
                     if($style_no_id > 0 ){
                         $data->where(['purchase_entries.style_no_id'=> $style_no_id]);
                     }
-
+                    if($color != null){
+                        $data->where(['purchase_entries.color'=> $color]);
+                    }
+                  
+                  
                     $stock_data = $data->first();
                     if( $stock_data != null ){
                         $purchase_entry[] = $stock_data;
@@ -119,6 +130,7 @@ class ManageStockController extends Controller
                         $html .= "<th scope='col'>SN</th>";
                         $html .= "<th scope='col'>Category</th>";
                         $html .= "<th scope='col'>Sub Category</th>";
+                        $html .= "<th scope='col'>Brand</th>";
                         $html .= "<th scope='col'>Style No</th>";
                         $html .= "<th scope='col'>Color</th>";
                     $html .= "</tr>";
@@ -133,11 +145,13 @@ class ManageStockController extends Controller
                         $html .= "<td>" .++$key. "</td>";
                         $html .= "<td>".ucwords($list->category)."</td>";
                         $html .= "<td>".ucwords($list->sub_category)."</td>";
+                        $html .= "<td>".ucwords($list->brand_name)."</td>";
                         $html .= "<td>".ucwords($list->style_no)."</td>";
                         $html .= "<td>".ucwords($list->color)."</td>";
                     $html .= "</tr>"; 
 
                     $stock_items = getStockItems($list->id);
+                    // $stock_price = getStockItems($list->id);
 
                     $html .= "<tr>";
                         $html .= "<td colspan='5'>";
@@ -149,6 +163,7 @@ class ManageStockController extends Controller
                                                 $html .= "<th> SN</th>";
                                                 $html .= "<th> Size</th>";
                                                 $html .= "<th> Qty</th>";
+                                                // $html .= "<th> Price</th>";
                                             $html .= "</tr>";
                                         $html .= "</thead>";
                                         $html .= "<tbody>";
@@ -157,6 +172,11 @@ class ManageStockController extends Controller
                                                     $html .= "<td>".++$key1."</td>";
                                                     $html .= "<td>".strtoupper($item->size)."</td>";
                                                     $html .= "<td>".$item->total_qty."</td>";
+                                                    // foreach ($stock_price['price'] as $key => $list) {
+                                                    //     $html .= "<td>".($list->price)."</td>";
+                                                    // }
+                                                  
+                                                   
                                                 $html .= "</tr>";
 
                                                 $total_quantity = $total_quantity + $item->total_qty;

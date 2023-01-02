@@ -134,7 +134,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
         Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
 
-        Route::get('admin/get-city-short/{city_id}', 'getCityShortName');
+    
         // Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
         // Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
         // Route::post('admin/manage-city', 'manageCity');
@@ -245,6 +245,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-sales-return-item', 'saveSalesReturnProduct');
         // Route::get('admin/update-release-status/{sales_return_id}', 'updateSalesReleaseStatus');
         Route::get('admin/sales-return-invoice/{sales_return_id}','salesReturnInvoice');
+        Route::get('admin/sales_return-status-update/{sales_return_id}', 'updateSalesReturnStatus');
+
 
     });
 
@@ -281,7 +283,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
-        Route::get('admin/show-product/{category_id}/{sub_category_id?}/{style_no_id?}','showProduct');
+        Route::get('admin/show-product/{category_id}/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','showProduct');
         Route::get('admin/get-style-no/{style_no_id}','getstyleNo');
     });
 

@@ -137,6 +137,39 @@ class PurchaseEntryController extends Controller
             $xxl_mrp_validation = 'required';
         }
 
+        if($req->input('three_xl_qty') == "" &&  $req->input('three_xl_price') == "" && $req->input('three_xl_mrp') == "")
+        {
+            $three_xl_qty_validation = '';
+            $three_xl_price_validation = '';
+            $three_xl_mrp_validation = '';
+        }else{
+            $three_xl_qty_validation = 'required';
+            $three_xl_price_validation = 'required';
+            $three_xl_mrp_validation = 'required';
+        }
+
+        if($req->input('four_xl_qty') == "" &&  $req->input('four_xl_price') == "" && $req->input('four_xl_mrp') == "")
+        {
+            $four_xl_qty_validation = '';
+            $four_xl_price_validation = '';
+            $four_xl_mrp_validation = '';
+        }else{
+            $four_xl_qty_validation = 'required';
+            $four_xl_price_validation = 'required';
+            $four_xl_mrp_validation = 'required';
+        }
+
+        if($req->input('five_xl_qty') == "" &&  $req->input('five_xl_price') == "" && $req->input('five_xl_mrp') == "")
+        {
+            $five_xl_qty_validation = '';
+            $five_xl_price_validation = '';
+            $five_xl_mrp_validation = '';
+        }else{
+            $five_xl_qty_validation = 'required';
+            $five_xl_price_validation = 'required';
+            $five_xl_mrp_validation = 'required';
+        }
+
         $validator = Validator::make($req->all(),[
             'supplier_id' => 'required|max:191',
             'bill_no'=>'required|max:191',
@@ -166,6 +199,15 @@ class PurchaseEntryController extends Controller
             'xxl_qty'=>$xxl_qty_validation,
             'xxl_price'=>$xxl_price_validation,
             'xxl_mrp'=>$xxl_mrp_validation,
+            'three_xl_qty'=>$three_xl_qty_validation,
+            'three_xl_price'=>$three_xl_price_validation,
+            'three_xl_mrp'=>$three_xl_mrp_validation,
+            'four_xl_qty'=>$four_xl_qty_validation,
+            'four_xl_price'=>$four_xl_price_validation,
+            'four_xl_mrp'=>$four_xl_mrp_validation,
+            'five_xl_qty'=>$five_xl_qty_validation,
+            'five_xl_price'=>$five_xl_price_validation,
+            'five_xl_mrp'=>$five_xl_mrp_validation,
         ]);
 
         if($validator->fails())
@@ -231,6 +273,9 @@ class PurchaseEntryController extends Controller
             $l_qty = $req->input('l_qty');
             $xl_qty = $req->input('xl_qty');
             $xxl_qty = $req->input('xxl_qty');
+            $three_xl_qty = $req->input('three_xl_qty');
+            $four_xl_qty = $req->input('four_xl_qty');
+            $five_xl_qty = $req->input('five_xl_qty');
 
             $xs_price = $req->input('xs_price');
             $s_price = $req->input('s_price');
@@ -238,6 +283,9 @@ class PurchaseEntryController extends Controller
             $l_price = $req->input('l_price');
             $xl_price = $req->input('xl_price');
             $xxl_price = $req->input('xxl_price');
+            $three_xl_price = $req->input('three_xl_price');
+            $four_xl_price = $req->input('four_xl_price');
+            $five_xl_price = $req->input('five_xl_price');
 
             $xs_mrp = $req->input('xs_mrp');
             $s_mrp = $req->input('s_mrp');
@@ -245,6 +293,9 @@ class PurchaseEntryController extends Controller
             $l_mrp = $req->input('l_mrp');
             $xl_mrp = $req->input('xl_mrp');
             $xxl_mrp = $req->input('xxl_mrp');
+            $three_xl_mrp = $req->input('three_xl_mrp');
+            $four_xl_mrp = $req->input('four_xl_mrp');
+            $five_xl_mrp = $req->input('five_xl_mrp');
 
             $qty = 0;
             $size = "";
@@ -303,9 +354,33 @@ class PurchaseEntryController extends Controller
                 $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
             }
 
-            $purchase_entry_html = $this->getPurchaseEntry($supplier_id, $bill_no);
+            if ($three_xl_qty > 0) {
+                $qty = $three_xl_qty;
+                $size = '3xl';
+                $price = $three_xl_price;
+                $mrp = $three_xl_mrp;
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+            }
 
-            if ($result['status'] == 400) {
+            if ($four_xl_qty > 0) {
+                $qty = $four_xl_qty;
+                $size = '4xl';
+                $price = $four_xl_price;
+                $mrp = $four_xl_mrp;
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+            }
+
+            if ($five_xl_qty > 0) {
+                $qty = $five_xl_qty;
+                $size = '5xl';
+                $price = $five_xl_price;
+                $mrp = $five_xl_mrp;
+                $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+            }
+
+            $purchase_entry_result = $this->getPurchaseEntry($supplier_id, $bill_no);
+
+            if ($purchase_entry_result['status'] == 400) {
                 return response()->json([
                     'status'=>400,
                     'errors'=>['This product is already exists if you want to change detail go to update product.'],
@@ -314,15 +389,14 @@ class PurchaseEntryController extends Controller
 
             return response()->json([   
                 'status'=>200,
-                'html'=>$purchase_entry_html['html'],
-                'result'=>$result, //dummy
+                'html'=>$purchase_entry_result['html'],
             ]);
         }
     }
 
     public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
     {
-        if(( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") ){
+        if(( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") && ($req->input('three_xl_qty') == "") && ($req->input('four_xl_qty') == "") && ($req->input('five_xl_qty') == "")){
             
             return response()->json([
                 'status'=>400,
@@ -392,6 +466,38 @@ class PurchaseEntryController extends Controller
             $xxl_price_validation = 'required';
             $xxl_mrp_validation = 'required';
         }
+        if($req->input('three_xl_qty') == "" &&  $req->input('three_xl_price') == "" && $req->input('three_xl_mrp') == "")
+        {
+            $three_xl_qty_validation = '';
+            $three_xl_price_validation = '';
+            $three_xl_mrp_validation = '';
+        }else{
+            $three_xl_qty_validation = 'required';
+            $three_xl_price_validation = 'required';
+            $three_xl_mrp_validation = 'required';
+        }
+
+        if($req->input('four_xl_qty') == "" &&  $req->input('four_xl_price') == "" && $req->input('four_xl_mrp') == "")
+        {
+            $four_xl_qty_validation = '';
+            $four_xl_price_validation = '';
+            $four_xl_mrp_validation = '';
+        }else{
+            $four_xl_qty_validation = 'required';
+            $four_xl_price_validation = 'required';
+            $four_xl_mrp_validation = 'required';
+        }
+
+        if($req->input('five_xl_qty') == "" &&  $req->input('five_xl_price') == "" && $req->input('five_xl_mrp') == "")
+        {
+            $five_xl_qty_validation = '';
+            $five_xl_price_validation = '';
+            $five_xl_mrp_validation = '';
+        }else{
+            $five_xl_qty_validation = 'required';
+            $five_xl_price_validation = 'required';
+            $five_xl_mrp_validation = 'required';
+        }
 
         $validator = Validator::make($req->all(),[
             'supplier_id' => 'required|max:191',
@@ -422,6 +528,15 @@ class PurchaseEntryController extends Controller
             'xxl_qty'=>$xxl_qty_validation,
             'xxl_price'=>$xxl_price_validation,
             'xxl_mrp'=>$xxl_mrp_validation,
+            'three_xl_qty'=>$three_xl_qty_validation,
+            'three_xl_price'=>$three_xl_price_validation,
+            'three_xl_mrp'=>$three_xl_mrp_validation,
+            'four_xl_qty'=>$four_xl_qty_validation,
+            'four_xl_price'=>$four_xl_price_validation,
+            'four_xl_mrp'=>$four_xl_mrp_validation,
+            'five_xl_qty'=>$five_xl_qty_validation,
+            'five_xl_price'=>$five_xl_price_validation,
+            'five_xl_mrp'=>$five_xl_mrp_validation,
         ]);
 
         if($validator->fails())
@@ -485,6 +600,9 @@ class PurchaseEntryController extends Controller
                     $l_qty = $req->input('l_qty');
                     $xl_qty = $req->input('xl_qty');
                     $xxl_qty = $req->input('xxl_qty');
+                    $three_xl_qty = $req->input('three_xl_qty');
+                    $four_xl_qty = $req->input('four_xl_qty');
+                    $five_xl_qty = $req->input('five_xl_qty');
 
                     $xs_price = $req->input('xs_price');
                     $s_price = $req->input('s_price');
@@ -492,6 +610,9 @@ class PurchaseEntryController extends Controller
                     $l_price = $req->input('l_price');
                     $xl_price = $req->input('xl_price');
                     $xxl_price = $req->input('xxl_price');
+                    $three_xl_price = $req->input('three_xl_price');
+                    $four_xl_price = $req->input('four_xl_price');
+                    $five_xl_price = $req->input('five_xl_price');
 
                     $xs_mrp = $req->input('xs_mrp');
                     $s_mrp = $req->input('s_mrp');
@@ -499,6 +620,9 @@ class PurchaseEntryController extends Controller
                     $l_mrp = $req->input('l_mrp');
                     $xl_mrp = $req->input('xl_mrp');
                     $xxl_mrp = $req->input('xxl_mrp');
+                    $three_xl_mrp = $req->input('three_xl_mrp');
+                    $four_xl_mrp = $req->input('four_xl_mrp');
+                    $five_xl_mrp = $req->input('five_xl_mrp');
 
                     $qty = 0;
                     $size = "";
@@ -551,6 +675,30 @@ class PurchaseEntryController extends Controller
                         $size = 'xxl';
                         $price = $xxl_price;
                         $mrp = $xxl_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+
+                    if ($three_xl_qty > 0) {
+                        $qty = $three_xl_qty;
+                        $size = '3xl';
+                        $price = $three_xl_price;
+                        $mrp = $three_xl_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+
+                    if ($four_xl_qty > 0) {
+                        $qty = $four_xl_qty;
+                        $size = '4xl';
+                        $price = $four_xl_price;
+                        $mrp = $four_xl_mrp;
+                        $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+                    }
+
+                    if ($five_xl_qty > 0) {
+                        $qty = $five_xl_qty;
+                        $size = '5xl';
+                        $price = $five_xl_price;
+                        $mrp = $five_xl_mrp;
                         $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
                     }
 
@@ -666,22 +814,27 @@ class PurchaseEntryController extends Controller
                         $html .="<tr style='position: sticky;z-index: 1;'>";
                             $html .="<th>SN</th>";
                             $html .="<th>Style</th>";
-                            $html .="<th>Color</th>";
+                            $html .="<th>Qty</th>";
+                            $html .="<th>Amount</th>";
+                            // $html .="<th>Color</th>";
                             
                         $html .="</tr>";
                     $html .="</thead>";
                     $html .="<tbody >";
                         
                     foreach ($purchase_entry as $key => $list) {
-                               
+                        $result = getSumOfPurchaseEntryItems($list->id);
+                       
                         $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
-                            $html .="<td>".ucwords($list->color)."</td>";
+                            $html .="<td>".$result['qty']."</td>";
+                            $html .="<td>".$result['amount']."</td>";
+                            // $html .="<td>".ucwords($list->color)."</td>";
                         $html .="</tr> ";
 
                         $html .="<tr>";
-                            $html .="<td colspan='3'>";
+                            $html .="<td colspan='4'>";
                                 $html .="<div id='collapse_".$list->id."' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>";
                                     $html .="<div class='accordion-body table-responsive' >";
                                         $html .="<table class='table  '>";

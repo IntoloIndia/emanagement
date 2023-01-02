@@ -18,7 +18,6 @@ class CreateCitiesTable extends Migration
             $table->integer('country_id')->default(0);
             $table->integer('state_id')->default(0);
             $table->string('city')->nullable();
-            $table->string('city_short')->nullable();
             $table->timestamps();
         });
     }

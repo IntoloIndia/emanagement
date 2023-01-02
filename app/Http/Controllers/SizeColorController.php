@@ -109,11 +109,30 @@ class SizeColorController extends Controller
             $model->color = $req->input('color');
            
             if($model->save()){
+                $data = $this->getColor();
                 return response()->json([   
-                    'status'=>200
+                    'status'=>200,
+                    'color_html'=>$data['html']
                 ]);
             }
         }
+    }
+
+    public function getColor()
+    {
+        $colors = Color::all();
+
+        $html = "";
+        $html .= "<option selected disabled value='0'>Color</option>";
+        foreach ($colors as $key => $list) {
+            $html .= "<option value='".$list->color."' selected>" . ucwords($list->color)  . "</option>" ;
+        }
+
+        return $result = [
+            'status'=>200,
+            'html'=>$html
+        ] ;
+
     }
 
     public function editColor($color_id)

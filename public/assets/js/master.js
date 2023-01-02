@@ -67,43 +67,43 @@ function generateInvoice(bill_id) {
 
 
 
-// function saveColor() {
-//     $.ajaxSetup({
-//         headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         }
-//     });
+function saveColor() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
-//     var formData = new FormData($("#colorForm")[0]);
-//     $.ajax({
-//         type: "post",
-//         url: "save-color",
-//         data: formData,
-//         dataType: "json",
-//         cache: false,
-//         contentType: false,
-//         processData: false,
-//         success: function (response) {
-//             // console.log(response);
-//             if (response.status === 400) {
-//                 $('#color_err').html('');
-//                 $('#color_err').addClass('alert alert-danger');
-//                 var count = 1;
-//                 $.each(response.errors, function (key, err_value) {
-//                     $('#color_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-//                 });
+    var formData = new FormData($("#colorForm")[0]);
+    $.ajax({
+        type: "post",
+        url: "save-color",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            if (response.status === 400) {
+                $('#color_err').html('');
+                $('#color_err').addClass('alert alert-danger');
+                var count = 1;
+                $.each(response.errors, function (key, err_value) {
+                    $('#color_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                });
 
-//             } else {
-//                 $('#color_err').html('');
-//                 $('#colorModal').modal('hide');
-//                 // window.location.reload();
-//                 $('#color').html('');
-//                 $('#color').append(response.color_html); 
-//                 $("#color").trigger("chosen:updated");  
-//             }
-//         }
-//     });
-// }
+            } else {
+                $('#color_err').html('');
+                $('#colorModal').modal('hide');
+                // window.location.reload();
+                $('#color').html('');
+                $('#color').append(response.color_html); 
+                $("#color").trigger("chosen:updated");  
+            }
+        }
+    });
+}
 
 function manageCity(){
     $.ajaxSetup({

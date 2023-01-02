@@ -23,7 +23,7 @@ class SupplierController extends Controller
                         ->join('states','states.id','=','suppliers.state_id')
                         ->join('cities','cities.id','=','suppliers.city_id')
                         ->orderBy('suppliers.id', 'DESC')
-                        ->select('suppliers.*','countries.country','states.state','cities.city','cities.city_short')->get();
+                        ->select('suppliers.*','countries.country','states.state','cities.city')->get();
                         // print_r($suppliers);
 
                         // return(supplierCode());
@@ -224,32 +224,18 @@ class SupplierController extends Controller
     
 
 
-    public function getCityShortName($city_id)
-    {
-        // $city_short_name = City::where(['city_id'=>$city_id])->first();
-        // print_r($product);
-        $city_short_name = City::find($city_id);
-        // print_r($city_short_name);
-                        
-        // return response()->json([
-        //     'city_short'=>$city_short_name->city_short
-        // ]);
-    }
-
     // public function manageCity(Request $req)
     // {
     //     if($req->input('city_id') > 0)
     //     {
     //         $country_id = 'required|max:191';
     //         $state_id = 'required|max:191';
-    //         $city = 'required|unique:cities,city,'.$req->input('city_id');
-    //         $city_short = 'required|unique:cities,city_short,'.$req->input('city_id');
+    //         $city = 'required|unique:cities,city,'.$req->input('city_id');    //       
     //         $model = City::find($req->input('city_id'));
     //     }else{
     //         $country_id = 'required|max:191';
     //         $state_id = 'required|max:191';
     //         $city = 'required|unique:cities,city,'.$req->input('city');
-    //         $city_short = 'required|unique:cities,city_short,'.$req->input('city_short');
     //         $model = new City ;
     //     }
 
@@ -257,7 +243,6 @@ class SupplierController extends Controller
     //         'country_id' => $country_id,
     //         'state_id' => $state_id,
     //         'city' => $city,
-    //         'city_short' => $city_short
     //     ]);
     //     if($validator->fails())
     //     {

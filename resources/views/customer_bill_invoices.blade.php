@@ -1,11 +1,6 @@
 @extends('layouts.app')
 @section('page_title', 'Dashboard')
-
-
-
-
 @section('content')
-
 
 {{-- delete modal start  --}}
 
@@ -31,26 +26,200 @@
 {{-- delete modal end  --}}
 
 
-<div class="row">
-    <div class="col-lg-9 col-md-12 col-sm-12">
+<!-- Button trigger modal -->
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Launch static backdrop modal
+    </button> --}}
+    
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Invoice</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12 table-responsive p-0" style="height: 550px;">
+                            <table class="table table-head-fixed">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sno</th>
+                                         <th scope="col">Name</th> 
+                                         <th scope="col">Bill no</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Print</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $count = 0;
+                                    @endphp
+                                     @foreach ($customers_billing as $item)
+                                    <tr>
+                                        <td>{{++$count}}</td>
+                                        <td>{{ucwords($item->customer_name)}}</td>
+                                        <td>{{$item->id}}</td>
+                                        <td>{{$item->total_amount}}</td>
+                                        <td>{{$item->bill_date}}</td>
+                                        <td>  
+                                            {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
+                                            {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
+                                             <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                            {{-- <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button> --}}
+                                          </td>
+                                    </tr>
+                                    @endforeach 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            {{-- <button type="button" class="btn btn-primary">Understood</button> --}}
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+{{-- <div class="row"> --}}
+    {{-- <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <b>Billing</b>
             </div>
-        <div class="card-body">
+            <div class="card-body">
             <form id="orderForm">
                     @csrf
                 <div class="order_err"></div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="moblie_no" class="form-label" >Moblie no</label>
-                            {{-- <input type="number"  class="form-control form-control-sm" name="mobile_no" min="10" max="10" value="" required id="moblie_no" placeholder="Enter mobile number"> --}}
+                <div class="row"> --}}
+                    {{-- <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <b>Customer Details</b>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                         <label for="moblie_no" class="form-label" >Moblie no</label>
+                                     <input type="number"  class="form-control form-control-sm " id="mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="mobile number">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="name" class="form-label">Customer name</label>
+                                        <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="moblie_no" class="form-label" >DOB</label>
+                                         <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1" placeholder="date of brith">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="moblie_no" class="form-label" >Months</label>
+                                        <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
+                                        <option selected>Select...</option>
+                                            @foreach ($months as $item)
+                                                <option value="{{$item->id}}">{{$item->month}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label" >Anniversary</label>
+                                        <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Total Points</label>
+                                        <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                         <div class="col-md-2 col-sm-12">
+                                            <div class="form-check state_type">
+                                                <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                                <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                            </div>
+                                        </div>  
+                                    <div class="col-md-2 col-sm-12">
+                                        <div class="form-check state_type">
+                                            <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Inter State
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="city_id" id="city_id" class="form-select" >
+                                            <option selected disabled>City</option>
+                                            @foreach($cities as $item)
+                                                <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" name="cupan_code" id="cupan_code" placeholder="cupan code"  class="form-control form-control-sm ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                    {{-- <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <b>Credit Notes</b>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive" style="max-height: 100px;">
+                                    <table class="table">
+                                        <thead>
+                                          <tr>
+                                           <th scope="col">#</th>
+                                           <th scope="col">Name</th>
+                                           <th scope="col">Bill no</th>
+                                           <th scope="col">Date</th>
+                                           {{-- <th scope="col">Time</th> --}}
+                                           {{-- <th scope="col">Action</th>
+                                          </tr>
+                                        </thead>
+                                         @php  
+                                             $count = 0;
+                                         @endphp
+                                        <tbody>
+                                         @foreach ($sales_return_data  as $item)
+                                             <tr>
+                                                <td>{{++$count}}</td>
+                                                <td>{{ucwords($item->customer_name)}}</td>
+                                                <td>{{$item->bill_id}}</td>
+                                                <td>{{date('d-m-Y',strtotime($item->create_date))}}</td>
+                                                {{-- <td>{{$item->create_time}}</td> --}}
+                                                {{-- <td> --}}
+                                                    {{-- <button type="button" class="btn btn   -success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                                     {{-- <button class="btn btn-success btn-sm" onclick="alert('call')">Act</button>
+                                                    <button class="btn btn-danger btn-sm">Deact</button> --}}
+                                                    {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                                 {{-- </td>
+                                             </tr>
+                                         @endforeach 
+                                        </tbody>
+                                      </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}} 
+                    {{-- <div class="col-md-2">
+                        <div class="mb-2">
+                             <label for="moblie_no" class="form-label" >Moblie no</label>
                             <input type="number"  class="form-control form-control-sm " id="mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="mobile number">
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
+                    <div class="col-md-2">
+                        <div class="mb-2">
                             <label for="name" class="form-label">Name</label>
                             <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
                         </div>
@@ -58,8 +227,8 @@
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-5">
-                                <label for="moblie_no" class="form-label" >DOB</label>
-                                <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1">
+                                    <label for="moblie_no" class="form-label" >DOB</label> 
+                                <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1" placeholder="date of brith">
                             </div>
                             <div class="col-6">
                                 <label for="moblie_no" class="form-label" >Months</label>
@@ -72,25 +241,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label" >Anniversary</label>
-                        <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Total Points</label>
-                        <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
-                    </div>
                 </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <label class="form-label" >Anniversary</label>
+                            <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Total Points</label>
+                            <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
+                        </div>
+                    </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mb-2">
-                            <div class="col-md-6 col-sm-6">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-check state_type">
                                 <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
                                 <label class="form-check-label" for="flexRadioDefault1">With in State</label>
                             </div>
                             </div>  
-                            <div class="col-md-6 col-sm-6">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-check state_type">
                                     <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
                                     <label class="form-check-label" for="flexRadioDefault2">
@@ -98,11 +269,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row  justify-content-end mb-2">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <select name="city_id" id="city_id" class="form-select" >
                                     <option selected disabled>City</option>
                                     @foreach($cities as $item)
@@ -110,166 +277,170 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
                             </div>
                         </div>
                     </div>
-                </div>
+                   
+                </div> --}}
                    
                 {{-- </div> --}}
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-2">
-                                <b>Items</b>
-                            </div>                           
-                            <div class="col-3">
-                                {{-- <input type="text" name="product_code" id="product_code" class="form-control form-control-sm"> --}}
-                                
-                            </div>                           
-                            <div class="col-md-7 ">
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                                    <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body"style="max-height:400px;">
-                       <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="table-responsive" style="max-height: 250px">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sno</th>
-                                        <th scope="col">Emp</th>
-                                        <th scope="col">Code</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Qty</th>
-                                        <th scope="col">Size</th>
-                                        <th scope="col">MRP</th>
-                                        <th scope="col">Dis.</th>
-                                        <th scope="col" class="sgst_show_hide">SGST</th>
-                                        <th scope="col" class="cgst_show_hide">CGST</th>
-                                        <th scope="col" class="igst_show_hide hide">IGST</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="item_list">
-
-                                </tbody>
-                            </table>  
-                            </div>
-                        </div>
-                       </div>
-                    </div>
-                    <div class="card-footer ">
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>Total Amount :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>Discount :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>SGST :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>CGST :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>IGST :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>Points :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 text-end">
-                                <b>Gross Amount :</b>
-                            </div>
-                            <div class="col-md-2 justify-content-end">
-                                {{-- <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly> --}}
-                                <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
-                            </div>
-                        </div>
-                            {{-- <div class="row text-end">
-                                <div class="col-md-3"></div>
-                                <div class="col-md-6 ">
-                                    <b>LESS DISCOUNT : </b>
-                                    <b>SGST AMOUNT :</b><br/>
-                                    <b>CGST AMOUNT :</b><br/>
-                                    <b>IGST AMOUNT :</b><br/>
-                                    <b>OTHER ADJ  :</b><br/>
-                                
-                                    <b>G.TOTAL  :</b><br/>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                    <span id="item_gross_amount"></span><br/>
-                                    <span id="item_less_amount"></span><br/>
-                                    <span id="item_add_sgst" ></span><br/>
-                                    <span id="item_add_cgst" ></span><br/>
-                                    <span id="item_add_igst" ></span><br/>
-                                    <span id="item_other_adj"></span><br/>
+            {{-- <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-2">
+                                    <b>Items</b>
+                                </div>                           
+                                <div class="col-3">
+                                    {{-- <input type="text" name="product_code" id="product_code" class="form-control form-control-sm"> --}}
                                     
-                                    <span id="item_total_amount"></span><br/>
+                                {{-- </div>                           
+                                <div class="col-md-7 ">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                                        <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body"style="max-height:400px;">
+                           <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="table-responsive" style="max-height: 250px">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sno</th>
+                                            <th scope="col">Emp</th>
+                                            <th scope="col">Code</th>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Size</th>
+                                            <th scope="col">MRP</th>
+                                            <th scope="col">Dis.</th>
+                                            <th scope="col" class="sgst_show_hide">SGST</th>
+                                            <th scope="col" class="cgst_show_hide">CGST</th>
+                                            <th scope="col" class="igst_show_hide hide">IGST</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Delete</th>
+                                        </tr>
+                                    </thead> --}}
+                                    {{-- <tbody id="item_list">
+    
+                                    </tbody>
+                                </table>  
+                                </div>
+                            </div>
+                           </div>
+                        </div>
+                        <div class="card-footer ">
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>Total Amount :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>Discount :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>SGST :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>CGST :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>IGST :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>Points :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 text-end">
+                                    <b>Gross Amount :</b>
+                                </div>
+                                <div class="col-md-2 justify-content-end">
+                                    {{-- <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly> --}}
+                                    {{-- <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
                                 </div>
                             </div> --}}
-                        <div class="row mt-1 hide" id="given_return_amount" >
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4"></div>
-                            <div class="col-md-2 text-end">
-                                <div><b>Given Amt :</b></div>
-                                <div class="mt-2" ><b >Return Amt :</b></div>
-                            </div>
-                            <div class="col-md-2 text-center">
-                                <input type="text" name="" id="given_amount" class="form-control form-control-sm">
-                                <input type="text" name="" id="return_amount" class="form-control form-control-sm mt-1" readonly>
-                            </div>
-                        </div>
-
+                                {{-- <div class="row text-end">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6 ">
+                                        <b>LESS DISCOUNT : </b>
+                                        <b>SGST AMOUNT :</b><br/>
+                                        <b>CGST AMOUNT :</b><br/>
+                                        <b>IGST AMOUNT :</b><br/>
+                                        <b>OTHER ADJ  :</b><br/>
+                                    
+                                        <b>G.TOTAL  :</b><br/>
+                                    </div>
+                                    <div class="col-md-2 text-center">
+                                        <span id="item_gross_amount"></span><br/>
+                                        <span id="item_less_amount"></span><br/>
+                                        <span id="item_add_sgst" ></span><br/>
+                                        <span id="item_add_cgst" ></span><br/>
+                                        <span id="item_add_igst" ></span><br/>
+                                        <span id="item_other_adj"></span><br/>
+                                        
+                                        <span id="item_total_amount"></span><br/>
+                                    </div>
+                                </div> --}}
+                            {{-- <div class="row mt-1 hide" id="given_return_amount" >
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-2 text-end">
+                                    <div><b>Given Amt :</b></div>
+                                    <div class="mt-2" ><b >Return Amt :</b></div>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <input type="text" name="" id="given_amount" class="form-control form-control-sm">
+                                    <input type="text" name="" id="return_amount" class="form-control form-control-sm mt-1" readonly>
+                                </div>
+                            </div> --}}
+    
+                        {{-- </div>
                     </div>
                 </div>
-                {{-- <button class="btn btn-primary btn-sm float-right" id="saveOrderBtn">save</button> --}}
-                <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
+            </div> --}}
+                    {{-- <button class="btn btn-primary btn-sm float-right" id="saveOrderBtn">save</button> --}}
+                {{-- <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
                 <hr>
                 <div class="row">
                     <div class="col-md-2">
                         <span>Payment :</span>
                     </div>
-                </div>
-            <div class="row">
+                </div> --}}
+            {{-- <div class="row">
                
                     <div class="col-md-1">
                         <div class="form-check form-check-inline">
@@ -298,15 +469,15 @@
                         <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
                     </div>
                
-                    <div class="col-md-1">
+                    {{-- <div class="col-md-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
                         </div>
                     </div>
                     <div class="col-md-2">
                             <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
-                        </div>
-            </div>
+                        </div> --}}
+                {{-- </div>
                
                     <div class="row mt-2">
                         <div class="col-md-4"></div>
@@ -316,18 +487,20 @@
                             <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
                             <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
                         </div>
-                    </div>
+                    </div> --}}
                 {{-- </div> --}}
                    
                    
 
                 {{-- </ div> --}}
              
-            </div> 
-        </form>
+            {{-- </div>  --}} 
+        {{-- </form>
     </div>
     </div>
-    <div class="col-lg-3 col-md-12 col-sm-12">
+</div>  --}}
+
+    {{-- <div class="col-lg-3 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -337,7 +510,7 @@
                     <div class="col-md-6">
                         {{-- <b class="float-right">Date</b><br/>
                         <b class="float-right">time</b> --}}
-                    </div>
+                    {{-- </div>
                 </div>
             </div>
             <div class="card-body">
@@ -347,7 +520,7 @@
                         <tr>
                             <th scope="col">Sno</th>
                             {{-- <th scope="col">Name</th> --}}
-                            <th scope="col">Bill no</th>
+                            {{-- <th scope="col">Bill no</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Date</th>
                             <th scope="col">Print</th>
@@ -360,18 +533,18 @@
                          @foreach ($customers_billing as $item)
                         <tr>
                             <td>{{++$count}}</td>
-                            {{-- <td>{{ucwords($item->customer_name)}}</td> --}}
+                            <td>{{ucwords($item->customer_name)}}</td>
                             <td>{{$item->id}}</td>
                             <td>{{$item->total_amount}}</td>
                             <td>{{$item->bill_date}}</td>
 
-                            <td> 
+                            <td>  --}} 
                                 {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
                                 {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
-                                <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                {{-- <button type="button" class="btn btn-success btn-flat btn-sm orderInvoiceBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
                                 {{-- <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button> --}}
                                 
-                             </td>
+                             {{-- </td>
                             
                         </tr>
                         @endforeach 
@@ -380,12 +553,12 @@
                         
                     </tfoot>
                 </table>  
-                </div>
+                </div> --}}
                 {{-- <button class="orderInvoiceBtn" >print</button> --}}
-            </div>
+            {{-- </div>
             
         </div>
-
+    </div> --}}
 
         {{-- <div class="card " >
             <div class="card-body page" id="barcode_body" style="max_height: 300px;">
@@ -415,22 +588,13 @@
 
     
 
-   </div>
+   {{-- </div> --}}
 
    <table class="hide">
     <tbody id="item_row">
         <tr>
             <td id="count_item"></td>
-                {{-- <td> --}}
-
-                    {{-- <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="alteration_voucher" value="1" id="alteration_voucher">
-                           <label class="form-check-label" for="flexCheckDefault"> 
-                          Default checkbox
-                        </label> 
-                      </div>
-                    </td> --}}
-                    {{-- </td> --}}
+            
             <td style="width: 200px;">
                 <select name="employee_id[]" id="employee_id" class="form-select" >
                     <option selected disabled>Emp</option>
@@ -469,8 +633,6 @@
                 <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
             </td>
              
-             {{-- <td style="width: 150px;"> --}}
-            {{-- </td>  --}}
              <td style="width: 80px;" class="sgst_show_hide">
                  <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0" readonly>
             </td> 
@@ -500,7 +662,490 @@
 </section>
 
 
-    @endsection
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <b>Billing</b>
+                <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    View Invoice
+                </button>
+            </div>
+            <div class="card-body">
+                <form id="orderForm">
+                        @csrf
+                        <div class="order_err"></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <b>Customer Details</b>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                                <div class="col-md-5">
+                                                    <label for="moblie_no" class="form-label" >Moblie no</label>
+                                                    <input type="number"  class="form-control form-control-sm " id="mobile_no" name="mobile_no" minlength="10" maxlength="10" required id="moblie_no" placeholder="mobile number">
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <label for="moblie_no" class="form-label" >Customer name</label>
+                                                    <input type="text"  class="form-control form-control-sm" id="customer_name" required name="customer_name" placeholder="Enter name">
+                                                </div>
+                                        </div>
+                                            <div class="row mt-1">
+                                                <div class="col-md-6">
+                                                    <label for="" class="form-label" >DOB</label>
+                                                        <input type="number"  class="form-control form-control-sm" name="birthday_date" id="birthday_date" required id="days" min="1" placeholder="date of brith">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="" class="form-label" >Months</label>
+                                                    <select class="form-select form-select-sm" name="month_id" id="month_id" style="height:30px">
+                                                    <option selected>Month</option>
+                                                        @foreach ($months as $item)
+                                                            <option value="{{$item->id}}">{{$item->month}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="row mt-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label" >City</label>
+                                                    <select name="city_id" id="city_id" class="form-select" >
+                                                        <option selected disabled>City</option>
+                                                        @foreach($cities as $item)
+                                                            <option value="{{$item->id}}">{{ucwords($item->city)}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label" >Anniversary Date</label>
+                                                    <input type="date" name="anniversary_date" id="anniversary_date"  class="form-control form-control-sm ">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-md-6">
+                                                    <div class="form-check state_type">
+                                                        <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::WITH_IN_STATE}}" id="with_in_state" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault1">With in State</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-check state_type">
+                                                        <input class="form-check-input " type="radio" name="state_type" value="{{MyApp::INTER_STATE}}"  id="inter_state" >
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            Inter State
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-md-8">
+                                                     <label for="" class="form-label" >GST NO</label>
+                                                     <input type="text" name="gst_no" id="gst_no" placeholder="GST NO"  class="form-control form-control-sm ">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Points</label>
+                                                    <input type="text" id="total_points" class="form-control form-control-sm" value="0" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-md-12">
+                                                    <label for="" class="form-label" >Coupon Code</label>
+                                                    <input type="text" name="cupan_code" id="cupan_code" placeholder="Coupon Code"  class="form-control form-control-sm ">
+                                               </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <b>Credit Note</b>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div id="credit_note"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <b>Item</b>
+                                        <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive" style="max-height: 400px">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Sno</th>
+                                                                <th scope="col">Emp</th>
+                                                                <th scope="col">Code</th>
+                                                                <th scope="col">Product</th>
+                                                                <th scope="col">Qty</th>
+                                                                <th scope="col">Size</th>
+                                                                <th scope="col">MRP</th>
+                                                                <th scope="col">Dis.</th>
+                                                                <th scope="col" class="sgst_show_hide">SGST</th>
+                                                                <th scope="col" class="cgst_show_hide">CGST</th>
+                                                                <th scope="col" class="igst_show_hide hide">IGST</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Delete</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="item_list">
+                        
+                                                        </tbody>
+                                                    </table>  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="card-footer ">
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>Total Amount :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>Discount :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>SGST :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>CGST :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>IGST :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>Points :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>Gross Amount :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    {{-- <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly> --}}
+                                                    <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
+                                                </div>
+                                            </div>
+    
+                                            <div class="row mt-1 hide" id="given_return_amount" >
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-2 text-end">
+                                                    <div><b>Given Amt :</b></div>
+                                                    <div class="mt-2" ><b >Return Amt :</b></div>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <input type="text" name="" id="given_amount" class="form-control form-control-sm">
+                                                    <input type="text" name="" id="return_amount" class="form-control form-control-sm mt-1" readonly>
+                                                </div>
+                                            </div>
+                    
+                                        </div>
+                                        {{-- <hr> --}}
+                                    </div>
+                                {{-- </div> --}}
+                                <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span>Payment :</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+               
+                                    <div class="col-md-1">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
+                                        </div>
+                                    </div>
+                                        <div class="col-md-2">
+                                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                        </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                    </div>
+                               
+                                    <div class="col-md-1">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
+                                    </div>
+                               
+                                    {{-- <div class="col-md-1">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
+                                        </div> --}}
+                                </div>
+                               
+                                    <div class="row mt-2">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
+                                            <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
+                                        </div>
+                                    </div>
+                                {{-- </div> --}}
+                                   
+                                   
+                
+                                {{-- </ div> --}}
+                            </div> 
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {{-- <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <b>Billing</b>
+                </div>
+                <div class="card-body">
+                    <form action="">
+                        @csrf
+                        <div class="card_error"></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card">
+                                   <div class="card-header">
+                                    <b>customer</b>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="text" name="" id="" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card">
+                                   <div class="card-header">
+                                    <b>Item</b>
+                                    <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
+                                   </div>
+                                   <div class="card-body">
+                                    <div class="card-body"style="max-height:400px;">
+                                        <div class="row">
+                                         <div class="col-md-12 col-sm-12">
+                                             <div class="table-responsive" style="max-height: 250px">
+                                             <table class="table">
+                                                 <thead>
+                                                     <tr>
+                                                         <th scope="col">Sno</th>
+                                                         <th scope="col">Emp</th>
+                                                         <th scope="col">Code</th>
+                                                         <th scope="col">Product</th>
+                                                         <th scope="col">Qty</th>
+                                                         <th scope="col">Size</th>
+                                                         <th scope="col">MRP</th>
+                                                         <th scope="col">Dis.</th>
+                                                         <th scope="col" class="sgst_show_hide">SGST</th>
+                                                         <th scope="col" class="cgst_show_hide">CGST</th>
+                                                         <th scope="col" class="igst_show_hide hide">IGST</th>
+                                                         <th scope="col">Amount</th>
+                                                         <th scope="col">Delete</th>
+                                                     </tr>
+                                                 </thead>
+                                                 <tbody id="item_list">
+                 
+                                                 </tbody>
+                                             </table>  
+                                             </div>
+                                         </div>
+                                        </div>
+                                     </div>
+                                     <div class="card-footer ">
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>Total Amount :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>Discount :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>SGST :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>CGST :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
+                                             </div>
+                                         </div>
+                                         
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>IGST :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>Points :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+                                                 <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-md-10 text-end">
+                                                 <b>Gross Amount :</b>
+                                             </div>
+                                             <div class="col-md-2 justify-content-end">
+        
+                                                 <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
+                                             </div>
+                                         </div>
+                                            
+                                         <div class="row mt-1 hide" id="given_return_amount" >
+                                             <div class="col-md-4"></div>
+                                             <div class="col-md-4"></div>
+                                             <div class="col-md-2 text-end">
+                                                 <div><b>Given Amt :</b></div>
+                                                 <div class="mt-2" ><b >Return Amt :</b></div>
+                                             </div>
+                                             <div class="col-md-2 text-center">
+                                                 <input type="text" name="" id="given_amount" class="form-control form-control-sm">
+                                                 <input type="text" name="" id="return_amount" class="form-control form-control-sm mt-1" readonly>
+                                             </div>
+                                         </div>
+                 
+                                     </div>
+                                 </div>
+                                 <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
+                                 <hr>
+                                 <div class="row">
+                                     <div class="col-md-2">
+                                         <span>Payment :</span>
+                                     </div>
+                                 </div>
+                             <div class="row">
+                                
+                                     <div class="col-md-1">
+                                         <div class="form-check form-check-inline">
+                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
+                                         </div>
+                                     </div>
+                                         <div class="col-md-2">
+                                             <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                         </div>
+                               
+                                     <div class="col-md-1">
+                                         <div class="form-check form-check-inline">
+                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
+                                         </div>
+                                     </div>
+                                     <div class="col-md-2">
+                                         <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                     </div>
+                                
+                                     <div class="col-md-1">
+                                         <div class="form-check form-check-inline">
+                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                                         </div>
+                                     </div>
+                                     <div class="col-md-2">
+                                         <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
+                                     </div>
+                                
+                             </div>
+                                
+                                     <div class="row mt-2">
+                                         <div class="col-md-4"></div>
+                                         <div class="col-md-4"></div>
+                                         <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                             <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
+                                             <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
+                                         </div>
+                                     </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+@endsection
 
 
 @section('script')
@@ -585,6 +1230,11 @@
                 var object = $(this);
                 getProductDetail(object);
                 
+            });
+
+            $(document).on('click','.credit_note', function () {
+                var credit_note_id = $(this).val();
+                alert(credit_note_id);
             });
 
           
@@ -712,6 +1362,8 @@
                         $('#city_id').val(response.customersData.city_id);
                         $('#gst_no').val(response.customersData.gst_no);
                         $('#total_points').val(response.total_points);
+                        $('#credit_note').html('');
+                        $('#credit_note').append(response.html);
                         
                         if(response.customersData.state_type==1){
                             $('#with_in_state').prop('checked',true);
@@ -726,7 +1378,9 @@
                         $('#gst_no').val('');
                         $('#with_in_state').prop('checked',false);
                         $('#inter_state').prop('checked',false);
-                        $('#total_points').val('0');
+                        $('#credit_note').html('');
+                        $('#credit_note').append('');
+                        // $('#credit_note').append(response.html);
                     }
                 }
 

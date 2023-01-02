@@ -70,7 +70,7 @@
                                                             <select id="category_id" name="category_id" class="form-select select_chosen_80" onchange="getSubCategoryByCategory(this.value);">
                                                                 <option selected disabled value="0">Category</option>
                                                                 @foreach ($categories as $list)
-                                                                <option value="{{$list->id}}"> {{ucwords($list->category)}} </option>
+                                                                <option value="{{$list->id}}" size-type="{{$list->size_type}}"> {{ucwords($list->category)}} </option>
                                                                 @endforeach
                                                             </select>
                                                             <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
@@ -221,24 +221,35 @@
                                                     <div class="d-grid gap-2 mt-2">
                                                         <button class="btn btn-primary btn-sm captureLivePhotoBtn" type="button">Live Camera</button>
                                                     </div>
+                                                    <div class="mt-1 mb-1 text-center">
+                                                        <span>OR</span>                                                        
+                                                    </div>
+                                                    <div >
+                                                        <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                                    </div>
                                                 </div>
                                                 
                                                 <div class="col-md-9">
                                         
                                                     {{-- <div class="row "> --}}
-                                                        <div class="card">
-                                                            <div class="card-body ">
+                                                        <div class="card ">
+                                                            <div class="card-body table-responsive " style="overflow-x: scroll;">
                                                                     
-                                                                <table class="table">
+                                                                <table class="table" style="width: 650px;">
                                                                     <tbody>
                                                                         <tr>
+                                                                            <div id="show_size">sfdbfds</div>
                                                                             <th>Size</th>
-                                                                            <td>XS <input type="hidden" name="xs_size" value="xs"></td>
-                                                                            <td>S <input type="hidden" name="s_size" value="s"></td>
-                                                                            <td>M <input type="hidden" name="m_size" value="m"></td>
-                                                                            <td>L <input type="hidden" name="l_size" value="l"></td>
-                                                                            <td>XL <input type="hidden" name="xl_size" value="xl"></td>
-                                                                            <td>XXL <input type="hidden" name="xxl_size" value="xxl"></td>
+                                                                            <td>XS </td>
+                                                                            <td>S </td>
+                                                                            <td>M </td>
+                                                                            <td>L </td>
+                                                                            <td>XL </td>
+                                                                            <td>XXL </td>
+                                                                            <td>3XL </td>
+                                                                            <td>4XL </td>
+                                                                            <td>5XL </td>
+                                                                           
                                                                         </tr>
                                                                         <tr>
                                                                             <th>Qty</th>
@@ -248,6 +259,9 @@
                                                                             <td><input type="text" id="l_qty" name="l_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                                                                             <td><input type="text" id="xl_qty" name="xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                                                                             <td><input type="text" id="xxl_qty" name="xxl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                            <td><input type="text" id="three_xl_qty" name="three_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                            <td><input type="text" id="four_xl_qty" name="four_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                            <td><input type="text" id="five_xl_qty" name="five_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                                                                             
                                                                         </tr>
                                                                         <tr>
@@ -257,20 +271,22 @@
                                                                             <td><input type="text" rel="popover" id="m_price" name="m_price" class="form-control form-control-sm m_price price" placeholder="Price"  ></td>
                                                                             <td><input type="text" rel="popover" id="l_price" name="l_price" class="form-control form-control-sm l_price price" placeholder="Price"  ></td>
                                                                             <td><input type="text" rel="popover" id="xl_price" name="xl_price" class="form-control form-control-sm xl_price price" placeholder="Price"  ></td>
-                                                                            <td>
-                                                                                <input type="text" rel="popover" id="xxl_price" name="xxl_price" class="form-control form-control-sm xxl_price price" placeholder="Price"  >
-                                                                            </td>
+                                                                            <td><input type="text" rel="popover" id="xxl_price" name="xxl_price" class="form-control form-control-sm xxl_price price" placeholder="Price" ></td>
+                                                                            <td><input type="text" rel="popover" id="three_xl_price" name="three_xl_price" class="form-control form-control-sm three_xl_price price" placeholder="Price"></td>
+                                                                            <td><input type="text" rel="popover" id="four_xl_price" name="four_xl_price" class="form-control form-control-sm four_xl_price price" placeholder="Price"></td>
+                                                                            <td><input type="text" rel="popover" id="five_xl_price" name="five_xl_price" class="form-control form-control-sm five_xl_price price" placeholder="Price"></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th>MRP</th>
                                                                             <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td >
-                                                                                <input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value="">
-                                                                            </td>
+                                                                            <td ><input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" id="l_mrp" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" id="xl_mrp" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
                                                                             <td ><input type="text" id="xxl_mrp" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                            <td><input type="text" id="three_xl_mrp" name="three_xl_mrp" class="form-control form-control-sm three_xl_mrp mrp" placeholder="MRP"></td>
+                                                                            <td><input type="text" id="four_xl_mrp" name="four_xl_mrp" class="form-control form-control-sm four_xl_mrp mrp" placeholder="MRP"></td>
+                                                                            <td><input type="text" id="five_xl_mrp" name="five_xl_mrp" class="form-control form-control-sm five_xl_mrp mrp" placeholder="MRP"></td>
                                                                         </tr>
                                                                         
                                                                     </tbody>
@@ -397,6 +413,22 @@
         </div>
     </div>
 </div>
+
+<div class="hide">
+    <div id="normal_size_type">
+        <th>Size</th>
+        <td>XS </td>
+        <td>S </td>
+        <td>M </td>
+        <td>L </td>
+        <td>XL </td>
+        <td>XXL </td>
+        <td>3XL </td>
+        <td>4XL </td>
+        <td>5XL </td>
+    </div>
+</div>
+
 
 <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">

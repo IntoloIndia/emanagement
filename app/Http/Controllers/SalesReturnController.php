@@ -22,6 +22,7 @@ class SalesReturnController extends Controller
         $sales_return_data = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
                                         // ->whereDate('sales_returns.create_date',date('Y-m-d'))
                                         ->select(['sales_returns.*','customers.customer_name'])->get();
+
         // $sales_return = SalesReturn::join('customer_bills','customer_bills.id','=','sales_returns.bill_id')
         //             ->where(['sales_returns.release_status' => MyApp::RELEASE_PANDDING_STATUS])
         //             ->select('customer_bills.customer_id','sales_returns.*')->get();
@@ -170,34 +171,26 @@ class SalesReturnController extends Controller
         }
     }
 
-    // function updateSalesReleaseStatus($sales_return_id)
-    // {
-    //     $release_status_data =SalesReturn::find($sales_return_id);
-    //     $release_status_data->release_status = MyApp::RELEASE_STATUS;
-    //     $release_status_data->release_date = date('Y-m-d');
-    //     $release_status_data->release_time = date('g:i A');
-    //     $release_status_data->save();
-        
-    //     return response()->json([
-    //         'status'=>200
-    //     ]);
-    // }
 
-    // function updateStatus($user_id)
-    // {
-    //     $status_data =User::find($user_id);
-    //     if($status_data->status){
-    //         $status_data->status = MyApp::DEACTIVE;
-    //     }else{
-    //         $status_data->status = MyApp::ACTIVE;
-    //     }
-    //     $status_data->save();
+    function updateSalesReturnStatus($sales_return_id)
+    {
+        $status_data =SalesReturn::find($sales_return_id);
+        if($status_data->status){
+            $status_data->status = MyApp::DEACTIVE;
+
+        }else if($status_data->status){
+            $status_data->status = MyApp::USAGE;
+
+        }else{
+            $status_data->status = MyApp::ACTIVE;
+        }
+        $status_data->save();
         
-    //     return response()->json([
-    //         'status'=>200,
-    //         // 'active'=>$status_data->status
-    //     ]);
-    // }
+        return response()->json([
+            'status'=>200,
+            'active'=>$status_data->status
+        ]);
+    }
     
     public function salesReturnInvoice($sales_return_id)
     {
@@ -224,7 +217,7 @@ class SalesReturnController extends Controller
          $html .= "</div>"; 
          $html .= "<div class='row mt-2'>";
             $html .= "<table class='table table-striped'>";
-                $html .= "<thead>";
+                // $html .= "<thead>";
                     $html .= "<tr>";
                         $html .= "<th></th>";
                         $html .= "<th>SN</th>";
@@ -235,6 +228,7 @@ class SalesReturnController extends Controller
                     $html .= "</tr>";
                 $html .= "</thead>";
                 $html .= "<tbody>";
+                    $total_amount =0;
                     foreach ($sales_return_item as $key => $list) {
                         $html .= "<tr>";
                             $html .= "<td></td>";
@@ -245,8 +239,17 @@ class SalesReturnController extends Controller
                             $html .= "<td>" . $list->amount ."</td>";
                             // $html .= "<td>" . $list->item_qty ."</td>";
                         $html .= "</tr>";
+                        $total_amount = $total_amount +$list->amount;
                     }
                 $html .= "<tbody>";
+                $html .="<tfoot>";
+                $html .="<tr>";
+                $html .="<td colspan='3'></td>";
+                // $html .="<td>".$total_qty."</td>";
+                    $html .="<td colspan='2'><b>Total :</b></td>";  
+                    $html .="<td><b>".$total_amount."</b></td>";
+                $html .="</tr>";
+            $html .="</tfoot>";
             $html .= "</table>";
         $html .= "</div>"; 
      
