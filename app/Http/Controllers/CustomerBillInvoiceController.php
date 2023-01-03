@@ -14,6 +14,7 @@ use App\Models\Month;
 use App\Models\City;
 use App\Models\User;
 use App\Models\SalesReturn;
+use App\Models\SalesReturnItem;
 use App\Models\CustomerPoint;
 use App\MyApp;
 use Validator;
@@ -151,10 +152,7 @@ class CustomerBillInvoiceController extends Controller
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
 
-            //   $sales_return_model = SalesReturn::find($bill_id);
-            //   $sales_return_model->apply_bill_id = $billmodel->id;
-            //   $sales_return_model->save();
-  
+             
            
                
                 $product_id = $req->input('product_id');
@@ -200,6 +198,17 @@ class CustomerBillInvoiceController extends Controller
                     manageStock($stock_type, $purchase_item->purchase_entry_id, $size[$key], $qty[$key]);
                 } 
 
+                        $credit_note_id = $req->input('credit_note_id');
+                        $total_amount = $req->input('total_amount');
+
+                        foreach ($credit_note_id as $key => $list) {
+                            // dd($list);
+                            // die();
+                            $sales_return_model = SalesReturn::find($list);
+                            $sales_return_model->status = MyApp::DEACTIVE;
+                            $sales_return_model->save();
+                    }    
+
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
                     'status'=>200,
@@ -233,30 +242,35 @@ class CustomerBillInvoiceController extends Controller
         //    }
         //    $amount = array_sum($credit_note_amount);
 
+        //    dd($credit_note_amount);
+
             $html = "";
          $html .= "<div class='row'>";
          $html .= "<div class='row'>";
             $html .= "<table class='table'>";
-                $html .= "<thead>";
-                    $html .= "<tr>";
-                        $html .= "<th></th>";
-                        $html .= "<th>SN</th>";
-                        $html .= "<th>Check</th>";
-                        $html .= "<th>Date</th>";
-                        // $html .= "<th>Time</th>";
-                        // $html .= "<th>Amount</th>";
-                    $html .= "</tr>";
-                $html .= "</thead>";
+                // $html .= "<thead>";
+                //     $html .= "<tr>";
+                //         $html .= "<th></th>";
+                //         $html .= "<th>SN</th>";
+                //         $html .= "<th>Check</th>";
+                //         $html .= "<th>Date</th>";
+                //         // $html .= "<th>Time</th>";
+                //         $html .= "<th>Amount</th>";
+                //     $html .= "</tr>";
+                // $html .= "</thead>";
                 $html .= "<tbody>";
                     $total_amount =0;
                     foreach ($credit_note_data as $key => $list) {
+                    $credit_note_amount = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
                         $html .= "<tr>";
                             $html .= "<td></td>";
                             $html .= "<td>" . ++$key . "</td>";
                             $html .= "<td> <div class='form-check'>
-                            <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='$list->id'></div></td>";
+                            <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='".$credit_note_amount."' >
+                            </div></td>";
+                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='$credit_note_amount'>
                             $html .= "<td>" .$list->create_date. "</td>";
-                            // $html .= "<td>" . $amount ."</td>";           
+                            $html .= "<td>" . $credit_note_amount ."</td>";           
                         $html .= "</tr>";
                         // $total_amount = $total_amount +$list->amount;
                     }

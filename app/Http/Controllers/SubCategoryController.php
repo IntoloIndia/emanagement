@@ -30,7 +30,8 @@ class SubCategoryController extends Controller
         // return view('employee');
         $validator = Validator::make($req->all(),[
             "category_id" => 'required|max:191',
-            "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
+            // "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
+            "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->id,
             // 'sub_category_img' => 'required|max:191'
         ]);
 

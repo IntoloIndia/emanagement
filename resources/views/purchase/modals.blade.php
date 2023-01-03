@@ -231,76 +231,72 @@
                                                 
                                                 <div class="col-md-9">
                                         
-                                                    {{-- <div class="row "> --}}
-                                                        <div class="card ">
-                                                            <div class="card-body table-responsive " style="overflow-x: scroll;">
-                                                                    
-                                                                <table class="table" style="width: 650px;">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <div id="show_size">sfdbfds</div>
-                                                                            <th>Size</th>
-                                                                            <td>XS </td>
-                                                                            <td>S </td>
-                                                                            <td>M </td>
-                                                                            <td>L </td>
-                                                                            <td>XL </td>
-                                                                            <td>XXL </td>
-                                                                            <td>3XL </td>
-                                                                            <td>4XL </td>
-                                                                            <td>5XL </td>
-                                                                           
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Qty</th>
-                                                                            <td><input type="text" id="xs_qty" name="xs_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="s_qty" name="s_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="m_qty" name="m_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="l_qty" name="l_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="xl_qty" name="xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="xxl_qty" name="xxl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="three_xl_qty" name="three_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="four_xl_qty" name="four_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            <td><input type="text" id="five_xl_qty" name="five_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
-                                                                            
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Price</th>
-                                                                            <td><input type="text" rel="popover" id="xs_price" name="xs_price" class="form-control form-control-sm xs_price price example-popover" placeholder="Price" ></td>
-                                                                            <td><input type="text" rel="popover" id="s_price" name="s_price" class="form-control form-control-sm s_price price" placeholder="Price"  ></td>
-                                                                            <td><input type="text" rel="popover" id="m_price" name="m_price" class="form-control form-control-sm m_price price" placeholder="Price"  ></td>
-                                                                            <td><input type="text" rel="popover" id="l_price" name="l_price" class="form-control form-control-sm l_price price" placeholder="Price"  ></td>
-                                                                            <td><input type="text" rel="popover" id="xl_price" name="xl_price" class="form-control form-control-sm xl_price price" placeholder="Price"  ></td>
-                                                                            <td><input type="text" rel="popover" id="xxl_price" name="xxl_price" class="form-control form-control-sm xxl_price price" placeholder="Price" ></td>
-                                                                            <td><input type="text" rel="popover" id="three_xl_price" name="three_xl_price" class="form-control form-control-sm three_xl_price price" placeholder="Price"></td>
-                                                                            <td><input type="text" rel="popover" id="four_xl_price" name="four_xl_price" class="form-control form-control-sm four_xl_price price" placeholder="Price"></td>
-                                                                            <td><input type="text" rel="popover" id="five_xl_price" name="five_xl_price" class="form-control form-control-sm five_xl_price price" placeholder="Price"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>MRP</th>
-                                                                            <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" id="l_mrp" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" id="xl_mrp" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td ><input type="text" id="xxl_mrp" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
-                                                                            <td><input type="text" id="three_xl_mrp" name="three_xl_mrp" class="form-control form-control-sm three_xl_mrp mrp" placeholder="MRP"></td>
-                                                                            <td><input type="text" id="four_xl_mrp" name="four_xl_mrp" class="form-control form-control-sm four_xl_mrp mrp" placeholder="MRP"></td>
-                                                                            <td><input type="text" id="five_xl_mrp" name="five_xl_mrp" class="form-control form-control-sm five_xl_mrp mrp" placeholder="MRP"></td>
-                                                                        </tr>
+                                                    <div class="card ">
+                                                        <div class="card-body table-responsive" style="overflow-x: scroll;">
+                                                                
+                                                            <table class="table" id="show_size" >
+                                                                {{-- <tbody>
+                                                                    <tr >
+                                                                        <th>Size</th>
+                                                                        <td>XS </td>
+                                                                        <td>S </td>
+                                                                        <td>M </td>
+                                                                        <td>L </td>
+                                                                        <td>XL </td>
+                                                                        <td>XXL </td>
+                                                                        <td>3XL </td>
+                                                                        <td>4XL </td>
+                                                                        <td>5XL </td>
                                                                         
-                                                                    </tbody>
-                                                                </table>
-                            
-                                                            </div>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Qty</th>
+                                                                        <td><input type="text" id="xs_qty" name="xs_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="s_qty" name="s_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="m_qty" name="m_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="l_qty" name="l_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="xl_qty" name="xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="xxl_qty" name="xxl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="three_xl_qty" name="three_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="four_xl_qty" name="four_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        <td><input type="text" id="five_xl_qty" name="five_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                                                                        
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Price</th>
+                                                                        <td><input type="text" rel="popover" id="xs_price" name="xs_price" class="form-control form-control-sm xs_price price example-popover" placeholder="Price" ></td>
+                                                                        <td><input type="text" rel="popover" id="s_price" name="s_price" class="form-control form-control-sm s_price price" placeholder="Price"  ></td>
+                                                                        <td><input type="text" rel="popover" id="m_price" name="m_price" class="form-control form-control-sm m_price price" placeholder="Price"  ></td>
+                                                                        <td><input type="text" rel="popover" id="l_price" name="l_price" class="form-control form-control-sm l_price price" placeholder="Price"  ></td>
+                                                                        <td><input type="text" rel="popover" id="xl_price" name="xl_price" class="form-control form-control-sm xl_price price" placeholder="Price"  ></td>
+                                                                        <td><input type="text" rel="popover" id="xxl_price" name="xxl_price" class="form-control form-control-sm xxl_price price" placeholder="Price" ></td>
+                                                                        <td><input type="text" rel="popover" id="three_xl_price" name="three_xl_price" class="form-control form-control-sm three_xl_price price" placeholder="Price"></td>
+                                                                        <td><input type="text" rel="popover" id="four_xl_price" name="four_xl_price" class="form-control form-control-sm four_xl_price price" placeholder="Price"></td>
+                                                                        <td><input type="text" rel="popover" id="five_xl_price" name="five_xl_price" class="form-control form-control-sm five_xl_price price" placeholder="Price"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>MRP</th>
+                                                                        <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td ><input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td ><input type="text" id="l_mrp" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td ><input type="text" id="xl_mrp" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td ><input type="text" id="xxl_mrp" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
+                                                                        <td><input type="text" id="three_xl_mrp" name="three_xl_mrp" class="form-control form-control-sm three_xl_mrp mrp" placeholder="MRP"></td>
+                                                                        <td><input type="text" id="four_xl_mrp" name="four_xl_mrp" class="form-control form-control-sm four_xl_mrp mrp" placeholder="MRP"></td>
+                                                                        <td><input type="text" id="five_xl_mrp" name="five_xl_mrp" class="form-control form-control-sm five_xl_mrp mrp" placeholder="MRP"></td>
+                                                                    </tr>
+                                                                    
+                                                                </tbody> --}}
+                                                            </table>
+                        
                                                         </div>
+                                                    </div>
                                                         
-                                                    {{-- </div> --}}
                                                 </div>
                                         
                                             </div>
 
-                                            
                                         </div>
                                         <div class="row">
                                             <div class="card card-body" >
@@ -403,11 +399,7 @@
                         </div>
 
                     {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
-                    {{-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="savePurchaseEntryBtn" class="btn btn-primary btn-sm ">Save </button>
-                        <button type="button" id="updateProductBtn" class="btn btn-primary btn-sm hide">Update </button>
-                    </div> --}}
+                    
                 </form>
             </div>
         </div>
@@ -415,19 +407,140 @@
 </div>
 
 <div class="hide">
-    <div id="normal_size_type">
-        <th>Size</th>
-        <td>XS </td>
-        <td>S </td>
-        <td>M </td>
-        <td>L </td>
-        <td>XL </td>
-        <td>XXL </td>
-        <td>3XL </td>
-        <td>4XL </td>
-        <td>5XL </td>
-    </div>
+
+    <table class="table" id="normal_size_type" >
+        <tbody >
+            <tr >
+                <th>Size</th>
+                <td>XS </td>
+                <td>S </td>
+                <td>M </td>
+                <td>L </td>
+                <td>XL </td>
+                <td>XXL </td>
+                <td>3XL </td>
+                <td>4XL </td>
+                <td>5XL </td>
+               
+            </tr>
+            <tr>
+                <th>Qty</th>
+                <td><input type="text" id="xs_qty" name="xs_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="s_qty" name="s_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="m_qty" name="m_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="l_qty" name="l_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="xl_qty" name="xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="xxl_qty" name="xxl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="three_xl_qty" name="three_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="four_xl_qty" name="four_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="five_xl_qty" name="five_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td><input type="text" rel="popover" id="xs_price" name="xs_price" class="form-control form-control-sm xs_price price example-popover" placeholder="Price" ></td>
+                <td><input type="text" rel="popover" id="s_price" name="s_price" class="form-control form-control-sm s_price price" placeholder="Price"  ></td>
+                <td><input type="text" rel="popover" id="m_price" name="m_price" class="form-control form-control-sm m_price price" placeholder="Price"  ></td>
+                <td><input type="text" rel="popover" id="l_price" name="l_price" class="form-control form-control-sm l_price price" placeholder="Price"  ></td>
+                <td><input type="text" rel="popover" id="xl_price" name="xl_price" class="form-control form-control-sm xl_price price" placeholder="Price"  ></td>
+                <td><input type="text" rel="popover" id="xxl_price" name="xxl_price" class="form-control form-control-sm xxl_price price" placeholder="Price" ></td>
+                <td><input type="text" rel="popover" id="three_xl_price" name="three_xl_price" class="form-control form-control-sm three_xl_price price" placeholder="Price"></td>
+                <td><input type="text" rel="popover" id="four_xl_price" name="four_xl_price" class="form-control form-control-sm four_xl_price price" placeholder="Price"></td>
+                <td><input type="text" rel="popover" id="five_xl_price" name="five_xl_price" class="form-control form-control-sm five_xl_price price" placeholder="Price"></td>
+            </tr>
+            <tr>
+                <th>MRP</th>
+                <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
+                <td ><input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value=""></td>
+                <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
+                <td ><input type="text" id="l_mrp" name="l_mrp" class="form-control form-control-sm l_mrp mrp" placeholder="MRP" value=""></td>
+                <td ><input type="text" id="xl_mrp" name="xl_mrp" class="form-control form-control-sm xl_mrp mrp" placeholder="MRP" value=""></td>
+                <td ><input type="text" id="xxl_mrp" name="xxl_mrp" class="form-control form-control-sm xxl_mrp mrp" placeholder="MRP" value=""></td>
+                <td><input type="text" id="three_xl_mrp" name="three_xl_mrp" class="form-control form-control-sm three_xl_mrp mrp" placeholder="MRP"></td>
+                <td><input type="text" id="four_xl_mrp" name="four_xl_mrp" class="form-control form-control-sm four_xl_mrp mrp" placeholder="MRP"></td>
+                <td><input type="text" id="five_xl_mrp" name="five_xl_mrp" class="form-control form-control-sm five_xl_mrp mrp" placeholder="MRP"></td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <table class="table" id="kids_size_type" style="width: 650px;">
+        <tbody>
+            <tr >
+                <th>Size</th>
+                <td>18</td>
+                <td>20</td>
+                <td>22</td>
+                <td>24</td>
+                <td>26</td>
+                <td>28</td>
+                <td>30</td>
+                <td>32</td>
+                <td>34</td>
+                <td>36</td>
+            </tr>
+            <tr>
+                <th>Qty</th>
+                <td><input type="text" id="k_18_qty" name="k_18_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_20_qty" name="k_20_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_22_qty" name="k_22_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_24_qty" name="k_24_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_26_qty" name="k_26_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_28_qty" name="k_28_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_30_qty" name="k_30_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_32_qty" name="k_32_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_34_qty" name="k_34_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="k_36_qty" name="k_36_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td><input type="text" id="k_18_price" name="k_18_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_20_price" name="k_20_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_22_price" name="k_22_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_24_price" name="k_24_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_26_price" name="k_26_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_28_price" name="k_28_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_30_price" name="k_30_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_32_price" name="k_32_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_34_price" name="k_34_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="k_36_price" name="k_36_price" class="form-control form-control-sm price" placeholder="Price"></td>
+            </tr>
+            <tr>
+                <th>MRP</th>
+                <td><input type="text" id="k_18_mrp" name="k_18_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_20_mrp" name="k_20_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_22_mrp" name="k_22_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_24_mrp" name="k_24_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_26_mrp" name="k_26_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_28_mrp" name="k_28_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_30_mrp" name="k_30_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_32_mrp" name="k_32_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_34_mrp" name="k_34_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+                <td><input type="text" id="k_36_mrp" name="k_36_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <table class="table" id="without_size_type">
+        <tbody>
+            <tr >
+                <th>Qty</th>
+                <th>Price</th>
+                <th>MRP</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="without_qty" name="without_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="without_price" name="without_price" class="form-control form-control-sm price" placeholder="Price"></td>
+                <td><input type="text" id="without_mrp" name="without_mrp" class="form-control form-control-sm mrp" placeholder="MRP"></td>                
+            </tr>
+        </tbody>
+    </table>
+
 </div>
+
+
 
 
 <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

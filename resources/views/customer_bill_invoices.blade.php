@@ -774,6 +774,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <b>Item</b>
+                                        <b style="margin-left: 100px">12656162922</b>
                                         <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
                                     </div>
                                     <div class="card-body">
@@ -1232,13 +1233,7 @@
                 
             });
 
-            $(document).on('click','.credit_note', function () {
-                var credit_note_id = $(this).val();
-                alert(credit_note_id);
-            });
-
-          
-
+            
             $(document).on('click','#with_in_state', function (e) {
                 // $('#gst_no').addClass('hide');
                 // $('#city_id').addClass('hide');
@@ -1289,7 +1284,6 @@
 
             $(document).on('keyup','#mobile_no', function () {
                 const mobile_no = $(this).val();
-                
                 if( mobile_no.length == 10 ) {
                     getCustomerData(mobile_no)
                 }
@@ -1299,6 +1293,7 @@
             $(document).on('keyup','.discount', function () {
                 var object = $(this);
                 calculateAmount(object);
+                
             });
              
             $(document).on('keyup','.qty', function () {
@@ -1333,6 +1328,7 @@
 
                 printInvoice();
             });
+
             $(document).on('click','#reload_invoice_print', function () {
               window.location.reload();
             });
@@ -1342,10 +1338,47 @@
                 // redeemPoint();
                 calculateTotalAmount();
             });
-
-            
+            // credit note function 
+            $(document).on('click','.credit_note', function () {
+                var credit_note_id = $(this).val();
+                // var total_Return;
+                // var credit_note_amount = $(this).attr('credit-note-amount');
+                
+                // $(".credit_note").each(function(){
+                //     var credit_note_amount = parseFloat($(this).val());
+                //     // alert(credit_note_amount);
+                //     // if (!isNaN(credit_note_amount))
+                //     // {
+                //     //     total_Return +=  credit_note_amount;
+                //     // }  
+                //     // alert(total_Return);
+                // });
+                    
+                // var tot_retun_amount = gross_amount-credit_note_amount;
+                // alert(tot_retun_amount);
+                calculateCreditnoteReturnTotalAmount();
+               
+            });
 
         });
+
+
+        // var gross_amount = $('#gross_amount').val();
+        // var credit_note_amount = 0;
+
+
+        function calculateCreditnoteReturnTotalAmount(){
+            var total_Return=0;
+            $(".credit_note").each(function(){
+                var credit_note = ($(this).is(":checked")).attr('credit-note-amount');
+                    if (!isNaN(credit_note))
+                    {
+                        total_Return +=  credit_note;
+                    }  
+                    alert(total_Return);
+                });
+        }
+
 
         function getCustomerData(mobile_no) {
             $.ajax({
@@ -1376,8 +1409,8 @@
                         $('#month_id').val('');
                         $('#city_id').val('');
                         $('#gst_no').val('');
-                        $('#with_in_state').prop('checked',false);
-                        $('#inter_state').prop('checked',false);
+                        // $('#with_in_state').prop('checked',false);
+                        // $('#inter_state').prop('checked',false);
                         $('#credit_note').html('');
                         $('#credit_note').append('');
                         // $('#credit_note').append(response.html);
@@ -1456,6 +1489,7 @@
 
 
             calculateTotalAmount();
+            // calculateCreditnoteReturnTotalAmount();
 
         }
 
@@ -1533,7 +1567,7 @@
             }else{
                 gross_amount = item_total_amount ;
             }
-            
+            // new
             $("#gross_amount").val(gross_amount.toFixed(2));
             $("#total_amount").val(gross_amount.toFixed(2));
         }
@@ -1551,6 +1585,8 @@
            
             $("#total_discount").val(total_discount.toFixed(2));
         }
+
+        
 
         function calculateTotalGst(){
             var total_sgst = 0;

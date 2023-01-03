@@ -1231,7 +1231,6 @@ class PurchaseEntryController extends Controller
             }
         }
 
-
         return response()->json([
             'status'=>200,
             'purchase'=>$purchase,
@@ -1243,61 +1242,57 @@ class PurchaseEntryController extends Controller
     }
 
 
-    public function updateProduct(Request $req, $product_id)
-    {
-        $validator = Validator::make($req->all(),[
-            'category_id' => 'required|max:191',
-            'sub_category_id'=>'required|max:191',
-            'product_name'=>'required|max:191',
-            // 'price'=>'required|max:191',
-            'size'=>'required|max:191',
-            'color'=>'required|max:191',
-            'qty'=>'required|max:191',
-        ]);
+    // public function updateProduct(Request $req, $product_id)
+    // {
+    //     $validator = Validator::make($req->all(),[
+    //         'category_id' => 'required|max:191',
+    //         'sub_category_id'=>'required|max:191',
+    //         'product_name'=>'required|max:191',
+    //         'size'=>'required|max:191',
+    //         'color'=>'required|max:191',
+    //         'qty'=>'required|max:191',
+    //     ]);
 
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=>$validator->messages(),
-            ]);
-        }else{
-            $product_code = rand(000001,999999);
-            $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-            // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
-            $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
+    //     if($validator->fails())
+    //     {
+    //         return response()->json([
+    //             'status'=>400,
+    //             'errors'=>$validator->messages(),
+    //         ]);
+    //     }else{
+    //         $product_code = rand(000001,999999);
+    //         $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+    //         // $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 1, 40);
+    //         $barcode = 'data:image/png;base64,' . base64_encode($generator->getBarcode($product_code, $generator::TYPE_CODE_128, 3, 50)) ;
 
-            $model =  PurchaseEntry::find($product_id);
-            $model->product_code = $product_code;
-            $model->category_id = $req->input('category_id');
-            $model->supplier_id = $req->input('supplier_id');
-            $model->sub_category_id = $req->input('sub_category_id');
-            $model->product = $req->input('product_name');
-            // $model->qty = $req->input('qty');
-            $model->sales_price = $req->input('sales_price');
-            $model->purchase_price = $req->input('purchase_price');
-            // $model->gst_no = $req->input('gst_no');
-            // $model->hsn_code = $req->input('hsn_code');
-            $model->bill_no = $req->input('bill_no');
-            $model->size = $req->input('size');
-            $model->color = $req->input('color');
-            $model->barcode = $barcode;
-            $model->date = date('Y-m-d');
-            $model->time = date('g:i A');
+    //         $model =  PurchaseEntry::find($product_id);
+    //         $model->product_code = $product_code;
+    //         $model->category_id = $req->input('category_id');
+    //         $model->supplier_id = $req->input('supplier_id');
+    //         $model->sub_category_id = $req->input('sub_category_id');
+    //         $model->product = $req->input('product_name');
+    //         $model->sales_price = $req->input('sales_price');
+    //         $model->purchase_price = $req->input('purchase_price');
+    //         $model->bill_no = $req->input('bill_no');
+    //         $model->size = $req->input('size');
+    //         $model->color = $req->input('color');
+    //         $model->barcode = $barcode;
+    //         $model->date = date('Y-m-d');
+    //         $model->time = date('g:i A');
 
-            if($model->save()){
+    //         if($model->save()){
 
-                $imageModal = ProductImage::find($product_id);
-                $imageModal->product_id = $model->id;
-                $imageModal->product_image = $req->input('product_image');
-                $imageModal->save();
+    //             $imageModal = ProductImage::find($product_id);
+    //             $imageModal->product_id = $model->id;
+    //             $imageModal->product_image = $req->input('product_image');
+    //             $imageModal->save();
 
-                return response()->json([
-                    'status'=>200,
-                ]);
-            }
-        }
-    }
+    //             return response()->json([
+    //                 'status'=>200,
+    //             ]);
+    //         }
+    //     }
+    // }
 
     public function deleteProduct($product_id)
     {
