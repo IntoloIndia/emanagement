@@ -198,16 +198,16 @@ class CustomerBillInvoiceController extends Controller
                     manageStock($stock_type, $purchase_item->purchase_entry_id, $size[$key], $qty[$key]);
                 } 
 
-                        $credit_note_id = $req->input('credit_note_id');
-                        $total_amount = $req->input('total_amount');
+                // $credit_note_id = $req->input('credit_note_id');
+                //         if($item->save()){
+                //         // $total_amount = $req->input('total_amount');
 
-                        foreach ($credit_note_id as $key => $list) {
-                            // dd($list);
-                            // die();
-                            $sales_return_model = SalesReturn::find($list);
-                            $sales_return_model->status = MyApp::DEACTIVE;
-                            $sales_return_model->save();
-                    }    
+                //             foreach($credit_note_id as $key => $list) {
+                //                 $sales_return_model = SalesReturn::find($list);
+                //                 $sales_return_model->status = MyApp::DEACTIVE;
+                //                 $sales_return_model->save();
+                //         } 
+                //     }      
 
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
@@ -265,8 +265,9 @@ class CustomerBillInvoiceController extends Controller
                         $html .= "<tr>";
                             $html .= "<td></td>";
                             $html .= "<td>" . ++$key . "</td>";
-                            $html .= "<td> <div class='form-check'>
-                            <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='".$credit_note_amount."' >
+                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='".$credit_note_amount."' >
+                            $html .= "<td> <div class='form-check '>
+                             <input class='form-check-input credit_note' id='notedata' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='".$credit_note_amount."' >
                             </div></td>";
                             // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='$credit_note_amount'>
                             $html .= "<td>" .$list->create_date. "</td>";
@@ -454,7 +455,7 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="<span class='float-end'>CGST :</span> <br>";
                                 $html .="<span class='float-end'>IGST : </span><br>";
                                 $html .="<span class='float-end'>Points :</span> <br>";
-                                // $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
+                                $html .="<span class='float-end'>R/Credit note amount :</span> <br>";
                                 $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
 
                         $html .="</div>";
@@ -466,7 +467,7 @@ class CustomerBillInvoiceController extends Controller
                             $html .="<b class='text-center'>".$total_sgst."</b><br>";
                             $html .="<b class='text-center'>".$total_igst."</b><br>";
                             $html .="<b class='text-center'>".$bills->redeem_point."</b><br>";
-                            // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
+                            $html .="<b class='text-center'>0.00</b><br>";
                             $html .="<b class='text-center'>".$bills->total_amount."</b><br>";
 
                     $html .="</div>";

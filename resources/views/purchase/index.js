@@ -816,6 +816,7 @@
 
         var category_id = $('#category_id').val();
         var size_type = $('#category_id').find("option:selected").attr('size-type');
+        $('#size_type_id').val(size_type);
         $('#show_size').empty();
         if (size_type == 2) {
             $('#show_size').append($('#kids_size_type').html());
@@ -861,7 +862,7 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                // console.log(response);
+                console.log(response);
 
                 if (response.status === 400) {
                     $('#purchase_entry_err').html('');
@@ -873,6 +874,7 @@
 
                 } else {
                     $('#purchase_entry_err').html('');
+                    $('#purchase_entry_err').removeClass('alert alert-danger');
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("option:selected").val();
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#color").val('').trigger('chosen:updated');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#product_image").val('');

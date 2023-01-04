@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Validator;
+use Illuminate\Validation\Rule;
 
 class SubCategoryController extends Controller
 {
@@ -29,10 +30,18 @@ class SubCategoryController extends Controller
     {
         // return view('employee');
         $validator = Validator::make($req->all(),[
-            "category_id" => 'required|max:191',
+            // "category_id" => 'required|max:191',
             // "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->input('sub_category'),
-            "sub_category" => 'required|unique:sub_categories,sub_category,'.$req->id,
             // 'sub_category_img' => 'required|max:191'
+            
+            // new
+            "category_id" => 'required|max:191',
+              'sub_category' => [
+                'required', 'max:255',
+                Rule::unique('sub_categories')->ignore($req->id)->where(function ($query) use($req) {
+                    return $query->where('category_id', $req->category_id);
+                }),
+            ],
         ]);
 
         if($validator->fails())
@@ -79,11 +88,22 @@ class SubCategoryController extends Controller
     public function updateSubCategory(Request $req, $sub_category_id)
     {
         $validator = Validator::make($req->all(),[
-            "category_id" => 'required|max:191',
-            "sub_category" => 'required|max:191',
+            // "category_id" => 'required|max:191',
+            // "sub_category" => 'required|max:191',
             // 'sub_category_img' => 'required|max:191',
             // 'category' => 'required|unique:categories,category,'.$category_id,
             // $item_name = 'required|unique:items,item_name,'.$item_id;
+
+
+            // new
+            "category_id" => 'required|max:191',
+            'sub_category' => [
+              'required', 'max:255',
+              Rule::unique('sub_categories')->ignore($req->id)->where(function ($query) use($req) {
+                  return $query->where('category_id', $req->category_id);
+              }),
+          ],
+
 
         ]);
         if($validator->fails())

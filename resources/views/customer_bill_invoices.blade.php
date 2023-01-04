@@ -857,6 +857,16 @@
                                                     <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
+                                           
+                                            <div class="row">
+                                                <div class="col-md-10 text-end">
+                                                    <b>Credit Note Amount :</b>
+                                                </div>
+                                                <div class="col-md-2 justify-content-end">
+                                                    {{-- <input type="text" name="" id="item_total_amount" class="form-control form-control-sm " value="0" readonly> --}}
+                                                    <input type="text" name="credit_note_amount" id="credit_note_amount" class="form-control form-control-sm " value="0" readonly>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-md-10 text-end">
                                                     <b>Gross Amount :</b>
@@ -887,7 +897,10 @@
                                 <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
                                 <hr>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-8">
+                                        <span>Payment :</span>
+                                    </div>
+                                    <div class="col-md-3">
                                         <span>Payment :</span>
                                     </div>
                                 </div>
@@ -951,200 +964,6 @@
         </div>
     </div>
 </div>
-
-    {{-- <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <b>Billing</b>
-                </div>
-                <div class="card-body">
-                    <form action="">
-                        @csrf
-                        <div class="card_error"></div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="card">
-                                   <div class="card-header">
-                                    <b>customer</b>
-                                   </div>
-                                   <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <input type="text" name="" id="" class="form-control form-control-sm">
-                                            </div>
-                                        </div>
-                                   </div>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="card">
-                                   <div class="card-header">
-                                    <b>Item</b>
-                                    <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
-                                   </div>
-                                   <div class="card-body">
-                                    <div class="card-body"style="max-height:400px;">
-                                        <div class="row">
-                                         <div class="col-md-12 col-sm-12">
-                                             <div class="table-responsive" style="max-height: 250px">
-                                             <table class="table">
-                                                 <thead>
-                                                     <tr>
-                                                         <th scope="col">Sno</th>
-                                                         <th scope="col">Emp</th>
-                                                         <th scope="col">Code</th>
-                                                         <th scope="col">Product</th>
-                                                         <th scope="col">Qty</th>
-                                                         <th scope="col">Size</th>
-                                                         <th scope="col">MRP</th>
-                                                         <th scope="col">Dis.</th>
-                                                         <th scope="col" class="sgst_show_hide">SGST</th>
-                                                         <th scope="col" class="cgst_show_hide">CGST</th>
-                                                         <th scope="col" class="igst_show_hide hide">IGST</th>
-                                                         <th scope="col">Amount</th>
-                                                         <th scope="col">Delete</th>
-                                                     </tr>
-                                                 </thead>
-                                                 <tbody id="item_list">
-                 
-                                                 </tbody>
-                                             </table>  
-                                             </div>
-                                         </div>
-                                        </div>
-                                     </div>
-                                     <div class="card-footer ">
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>Total Amount :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="" class="form-control form-control-sm" id="item_total_amount" value="0" readonly>
-                                             </div>
-                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>Discount :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="" id="total_discount" class="form-control form-control-sm" value="0" readonly>
-                                             </div>
-                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>SGST :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="" id="total_sgst" class="form-control form-control-sm " value="0" readonly>
-                                             </div>
-                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>CGST :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="" id="total_cgst" class="form-control form-control-sm " value="0" readonly>
-                                             </div>
-                                         </div>
-                                         
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>IGST :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="" id="total_igst" class="form-control form-control-sm " value="0" readonly>
-                                             </div>
-                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>Points :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-                                                 <input type="text" name="redeem_points" id="redeem_points" class="form-control form-control-sm" value="0">
-                                             </div>
-                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-10 text-end">
-                                                 <b>Gross Amount :</b>
-                                             </div>
-                                             <div class="col-md-2 justify-content-end">
-        
-                                                 <input type="text" name="" id="gross_amount" class="form-control form-control-sm " value="0" readonly>
-                                             </div>
-                                         </div>
-                                            
-                                         <div class="row mt-1 hide" id="given_return_amount" >
-                                             <div class="col-md-4"></div>
-                                             <div class="col-md-4"></div>
-                                             <div class="col-md-2 text-end">
-                                                 <div><b>Given Amt :</b></div>
-                                                 <div class="mt-2" ><b >Return Amt :</b></div>
-                                             </div>
-                                             <div class="col-md-2 text-center">
-                                                 <input type="text" name="" id="given_amount" class="form-control form-control-sm">
-                                                 <input type="text" name="" id="return_amount" class="form-control form-control-sm mt-1" readonly>
-                                             </div>
-                                         </div>
-                 
-                                     </div>
-                                 </div>
-                                 <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
-                                 <hr>
-                                 <div class="row">
-                                     <div class="col-md-2">
-                                         <span>Payment :</span>
-                                     </div>
-                                 </div>
-                             <div class="row">
-                                
-                                     <div class="col-md-1">
-                                         <div class="form-check form-check-inline">
-                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
-                                         </div>
-                                     </div>
-                                         <div class="col-md-2">
-                                             <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
-                                         </div>
-                               
-                                     <div class="col-md-1">
-                                         <div class="form-check form-check-inline">
-                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
-                                         </div>
-                                     </div>
-                                     <div class="col-md-2">
-                                         <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
-                                     </div>
-                                
-                                     <div class="col-md-1">
-                                         <div class="form-check form-check-inline">
-                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
-                                         </div>
-                                     </div>
-                                     <div class="col-md-2">
-                                         <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
-                                     </div>
-                                
-                             </div>
-                                
-                                     <div class="row mt-2">
-                                         <div class="col-md-4"></div>
-                                         <div class="col-md-4"></div>
-                                         <div class="col-md-3 d-grid gap-2 d-md-flex justify-content-md-end">
-                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                             <button type="button" id="saveOrderBtn" class="btn btn-primary btn-sm" disabled>Save Order</button>
-                                             <button type="button" id="updateOrderBtn" class="btn btn-primary btn-sm hide">Update Order</button>
-                                         </div>
-                                     </div>
-                                   </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
 @endsection
 
@@ -1341,42 +1160,71 @@
             // credit note function 
             $(document).on('click','.credit_note', function () {
                 var credit_note_id = $(this).val();
-                // var total_Return;
-                // var credit_note_amount = $(this).attr('credit-note-amount');
-                
-                // $(".credit_note").each(function(){
-                //     var credit_note_amount = parseFloat($(this).val());
-                //     // alert(credit_note_amount);
-                //     // if (!isNaN(credit_note_amount))
-                //     // {
-                //     //     total_Return +=  credit_note_amount;
-                //     // }  
-                //     // alert(total_Return);
-                // });
-                    
-                // var tot_retun_amount = gross_amount-credit_note_amount;
-                // alert(tot_retun_amount);
+                // alert(credit_note_id);
                 calculateCreditnoteReturnTotalAmount();
-               
+                // calculateAmount();
             });
+          
+                    //  $(document).on('click','#notedata', function (e) {
+                    //     var credit_note_id = $(this).val();
+                    //     // alert(credit_note_id)
+                    //      var total_amount =   $('#item_total_amount').val();
+                    //         var total_Return = 0;
+                    //         var total_note_amount = 0;
+                    //     if ($(this).is(":checked")) {
+                    //         $('.credit_note:checked').each(function() {
+                    //             var note_amount = parseFloat($(this).attr('credit-note-amount'));
+                    //             total_note_amount = total_note_amount + note_amount ;
+                    //             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
+                    //         });
+                    //         console.log(total_note_amount);
+                    //     }else{
+                    //         // $('.credit_note').prop('checked', false); 
+                    //         // console.log(total_note_amount);
+                    //             alert("callnot");
+                                
+                    //             // // getCustomerData();
+                    //             // var note_amount = parseFloat($(this).attr('credit-note-amount'));
+                    //             // total_Return =  total_Return +  note_amount;
+                    //             // console.log("🚀 ~ file: customer_bill_invoices.blade.php:1185 ~ total_Return", total_Return)
+                    //             // calculateAmount(object);
+                             
+                    //     }
 
-        });
+                        
+                    //     $("#item_total_amount").val(total_Return.toFixed(2));
+                    //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                    // });
 
 
-        // var gross_amount = $('#gross_amount').val();
-        // var credit_note_amount = 0;
+             });
 
 
+        
+        
         function calculateCreditnoteReturnTotalAmount(){
-            var total_Return=0;
-            $(".credit_note").each(function(){
-                var credit_note = ($(this).is(":checked")).attr('credit-note-amount');
-                    if (!isNaN(credit_note))
-                    {
-                        total_Return +=  credit_note;
-                    }  
-                    alert(total_Return);
-                });
+             var gross_amount = $('#gross_amount').val();
+             var total_amount =   $('#item_total_amount').val();
+             var total_Return = 0;
+             var total_note_amount = 0;
+            //  if(total_amount == "")
+            //  {
+            //     var total_amount = $('#item_total_amount').val();
+                
+            // }
+
+            $('.credit_note:checked').each(function() {
+                var note_amount = parseFloat($(this).attr('credit-note-amount'));
+                total_note_amount = total_note_amount + note_amount ;
+            });
+            total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
+
+            console.log(total_note_amount);
+
+            $("#credit_note_amount").val(total_note_amount.toFixed(2));
+            // $("#item_total_amount").val(total_Return.toFixed(2));
+            $("#gross_amount").val(total_Return.toFixed(2));
+            // $("#total_amount").val(total_Return.toFixed(2));
         }
 
 
@@ -1489,7 +1337,7 @@
 
 
             calculateTotalAmount();
-            // calculateCreditnoteReturnTotalAmount();
+            calculateCreditnoteReturnTotalAmount();
 
         }
 

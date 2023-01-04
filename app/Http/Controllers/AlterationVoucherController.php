@@ -176,7 +176,7 @@ class AlterationVoucherController extends Controller
                 // if($model->save()){
                     return response()->json([   
                         'status'=>200,
-                        'qty'=>$req->item_qty[$i]
+                        // 'qty'=>$req->item_qty[$i]
                         
                     ]);
                 // }
@@ -196,8 +196,9 @@ class AlterationVoucherController extends Controller
                
             $html = "";
              $html .= "<div class='row'>";
-                 $html .= "<div class='col-6'><h6>Name :  ".$alteration_voucher->customer_name."</h6><h6>GSTNO :  ".$alteration_voucher->gst_no."</h6><h6>Mobile No : ".$alteration_voucher->mobile_no."</h6></div>";
-                 $html .= "<div class='col-6 text-end'><h6>Bill No : ".$alteration_voucher->bill_id."</h6><h6>Date : ".date('d-m-Y',strtotime($alteration_voucher->alteration_date))."</h6></div>";
+                 $html .= "<div class='col-6'><h6>Name :  ".$alteration_voucher->customer_name."</h6><h6>Mobile No : ".$alteration_voucher->mobile_no."</h6>
+                 <h6>Date : ".date('d-m-Y',strtotime($alteration_voucher->alteration_date))."</h6></div>";
+                 $html .= "<div class='col-6 text-end'><h6>Bill No : ".$alteration_voucher->bill_id."</h6><h6>Enquiry : 8587587545</h6></div>";
              $html .= "</div>"; 
              $html .= "<div class='row mt-2'>";
                 $html .= "<table class='table table-striped'>";
@@ -207,6 +208,8 @@ class AlterationVoucherController extends Controller
                             $html .= "<th>SN</th>";
                             $html .= "<th>Item</th>";
                             $html .= "<th>Qty</th>";
+                            // $html .= "<th>Size</th>";
+                            // $html .= "<th>Color</th>";
                         $html .= "</tr>";
                     $html .= "</thead>";
                     $html .= "<tbody>";
@@ -216,6 +219,8 @@ class AlterationVoucherController extends Controller
                                 $html .= "<td>" . ++$key . "</td>";
                                 $html .= "<td>" . $list->sub_category ."</td>";
                                 $html .= "<td>" . $list->item_qty ."</td>";
+                                // $html .= "<td>" . $list->item_qty ."</td>";
+                                // $html .= "<td>" . $list->item_qty ."</td>";
                             $html .= "</tr>";
                         }
                     $html .= "<tbody>";

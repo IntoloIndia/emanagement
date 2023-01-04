@@ -116,6 +116,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('admin/barcode','index');
+        Route::get('admin/filter-product/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterProduct');
           
     });
 

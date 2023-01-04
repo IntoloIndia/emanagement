@@ -32,7 +32,7 @@
                                 <label for="" class="form-label">Offer</label>
                             </div>
                             <div class="col-md-8">
-                                <input type="number" name="discount_offer" id="discount_offer" class="form-control form-control-sm">
+                                <input type="number" name="discount_offer" id="discount_offer" class="form-control form-control-sm" min="0">
                             </div>
                         </div>
                    
