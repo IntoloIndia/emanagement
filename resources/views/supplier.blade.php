@@ -298,7 +298,7 @@
             e.preventDefault();
             manageCity();
            
-            const country_id = $("#country_id").val();
+            // const country_id = $("#country_id").val();
                 //  alert(country_id);
             // getStateByCountry(country_id);
             // var state_id = $("#put_country_id").val();

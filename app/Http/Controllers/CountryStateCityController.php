@@ -153,13 +153,11 @@ class CountryStateCityController extends Controller
             $country_id = 'required|max:191';
             $state_id = 'required|max:191';
             $city = 'required|unique:cities,city,'.$req->input('city_id');
-            $city_short = 'required|unique:cities,city_short,'.$req->input('city_id');
             $model = City::find($req->input('city_id'));
         }else{
             $country_id = 'required|max:191';
             $state_id = 'required|max:191';
             $city = 'required|unique:cities,city,'.$req->input('city');
-            $city_short = 'required|unique:cities,city_short,'.$req->input('city_short');
             $model = new City ;
         }
 
@@ -167,7 +165,6 @@ class CountryStateCityController extends Controller
             'country_id' => $country_id,
             'state_id' => $state_id,
             'city' => $city,
-            'city_short' => $city_short
         ]);
         if($validator->fails())
         {
@@ -179,7 +176,6 @@ class CountryStateCityController extends Controller
             $model->country_id = $req->input('country_id');
             $model->state_id = $req->input('state_id');
             $model->city = strtolower($req->input('city'));
-            $model->city_short = strtolower($req->input('city_short'));
 
             if($model->save()){
                 return response()->json([

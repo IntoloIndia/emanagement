@@ -13,6 +13,8 @@ use App\Models\Customer;
 use App\Models\Month;
 use App\Models\City;
 use App\Models\User;
+use App\Models\SalesReturn;
+use App\Models\SalesReturnItem;
 use App\Models\CustomerPoint;
 use App\MyApp;
 use Validator;
@@ -31,18 +33,10 @@ class CustomerBillInvoiceController extends Controller
         $months = Month::all();
         $cities = City::all();
         $users = User::all();
-        // $allSales = CustomerBillInvoice::all();
-        // $customers_billing = Customer::join('billings','billings.customer_id','=','customers.id')
-        // $customers_billing = Billing::join('customers','customers.id','=','billings.customer_id')
-        // $customers_billing = Billing::join('products','products.id','=','billings.product_id')
-                        // ->groupBy('customers.customer_name')
-                    // ->get(['customers.*','billings.amount','billings.qty']);
-                    // ->get(['customers.*','billings.amount','billings.qty']);
-                    // print_r($customers_billing);
+        $sales_return_data = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
+                                        ->join('sales_return_items','sales_return_items.sales_return_id','=','sales_returns.id')
+                             ->select(['sales_returns.*','customers.customer_name','sales_return_items.amount'])->get();
 
-            // print_r($allSales); 
-            // print_r("<per>");   
-                    
         return view('customer_bill_invoices',[ 
             'products'=> $products,
             'product_barcode'=> $product_barcode,
@@ -50,14 +44,16 @@ class CustomerBillInvoiceController extends Controller
             'customers_billing' => $customers_billing,
             'months' => $months,
             'cities' => $cities,
-            'users' => $users
-            // 'allSales' => $allSales,
+            'users' => $users,
+            'sales_return_data' => $sales_return_data
         ]);
         
     }
 
      function saveOrder(Request $req)
     {
+        // return $req;
+        // die();
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required|max:191',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
@@ -108,7 +104,7 @@ class CustomerBillInvoiceController extends Controller
             $pay_online = $req->input('total_amount');
             $pay_cash = $req->input('pay_cash');
             $pay_card = $req->input('pay_card');
-            $pay_credit = $req->input('pay_credit');
+            // $pay_credit = $req->input('pay_credit');
             $redeem_points = $req->input('redeem_points');
 
 
@@ -149,12 +145,14 @@ class CustomerBillInvoiceController extends Controller
               $billmodel->pay_online = $pay_online;
               $billmodel->pay_cash = $pay_cash;
               $billmodel->pay_card = $pay_card;
-              $billmodel->pay_credit = $pay_credit;
+            //   $billmodel->pay_credit = $pay_credit;
               $billmodel->earned_point = $earn_point;
               $billmodel->redeem_point = $redeem_points;
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
+
+             
            
                
                 $product_id = $req->input('product_id');
@@ -200,6 +198,17 @@ class CustomerBillInvoiceController extends Controller
                     manageStock($stock_type, $purchase_item->purchase_entry_id, $size[$key], $qty[$key]);
                 } 
 
+                // $credit_note_id = $req->input('credit_note_id');
+                //         if($item->save()){
+                //         // $total_amount = $req->input('total_amount');
+
+                //             foreach($credit_note_id as $key => $list) {
+                //                 $sales_return_model = SalesReturn::find($list);
+                //                 $sales_return_model->status = MyApp::DEACTIVE;
+                //                 $sales_return_model->save();
+                //         } 
+                //     }      
+
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
                     'status'=>200,
@@ -222,15 +231,65 @@ class CustomerBillInvoiceController extends Controller
             {
                 $total_points = $points->total_points; 
             }
+
+            $credit_note_data =  SalesReturn::where(['customer_id'=>$customer_id])
+                                ->where(['status'=>MyApp::ACTIVE])
+                                ->select(['sales_returns.*'])
+                                ->get();
+        //     $credit_note_amount = array();
+        //    foreach ($credit_note_data as $key => $list) {
+        //     $credit_note_amount[] = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
+        //    }
+        //    $amount = array_sum($credit_note_amount);
+
+        //    dd($credit_note_amount);
+
+            $html = "";
+         $html .= "<div class='row'>";
+         $html .= "<div class='row'>";
+            $html .= "<table class='table'>";
+                // $html .= "<thead>";
+                //     $html .= "<tr>";
+                //         $html .= "<th></th>";
+                //         $html .= "<th>SN</th>";
+                //         $html .= "<th>Check</th>";
+                //         $html .= "<th>Date</th>";
+                //         // $html .= "<th>Time</th>";
+                //         $html .= "<th>Amount</th>";
+                //     $html .= "</tr>";
+                // $html .= "</thead>";
+                $html .= "<tbody>";
+                    $total_amount =0;
+                    foreach ($credit_note_data as $key => $list) {
+                    $credit_note_amount = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
+                        $html .= "<tr>";
+                            $html .= "<td></td>";
+                            $html .= "<td>" . ++$key . "</td>";
+                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='".$credit_note_amount."' >
+                            $html .= "<td> <div class='form-check '>
+                             <input class='form-check-input credit_note' id='notedata' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='".$credit_note_amount."' >
+                            </div></td>";
+                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='$credit_note_amount'>
+                            $html .= "<td>" .$list->create_date. "</td>";
+                            $html .= "<td>" . $credit_note_amount ."</td>";           
+                        $html .= "</tr>";
+                        // $total_amount = $total_amount +$list->amount;
+                    }
+                $html .= "<tbody>";
+            $html .= "</table>";
+        $html .= "</div>"; 
+
             return response()->json([
                 'status'=>200,
                 'customersData'=>$customersData,
-                'total_points'=> $total_points
+                'total_points'=> $total_points,
+                'html'=> $html
             ]);
         }else{
             return response()->json([
                 'status'=>404,
                 'msg'=>"Data not found",
+                // 'html'=> "dat"
                 // 'total_points'=>$total_points
             ]);
         }
@@ -396,7 +455,7 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="<span class='float-end'>CGST :</span> <br>";
                                 $html .="<span class='float-end'>IGST : </span><br>";
                                 $html .="<span class='float-end'>Points :</span> <br>";
-                                // $html .="<span class='float-end'>R/OFF AMT :</span> <br>";
+                                $html .="<span class='float-end'>R/Credit note amount :</span> <br>";
                                 $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
 
                         $html .="</div>";
@@ -408,7 +467,7 @@ class CustomerBillInvoiceController extends Controller
                             $html .="<b class='text-center'>".$total_sgst."</b><br>";
                             $html .="<b class='text-center'>".$total_igst."</b><br>";
                             $html .="<b class='text-center'>".$bills->redeem_point."</b><br>";
-                            // $html .="<b class='text-center'>".$get_cutomer_data->total_amount."</b><br>";
+                            $html .="<b class='text-center'>0.00</b><br>";
                             $html .="<b class='text-center'>".$bills->total_amount."</b><br>";
 
                     $html .="</div>";

@@ -51,7 +51,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">category</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Category</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -81,6 +81,32 @@
                       {{-- <img src="/storage/app/public/" alt="no image" class="hide" srcset="" id="category_img_update"> --}}
                       {{-- <input type="text" name="category_img" id="category_img_update" class="hide form-control form-control-sm"> --}}
                   </div>
+
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="size_type" id="normal_size" value="{{MyApp::NORMAL_SIZE}}" checked> 
+                        <label class="form-check-label">Normal Size</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="size_type" id="kids_size" value="{{MyApp::KIDS_SIZE}}"> 
+                        <label class="form-check-label">Kids Size</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="size_type" id="without_size" value="{{MyApp::WITHOUT_SIZE}}"> 
+                        <label class="form-check-label">Without Size</label>
+                      </div>
+                    </div>
+                    
+                  </div>
+
                 </div>
               </div>
                {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}} 
@@ -204,6 +230,7 @@
               <th scope="col">Sno</th>
               <th scope="col">Image</th>
               <th scope="col">Category</th>
+              <th scope="col">Size Type</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -215,9 +242,22 @@
                 <tr>
                   <td>{{++$count}}</td>
                   <td>
-                    <a href="{{asset('/storage/app/public/'.$list->category_img)}}" target="_blank">
-                    <img src="{{asset('/storage/app/public/'.$list->category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td>
+                    @if ($list->category_img != null)
+                      <a href="{{asset('/storage/app/public/'.$list->category_img)}}" target="_blank">
+                      <img src="{{asset('/storage/app/public/'.$list->category_img)}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td>
+                    @else
+                      <img src="{{asset('public/assets/images/icons/jpg-file.png')}}"  alt="image not found" srcset="" class="card-img-top img-thumbnail img-wh-40" style="cursor:pointer"></a></td>
+                    @endif
                   <td>{{$list->category}}</td>
+                  <td>
+                    @if ($list->size_type == MyApp::NORMAL_SIZE)
+                        {{"Normal Size"}}
+                    @elseif($list->size_type == MyApp::KIDS_SIZE)
+                        {{"Kids Size"}}
+                    @else
+                        {{"Without Size"}}
+                    @endif
+                  </td>
                   <td>
                     <button type="button" class="btn btn-info btn-sm editCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                     <button type="button" class="btn btn-danger btn-sm deleteCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>

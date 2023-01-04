@@ -8,8 +8,9 @@ class MyApp {
     const BILLING = 2;
     const OTHER = 3;
 
-    const ACTIVE = 1;
     const DEACTIVE = 0;
+    const ACTIVE = 1;
+    const USAGE = 2;
     const INACTIVE = 0;
 
     const PENDING = 0;
@@ -43,6 +44,10 @@ class MyApp {
     const WITH_IN_STATE = 1;
     const INTER_STATE = 2;
     const THOUSAND = 1000;
+
+    const NORMAL_SIZE = 1;
+    const KIDS_SIZE = 2;
+    const WITHOUT_SIZE = 3;
     
     const DELIVERY = 1;
    

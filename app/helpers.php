@@ -11,6 +11,7 @@
     use App\Models\CustomerBill;
     use App\Models\Purchase;
     use App\Models\ManageStock;
+   
 
     // use App\MyApp;
 
@@ -86,9 +87,11 @@
     function getStockItems($purchase_entry_id)
     {
         $items = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get();
+        // $price = PurchaseEntryItem::where('purchase_entry_id',$purchase_entry_id)->get();
         return $result = [
             'status'=>200,
-            'items'=>$items
+            'items'=>$items,
+            // 'price'=>$price
         ] ;
     }
 
@@ -135,27 +138,46 @@
     {
         $purchase_entry = PurchaseEntry::where(['category_id'=>$category_id])->get('id');
         $stock_qty = array();
+        $stock_amount = array();
         foreach ($purchase_entry as $key => $list) {
             $stock_qty[] = ManageStock::where(['purchase_entry_id'=>$list->id])->get()->sum('total_qty');
+            $stock_amount[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('taxable');
         }
-        $total_qty = array_sum($stock_qty);
-
-        return $total_qty;
+        
+        return $result = [
+            'total_qty'=>array_sum($stock_qty),
+            'total_amount'=>array_sum($stock_amount)
+        ] ;
+        // $total_qty = array_sum($stock_qty);
+        // return $total_qty;
+      
     }
-
+   
     function stockItemQtyBySubCategory($sub_category_id)
     {
         $purchase_entry = PurchaseEntry::where(['sub_category_id'=>$sub_category_id])->get('id');
         $stock_qty = array();
+        $stock_amount = array();
+
         foreach ($purchase_entry as $key => $list) {
             $stock_qty[] = ManageStock::where(['purchase_entry_id'=>$list->id])->get()->sum('total_qty');
+            $stock_amount[] = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get()->sum('taxable');
         }
-        $total_qty = array_sum($stock_qty);
-
-        return $total_qty;
+        return $result = [
+            'total_qty'=>array_sum($stock_qty),
+            'total_amount'=>array_sum($stock_amount)
+        ];
     }
 
-    
+    function getSumOfPurchaseEntryItems($purchase_entry_id)
+    {
+        $qty = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get()->sum('qty');
+        $amount = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id])->get()->sum('taxable');
+        return $result = [
+            'qty'=>$qty,
+            'amount'=>$amount,
+        ];
+    }
 
     function manageStock($stock_type, $purchase_entry_id, $size, $qty){
 
@@ -179,9 +201,7 @@
             $model->purchase_entry_id = $purchase_entry_id;
             $model->size = $size;
             $model->total_qty = $qty;
-
             $model->save();
-
         }
         
         return 'ok';

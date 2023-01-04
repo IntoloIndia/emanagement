@@ -15,72 +15,96 @@
     {{-- <h1>Barcode</h1> --}}
      <div class="card">
         <div class="card-header">
-           <div class="row">
-            <div class="col-md-6">
-                <b>Barcodes</b>
+            <div class="row">
+                <div class="col-md-6">
+                    <b>Barcodes</b>
+                </div>
             </div>
-            <div class="col-md-2">
-                <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
-                    <option selected disabled >Category</option>
-                    @foreach ($categories as $key => $list)
-                        <option value="{{$list->id}}" >{{$list->category}}</option>
-                    @endforeach
-                </select>
+            <div class="row">
+           <div class="col-md-2  offset-1">
+                         <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
+                        <option selected disabled >Category</option>
+                        @foreach ($categories as $key => $list)
+                            <option value="{{$list->id}}" >{{$list->category}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="sub_category_id" class="form-select form-select-sm select_chosen">
+                        <option selected disabled >Choose...</option>
+                    </select>
+                </div>
+                {{-- <div class="col-md-2">
+                    <select id="sub_category_id" class="form-select form-select-sm select_chosen">
+                        <option selected disabled value="0">Sub Category</option>
+                        @foreach ($sub_categories as $key => $list)
+                            <option value="{{$list->id}}">{{ucwords($list->sub_category)}}</option>
+                        @endforeach
+                    </select>
+                </div>  --}}
+                <div class="col-md-2">
+                    <select id="brand_id" class="form-select form-select-sm select_chosen" >
+                        <option selected disabled value="0">Brand</option>
+                        @foreach ($brands as $key => $list)
+                            <option value="{{$list->id}}">{{ucwords($list->brand_name)}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="style_no_id" class="form-select form-select-sm select_chosen">
+                        <option selected disabled value="0">Style No</option>
+                        @foreach ($get_style_no as $key => $list)
+                            <option value="{{$list->id}}" >{{$list->style_no}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="color" data-placeholder='Select color' class="form-select form-select-sm select_chosen" >
+                        <option selected value="" disabled ></option>
+                        @foreach ($colors as $key => $list)
+                            <option value="{{$list->id}}">{{$list->color}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1 text-end position-relative" >
+                    <i class="fas fa-redo cursor-pointer position-absolute top-50 start-50 translate-middle" id="reset_filter"></i>
+                </div>
             </div>
-            <div class="col-md-2">
-                <select id="sub_category_id" class="form-select form-select-sm select_chosen">
-                    <option selected disabled >Choose...</option>
-                    {{-- @foreach ($sub_categories as $items)
-                        <option value="{{$items->id}}">{{$items->sub_category}}</option>
-                    @endforeach --}}
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select id="style_no_id" class="form-select form-select-sm select_chosen">
-                    <option selected disabled >Style No</option>
-                    @foreach ($get_style_no as $key => $list)
-                        <option value="{{$list->id}}" >{{$list->style_no}}</option>
-                    @endforeach
-                </select>
-            </div>
-           </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                @foreach ($Barcodes_data as $list)
+            <div id="show_filter_product"></div>
+            {{-- <div class="row"> --}}
+                {{-- @foreach ($Barcodes_data as $list)
                 <div class="col-md-3">
                     <div class="card" id="div1">
-                         {{-- <div class="card-header">
-                            <b>barcode</b>
-                        </div>  --}}
-                      {{-- <div> --}}
-                            <div class="card-body" >
-                                <div class="row mb-2">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
+                      
+                            <div class="card-body" > --}}
+                                   
+
+                                {{-- <div class="row mb-2"></div>
+                                <div class="row" >
+                                    <div class="col-md-12 ">
                                     <span class="tect-center business_title ml-2" style="letter-spacing: 3px;"><b>MANGALDEEP CLOTHS LLP</b></span><br/>
-                                    <span class="product_detail ml-3">Product : </span> <span  class="ml-5">{{ucwords($list->sub_category)}}</span> <br/>
-                                    <span class="product_detail ml-3">Brand : </span> <span class="ml-5">{{ucwords($list->brand_name)}}</span> <br/>
-                                    <span class="product_detail ml-3">Style: </span> <span  class="ml-5">{{$list->style_no}}</span> <br/>
-                                    <span class="product_detail ml-3">Color : </span> <span class="ml-5 colorbox">{{ucwords($list->color)}}</span> <br/>
+                                    <span class="product_detail ml-3">Product : </span> <span  class="ml-5 filter_row " row-value="{{$list->id}}">{{ucwords($list->sub_category)}}</span> <br/>
+                                    <span class="product_detail ml-3">Brand : </span> <span class="ml-5 ">{{ucwords($list->brand_name)}}</span> <br/>
+                                    <span class="product_detail ml-3">Style: </span> <span  class="ml-5 ">{{$list->style_no}}</span> <br/>
+                                    <span class="product_detail ml-3">Color : </span> <span class="ml-5 colorbox ">{{ucwords($list->color)}}</span> <br/>
                                     <span class="product_detail ml-3">Size : </span> <span  class="ml-5">{{ucwords($list->size)}}</span> <br/>
-                                    <span class="product_detail ml-3" style="font-size: 20px; ">MRP </span>: <b  class="ml-5" style="font-size: 20px;">{{$list->mrp}}</b> <br/>
+                                    <span class="product_detail ml-3" style="font-size: 20px;">MRP </span>: <b  class="ml-5" style="font-size: 20px;">{{$list->mrp}}</b> <br/>
                                 </div>
                                     <div class="col-md-12" >
                                         <img src="{{$list->barcode_img}}" class="barcode_image barcode img-fluid"><br/>
-                                        {{-- <img src="{{asset('public/assets/barcodes/barcode.gif')}}" class="img-thumbnail " > --}}
                                         <span class="product_detail"><b style="letter-spacing: 15px;">{{$list->barcode}}</b></span> <br/>
                                      </div>
                                 </div>
                                 <button class="btn btn-success btn-sm float-right" onclick="myFun('div1')"><i class="fas fa-file-invoice"></i></button>
-                            </div>
-                        {{-- </div> --}}
-                       
+                            </div> --}}
+                        
+                            {{--                        
                     </div>
                 </div>
-                @endforeach
-            </div>
+                @endforeach --}}
+            {{-- </div> --}}
         </div> 
     </div>
 
@@ -171,7 +195,40 @@
 
     $(document).ready(function () {
         $(".select_chosen").chosen({ width: '100%' });
+
+        $(document).on('click','#reset_filter', function (e) {
+                window.location.reload();
+        });
         
+        $(document).on('change','#sub_category_id', function (e) {
+               var sub_category_id = $(this).val();
+                filterProduct(sub_category_id);
+        });
+        $(document).on('change','#brand_id', function (e) {
+               var brand_id = $(this).val();
+                filterProduct(brand_id);
+        });
+        $(document).on('change','#style_no_id', function (e) {
+            var style_no_id = $(this).val();
+            filterProduct(style_no_id);
+        });
+        $(document).on('change','#color', function (e) {
+            filterProduct();
+        });
+
+        // $("#sub_category_id").change(function() {
+        //     var filterValue = $(this).val();
+        //     var row = $('.filter_row'); 
+        //     row.hide()
+        //     row.each(function(i, el) {
+        //         if($(el).attr('row-value') == filterValue) {
+        //             $(el).show();
+        //         }
+        //     })
+        // });
+
+
+
     });
     function myFun(params) {
         // alert("call");
@@ -181,6 +238,31 @@
         window.print();
         document.body.innerHTML = backup;
     }
+
+
+
+    function filterProduct()
+        {
+            var sub_category_id = $('#sub_category_id').val();
+            var brand_id = $('#brand_id').val();
+            var style_no_id = $('#style_no_id').val();
+            var color = $('#color option:selected').text();
+
+
+             $.ajax({
+                type: "get",
+                dataType: "json",
+                url: "filter-product/"+ sub_category_id + "/" +brand_id + "/" + style_no_id + "/" + color,
+                success: function (response) {
+                    console.log(response);
+                    if(response.status == 200){
+                        $('#show_filter_product').html("");
+                        $('#show_filter_product').append(response.html)
+                    }
+                }
+            });
+        }
+
 </script>
 @endsection
 

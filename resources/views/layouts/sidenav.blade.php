@@ -41,6 +41,11 @@
                                 <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="role" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Role </p>
+                            </a>
+                        </li>
                         <li class="nav-item ">
                             <a href="department" class="nav-link">
                                 <i class="fas fa-angle-right nav-icon"></i><p>Department </p>
@@ -185,6 +190,11 @@
             <li class="nav-item">
                 <a href="barcode" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="offer" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Offer</p>
                 </a>
             </li>
             

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SizeColorController;
 use App\Http\Controllers\UserController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SalesReturnController;
+use App\Http\Controllers\OfferController;
 
 use App\MyApp;
 /*
@@ -114,6 +116,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('admin/barcode','index');
+        Route::get('admin/filter-product/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterProduct');
           
     });
 
@@ -134,7 +137,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
         Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
 
-        Route::get('admin/get-city-short/{city_id}', 'getCityShortName');
+    
         // Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
         // Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
         // Route::post('admin/manage-city', 'manageCity');
@@ -180,6 +183,16 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-admin/{admin_id}', 'updateAdmin');
         Route::get('admin/delete-admin/{admin_id}', 'deleteAdmin');
     });
+
+    Route::controller(RoleController::class)->group(function(){
+        Route::get('admin/role','index');
+        Route::post('admin/save-role','saveRole');
+        Route::get('admin/edit-role/{role_id}','editRole');
+        Route::post('admin/update-role/{role_id}','updateRole');
+        Route::get('admin/delete-role/{role_id}','deleteRole');
+        Route::get('admin/active-deactive-role/{role_id}','activeDeactiveRole');
+    });
+
 
     Route::controller(UserController::class)->group(function () {
         Route::get('admin/user','index');
@@ -245,6 +258,18 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-sales-return-item', 'saveSalesReturnProduct');
         // Route::get('admin/update-release-status/{sales_return_id}', 'updateSalesReleaseStatus');
         Route::get('admin/sales-return-invoice/{sales_return_id}','salesReturnInvoice');
+        Route::get('admin/sales_return-status-update/{sales_return_id}', 'updateSalesReturnStatus');
+
+
+    });
+
+    // offer return 
+    Route::controller(OfferController::class)->group(function () {
+        Route::get('admin/offer', 'index');
+        Route::post('admin/save-offer', 'saveOffer');
+        Route::get('admin/edit-offer/{offer_id}', 'editOffer');
+        Route::post('admin/update-offer/{offer_id}', 'updateOffer');
+        Route::get('admin/delete-offer/{offer_id}', 'deleteOffer');
 
     });
 
@@ -281,7 +306,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
-        Route::get('admin/show-product/{category_id}/{sub_category_id?}/{style_no_id?}','showProduct');
+        Route::get('admin/show-product/{category_id}/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','showProduct');
         Route::get('admin/get-style-no/{style_no_id}','getstyleNo');
     });
 

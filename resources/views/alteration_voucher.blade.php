@@ -73,6 +73,10 @@
                         <hr>
                         <div id='alter_item_list'></div>
                         <div class="row">
+                            <div class="col-md-12 text-end"><b>Balance :</b> 1000</div>
+                            
+                        </div>
+                        <div class="row">
                             <div class="col-md-12 text-center">
                                 <p>Thankyou! Visit Again</p>
                             </div>

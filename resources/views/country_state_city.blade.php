@@ -110,7 +110,7 @@
                             <div id="city_err"></div>
 
                             <div class="row mb-2">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <label for="countryName" class="form-label">Country</label>
                                     <select name="country_id" id="city_country_id" class="form-select form-select-sm" onchange="getStateByCountry(this.value);">
                                         <option selected disabled >Select...</option>
@@ -123,23 +123,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-7">
+                                <div class="col-md-5">
                                     <label for="stateName" class="form-label">State</label>
                                     <select name="state_id" id="state_id" class="form-select form-select-sm">
                                         
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-8">
+                                </div>                          
+                                <div class="col-md-4">
                                     <label for="cityName" class="form-label">City</label>
                                     <input type="text" name="city" id="city" class="form-control form-control-sm" placeholder="City name">
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="cityShort" class="form-label">Short</label>
-                                    <input type="text" name="city_short" id="city_short" class="form-control form-control-sm" placeholder="JBP">
-                                </div>
+                               
                             </div>
 
                             <input type="hidden" name="city_id" id="city_id" value="">
@@ -324,7 +318,6 @@
                             <tr>
                                 <th>SN</th>
                                 <th>City</th>
-                                <th>Short</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -339,7 +332,6 @@
                                     <tr>
                                         <td>{{++$count}}</td>
                                         <td>{{ucwords($item->city)}}</td>
-                                        <td>{{strtoupper($item->city_short)}}</td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm editCityBtn" value="{{$item->id}}"><i class="fas fa-edit"></i></button>
                                             <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::CITY}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button>
@@ -678,7 +670,6 @@
                         $('#city_country_id').val(response.city.country_id);
                         $('#state_id').html(response.states);
                         $('#city').val(response.city.city);
-                        $('#city_short').val(response.city.city_short);
                         $('#city_id').val(response.city.id);
 
                     }

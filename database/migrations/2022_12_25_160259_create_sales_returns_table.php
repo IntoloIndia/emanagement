@@ -15,13 +15,12 @@ class CreateSalesReturnsTable extends Migration
     {
         Schema::create('sales_returns', function (Blueprint $table) {
             $table->id();
-            $table->integer('bill_id')->nullable();
             $table->integer('customer_id')->nullable();
+            $table->integer('bill_id')->nullable();
+            // $table->integer('apply_bill_id')->nullable();
             $table->date('create_date')->nullable();
             $table->string('create_time')->nullable();
-            $table->date('release_date')->nullable();
-            $table->string('release_time')->nullable();
-            $table->integer('release_status')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
