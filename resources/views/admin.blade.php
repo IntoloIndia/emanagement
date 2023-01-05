@@ -126,7 +126,7 @@
                             @foreach ($admins as $list)
                                 <tr>
                                     <td>{{++$count}}</td>
-                                    <td>{{($list->role_id == MyApp::ADMINISTRATOR) ? "Administrator" : "Billing" }}</td>
+                                    <td>{{ ucwords($list->role) }}</td>
                                     <td>{{ucwords($list->name)}}</td>
                                     <td>{{$list->email}}</td>
                                     <td>

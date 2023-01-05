@@ -99,7 +99,7 @@
               @foreach ($departments as $list)
                   <tr>
                     <td>{{++$count}}</td>
-                    <td>{{$list->department}}</td> 
+                    <td>{{ucwords($list->department)}}</td> 
                     <td> 
                       <button type="button" class="btn btn-info btn-sm editDepartmentBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                      <button type="button" class="btn btn-danger btn-sm deleteDepartmentBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> 

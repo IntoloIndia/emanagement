@@ -183,7 +183,7 @@
                                   <td>{{ucwords($list->sub_category)}}</td>
                                 <td>
                                   <button type="button" class="btn btn-info btn-sm editsubCategoryBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                  <button type="button" class="btn btn-danger btn-sm deletesubCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                                  {{-- <button type="button" class="btn btn-danger btn-sm deletesubCategoryBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> --}}
                               </td>
                             </tr>
                         @endforeach

@@ -4,39 +4,88 @@
 @section('content')
 {{-- model  --}}
 <div class="modal fade" id="offerModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Offers</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Offer</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="offerForm">
                     @csrf
                         <div id="offer_err"></div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="" class="form-label">Brands</label>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-md-8">
+                                        <div class="form-check product offset-2">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="product" value="product" checked>
+                                            <label class="form-check-label" id="">
+                                                <b>Product</b>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check store">
+                                            <input class="form-check-input " type="radio" name="exampleRadios" id="store" value="store" >
+                                            <label class="form-check-label" id="" >
+                                                <b>Store</b>
+                                            </label>
+                                        </div>
+                                    </div>                            
+                                </div> 
                             </div>
-                            <div class="col-md-8">
-                                <select id="brand_id" name="brand_id" class="form-select form-select-sm">
-                                    <option selected disabled >Choose...</option>
-                                    @foreach ($allbrands as $list)
+                        </div>
+                        <div class="row mt-2 brand_id">
+                            <div class="col-md-6">
+                                <label class="form-label brand_id">Brands</label>
+                            </div>
+                            <div class="col-md-6 style_no_id">
+                                <label class="form-label">Style No</label>
+                            </div>
+                        </div>
+                        <div class="row mb-4 ">
+                            <div class="col-md-6">
+                                <select id="brand_id" name="brand_id" class="form-select form-select-sm select_chosen brand_id" >
+                                    <option selected disabled>Brand</option>
+                                    @foreach ($brands as $key => $list)
                                         <option value="{{$list->id}}">{{ucwords($list->brand_name)}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <select name="style_no_id" id="style_no_id" class="form-select form-select-sm style_no_id">
+                                    <option selected disabled >Style No</option>
+                                    @foreach ($get_style_no as $key => $list)
+                                        <option value="{{$list->id}}" >{{$list->style_no}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> 
+
+                        <div class="row mt-2">
                             <div class="col-md-4">
-                                <label for="" class="form-label">Offer</label>
+                                <label for="" class="form-label">Percent</label>
                             </div>
-                            <div class="col-md-8">
-                                <input type="number" name="discount_offer" id="discount_offer" class="form-control form-control-sm" min="0">
+                            <div class="col-md-4">
+                                <label class="form-label">From Date</label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">To Date</label>
                             </div>
                         </div>
-                   
-                    {{-- <input type="hidden" name="admin_id" id="admin_id" value=""> --}}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="number" name="discount_offer" id="discount_offer" class="form-control form-control-sm" min="0" style="height: 5px;">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="date" name="offer_from" id="offer_from" class="form-control form-control-sm" min="0" style="height: 5px;">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="date" name="offer_to" id="offer_to" class="form-control form-control-sm" min="0" style="height: 5px;">
+                            </div>
+                        </div> 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="saveOfferBtn" class="btn btn-primary btn-sm ">Save Offer</button>
@@ -77,56 +126,37 @@
    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card">
-
-            <div class="card-header">
-                <h3 class="card-title">Offers</h3>
-
-                <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+<div class="card mt-3">
+    <div class="card-header"><h5><strong>Offer</strong></h5></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6"><b>1/12/2023</b></div>
+                            <div class="col-md-6 text-end"><b>12/12/2023</b></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-12 text-red" ><strong style="font-size:30px;"> 50% Off</strong></div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6"><b>Jara</b></div>
+                            <div class="col-md-6 text-end"><b> A-1145</b></div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="card-body table-responsive p-0" style="height: 450px;">
-                <table class="table table-head-fixed text-nowrap">
-                    <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Brands</th>
-                            <th>Offers</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{$count = "";}}
-                        @foreach ($offers as $list)
-                            <tr>
-                                <td>{{++$count}}</td>
-                                <td>{{$list->brand_name}}</td>
-                                <td>{{$list->discount_offer}}%</td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm editOfferBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-danger btn-sm deleteOfferBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
         </div>
     </div>
 </div>
+
+
+
 
 @endsection
 @section('script')
@@ -172,6 +202,20 @@
                 e.preventDefault();
                 const offer_id = $(this).val();
                 deleteOffer(offer_id);
+            });
+
+            $(document).on('change','.store', function (e) {
+                e.preventDefault();
+                // alert("fg");
+               $('.brand_id').addClass('hide');
+               $('.style_no_id').addClass('hide');
+            });
+
+            $(document).on('change','.product', function (e) {
+                e.preventDefault();
+                // alert("fg");
+               $('.brand_id').removeClass('hide');
+               $('.style_no_id').removeClass('hide');
             });
 
 
@@ -226,6 +270,7 @@
                         $('#saveOfferBtn').addClass('hide');
                         $('#updateOfferBtn').removeClass('hide');
                         $('#brand_id').val(response.offer.brand_id);
+                        $('#style_no_id').val(response.offer.style_no_id);
                         $('#discount_offer').val(response.offer.discount_offer);
 
                         $('#updateOfferBtn').val(response.offer.id);

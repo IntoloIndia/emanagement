@@ -15,7 +15,8 @@ class CreateOffersTable extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->integer('brand_id')->nullable();
+            $table->integer('brand_id')->default(0);
+            $table->integer('style_no_id')->default(0);
             $table->string('discount_offer')->nullable();
             $table->date('date')->nullable();
             $table->string('time')->nullable();

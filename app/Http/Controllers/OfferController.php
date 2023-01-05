@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\StyleNo;
 use App\Models\Offer;
 use Validator;
 
@@ -11,15 +12,22 @@ use Validator;
 class OfferController extends Controller
 {
     public function index(){
-        $allbrands = Brand::all();
+        $brands = Brand::all();
+        $get_style_no= StyleNo::all();
+       
         $offers = Offer::join('brands','brands.id','=','offers.brand_id')
-                            ->select(['offers.*','brands.brand_name'])->get();
+            ->join('style_nos','style_nos.id','=','offers.style_no_id')
+            ->select(['offers.*','brands.brand_name','style_nos.style_no'])
+            ->select(['offers.*','brands.brand_name'])
+            // ->groupBy('offers.id','offers.brand_id')
+            ->get();
+            // print($offers);
         return view('offer',[
-            'allbrands' => $allbrands,
+            'brands' => $brands,
+            'get_style_no' => $get_style_no,
             'offers' => $offers
         ]);
     }
-
     public function saveOffer(Request $req)
     {
         $validator = Validator::make($req->all(),[
@@ -36,6 +44,7 @@ class OfferController extends Controller
         }else{
             $model = new Offer;
             $model->brand_id = $req->input('brand_id');
+            $model->style_no_id = $req->input('style_no_id');
             $model->discount_offer = $req->input('discount_offer');
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');
@@ -72,6 +81,7 @@ class OfferController extends Controller
         }else{
             $model = Offer::find($offer_id);
             $model->brand_id = $req->input('brand_id');
+            $model->style_no_id = $req->input('style_no_id');
             $model->discount_offer = $req->input('discount_offer');
             $model->date = date('Y-m-d');
             $model->time = date('g:i A');

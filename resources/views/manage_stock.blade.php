@@ -203,14 +203,13 @@
             var brand_id = $('#brand_id').val();
             var style_no_id = $('#style_no_id').val();
             var color = $('#color option:selected').text();
-          
 
             $.ajax({
                 type: "get",
                 dataType: "json",
                 url: "show-product/"+ category_id + "/" + sub_category_id + "/" + brand_id + "/" + style_no_id + "/" + color,
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if(response.status == 200){
                         $('#show_product').html("");
                         $('#show_product').append(response.html)

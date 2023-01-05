@@ -17,10 +17,10 @@ class CreateSalesReturnsTable extends Migration
             $table->id();
             $table->integer('customer_id')->nullable();
             $table->integer('bill_id')->nullable();
-            // $table->integer('apply_bill_id')->nullable();
+            $table->integer('apply_bill_id')->nullable();
             $table->date('create_date')->nullable();
             $table->string('create_time')->nullable();
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

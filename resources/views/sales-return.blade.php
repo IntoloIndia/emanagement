@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="exampleFormControlInput1" class="form-label">Customer name</label>
-                            <input type="text" name="customer_name" id="customer_name" class="form-control form-control-sm" readonly placeholder="customer name">
+                            <input type="text" name="customer_name" id="customer_name" class="form-control form-control-sm" readonly placeholder="customer name" style="text-transform: capitalize">
                             <input type="hidden" name="customer_id" id="customer_id" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-2">
@@ -128,11 +128,13 @@
                                 <td>{{date('d-m-Y',strtotime($item->create_date))}}</td>
                                 <td>{{$item->create_time}}</td>
                                 <td>
+                                    <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+
                                     @if ($item->status==MyApp::ACTIVE)
-                                    <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Active</button>  
+                                    <button type="button" class="btn btn-warning deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Active</button>  
                                     @endif
-                                    @if ($item->status==MyApp::USAGE)
-                                    <button type="button" class="btn btn-info  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Usage</button>
+                                    @if ($item->status==MyApp::USED)
+                                    <button type="button" class="btn btn-success btn-sm  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Used</button>
                                     @endif
                                     @if ($item->status==MyApp::DEACTIVE)
                                     <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Deactive</button>
@@ -142,7 +144,6 @@
                                     <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Active</button>  
                                     <button type="button" class="btn btn-info  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Usage</button>
                                     <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$item->id}}">Deactive</button>
-
                                 </td> --}}
                              </tr>
                          @endforeach

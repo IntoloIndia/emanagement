@@ -8,9 +8,9 @@ class MyApp {
     const BILLING = 2;
     const OTHER = 3;
 
-    const DEACTIVE = 0;
     const ACTIVE = 1;
-    const USAGE = 2;
+    const USED = 2;
+    const DEACTIVE = 3;
     const INACTIVE = 0;
 
     const PENDING = 0;

@@ -19,6 +19,7 @@ class CreateCustomerBillsTable extends Migration
             $table->integer('bill_date')->default(0);
             $table->integer('bill_time')->default(0);
             $table->integer('total_amount')->default(0);
+            $table->integer('credit_note_amount')->default(0);
             $table->integer('pay_online')->default(0);
             $table->integer('pay_cash')->default(0);
             $table->integer('pay_card')->default(0);

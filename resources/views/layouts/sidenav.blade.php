@@ -36,14 +36,14 @@
                         <p>User Management<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item ">
-                            <a href="admin" class="nav-link">
-                                <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="role" class="nav-link">
                                 <i class="fas fa-angle-right nav-icon"></i><p>Role </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="admin" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
                             </a>
                         </li>
                         <li class="nav-item ">

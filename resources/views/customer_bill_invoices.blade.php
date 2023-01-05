@@ -774,7 +774,6 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <b>Item</b>
-                                        <b style="margin-left: 100px">12656162922</b>
                                         <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
                                     </div>
                                     <div class="card-body">
@@ -1165,37 +1164,7 @@
                 // calculateAmount();
             });
           
-                    //  $(document).on('click','#notedata', function (e) {
-                    //     var credit_note_id = $(this).val();
-                    //     // alert(credit_note_id)
-                    //      var total_amount =   $('#item_total_amount').val();
-                    //         var total_Return = 0;
-                    //         var total_note_amount = 0;
-                    //     if ($(this).is(":checked")) {
-                    //         $('.credit_note:checked').each(function() {
-                    //             var note_amount = parseFloat($(this).attr('credit-note-amount'));
-                    //             total_note_amount = total_note_amount + note_amount ;
-                    //             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
-                    //         });
-                    //         console.log(total_note_amount);
-                    //     }else{
-                    //         // $('.credit_note').prop('checked', false); 
-                    //         // console.log(total_note_amount);
-                    //             alert("callnot");
-                                
-                    //             // // getCustomerData();
-                    //             // var note_amount = parseFloat($(this).attr('credit-note-amount'));
-                    //             // total_Return =  total_Return +  note_amount;
-                    //             // console.log("🚀 ~ file: customer_bill_invoices.blade.php:1185 ~ total_Return", total_Return)
-                    //             // calculateAmount(object);
-                             
-                    //     }
-
-                        
-                    //     $("#item_total_amount").val(total_Return.toFixed(2));
-                    //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
-                    // });
-
+                   
 
              });
 
@@ -1207,11 +1176,6 @@
              var total_amount =   $('#item_total_amount').val();
              var total_Return = 0;
              var total_note_amount = 0;
-            //  if(total_amount == "")
-            //  {
-            //     var total_amount = $('#item_total_amount').val();
-                
-            // }
 
             $('.credit_note:checked').each(function() {
                 var note_amount = parseFloat($(this).attr('credit-note-amount'));
@@ -1219,12 +1183,12 @@
             });
             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
 
-            console.log(total_note_amount);
+            // console.log(total_note_amount);
 
             $("#credit_note_amount").val(total_note_amount.toFixed(2));
-            // $("#item_total_amount").val(total_Return.toFixed(2));
             $("#gross_amount").val(total_Return.toFixed(2));
-            // $("#total_amount").val(total_Return.toFixed(2));
+            $("#total_amount").val(total_Return.toFixed(2));
+
         }
 
 
@@ -1333,7 +1297,7 @@
             $(object).parent().parent().find(".cgst").val(gst.cgst);
             $(object).parent().parent().find(".igst").val(gst.igst);
             $(object).parent().parent().find(".amount").val(taxable);
-            $(object).parent().parent().find(".taxable").val(taxable);
+            $(object).parent().parent().find(".taxable").val(gst.base_amount);
 
 
             calculateTotalAmount();
@@ -1361,6 +1325,7 @@
 
             if (taxable < 1000) {
                 base_amount = parseFloat(taxable / 1.05);
+
             }else{
                 base_amount = parseFloat(taxable / 1.12);
             }
@@ -1385,6 +1350,7 @@
                 "sgst":sgst.toFixed(2),
                 "cgst":cgst.toFixed(2),
                 "igst":igst.toFixed(2),
+                "base_amount":base_amount.toFixed(2),
             }
 
             return(data);

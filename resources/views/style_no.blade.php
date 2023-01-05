@@ -162,19 +162,19 @@
                 manageStyleNo(style_id);
             });
             
-            $(document).on('click','.deleteStyleNoBtn', function (e) {
-                e.preventDefault();
-                // alert("gdg");
-                const style_no_id = $(this).val();
-                $('#deleteStyleNoModal').modal('show');
-                $('#yesDeleteStyleNoBtn').val(style_no_id);
-            });
+            // $(document).on('click','.deleteStyleNoBtn', function (e) {
+            //     e.preventDefault();
+            //     // alert("gdg");
+            //     const style_no_id = $(this).val();
+            //     $('#deleteStyleNoModal').modal('show');
+            //     $('#yesDeleteStyleNoBtn').val(style_no_id);
+            // });
 
-            $(document).on('click','#yesDeleteStyleNoBtn', function (e) {
-                e.preventDefault();
-                const style_no_id = $(this).val();
-                deleteStyleNo(style_no_id);
-            });
+            // $(document).on('click','#yesDeleteStyleNoBtn', function (e) {
+            //     e.preventDefault();
+            //     const style_no_id = $(this).val();
+            //     deleteStyleNo(style_no_id);
+            // });
 
             $(document).on('change','#supplier_id', function(e){
             e.preventDefault();

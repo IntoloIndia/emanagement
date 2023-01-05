@@ -380,9 +380,9 @@
                                         {{-- </div> --}}
                                     {{-- </div> --}}
 
+                                    <input type="hidden" name="size_type_id" id="size_type_id">
                                     <input type="hidden" name="purchase_id" id="purchase_id">
                                     <input type="hidden" name="purchase_entry_id" id="purchase_entry_id">
-                                    <input type="hidden" name="size_type_id" id="size_type_id">
 
                                     <div class="card-footer ">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">

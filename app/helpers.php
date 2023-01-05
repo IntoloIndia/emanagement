@@ -87,11 +87,19 @@
     function getStockItems($purchase_entry_id)
     {
         $items = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get();
-        // $price = PurchaseEntryItem::where('purchase_entry_id',$purchase_entry_id)->get();
+        $total_quantity = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get()->sum('total_qty');
         return $result = [
             'status'=>200,
             'items'=>$items,
-            // 'price'=>$price
+            'total_quantity'=>$total_quantity
+        ] ;
+    }
+
+    function getItemsDetail($purchase_entry_id, $size)
+    {
+        $item_detail = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$size])->first('price');
+        return $result = [
+            'price'=>$item_detail->price,
         ] ;
     }
 

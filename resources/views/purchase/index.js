@@ -890,7 +890,6 @@
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
                     
                     setTimeout(() => {
-                        
                         calculateQtyPrice();
                     }, 200);
 
@@ -923,7 +922,7 @@
             url: "edit-purchase-entry/"+purchase_entry_id,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
 
                 if(response.status == 200){
 
@@ -958,18 +957,41 @@
                         
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'"/>');
                     }
+
+                    // $('#size_type_id').val(size_type);
+                    $('#show_size').empty();
+                    if (response.size_type == 2) {
+                        $('#show_size').append($('#kids_size_type').html());
+                        $('#show_size').css('width','700px');
+                    }else if (response.size_type == 3) {
+                        $('#show_size').append($('#without_size_type').html());
+                        $('#show_size').css('width','100%');
+                    } else {
+                        $('#show_size').append($('#normal_size_type').html());
+                        $('#show_size').css('width','650px');
+                    }
+
                     var discount = 0;
                     $.each(response.purchase_entry_items, function (key, list) {
                         var size = "";
-                        if (list.size == '3xl') {
-                            size = 'three_xl';
-                        }else if(list.size == '4xl'){
-                            size = 'four_xl';
-                        }else if(list.size == '5xl'){
-                            size = 'five_xl';
-                        }else{
-                            size = list.size;
-                        }
+                        if (response.size_type == 2) {
+                            //kids
+                            size = 'k_'+list.size;
+                        } else if (response.size_type == 3) {
+                            //without
+                            size = 'without';
+                        } else {
+                            //normal
+                            if (list.size == '3xl') {
+                                size = 'three_xl';
+                            }else if(list.size == '4xl'){
+                                size = 'four_xl';
+                            }else if(list.size == '5xl'){
+                                size = 'five_xl';
+                            }else{
+                                size = list.size;
+                            }
+                        } 
 
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+size+'_qty').val(list.qty);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#'+size+'_price').val(list.price);
@@ -977,16 +999,22 @@
                         discount = list.discount;
                     });
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#discount').val(discount);
-                    // alert(discount);
-                    
-                    calculateQtyPrice();
-                    
+
+                    if (response.size_type == 2) {
+                        calculateQtyPriceKids();
+                    }else if (response.size_type == 3) {
+                        calculateQtyPriceWithout();
+                    } else {
+                        calculateQtyPrice();
+                    }
+                                        
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_id').val(response.purchase.supplier_id);
                     // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#supplier_id').remove();
                     
                     // $("#supplier_div").append('<input type="hidden" name="supplier_id" value="">\
                     // <input type="text" value="'+response.purchase.supplier_id+'" class="form-control form-control-sm" readonly disabled>');
                     
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#size_type_id').val(response.size_type);
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#purchase_id').val(response.purchase.id);
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#purchase_entry_id').val(response.purchase_entry.id);
 

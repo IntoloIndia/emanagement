@@ -56,7 +56,7 @@ class UserController extends Controller
             $model->email = $req->input('email');
             $model->password = Hash::make($req->input('password')); 
             $model->percentage = $req->input('percentage');
-            $model->status = $req->input('status');
+            // $model->status = $req->input('status');
             
             if($model->save()){
 

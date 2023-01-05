@@ -95,7 +95,7 @@
                         @foreach ($roles as $list)
                             <tr class="">
                                 <td>{{++$count}}</td>
-                                <td>{{($list->role)}}</td>
+                                <td>{{ ucwords($list->role)}}</td>
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm editRoleBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                     {{-- <button type="button" class="btn btn-danger btn-sm deleteRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> --}}

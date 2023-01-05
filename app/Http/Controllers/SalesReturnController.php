@@ -175,12 +175,10 @@ class SalesReturnController extends Controller
     function updateSalesReturnStatus($sales_return_id)
     {
         $status_data =SalesReturn::find($sales_return_id);
-        if($status_data->status){
+        if($status_data->status == MyApp::ACTIVE){
+            $status_data->status = MyApp::USED;
+        }else if($status_data->status = MyApp::USED){
             $status_data->status = MyApp::DEACTIVE;
-
-        }else if($status_data->status){
-            $status_data->status = MyApp::USAGE;
-
         }else{
             $status_data->status = MyApp::ACTIVE;
         }

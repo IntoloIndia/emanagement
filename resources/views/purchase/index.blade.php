@@ -260,9 +260,7 @@ a {
                     calculateQtyPrice();
                 }
 
-
                 // calculateQtyPrice();
-                
             });
         
             
@@ -368,6 +366,7 @@ a {
 
             $(document).on('click','#updatePurchaseEntryBtn', function (e) {
                 e.preventDefault();
+                
                 const purchase_id = $('#purchase_id').val();
                 const purchase_entry_id = $('#purchase_entry_id').val();
 
