@@ -171,6 +171,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="payment-receiving" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Pending Payment Receiving</p>
+                </a>
+            </li>
             
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light">Stock Management</li>

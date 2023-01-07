@@ -16,12 +16,11 @@
      <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-1">
                     <b>Barcodes</b>
                 </div>
-            </div>
-            <div class="row">
-           <div class="col-md-2  offset-1">
+            
+                <div class="col-md-2 ">
                          <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
                         <option selected disabled >Category</option>
                         @foreach ($categories as $key => $list)
@@ -34,14 +33,6 @@
                         <option selected disabled >Choose...</option>
                     </select>
                 </div>
-                {{-- <div class="col-md-2">
-                    <select id="sub_category_id" class="form-select form-select-sm select_chosen">
-                        <option selected disabled value="0">Sub Category</option>
-                        @foreach ($sub_categories as $key => $list)
-                            <option value="{{$list->id}}">{{ucwords($list->sub_category)}}</option>
-                        @endforeach
-                    </select>
-                </div>  --}}
                 <div class="col-md-2">
                     <select id="brand_id" class="form-select form-select-sm select_chosen" >
                         <option selected disabled value="0">Brand</option>
@@ -51,8 +42,8 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select id="style_no_id" class="form-select form-select-sm select_chosen">
-                        <option selected disabled value="0">Style No</option>
+                    <select id="style_no_id" data-placeholder='Style no' class="form-select form-select-sm select_chosen">
+                        <option selected disabled value="0">Style no</option>
                         @foreach ($get_style_no as $key => $list)
                             <option value="{{$list->id}}" >{{$list->style_no}}</option>
                         @endforeach
@@ -71,17 +62,18 @@
                 </div>
             </div>
         </div>
+
         <div class="card-body">
-            <div id="show_filter_product"></div>
-            {{-- <div class="row"> --}}
-                {{-- @foreach ($Barcodes_data as $list)
+            <div id="show_filter_barcode"></div>
+            {{-- <div class="row">
+                @foreach ($Barcodes_data as $list)
                 <div class="col-md-3">
                     <div class="card" id="div1">
                       
-                            <div class="card-body" > --}}
+                            <div class="card-body" >
                                    
 
-                                {{-- <div class="row mb-2"></div>
+                                <div class="row mb-2"></div>
                                 <div class="row" >
                                     <div class="col-md-12 ">
                                     <span class="tect-center business_title ml-2" style="letter-spacing: 3px;"><b>MANGALDEEP CLOTHS LLP</b></span><br/>
@@ -97,14 +89,14 @@
                                         <span class="product_detail"><b style="letter-spacing: 15px;">{{$list->barcode}}</b></span> <br/>
                                      </div>
                                 </div>
-                                <button class="btn btn-success btn-sm float-right" onclick="myFun('div1')"><i class="fas fa-file-invoice"></i></button>
-                            </div> --}}
+                                <button class="btn btn-success btn-sm float-right" onclick="printBarcode('div1')"><i class="fas fa-file-invoice"></i></button>
+                            </div>
                         
-                            {{--                        
+                                                  
                     </div>
                 </div>
-                @endforeach --}}
-            {{-- </div> --}}
+                @endforeach
+            </div> --}}
         </div> 
     </div>
 
@@ -201,19 +193,21 @@
         });
         
         $(document).on('change','#sub_category_id', function (e) {
-               var sub_category_id = $(this).val();
-                filterProduct(sub_category_id);
+            filterBarcode();
         });
         $(document).on('change','#brand_id', function (e) {
-               var brand_id = $(this).val();
-                filterProduct(brand_id);
+            filterBarcode();
         });
         $(document).on('change','#style_no_id', function (e) {
-            var style_no_id = $(this).val();
-            filterProduct(style_no_id);
+            filterBarcode();
         });
         $(document).on('change','#color', function (e) {
-            filterProduct();
+            filterBarcode();
+        });
+
+        $(document).on('click','.print', function (e) {
+            var print_section = $(this).attr('print-section');
+            printBarcode(print_section);
         });
 
         // $("#sub_category_id").change(function() {
@@ -230,38 +224,58 @@
 
 
     });
-    function myFun(params) {
-        // alert("call");
-        var backup = document.body.innerHTML;
-        var divcon = document.getElementById(params).innerHTML;
-        document.body.innerHTML = divcon;
-        window.print();
-        document.body.innerHTML = backup;
+    
+
+    // function printBarcode(){
+        
+    //     var backup = document.body.innerHTML;
+    //     var div_content = document.getElementById("show_barcode_body").innerHTML;
+    //     document.body.innerHTML = div_content;
+    //     window.print();
+    //     document.body.innerHTML = backup;
+
+
+    //     // const section = $("section");
+    //     // // const modalBody = $("#show_barcode_body").detach();
+    //     // const modalBody = document.getElementById("barcode_body").innerHTML;
+
+    //     // section.empty();
+    //     // section.append(modalBody);
+    //     // window.print();
+    //     // window.location.reload();
+
+    //     // var print_div = document.getElementById("show_barcode_body");
+    //     // // var print_div = document.getElementById("barcode_body");
+    //     // var print_area = window.open();
+    //     // print_area.document.write(print_div.innerHTML);
+    //     // print_area.document.close();
+    //     // print_area.focus();
+    //     // print_area.print();
+      
+    //     window.location.reload();
+    // }
+
+    function filterBarcode()
+    {
+        var sub_category_id = $('#sub_category_id').val();
+        var brand_id = $('#brand_id').val();
+        var style_no_id = $('#style_no_id').val();
+        var color = $('#color option:selected').text();
+
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "filter-barcode/"+ sub_category_id + "/" +brand_id + "/" + style_no_id + "/" + color,
+            success: function (response) {
+                // console.log(response);
+                if(response.status == 200){
+                    $('#show_filter_barcode').html("");
+                    $('#show_filter_barcode').append(response.html)
+                }
+            }
+        });
     }
 
-
-
-    function filterProduct()
-        {
-            var sub_category_id = $('#sub_category_id').val();
-            var brand_id = $('#brand_id').val();
-            var style_no_id = $('#style_no_id').val();
-            var color = $('#color option:selected').text();
-
-
-             $.ajax({
-                type: "get",
-                dataType: "json",
-                url: "filter-product/"+ sub_category_id + "/" +brand_id + "/" + style_no_id + "/" + color,
-                success: function (response) {
-                    console.log(response);
-                    if(response.status == 200){
-                        $('#show_filter_product').html("");
-                        $('#show_filter_product').append(response.html)
-                    }
-                }
-            });
-        }
 
 </script>
 @endsection

@@ -201,7 +201,7 @@
         $.ajax({
             type: "get",
             url: "edit-role/" + role_id,
-            data: "formDate",
+            data: "formData",
             dataType: "json",
             success: function (response) {
                 console.log(response);

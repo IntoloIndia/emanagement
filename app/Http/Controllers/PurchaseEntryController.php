@@ -1790,7 +1790,10 @@ class PurchaseEntryController extends Controller
                             $html .="<td>".ucwords($list->brand_name)."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
                             $html .="<td>".ucwords($list->color)."</td>";
-                            $html .="<td><button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button></td>";
+                            $html .="<td>";
+                                $html .="<button type='button' class='btn btn-info btn-flat btn-sm mx-1 barcodeBtn' value='".$list->id."' > <i class='fas fa-barcode'></i></button>";
+                                $html .="<button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button>";
+                            $html .="</td>";
                         $html .="</tr> ";
 
                         $html .="<tr>";

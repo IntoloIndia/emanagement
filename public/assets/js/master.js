@@ -145,3 +145,13 @@ function manageCity(){
         }
     });
 }
+
+function printBarcode(params) {
+    
+    var backup = document.body.innerHTML;
+    var div_content = document.getElementById(params).innerHTML;
+    document.body.innerHTML = div_content;
+    window.print();
+    document.body.innerHTML = backup;
+    window.location.reload();
+}

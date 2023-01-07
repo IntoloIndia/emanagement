@@ -28,6 +28,7 @@ use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PaymentReceivingController;
 
 use App\MyApp;
 /*
@@ -116,8 +117,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('admin/barcode','index');
-        Route::get('admin/filter-product/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterProduct');
-          
+        Route::get('admin/filter-barcode/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterBarcode');
+        Route::get('admin/barcode-by-purchase-entry/{purchase_entry_id}','getBarcodeByPurchaseEntry');
+
     });
 
     Route::controller(ExcalProductDataController::class)->group(function () {
@@ -334,6 +336,13 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-brand/{brand_id}','deleteBrand');
 
     });
+
+    Route::controller(PaymentReceivingController::class)->group(function () {
+        Route::get('admin/payment-receiving', 'index');
+        Route::get('admin/get-payment-receiving/{bill_id}', 'paymentReceiving');
+        Route::post('admin/save-payment-receiving', 'savePaymentReceiving');
+        
+    });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
 });
@@ -371,6 +380,7 @@ Route::group(['middleware'=>'billing_auth'], function(){
         Route::get('purchase-return', 'index');
         
     });
+   
 
 
     Route::get('logout', [AuthController::class, 'logout']);

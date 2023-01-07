@@ -525,6 +525,19 @@ a {
                 // generatePurchaseInvoice(purchase_id);
             });
 
+            $(document).on('click','.barcodeBtn', function (e) {
+                e.preventDefault();
+                var purchase_entry_id = $(this).val();
+                getBarcodeByPurchaseEntry(purchase_entry_id);
+            });
+
+            $(document).on('click','.print', function (e) {
+                var print_section = $(this).attr('print-section');
+                printBarcode(print_section);
+            });
+
+
+
             // $(document).on("click",".price", function(e){
                 // e.preventDefault();
 

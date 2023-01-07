@@ -64,6 +64,7 @@
                         <div class="card mt-3">
                             <div class="card-header">
                                 <b>Customer Details</b>
+                                <b style="margin-left: 100px">017791071723</b>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -91,6 +92,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-footer">
+                                <div class="col-md-12">
+                                    <input type="text" readonly name="credit_note_total_amount"  id="credit_note_total_amount" class="form-control form-control-sm">
+                                </div>
+                             </div>
                         </div>
                 </form>
                 <button class="btn btn-primary btn-sm float-right saveSalesReturnbtn" id="saveSalesReturnbtn">save</button>
@@ -280,7 +286,7 @@
 
         $(document).ready(function(){
             addItem();
-                // $(document).on('change','#product_barcode',function(){
+                // $(document).on('click','.barcode',function(){
                 //     addItem();
                 // });
 
@@ -312,6 +318,7 @@
                                     return false;
                                 }
                                 $(this).parent().parent().remove();
+                                calculateTotalAmount();
                         });
 
 
@@ -404,10 +411,25 @@
                             $(object).parent().parent().find('.mrp').val("");
                             $(object).parent().parent().find('.amount').val("");
                         }
+                        calculateTotalAmount();
                     }
                 });
                 
             });
+
+                    function calculateTotalAmount(){
+                    var item_total_amount = 0;
+
+                    $(".amount").each(function(){
+                        var total_amount = parseFloat($(this).val());
+                        if (!isNaN(total_amount))
+                        {
+                            item_total_amount +=  total_amount;
+                        }  
+                    });
+                    $("#credit_note_total_amount").val(item_total_amount.toFixed(2));
+
+                }
 
             function saveSalesReturnProduct() {
             $.ajaxSetup({

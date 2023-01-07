@@ -24,7 +24,7 @@
                                 <th >SN</th>
                                 <th >Category</th>
                                 <th >Qty</th>
-                                <th >Amount</th>
+                                {{-- <th >Amount</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -38,7 +38,7 @@
                                         <th scope="row">{{++$key}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
                                         <td>{{$result['total_qty']}}</td>
-                                        <td>{{$result['total_amount']}}</td>
+                                        {{-- <td>{{$result['total_amount']}}</td> --}}
                                     </tr>
                             @endforeach
                         </tbody>
@@ -67,7 +67,7 @@
                                 <th >SN</th>
                                 <th >Sub Categoty</th>
                                 <th >Qty</th>
-                                <th >Amount</th>
+                                {{-- <th >Amount</th> --}}
                             </tr>
                         </thead>
                         <tbody >
@@ -81,7 +81,7 @@
                                     <th scope="row">{{++$key}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
                                     <td>{{$result['total_qty']}}</td>
-                                    <td>{{$result['total_amount']}}</td>
+                                    {{-- <td>{{$result['total_amount']}}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

@@ -127,12 +127,16 @@
 </div>
 
 <div class="card mt-3">
-    <div class="card-header"><h5><strong>Offer</strong></h5></div>
+    <div class="card-header"><h5><strong>Offers</strong></h5></div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-3">
                 <div class="card mt-2">
                     <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6"><small><b>From Date</b></small></b></div>
+                            <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6"><b>1/12/2023</b></div>
                             <div class="col-md-6 text-end"><b>12/12/2023</b></div>
@@ -140,13 +144,38 @@
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
-                            <div class="col-md-12 text-red" ><strong style="font-size:30px;"> 50% Off</strong></div>
+                            <div class="col-md-12 text-red" ><strong style="font-size:25px;"> 25% Off</strong></div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-6"><b>Jara</b></div>
                             <div class="col-md-6 text-end"><b> A-1145</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            {{-- second card --}}
+            <div class="col-md-3">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6"><small><b>From Date</b></small></b></div>
+                            <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><b>10/12/2023</b></div>
+                            <div class="col-md-6 text-end"><b>15/12/2023</b></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-12 text-red" ><strong style="font-size:25px;"> 10% Off</strong></div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-12 text-center"><b>All Product</b></div>
                         </div>
                     </div>
                 </div>

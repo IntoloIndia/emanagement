@@ -597,6 +597,28 @@
     </div>
 </div>  
 
+{{-- barcode modal --}}
+<section>
+
+    <div class="modal fade" id="barcodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"><b>Barcodes</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="view_barcode"> </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm float-end print" print-section='print_barcode'>Print</button>
+                </div>
+            </div>
+        </div>
+    </div>  
+    
+</section>
+
 {{-- excel data entry modal start --}}
 
 <!-- Button trigger modal -->
@@ -630,6 +652,8 @@
         </div>
     </div>
 {{-- excel data entry modal end --}}
+
+
 
 
 

@@ -774,6 +774,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <b>Item</b>
+                                        <b style="margin-left: 200px">017791071723</b>
                                         <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
                                     </div>
                                     <div class="card-body">
@@ -899,9 +900,9 @@
                                     <div class="col-md-8">
                                         <span>Payment :</span>
                                     </div>
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <span>Payment :</span>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="row">
                
@@ -931,14 +932,14 @@
                                         <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
                                     </div>
                                
-                                    {{-- <div class="col-md-1">
+                                    <div class="col-md-1">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
-                                        </div> --}}
+                                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm"  value="0" placeholder="amount">
+                                    </div>
                                 </div>
                                
                                     <div class="row mt-2">
@@ -1041,6 +1042,7 @@
                 }
                 $(this).parent().parent().remove();
                 calculateTotalAmount();
+                calculateCreditnoteReturnTotalAmount();
             });
 
 
@@ -1163,10 +1165,34 @@
                 calculateCreditnoteReturnTotalAmount();
                 // calculateAmount();
             });
-          
+
+            $(document).on('change','#online_payment', function () {
+                    var pay_online = $(this).val();
+                    var total_amount =   $('#item_total_amount').val();
+                    var pay_online_amount = parseFloat(total_amount - parseFloat(pay_online));
+                    $("#gross_amount").val(pay_online_amount.toFixed(2));
+                    $("#total_amount").val(pay_online_amount.toFixed(2));
+                });
+            $(document).on('change','#cash_payment', function () {
+                    var pay_cash = $(this).val();
+                    var total_amount =   $('#item_total_amount').val();
+                    var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
+                    $("#gross_amount").val(pay_online_amount.toFixed(2));
+                    $("#total_amount").val(pay_online_amount.toFixed(2));
+                });
+               
+            
                    
 
-             });
+         });
+
+         function payOnlineCashCard(){
+            var pay_online = $(this).val();
+            var pay_cash = $(this).val();
+            var pay_card = $(this).val();
+            console.log(pay_online,pay_cash,pay_card)
+         }
+
 
 
         
@@ -1181,16 +1207,32 @@
                 var note_amount = parseFloat($(this).attr('credit-note-amount'));
                 total_note_amount = total_note_amount + note_amount ;
             });
+
             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
-
-            // console.log(total_note_amount);
-
-            $("#credit_note_amount").val(total_note_amount.toFixed(2));
-            $("#gross_amount").val(total_Return.toFixed(2));
-            $("#total_amount").val(total_Return.toFixed(2));
+                $("#gross_amount").val(total_Return.toFixed(2));
+                $("#total_amount").val(total_Return.toFixed(2));
+                $("#credit_note_amount").val(total_note_amount.toFixed(2));
+            
+            // if(total_note_amount > total_amount){
+            //     $("#gross_amount").val("0.00");
+            //     $("#total_amount").val('0.00');
+            //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                
+            // }else if(total_note_amount == total_amount){
+            //     $("#gross_amount").val("0.00");
+            //     $("#total_amount").val('0.00');
+            //     $("#credit_note_amount").val('0.00');
+            // }else{
+            //     $("#gross_amount").val(total_amount.toFixed(2));
+            //     $("#total_amount").val(total_Return.toFixed(2));
+            //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
+            // }
+            // $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                
 
         }
 
+       
 
         function getCustomerData(mobile_no) {
             $.ajax({
@@ -1557,13 +1599,13 @@
         // }
 
         function printInvoice(){
-        var backup = document.body.innerHTML;
-        var div_content = document.getElementById("invoiceModalPrint").innerHTML;
-        document.body.innerHTML = div_content;
-        window.print();
-        document.body.innerHTML = backup;
-        window.location.reload();
-    }
+            var backup = document.body.innerHTML;
+            var div_content = document.getElementById("invoiceModalPrint").innerHTML;
+            document.body.innerHTML = div_content;
+            window.print();
+            document.body.innerHTML = backup;
+            window.location.reload();
+        }
 
         // function generateInvoice(bill_id) {
         //  $.ajax({

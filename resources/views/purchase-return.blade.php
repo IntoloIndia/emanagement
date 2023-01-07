@@ -193,7 +193,7 @@
                     {{-- <input type="hidden" name="size_id[]" class="size_id"> --}}
                 </td>
                 <td>
-                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0"readonly>
+                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0">
                 </td>
                 <td>
                     <input type="text"  name="color" class="form-control form-control-sm" id="color" readonly>
@@ -228,11 +228,11 @@
                         </div>
                         <hr>
                         <div id='alter_item_list'></div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-12 text-center">
                                 <p>Thankyou! Visit Again</p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
@@ -306,7 +306,7 @@
                             $('#sub_category').val(response.return_product.sub_category);
                             $('#sub_category_id').val(response.return_product.sub_category_id);
                             $('#size').val(response.return_product.size);
-                            $('#qty').val(response.return_product.qty);
+                            // $('#qty').val(response.return_product.qty);
                             $('#color').val(response.return_product.color);
                         }
                        
