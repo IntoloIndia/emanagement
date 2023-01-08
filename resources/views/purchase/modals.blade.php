@@ -213,7 +213,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <div id="take_photo" class="take_photo mt-2">
+                                                    <div id="take_photo" class="take_photo mt-2" >
                                                         {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/user-img.jpg')}}" style="width: 60px; height:60px;" /> --}}
                                                         {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="" style="width: 60px; height:60px;" /> --}}
                                                     </div>                                
@@ -225,7 +225,7 @@
                                                         <span>OR</span>                                                        
                                                     </div>
                                                     <div >
-                                                        <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                                        <input class="form-control form-control-sm" id="formFileSm" type="file" >
                                                     </div>
                                                 </div>
                                                 

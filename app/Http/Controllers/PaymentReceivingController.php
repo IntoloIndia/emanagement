@@ -12,7 +12,11 @@ class PaymentReceivingController extends Controller
 {
   public function index()
   {
-    return view('payment_receiving');
+    $all_receiving_payment = PaymentReceiving::join('customers','payment_receivings.customer_id','=','customers.id')
+    ->select('payment_receivings.*','customers.customer_name')->get();
+    return view('payment_receiving',[
+        'all_receiving_payment'=>$all_receiving_payment
+    ]);
   }
 
   public function paymentReceiving($bill_id)

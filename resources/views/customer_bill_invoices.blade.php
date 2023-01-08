@@ -1161,42 +1161,46 @@
             // credit note function 
             $(document).on('click','.credit_note', function () {
                 var credit_note_id = $(this).val();
-                // alert(credit_note_id);
                 calculateCreditnoteReturnTotalAmount();
-                // calculateAmount();
             });
 
-            $(document).on('change','#online_payment', function () {
-                    var pay_online = $(this).val();
-                    var total_amount =   $('#item_total_amount').val();
-                    var pay_online_amount = parseFloat(total_amount - parseFloat(pay_online));
-                    $("#gross_amount").val(pay_online_amount.toFixed(2));
-                    $("#total_amount").val(pay_online_amount.toFixed(2));
-                });
-            $(document).on('change','#cash_payment', function () {
-                    var pay_cash = $(this).val();
-                    var total_amount =   $('#item_total_amount').val();
-                    var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
-                    $("#gross_amount").val(pay_online_amount.toFixed(2));
-                    $("#total_amount").val(pay_online_amount.toFixed(2));
-                });
+            // $(document).on('change','#online_payment', function () {
+            //         var pay_online = $(this).val();
+            //         var total_amount =   $('#item_total_amount').val();
+            //         var pay_online_amount = parseFloat(total_amount - parseFloat(pay_online));
+            //         $("#gross_amount").val(pay_online_amount.toFixed(2));
+            //         $("#total_amount").val(pay_online_amount.toFixed(2));
+            //     });
+
+            //     $(document).on('change','#cash_payment', function () {
+            //         var pay_cash = $(this).val();
+            //         var total_amount =   $('#item_total_amount').val();
+            //         var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
+            //         $("#gross_amount").val(pay_online_amount.toFixed(2));
+            //         $("#total_amount").val(pay_online_amount.toFixed(2));
+            //     });
+
+                // $(document).on('change','#', function () {
+                //     var pay_cash = $(this).val();
+                //     var total_amount =   $('#item_total_amount').val();
+                //     var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
+                //     $("#gross_amount").val(pay_online_amount.toFixed(2));
+                //     $("#total_amount").val(pay_online_amount.toFixed(2));
+                // });
                
             
                    
 
          });
 
-         function payOnlineCashCard(){
-            var pay_online = $(this).val();
-            var pay_cash = $(this).val();
-            var pay_card = $(this).val();
-            console.log(pay_online,pay_cash,pay_card)
-         }
+        //  function payOnlineCashCard(){
+        //     var pay_online = $(this).val();
+        //     var pay_cash = $(this).val();
+        //     var pay_card = $(this).val();
+        //     console.log(pay_online,pay_cash,pay_card)
+        //  }
 
 
-
-        
-        
         function calculateCreditnoteReturnTotalAmount(){
              var gross_amount = $('#gross_amount').val();
              var total_amount =   $('#item_total_amount').val();
@@ -1242,13 +1246,14 @@
                 success: function(response) {
 
                     if (response.status == 200) {
-
+                        console.log(response)
                         $('#customer_name').val(response.customersData.customer_name);
                         $('#birthday_date').val(response.customersData.birthday_date);
                         $('#month_id').val(response.customersData.month_id);
                         $('#city_id').val(response.customersData.city_id);
                         $('#gst_no').val(response.customersData.gst_no);
                         $('#total_points').val(response.total_points);
+                        $('#anniversary_date').val(response.anniversary_date);
                         $('#credit_note').html('');
                         $('#credit_note').append(response.html);
                         

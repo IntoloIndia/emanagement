@@ -194,10 +194,10 @@ class SalesReturnController extends Controller
     public function salesReturnInvoice($sales_return_id)
     {
         $sales_return = SalesReturn::join('sales_return_items','sales_return_items.sales_return_id','=','sales_returns.id')
-                        //  ->join('customers','customers.id','=','sales_returns.customer_id')
+                         ->join('customers','customers.id','=','sales_returns.customer_id')
                         ->where('sales_returns.id', $sales_return_id)
                         ->first(['sales_returns.*',
-                        // 'customers.customer_name','customers.mobile_no'
+                        'customers.customer_name','customers.mobile_no'
                     ]);
             // dd($sales_return);
 
@@ -209,9 +209,9 @@ class SalesReturnController extends Controller
            
         $html = "";
          $html .= "<div class='row'>";
-            //  $html .= "<div class='col-6'><h6 style='text-transform: capitalize;'>".$sales_return->customer_name."</h6> 
-            //  <h6>Mobile No : ".$sales_return->mobile_no."</h6>
-            //   </div>";
+             $html .= "<div class='col-6'><h6 style='text-transform: capitalize;'>".$sales_return->customer_name."</h6> 
+                    <h6>Mobile No : ".$sales_return->mobile_no."</h6>
+              </div>";
             
              $html .= "<div class='col-6 text-end'><h6>Time : ".$sales_return->create_time."</h6>
                         <h6>Date : ".date('d-m-Y',strtotime($sales_return->create_date))."</h6></div>";

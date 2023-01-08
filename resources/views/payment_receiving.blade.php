@@ -91,13 +91,77 @@
                                 <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0">
                         </div>
                         <div class="col-md-3">
-                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1 ">Payment</button></div>
+                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-dark btn-sm mx-1 ">Payment</button></div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    {{-- right card --}}
+    <div class="col-md-8">
+        <div class="card mt-3">
+            <div class="card-header"><h5><strong>Payment Receivings</strong></h5></div>
+            <div class="card-body">
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                            <th row>SN</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Payment Against</th>
+                            <th>Customer</th>
+                            <th>Online</th>
+                            <th>Cash</th>
+                            <th>Card</th>
+                            {{-- <th colspan="3">Payment By</th> --}}
+                            <th>Total Amount</th>
+                        </tr>
+                        {{-- <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Online</th>
+                            <th>Cash</th>
+                            <th>Card</th>
+                        </tr> --}}
+                    </thead>
+                    <tbody id="filter_table">
+                        @foreach ($all_receiving_payment as $key=> $list)
+                            <tr class="">
+                                <td>{{++$key}}</td>
+                                <td>{{ ($list->against_payment_date)}}</td>
+                                <td>{{ ($list->against_payment_time)}}</td>
+                                <td>{{ ($list->against_bill_id)}}</td>
+                                <td>{{ ucwords($list->customer_name)}}</td>
+                                <td>{{ ($list->pay_online)}}</td>
+                                <td>{{ ($list->pay_cash)}}</td>
+                                <td>{{ ($list->pay_card)}}</td>
+                                <td>{{ ($list->balance_amount)}}</td>
+                                {{-- <td>{{ ($list->against_bill_id)}}</td> --}}
+                                <td>
+                                    
+                                   
+                                    {{-- @if($list->active_role == MyApp::ACTIVE)
+                                        <button type="button" class="btn  btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban" style="font-size:24px;color:lightcoral"></i></button> 
+                                        
+                                    @else
+                                        <button type="button" class="btn btn btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="far fa-check-circle" style="font-size:24px;color:rgb(5, 119, 5)"></i></button> 
+                                    @endif --}}
+                                </td>
+                            </tr>
+                        @endforeach 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
 @endsection
 

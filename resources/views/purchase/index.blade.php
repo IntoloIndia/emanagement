@@ -536,6 +536,24 @@ a {
                 printBarcode(print_section);
             });
 
+            $(document).on('change','#formFileSm', function (e) {
+                e.preventDefault();
+
+                const file = this.files[0];
+                $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#take_photo").html('');
+                $("#product_image").val('');
+                if (file){
+                    let reader = new FileReader();
+                    reader.onload = function(event){
+                        // $('#imgPreview').attr('src', event.target.result);
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+event.target.result+'" style="height: 100px;"/>');
+                        $("#product_image").val(event.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+           
+            });
+
 
 
             // $(document).on("click",".price", function(e){

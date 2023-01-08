@@ -94,7 +94,7 @@
                             </div>
                             <div class="card-footer">
                                 <div class="col-md-12">
-                                    <input type="text" readonly name="credit_note_total_amount"  id="credit_note_total_amount" class="form-control form-control-sm">
+                                    <input type="hidden" readonly name="credit_note_total_amount"  id="credit_note_total_amount" class="form-control form-control-sm">
                                 </div>
                              </div>
                         </div>
@@ -257,8 +257,12 @@
                 <div class="modal-body" id="print_alter_voucher">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <h6><b>Mangaldeep (Jabalpur)<br>
-                            Samdariya Mall Jabalpur-482002</b></h6>
+                            <h6><b>Mangaldeep Clothing LLP<br/></b>
+                                501/2 A k towers 
+                                Main road katanga
+                                Near mittal <br/> gas agency 
+                                Narmada road 
+                                482005</h6>
                         </div>
                     </div>
                     <div class="row mt-2">
