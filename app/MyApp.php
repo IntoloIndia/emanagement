@@ -50,6 +50,7 @@ class MyApp {
     const WITHOUT_SIZE = 3;
     
     const DELIVERY = 1;
+    const IMPORT_CSV_FILE = 1;
    
     const RELEASE_STATUS = 1;
     const RELEASE_PANDDING_STATUS = 0;

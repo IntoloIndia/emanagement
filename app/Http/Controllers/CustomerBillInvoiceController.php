@@ -211,7 +211,6 @@ class CustomerBillInvoiceController extends Controller
                         } 
                     }
 
-
                     // dd($credit_note_amount); 
                     // dd($total_amount); 
                     // die();
@@ -220,7 +219,7 @@ class CustomerBillInvoiceController extends Controller
                         $model_item = new SalesReturn;
                         $model_item->bill_id = $billmodel->id;
                         $model_item->customer_id = $customer_id;
-                        $model_item->credit_note_total_amount = -$total_amount;
+                        $model_item->credit_note_total_amount = $total_amount;
                         $model_item->create_date = date('Y-m-d');
                         $model_item->create_time = date('g:i A');
                         $model_item->save();
@@ -254,15 +253,9 @@ class CustomerBillInvoiceController extends Controller
                                 ->where(['status'=>MyApp::ACTIVE])
                                 ->select(['sales_returns.*'])
                                 ->get();
-        //     $credit_note_amount = array();
-        //    foreach ($credit_note_data as $key => $list) {
-        //     $credit_note_amount[] = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
-        //    }
-        //    $amount = array_sum($credit_note_amount);
-
+     
         //    dd($credit_note_data);
-
-            $html = "";
+        $html = "";
          $html .= "<div class='row'>";
          $html .= "<div class='row'>";
             $html .= "<table class='table'>";
@@ -526,6 +519,8 @@ class CustomerBillInvoiceController extends Controller
             'html'=>$html
         ]);
   }   
+
+  
 
 }
 

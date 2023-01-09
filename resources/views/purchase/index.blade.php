@@ -73,7 +73,7 @@ a {
             </div>
             <div class="col-sm-6">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                    <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button>
+                    {{-- <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button> --}}
                     <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
                 </div>
             </div>
@@ -236,10 +236,23 @@ a {
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
             
-                $('#savePurchaseEntryBtn').removeClass('hide');
-                $('#updatePurchaseEntryBtn').addClass('hide');
+                $('#savePurchaseEntryExcelBtn').removeClass('hide');
+                $('#updatePurchaseEntryExcelBtn').addClass('hide');
             });
 
+            $(document).on('change','#import_csv_file', function (e) {
+                e.preventDefault();
+                var import_csv = $(this).is(":checked");
+                // console.log(import_csv);
+                if (import_csv == true) {
+                    $('.direct_entry').addClass('hide');
+                    $('.import_csv').removeClass('hide');
+                }else{
+                    $('.import_csv').addClass('hide');
+                    $('.direct_entry').removeClass('hide');
+                }
+
+            });
             $(document).on('change','#supplier_id', function (e) {
                 e.preventDefault();
                 var supplier_id = $('#supplier_id').val();
@@ -344,11 +357,12 @@ a {
 
             $(document).on('click','#savePurchaseEntryBtn', function (e) {
                 e.preventDefault();
-                // let productCode = Math.floor((Math.random() * 1000000) + 1);
-                // alert(productCode);
-
-                // savePurchaseEntry();
                 validateForm();
+            });
+
+            $(document).on('click','#savePurchaseEntryExcelBtn', function (e) {
+                e.preventDefault();
+                savePurchaseEntryExcel();
             });
 
             
@@ -541,12 +555,12 @@ a {
 
                 const file = this.files[0];
                 $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#take_photo").html('');
-                $("#product_image").val('');
                 if (file){
                     let reader = new FileReader();
                     reader.onload = function(event){
                         // $('#imgPreview').attr('src', event.target.result);
                         $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+event.target.result+'" style="height: 100px;"/>');
+                        $("#product_image").val('');
                         $("#product_image").val(event.target.result);
                     }
                     reader.readAsDataURL(file);

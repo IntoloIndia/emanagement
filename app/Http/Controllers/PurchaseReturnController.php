@@ -24,9 +24,10 @@ class PurchaseReturnController extends Controller
                                         ->select('suppliers.supplier_name','purchase_returns.*')->get();
         $purchase_return_items = array();
         foreach ($purchase_return as $key => $list) {
-            $purchase_return_items[] = PurchaseReturnItem::join('sub_categories','sub_categories.id','=','purchase_return_items.sub_category_id')
+            $purchase_return_items[] = PurchaseReturnItem::join('style_nos','style_nos.id','=','purchase_return_items.style_no_id')
+            // join('sub_categories','sub_categories.id','=','purchase_return_items.sub_category_id')
                                 ->where(['purchase_return_id'=>$list->id])
-                                ->select('purchase_return_items.*','sub_categories.sub_category')->get();     
+                                ->select('purchase_return_items.*','style_nos.style_no')->get();     
         }
 
 
@@ -48,7 +49,7 @@ class PurchaseReturnController extends Controller
     {
         
         $validator = Validator::make($req->all(),[
-            // 'color' => 'required|max:191'
+            'color' => 'required|max:191'
         ]);
 
         if($validator->fails())
@@ -93,10 +94,12 @@ class PurchaseReturnController extends Controller
             $returnitemmodel = new PurchaseReturnItem;
             $returnitemmodel->purchase_return_id = $supplier_id;
             // $returnitemmodel->purchase_return_id = $model->id;
-            $returnitemmodel->sub_category_id = $req->input('sub_category_id');
+            // $returnitemmodel->sub_category_id = $req->input('sub_category_id');
+            $returnitemmodel->style_no_id = $req->input('style_no_id');
             $returnitemmodel->color = $req->input('color');
             $returnitemmodel->size = $req->input('size');
             $returnitemmodel->qty = $req->input('qty');
+            $returnitemmodel->price = $req->input('price');
             $returnitemmodel->date = date('Y-m-d');
             $returnitemmodel->time = date('g:i A');
             $returnitemmodel->save();
@@ -125,11 +128,14 @@ class PurchaseReturnController extends Controller
         //                 'suppliers.supplier_name','suppliers.id')
         //                 ->first();
 
-        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $barcode_code])->first(['purchase_entry_id','size','qty']);
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $barcode_code])->first(['purchase_entry_id','size','qty','price']);
+            if($purchase_entry_item){
 
-        $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+        $purchase_entry = PurchaseEntry::join('style_nos','purchase_entries.style_no_id','=','style_nos.id')
+        // join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')         
                 ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
-                ->first(['purchase_entries.id','purchase_entries.purchase_id','purchase_entries.sub_category_id','sub_categories.sub_category','purchase_entries.color']);
+                ->first(['purchase_entries.id','purchase_entries.purchase_id','purchase_entries.color','purchase_entries.style_no_id','style_nos.style_no']);
+        // dd($purchase_entry);
 
         $purchase = Purchase::join('suppliers','suppliers.id','=','purchases.supplier_id')
                 ->where(['purchases.id'=> $purchase_entry->purchase_id])
@@ -138,18 +144,27 @@ class PurchaseReturnController extends Controller
         $result = collect([
             'supplier_id' => $purchase->supplier_id,
             'supplier_name' => $purchase->supplier_name,
-            'sub_category_id' => $purchase_entry->sub_category_id,
-            'sub_category' => $purchase_entry->sub_category,
+            'style_no_id' => $purchase_entry->style_no_id,
+            'style_no' => $purchase_entry->style_no,
+            // 'sub_category_id' => $purchase_entry->sub_category_id,
+            // 'sub_category' => $purchase_entry->sub_category,
             'size' => $purchase_entry_item->size,
             'qty' => $purchase_entry_item->qty,
             'color' => $purchase_entry->color,
+            'price' => $purchase_entry_item->price,
         ]);
                
-        return response()->json([
-            'status'=>200,
-            'return_product'=>$result
-           
-        ]);
+            return response()->json([
+                'status'=>200,
+                'return_product'=>$result
+            
+            ]);
+        }else{
+            return response()->json([
+                'status'=>400,
+                'return_product'=>"data not found"
+            ]);
+        }
     }
 
     function updateReleaseStatus($supplier_id)
@@ -173,17 +188,16 @@ class PurchaseReturnController extends Controller
                         ->first(['purchase_returns.*','suppliers.*']);
             // dd($purchase_return);
 
-        $purchase_return_item = PurchaseReturnItem::join('sub_categories','sub_categories.id','=','purchase_return_items.sub_category_id')
+        $purchase_return_item = PurchaseReturnItem::join('style_nos','style_nos.id','=','purchase_return_items.style_no_id')
                     ->where('purchase_return_items.purchase_return_id',$purchase_return_id)
-                    ->select(['purchase_return_items.*','sub_categories.sub_category'])->get();
+                    ->select(['purchase_return_items.*','style_nos.style_no'])->get();
 
             // dd($purchase_return_item);
            
         $html = "";
          $html .= "<div class='row'>";
-             $html .= "<div class='col-6'><h6>".$purchase_return->supplier_name."</h6>  </div>";
-             // <h6>GSTNO : ".$supplier_return_item->gst_no."</h6><h6>Mobile No : ".$supplier_return_item->mobile_no."</h6>
-             $html .= "<div class='col-6 text-end'><h6>Time : ".$purchase_return->release_time."</h6>
+             $html .= "<div class='col-8'><h6 style='text-transform: capitalize;'>".$purchase_return->supplier_name."</h6><h6 style='text-transform: capitalize;'> ".$purchase_return->address."</h6><h6>GSTNO : ".$purchase_return->gst_no."</h6><h6>Mobile No : ".$purchase_return->mobile_no."</h6></div>";
+             $html .= "<div class='col-4 text-end'><h6>Time : ".$purchase_return->release_time."</h6>
                         <h6>Date : ".date('d-m-Y',strtotime($purchase_return->release_date))."</h6></div>";
          $html .= "</div>"; 
          $html .= "<div class='row mt-2'>";
@@ -192,25 +206,38 @@ class PurchaseReturnController extends Controller
                     $html .= "<tr>";
                         $html .= "<th></th>";
                         $html .= "<th>SN</th>";
-                        $html .= "<th>Item name</th>";
-                        $html .= "<th>Size</th>";
-                        $html .= "<th>Qty</th>";
+                        $html .= "<th>Style no</th>";
                         $html .= "<th>Color</th>";
+                        $html .= "<th>Qty</th>";
+                        $html .= "<th>Size</th>";
+                        $html .= "<th>Price</th>";
                     $html .= "</tr>";
                 $html .= "</thead>";
                 $html .= "<tbody>";
+                $totalQty = 0;
+                $totalAmount = 0;
                     foreach ($purchase_return_item as $key => $list) {
                         $html .= "<tr>";
                             $html .= "<td></td>";
                             $html .= "<td>" . ++$key . "</td>";
-                            $html .= "<td>" . ucwords($list->sub_category)."</td>";
-                            $html .= "<td>" . $list->size ."</td>";
-                            $html .= "<td>" . $list->qty ."</td>";
+                            $html .= "<td>" . ucwords($list->style_no)."</td>";
                             $html .= "<td>" . $list->color ."</td>";
-                            // $html .= "<td>" . $list->item_qty ."</td>";
+                            $html .= "<td>" . $list->qty ."</td>";
+                            $html .= "<td>" . $list->size ."</td>";
+                            $html .= "<td>" . $list->price ."</td>";
                         $html .= "</tr>";
+                        $totalQty= $totalQty+$list->qty;
+                        $totalAmount= $totalAmount+$list->price;
                     }
                 $html .= "<tbody>";
+                    $html .="<tfoot>";
+                    $html .="<tr>";
+                        $html .="<td colspan='4'></td>";
+                        $html .="<td colspan=''><b>".$totalQty."</b></td>";
+                        $html .="<td><b>Total :</b></td>";
+                        $html .="<td><b>".$totalAmount."</b></td>";
+                    $html .="</tr>";
+                $html .="</tfoot>";
             $html .= "</table>";
         $html .= "</div>"; 
      

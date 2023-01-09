@@ -304,6 +304,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
         Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
+
+        Route::get('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
+
+
+
     });
     
     Route::controller(ManageStockController::class)->group(function () {

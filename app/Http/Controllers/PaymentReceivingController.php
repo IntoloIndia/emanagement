@@ -13,9 +13,14 @@ class PaymentReceivingController extends Controller
   public function index()
   {
     $all_receiving_payment = PaymentReceiving::join('customers','payment_receivings.customer_id','=','customers.id')
-    ->select('payment_receivings.*','customers.customer_name')->get();
+    ->select('payment_receivings.*','customers.customer_name')
+    ->orderBy('against_payment_date','DESC')
+    ->orderBy('against_payment_time','DESC')
+    ->get();
+   
     return view('payment_receiving',[
         'all_receiving_payment'=>$all_receiving_payment
+       
     ]);
   }
 
@@ -37,16 +42,23 @@ class PaymentReceivingController extends Controller
     // return $req;
     // die();
       $validator = Validator::make($req->all(),[
-          'against_bill_id' => 'required|:payment_receivings,against_bill_id,'.$req->input('against_bill_id'),
-          'customer_id' => 'required|max:191',
-          'balance_amount' => 'required|max:191',
-         
+        //   'against_bill_id' => 'required|:payment_receivings,against_bill_id,'.$req->input('against_bill_id'),
+        'against_bill_id' => 'required|max:191',
+        'customer_id' => 'required|max:191',
+        'balance_amount' => 'required|max:191',
+        // 'pay_online' => 'sometimes|required|max:191',
+        // 'pay_cash' => 'sometimes|required|max:191',
+        // 'pay_card' => 'sometimes|required|max:191',
+
+        // 'pay_online' => 'required_without_all:pay_cash,pay_card',
+        // 'pay_cash' => 'required_without_all:pay_online,pay_card',
+        // 'pay_card' => 'required_without_all:pay_online,pay_cash',
       ]);
       if($validator->fails())
       {
           return response()->json([
               'status'=>400,
-              'errors'=>$validator->messages(),
+              'errors'=>$validator->messages("all field required"),
           ]);
       }else{
           $model = new PaymentReceiving;

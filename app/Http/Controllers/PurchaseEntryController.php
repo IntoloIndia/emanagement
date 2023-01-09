@@ -894,7 +894,7 @@ class PurchaseEntryController extends Controller
             $purchase_entry->style_no_id = $style_no_id;
             $purchase_entry->color = $color;
 
-            if ($product_image) {
+            if ($product_image != '') {
                 $purchase_entry->img = $product_image;
             }
 
@@ -930,7 +930,7 @@ class PurchaseEntryController extends Controller
             }else{
                 return response()->json([   
                     'status'=>$result['status'],
-                    'html'=>$result['html'],
+                    // 'html'=>$result['html'],
                 ]);
             }        
      
@@ -2126,8 +2126,8 @@ class PurchaseEntryController extends Controller
     public function getProductDetail($product_code)
     {
 
-        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp']);
-
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode']);
+        if($purchase_entry_item){
         $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
                 ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
                 ->first(['purchase_entries.id','purchase_entries.sub_category_id','sub_categories.sub_category']);
@@ -2137,13 +2137,20 @@ class PurchaseEntryController extends Controller
             'product' => $purchase_entry->sub_category,
             'size' => $purchase_entry_item->size,
             'mrp' => $purchase_entry_item->mrp,
+            'qty' => $purchase_entry_item->qty,
+            'barcode' => $purchase_entry_item->barcode,
         ]);
                        
-        return response()->json([
-            'status'=>200,
-            'product_detail'=>$result,
-        ]);
-
+            return response()->json([
+                'status'=>200,
+                'product_detail'=>$result,
+            ]);
+        }else{
+            return response()->json([
+                'status'=>400,
+                'product_detail'=>"barcode not found"
+            ]);
+        } 
     }
 
     public function getBarcode()
@@ -2438,6 +2445,44 @@ class PurchaseEntryController extends Controller
             'status'=>200
         ]);
     }
+
+
+    public function savePurchaseEntryExcel()
+    {
+        $path = public_path();
+        // $csv_data = [];
+        // // $open = fopen(base_path()."public/demo.csv","r") ;
+        // if ($open = fopen(public_path()."/demo.csv","r") != FALSE) {
+        //     while ( ($data = fgetcsv($open,",")) != FALSE) {
+        //         $csv_data[] = $data[0];
+        //     }
+        //     fclose($open);
+        // }
+
+        $csv_data = [];
+        if (($csv_file = fopen(base_path()."/public/demo.csv", "r")) !== FALSE) {
+            while (($read_data = fgetcsv($csv_file, 1000, ",")) !== FALSE) {
+                // $column_count = count($read_data);
+                // for ($c=0; $c < $column_count; $c++) {
+                //     $csv_data[] = $read_data[0] ;
+                // }
+                $csv_data[] = $read_data[0] ;
+            }
+            fclose($csv_file);
+        }
+        
+        // dd($read_data);
+
+
+
+        return response()->json([
+            'status'=>200,
+            'csv_data'=>$csv_data
+        ]);
+    }
+
+
+
 
     
 

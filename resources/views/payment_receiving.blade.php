@@ -13,6 +13,7 @@
 
                 <form id="paymentReceivingForm">
                     @csrf
+                    <div id="payment_receiving_err"></div>
                     <div class="row">
                         <div class="col-md-4">
                             <label for="moblie_no" class="form-label" >Bill no</label>
@@ -41,10 +42,10 @@
                     </div>   
                     <div class="row">     
                         <div class="col-md-6">
-                            <input type="text" id="total_amount" class="form-control form-control-sm"  value="0" readonly>
+                            <input type="text" id="total_amount" class="form-control form-control-sm"  value="0" readonly >
                         </div>           
                         <div class="col-md-6">
-                            <input type="text" name="balance_amount" id="balance_amount" class="form-control form-control-sm" placeholder="Balance Amount" value="0" readonly> 
+                            <input type="text" name="balance_amount" id="balance_amount" class="form-control form-control-sm" placeholder="Balance Amount" value="0" readonly > 
                         </div> 
                     </div>
                     <div class="row mt-3">
@@ -53,7 +54,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" value="{{MyApp::ONLINE}}">Online
+                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="online" >Online
                             </div>
                         </div>
                         {{-- <div class="col-md-2">
@@ -63,7 +64,7 @@
                     <div class="row"> --}}
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" value="{{MyApp::CASH}}">Cash
+                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="cash" >Cash
                             </div>
                         </div>
                         {{-- <div class="col-md-2">
@@ -73,7 +74,7 @@
                     <div class="row"> --}}
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" value="{{MyApp::CARD}}">Card
+                                <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="card" >Card
                             </div>
                         </div>
                         {{-- <div class="col-md-2">
@@ -91,7 +92,7 @@
                                 <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0">
                         </div>
                         <div class="col-md-3">
-                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-dark btn-sm mx-1 ">Payment</button></div>
+                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1 ">Payment</button></div>
                         </div>
                     </div>
                 </form>
@@ -109,7 +110,7 @@
                             <th row>SN</th>
                             <th>Date</th>
                             <th>Time</th>
-                            <th>Payment Against</th>
+                            <th>Bill No</th>
                             <th>Customer</th>
                             <th>Online</th>
                             <th>Cash</th>
@@ -129,17 +130,32 @@
                         </tr> --}}
                     </thead>
                     <tbody id="filter_table">
+                        @php
+                            $pay_online =0;
+                            $pay_cash =0;
+                            $pay_card =0;
+                            $total_balance_amount =0;
+                        @endphp
                         @foreach ($all_receiving_payment as $key=> $list)
                             <tr class="">
+                                @php
+                                    $balance_amount = ($list->pay_online + $list->pay_cash + $list->pay_card);
+                                @endphp
                                 <td>{{++$key}}</td>
-                                <td>{{ ($list->against_payment_date)}}</td>
+                                <td>{{ date('d-m-Y', strtotime($list->against_payment_date))}}</td>
                                 <td>{{ ($list->against_payment_time)}}</td>
                                 <td>{{ ($list->against_bill_id)}}</td>
                                 <td>{{ ucwords($list->customer_name)}}</td>
                                 <td>{{ ($list->pay_online)}}</td>
                                 <td>{{ ($list->pay_cash)}}</td>
                                 <td>{{ ($list->pay_card)}}</td>
-                                <td>{{ ($list->balance_amount)}}</td>
+                                <td>{{$balance_amount}}</td>
+                                @php
+                                    $pay_online = ($pay_online) + $list->pay_online ;
+                                    $pay_cash = ($pay_cash) + $list->pay_cash ;
+                                    $pay_card = ($pay_card) + $list->pay_card ;
+                                    $total_balance_amount = ($total_balance_amount) + $balance_amount ;
+                                @endphp
                                 {{-- <td>{{ ($list->against_bill_id)}}</td> --}}
                                 <td>
                                     
@@ -153,6 +169,14 @@
                                 </td>
                             </tr>
                         @endforeach 
+                        <tr>
+                            <td colspan="4"></td>
+                            <td><b>Total : </b></td>
+                            <td><b>{{$pay_online}}</td>
+                            <td><b>{{$pay_cash}}</b></td>
+                            <td><b>{{$pay_card}}</b></td>
+                            <td><b>{{$total_balance_amount}}</b></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -1047,7 +1047,6 @@
 
 
             $(document).on('change','.product_code', function () {
-
                 var object = $(this);
                 getProductDetail(object);
                 
@@ -1078,28 +1077,38 @@
                     $('#online_payment').removeClass("hide");
                 } else {
                     $('#online_payment').addClass("hide");
+                    $('#online_payment').val(0);
                 }
+                payonlinecashcard()
             });
+
             $('#cash').change(function(){
                 if($(this).is(":checked")) {
                     $('#cash_payment').removeClass("hide");
                 } else {
                     $('#cash_payment').addClass("hide");
+                    $('#cash_payment').val(0);
                 }
+                // payonlinecashcard()
             });
+
             $('#card').change(function(){
                 if($(this).is(":checked")) {
                     $('#card_payment').removeClass("hide");
                 } else {
                     $('#card_payment').addClass("hide");
+                    $('#card_payment').val(0);
                 }
+                // payonlinecashcard()
             });
+
             $('#credit').change(function(){
                 if($(this).is(":checked")) {
                     $('#credit_payment').removeClass("hide");
                 } else {
                     $('#credit_payment').addClass("hide");
                 }
+                // payonlinecashcard()
             });
 
             $(document).on('keyup','#mobile_no', function () {
@@ -1164,41 +1173,51 @@
                 calculateCreditnoteReturnTotalAmount();
             });
 
-            // $(document).on('change','#online_payment', function () {
-            //         var pay_online = $(this).val();
-            //         var total_amount =   $('#item_total_amount').val();
-            //         var pay_online_amount = parseFloat(total_amount - parseFloat(pay_online));
-            //         $("#gross_amount").val(pay_online_amount.toFixed(2));
-            //         $("#total_amount").val(pay_online_amount.toFixed(2));
-            //     });
+            $(document).on('change','#online_payment', function () {
+                var pay_online = $(this).val();
+                var total_amount =   $('#item_total_amount').val();
+                var gross_amount = $('#gross_amount').val();
+                    var pay_online_amount = parseFloat(gross_amount - parseFloat(pay_online));
+                    $("#gross_amount").val(pay_online_amount.toFixed(2));
+                    $("#total_amount").val(pay_online_amount.toFixed(2));
+                    $("#credit_payment").val(pay_online_amount.toFixed(2));
+                });
 
-            //     $(document).on('change','#cash_payment', function () {
-            //         var pay_cash = $(this).val();
-            //         var total_amount =   $('#item_total_amount').val();
-            //         var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
-            //         $("#gross_amount").val(pay_online_amount.toFixed(2));
-            //         $("#total_amount").val(pay_online_amount.toFixed(2));
-            //     });
+                $(document).on('change','#cash_payment', function () {
+                    var gross_amount = $('#gross_amount').val();
+                    var pay_cash = $(this).val();
+                    var pay_online = $(this).val();
+                    var total_amount =   $('#item_total_amount').val();
+                    var pay_online_amount = parseFloat(gross_amount - parseFloat(pay_cash));
+                    $("#gross_amount").val(pay_online_amount.toFixed(2));
+                    $("#total_amount").val(pay_online_amount.toFixed(2));
+                    $("#credit_payment").val(pay_online_amount.toFixed(2));
+                });
 
-                // $(document).on('change','#', function () {
-                //     var pay_cash = $(this).val();
-                //     var total_amount =   $('#item_total_amount').val();
-                //     var pay_online_amount = parseFloat(total_amount - parseFloat(pay_cash));
-                //     $("#gross_amount").val(pay_online_amount.toFixed(2));
-                //     $("#total_amount").val(pay_online_amount.toFixed(2));
-                // });
-               
+                $(document).on('change','#card_payment', function () {
+                    var gross_amount = $('#gross_amount').val();
+                    var pay_card = $(this).val();
+                    var total_amount =   $('#item_total_amount').val();
+                    var pay_online_amount = parseFloat(gross_amount - parseFloat(pay_card));
+                    $("#gross_amount").val(pay_online_amount.toFixed(2));
+                    $("#total_amount").val(pay_online_amount.toFixed(2));
+                    $("#credit_payment").val(pay_online_amount.toFixed(2));
+                });
+
+                
             
-                   
-
+                
          });
 
-        //  function payOnlineCashCard(){
-        //     var pay_online = $(this).val();
-        //     var pay_cash = $(this).val();
-        //     var pay_card = $(this).val();
-        //     console.log(pay_online,pay_cash,pay_card)
-        //  }
+            // function payonlinecashcard(){
+            //     var pay_online = $('#online_payment').val();
+            //     var gross_amount = $('#gross_amount').val();
+            //     var pay_online_amount = parseFloat(gross_amount - parseFloat(pay_online));
+            //     $("#gross_amount").val(pay_online_amount.toFixed(2));
+            //     $("#total_amount").val(pay_online_amount.toFixed(2));
+            //     $("#credit_payment").val(pay_online_amount.toFixed(2));
+               
+            // }
 
 
         function calculateCreditnoteReturnTotalAmount(){
@@ -1213,24 +1232,25 @@
             });
 
             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
+                // $("#gross_amount").val(total_Return.toFixed(2));
+                // $("#total_amount").val(total_Return.toFixed(2));
+                // $("#credit_note_amount").val(total_note_amount.toFixed(2));
+              
+
+            if(total_note_amount > total_amount){
+                $("#gross_amount").val(Math.abs(total_Return).toFixed(2));
+                $("#total_amount").val(Math.abs(total_Return).toFixed(2));
+                $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                
+            }else if(total_note_amount == total_amount){
+                $("#gross_amount").val("0.00");
+                $("#total_amount").val('0.00');
+                $("#credit_note_amount").val('0.00');
+            }else{
                 $("#gross_amount").val(total_Return.toFixed(2));
                 $("#total_amount").val(total_Return.toFixed(2));
                 $("#credit_note_amount").val(total_note_amount.toFixed(2));
-            
-            // if(total_note_amount > total_amount){
-            //     $("#gross_amount").val("0.00");
-            //     $("#total_amount").val('0.00');
-            //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
-                
-            // }else if(total_note_amount == total_amount){
-            //     $("#gross_amount").val("0.00");
-            //     $("#total_amount").val('0.00');
-            //     $("#credit_note_amount").val('0.00');
-            // }else{
-            //     $("#gross_amount").val(total_amount.toFixed(2));
-            //     $("#total_amount").val(total_Return.toFixed(2));
-            //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
-            // }
+            }
             // $("#credit_note_amount").val(total_note_amount.toFixed(2));
                 
 
@@ -1287,24 +1307,37 @@
         }
 
         function getProductDetail(object){
-
-            // var product_code = $('#product_code').val();
             const product_code = $(object).val();
+            // const product_id = $(object).val();
+            //     alert(product_id);
             $.ajax({
                 type: "get",
                 url: "get-product-detail/"+product_code,
                 dataType: "json",
                 success: function (response) {
                     if (response.status == 200) {
+                        console.log(response)
                         // addItem();
-                        $(object).parent().parent().find(".price").val(response.product_detail.mrp);
-                        $(object).parent().parent().find(".product").val(response.product_detail.product);
-                        $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
-                        $(object).parent().parent().find(".size").val(response.product_detail.size);
-                        $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
-
-                        // $('.price').val(response.product_detail.mrp);
-                        // $(object).parent().parent().find(".size_id").val(response.product_detail.size.id);
+                        if(response.product_detail.barcode==product_code){
+                            $(object).parent().parent().find(".qty").val(response.product_detail.qty++);
+                            // alert(true)
+                         
+                            $(object).parent().parent().find(".price").val(response.product_detail.mrp);
+                            $(object).parent().parent().find(".product").val(response.product_detail.product);
+                            $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
+                            $(object).parent().parent().find(".size").val(response.product_detail.size);
+                            $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
+                        }
+                    }else{
+                        console.log(response)
+                        alert(false)
+                        $(object).parent().parent().find(".qty").val('');
+                        $(object).parent().parent().find(".price").val('');
+                        $(object).parent().parent().find(".product").val('');
+                        $(object).parent().parent().find(".product_id").val('');
+                        $(object).parent().parent().find(".size").val('');
+                        $(object).parent().parent().find(".mrp").val('');
+                        
                     }
                     calculateAmount(object);
                 }

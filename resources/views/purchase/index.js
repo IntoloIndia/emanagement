@@ -645,8 +645,7 @@
 
     function takePhoto() {
         Webcam.snap( function(data_uri) {
-            document.getElementById('take_photo').innerHTML = 
-            '<img class="card-img-top img-thumbnail after_capture_frame" src="'+data_uri+'"/>';
+            document.getElementById('take_photo').innerHTML = '<img class="card-img-top img-thumbnail after_capture_frame" src="'+data_uri+'"/>';
             $("#product_image").val(data_uri);
         });	 
         $('#captureLivePhotoModal').modal('hide');
@@ -955,7 +954,7 @@
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find(".after_capture_frame").addClass('hide');
                     if (response.purchase_entry.img) {
                         
-                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'"/>');
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+response.purchase_entry.img+'" style="height: 100px;"/>');
                     }
 
                     // $('#size_type_id').val(size_type);
@@ -1041,7 +1040,7 @@
             contentType: false, 
             processData: false, 
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response.status === 400)
                 {
                     $('#purchase_entry_err').html('');
@@ -1055,9 +1054,6 @@
                     $('#purchase_entry_err').html('');
                     $('#purchaseEntryModal').modal('hide');
                     window.location.reload();
-                        
-                    // $('#view_purchase_entry').html('');
-                    // $('#view_purchase_entry').append(response.html);
                 }
             }
         });
@@ -1275,6 +1271,23 @@
             }
         });
 
+    }
+
+    function savePurchaseEntryExcel() {
+
+        $.ajax({
+            type: "get",
+            url: "save-purchase-entry-excel",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                // if (response.status == 200) {
+                //     $('#barcodeModal').modal('show');
+                //     $('#view_barcode').html('');
+                //     $('#view_barcode').append(response.html);
+                // }
+            }
+        });
     }
 
     //function printBarcodeWithModal(){

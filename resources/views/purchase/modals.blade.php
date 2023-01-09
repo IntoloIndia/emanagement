@@ -15,10 +15,22 @@
                             <div class="col-md-12">
 
                                 <div class="card">
-                                    <div class="card-header"><b>Supplier</b></div>
+                                    <div class="card-header">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-9"><b>Supplier</b></div>
+                                            <div class="col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="{{MyApp::IMPORT_CSV_FILE}}" id="import_csv_file">
+                                                    <label class="form-check-label" for="flexCheckDefault"><b>Import From CSV File</b></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         
                                         <div class="row">
+
                                             <div class="col-md-3">
                                                 <div class="row">
                                                     <div class="col-md-12" id="supplier_div">
@@ -51,19 +63,21 @@
                                                         <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
                                                     </div>
                                                 </div>
-                                                <div class="row mt-1">
-                                                    <div class="col-md-12">
-                                                        <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <input type="text"  name="payment_days"  id="payment_days" class="form-control form-control-sm" placeholder="Payment Days">
                                                     </div>
                                                 </div>
+                                               
+                                            </div>
+
+                                            <div class="col-md-3 direct_entry">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                                    </div>
+                                                </div>
+                                                
                                                 <div class="row mt-2">
                                                     <div class="col-md-12">
                                                         <div class="input-group">
@@ -93,7 +107,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 direct_entry">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <input type="date"  name="bill_date"  id="bill_date" class="form-control form-control-sm" placeholder="Bill Date">
@@ -129,22 +143,32 @@
                                                
                                             </div>
 
+                                            <div class="col-md-6 import_csv hide">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <input type="file"name="file" id="file" class="form-control form-control-sm">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button" id="" class="btn btn-primary btn-sm ">Save Data </button>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
 
-                                        {{-- <div class="row">
-                                            <div class="col-md-3">hdjdaj</div>
-                                            <div class="col-md-3">hdjdaj</div>
-                                            <div class="col-md-3">hdjdaj</div>
-                                            <div class="col-md-3">hdjdaj</div>
-                                        </div> --}}
-    
+                                        
+
                                     </div>
                                 </div>
+
+                                
 
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row direct_entry">
 
                             <div class="div col-md-4">
                                 <div class="card">
@@ -217,7 +241,7 @@
                                                         {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="{{asset('public/assets/images/user-img.jpg')}}" style="width: 60px; height:60px;" /> --}}
                                                         {{-- <img class="card-img-top img-thumbnail after_capture_frame" src="" style="width: 60px; height:60px;" /> --}}
                                                     </div>                                
-                                                    <input type="hidden" name="product_image" id="product_image" class="product_image">
+                                                    <input type="hidden" name="product_image" id="product_image" class="product_image" value="">
                                                     <div class="d-grid gap-2 mt-2">
                                                         <button class="btn btn-primary btn-sm captureLivePhotoBtn" type="button">Live Camera</button>
                                                     </div>
@@ -624,34 +648,76 @@
 <!-- Button trigger modal -->
 
   <!-- Modal -->
-  <div class="modal fade" id="purchaseExcelModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="purchaseExcelModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Excel Purchase Entry</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="purchaseExcelEntryForm" action="{{url('admin/export-excel-data')}}" method="post" enctype="multipart/form-data">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Excel Purchase Entry</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            {{-- <form id="purchaseExcelEntryForm" action="{{url('admin/export-excel-data')}}" method="post" enctype="multipart/form-data"> --}}
             <div class="modal-body">
-                @csrf
+                <form id="purchaseExcelEntryForm" >
+                    @csrf
                     <div id="purchase_entry_err"></div>
-                        <div class="row">
-                                <div class="col-md-6">
-                                    <input type="file"name="file" id="file" class="form-control form-control-sm">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12" id="supplier_div">
+                                    {{-- <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);"> --}}
+                                    <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
+                                        <option selected disabled value="0">Supplier</option>                                          
+                                        @foreach ($suppliers as $list)
+                                        <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                        @endforeach
+                                    </select>  
+
                                 </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-primary btn-sm mt-1">Save</button>
+                                
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" id="supplier_address" style="height: 70px;"  placeholder="Address" disabled readonly></textarea>
                                 </div>
                             </div>
                         </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success btn-sm" href="{{url('admin/import-data')}}">Download Excel File</button>
-                </div>
-            </form>
-         </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-md-12">
+                                    <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-md-12">
+                                    <input type="text"  name="payment_days"  id="payment_days" class="form-control form-control-sm" placeholder="Payment Days">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <input type="file"name="file" id="file" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-sm mt-1" id="savePurchaseEntryExcelBtn">Save</button>
+            </div>
+
         </div>
     </div>
-{{-- excel data entry modal end --}}
+</div>
 
 
 

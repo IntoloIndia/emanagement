@@ -38,7 +38,7 @@
                 <div class="modal-body">
                     <form id="alterVoucherForm">
                         @csrf
-                      <div class='alterationvoucher_err'></div>
+                      <div id='alterationvoucher_err'></div>
                        
                         <div id="show_alteration_items"></div>
                     </form>
@@ -131,82 +131,126 @@
                         </table>    
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
-</div>
-<div class="col-md-7">
-    <div class="card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-6"> <b>Alter Voucher</b></div>
-                <div class="offset-2 col-md-4">
-                    <input type="text" id="filter_voucher" class="form-control form-control-sm" placeholder="Search voucher" >
+        {{-- Delivered item table --}}
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6"> <b>Delivered Item</b></div>
+                    <div class="offset-2 col-md-4">
+                        <input type="text" id="filter_item" class="form-control form-control-sm" placeholder="Search voucher" >
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-responsive p-0" style="height: 300px;">
+                <div class="row">
+                    <div class="col-md-12 mt-2">
+                        <div class="table-responsive">
+                        <table class='table table-striped'>
+                            <thead>
+                                <tr style='position: sticky;'>
+                                    <th>SNo</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Bill</th>
+                                    <th>Customer</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filter_alter_item">
+                                @foreach ($delivered_vouchers as $key => $list)
+                                    <tr>
+                                        <td>{{++$key}}</td>
+                                        <td>{{date('d-m-Y',strtotime($list->alteration_date))}}</td>
+                                        <td>{{$list->alteration_time}}</td>
+                                        <td>{{$list->bill_id}}</td>
+                                        <td>{{$list->customer_name}}</td>
+                                        <td> <button type="button" class="btn btn-dark btn-sm viewAlterVoucherBtn" value="{{$list->id}}"><i class="fas fa-file-invoice"></i></button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-
-            <div class='accordion accordion-flush' id='accordionFlushExample'>
-                <table class='table table-striped'>
-                    <thead>
-                        <tr style='position: sticky;z-index: 1;'>
-                            <th>SNo</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Bill No</th>
-                            <th>Customer</th>
-                            <th colspan="2" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="filter_alter_voucher">
-                            @foreach ($alteration_vouchers as $key => $vouchers)
-                           
-                                <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$key}}' aria-expanded='false' aria-controls='flush-collapseOne'>
-                                    <td>{{++$key}}</td>
-                                    <td>{{date('d-m-Y',strtotime($vouchers->alteration_date))}}</td>
-                                    <td>{{$vouchers->alteration_time}}</td>
-                                    <td>{{$vouchers->bill_id}}</td>
-                                    <td>{{$vouchers->customer_name}}</td>
-                                    <td>  <button type="button" class="btn btn-dark btn-sm deliveryStatusBtn" value="{{$vouchers->id}}">Delivery</button></td>
-                                    <td>  <button type="button" class="btn btn-dark btn-sm viewAlterVoucherBtn" value="{{$vouchers->id}}"><i class="fas fa-file-invoice"></i></button></td>
-                                </tr> 
-                                {{-- @php
-                                    $alteration_items = getAlterationItem($vouchers->id);// show voucher item
-                                @endphp
-                                <tr>
-                                    <td colspan='3'>
-                                        <div id='collapse_{{$key}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
-                                            <div class='accordion-body'>
-                                                <table class="table table-striped table-hover table-info">
-                                                    <thead>
-                                                            <tr>
-                                                                <th> SN</th>
-                                                                <th> Item</th>
-                                                                <th> Qty</th>
-                                                            </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($alteration_items as $key => $items)
-                                                            <tr>
-                                                                <td>{{++$key}}</td>
-                                                                <td>{{$items->sub_category}}</td>
-                                                                <td>{{$items->item_qty}}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+    </div>
+        {{-- ==============end of delivered item ============================= --}}
+</div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6"> <b>Alter Voucher</b></div>
+                    <div class="offset-2 col-md-4">
+                        <input type="text" id="filter_voucher" class="form-control form-control-sm" placeholder="Search voucher" >
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class='accordion accordion-flush' id='accordionFlushExample'>
+                    <table class='table table-striped'>
+                        <thead>
+                            <tr style='position: sticky;z-index: 1;'>
+                                <th>SNo</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Bill No</th>
+                                <th>Customer</th>
+                                <th colspan="2" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filter_alter_voucher">
+                                @foreach ($alteration_vouchers as $key => $vouchers)
+                            
+                                    <tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_{{$key}}' aria-expanded='false' aria-controls='flush-collapseOne'>
+                                        <td>{{++$key}}</td>
+                                        <td>{{date('d-m-Y',strtotime($vouchers->alteration_date))}}</td>
+                                        <td>{{$vouchers->alteration_time}}</td>
+                                        <td>{{$vouchers->bill_id}}</td>
+                                        <td>{{$vouchers->customer_name}}</td>
+                                        <td>  <button type="button" class="btn btn-dark btn-sm deliveryStatusBtn" value="{{$vouchers->id}}">Delivery</button></td>
+                                        <td>  <button type="button" class="btn btn-dark btn-sm viewAlterVoucherBtn" value="{{$vouchers->id}}"><i class="fas fa-file-invoice"></i></button></td>
+                                    </tr> 
+                                    {{-- @php
+                                        $alteration_items = getAlterationItem($vouchers->id);// show voucher item
+                                    @endphp
+                                    <tr>
+                                        <td colspan='3'>
+                                            <div id='collapse_{{$key}}' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>
+                                                <div class='accordion-body'>
+                                                    <table class="table table-striped table-hover table-info">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th> SN</th>
+                                                                    <th> Item</th>
+                                                                    <th> Qty</th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($alteration_items as $key => $items)
+                                                                <tr>
+                                                                    <td>{{++$key}}</td>
+                                                                    <td>{{$items->sub_category}}</td>
+                                                                    <td>{{$items->item_qty}}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr> --}}
-                            @endforeach                                               
-                        </tbody>
-                </table>  
+                                        </td>
+                                    </tr> --}}
+                                @endforeach                                               
+                            </tbody>
+                    </table>  
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-5">
         <div class="card">
             <div class="card-header">
@@ -217,7 +261,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body table-responsive p-0"  style="height: 300px;">
+            <div class="card-body table-responsive p-0" style="height: 300px;">
                 <div class="row">
                     <div class="col-md-12 mt-2">
                         <div class="table-responsive">
@@ -251,7 +295,7 @@
         </div>
     </div>
     <div class="col-md-6"></div>
-</div>
+</div> --}}
 
 
 @endsection

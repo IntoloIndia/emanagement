@@ -15,11 +15,13 @@ class CreatePurchaseReturnItemsTable extends Migration
     {
         Schema::create('purchase_return_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('sub_category_id')->default(0);
+            // $table->integer('sub_category_id')->default(0);
+            $table->integer('style_no_id')->default(0);
             $table->integer('purchase_return_id')->default(0);
             $table->integer('qty')->default(0);
             $table->string('size')->nullable();
             $table->string('color')->nullable();
+            $table->string('price')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->timestamps();
