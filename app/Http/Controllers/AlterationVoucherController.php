@@ -92,8 +92,16 @@ class AlterationVoucherController extends Controller
             $html .="<div class='card'>";
                 $html .="<div class='card-body'>";
                     $html .="<div class='row'>";
-                        $html .="<div class='col-md-6'>Bill No : " .$bill_id."</div>";
-                        $html .="<div class='col-md-6 text-end'>Date : " .date('d-m-Y',strtotime($bill_date->bill_date))."</div>";
+                        $html .="<div class='col-md-8'>Bill No : " .$bill_id."</div>";
+                        $html .="<div class='col-md-4 '>Delivery Date";
+                          
+                        $html .= "</div>";
+                    $html .="</div>";
+                    $html .="<div class='row'>";
+                        $html .="<div class='col-md-8'>Bill No : "  .date('d-m-Y',strtotime($bill_date->bill_date))."</div>";
+                        $html .="<div class='col-md-4 text-end'>";
+                             $html .= "<input type='date' id='delivery_date' name='delivery_date' class='form-control form-control-sm'>";
+                        $html .="</div>";
                     $html .="</div>";
                     $html .="<div class='row mt-3'>";
                         $html .="<div class='col-md-12'>";
@@ -145,7 +153,8 @@ class AlterationVoucherController extends Controller
             // ]);
             $validator = Validator::make($req->all(),[
                 'customer_id' => 'required|max:191',
-                'bill_id' => 'required|max:191'
+                'bill_id' => 'required|max:191',
+                'delivery_date' => 'required|max:191'
             ]);
     
             if($validator->fails())
@@ -163,11 +172,13 @@ class AlterationVoucherController extends Controller
                 $model->bill_id = $req->input('bill_id');
 
                 if($model->save()){
+
                     for ($i=0; $i < count($req->product_id); $i++) { 
                         $alter_model = new AlterationItem;
                         $alter_model->alteration_voucher_id =  $model->id;
                         $alter_model->product_id = $req->product_id[$i];
                         $alter_model->item_qty = $req->item_qty[$i];
+                        $alter_model->delivery_date = $req->delivery_date;
                         $alter_model->save();
                       
                     }
@@ -176,7 +187,6 @@ class AlterationVoucherController extends Controller
                 // if($model->save()){
                     return response()->json([   
                         'status'=>200,
-                        // 'qty'=>$req->item_qty[$i]
                         
                     ]);
                 // }

@@ -774,14 +774,15 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <b>Item</b>
-                                        <b style="margin-left: 100px">12656162922</b>
+                                        {{-- <input type="text" name="" class="barcode" style="margin-left: 100px;"> --}}
+                                        <b style="margin-left: 200px">017791071723</b>
                                         <button class="btn btn-primary btn-sm  float-right"  id="addItemBtn"> Add item</button>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="table-responsive" style="max-height: 400px">
-                                                    <table class="table">
+                                                    <table class="table" id="tablebox">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Sno</th>
@@ -894,15 +895,15 @@
                                         {{-- <hr> --}}
                                     </div>
                                 {{-- </div> --}}
-                                <input type="hidden" name="total_amount" id="total_amount" class="form-control form-control-sm " >
+                                <input type="" name="total_amount" id="total_amount" class="form-control form-control-sm " >
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-8">
                                         <span>Payment :</span>
                                     </div>
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <span>Payment :</span>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="row">
                
@@ -912,7 +913,7 @@
                                         </div>
                                     </div>
                                         <div class="col-md-2">
-                                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                            <input type="text" name="pay_online" id="online_payment" class="form-control form-control-sm hide paymentMode" value="0" placeholder="amount">
                                         </div>
                                     <div class="col-md-1">
                                         <div class="form-check form-check-inline">
@@ -920,7 +921,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide" value="0" placeholder="amount">
+                                        <input type="text" name="pay_cash" id="cash_payment" class="form-control form-control-sm hide paymentMode" value="0" placeholder="amount">
                                     </div>
                                
                                     <div class="col-md-1">
@@ -929,17 +930,18 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
+                                        <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide paymentMode"  value="0" placeholder="amount">
                                     </div>
                                
-                                    {{-- <div class="col-md-1">
+                                    <div class="col-md-1">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit
+                                            <label class="form-label" >Credit</label>
+                                            {{-- <input class="form-check-input payment_mode" type="checkbox" name="payment_mode" id="credit" value="{{MyApp::CREDIT}}">Credit --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                            <input type="text" name="pay_credit" id="credit_payment" class="form-control form-control-sm hide"  value="0" placeholder="amount">
-                                        </div> --}}
+                                            <input type="text" name="balance_amount" id="credit_payment" class="form-control form-control-sm"  value="0" placeholder="amount">
+                                    </div>
                                 </div>
                                
                                     <div class="row mt-2">
@@ -976,6 +978,8 @@
 
         // print modal open
         addItem();
+        // $(".barcode").focus();
+       
 
         $(document).on('click','.deleteBrandBtn', function (e) {
                 e.preventDefault();
@@ -1042,11 +1046,14 @@
                 }
                 $(this).parent().parent().remove();
                 calculateTotalAmount();
+                calculateCreditnoteReturnTotalAmount();
+                payOnline();  
+                payCash();
+                payCard(); 
             });
 
 
             $(document).on('change','.product_code', function () {
-
                 var object = $(this);
                 getProductDetail(object);
                 
@@ -1077,29 +1084,39 @@
                     $('#online_payment').removeClass("hide");
                 } else {
                     $('#online_payment').addClass("hide");
+                    $('#online_payment').val(0);
                 }
+                payOnline()
             });
+
             $('#cash').change(function(){
                 if($(this).is(":checked")) {
                     $('#cash_payment').removeClass("hide");
                 } else {
                     $('#cash_payment').addClass("hide");
+                    $('#cash_payment').val(0);
                 }
+                payCash()
             });
+
             $('#card').change(function(){
                 if($(this).is(":checked")) {
                     $('#card_payment').removeClass("hide");
                 } else {
                     $('#card_payment').addClass("hide");
+                    $('#card_payment').val(0);
                 }
+                payCard();
             });
-            $('#credit').change(function(){
-                if($(this).is(":checked")) {
-                    $('#credit_payment').removeClass("hide");
-                } else {
-                    $('#credit_payment').addClass("hide");
-                }
-            });
+
+            // $('#credit').change(function(){
+            //     if($(this).is(":checked")) {
+            //         $('#credit_payment').removeClass("hide");
+            //     } else {
+            //         $('#credit_payment').addClass("hide");
+            //     }
+            //     // payonlinecashcard()
+            // });
 
             $(document).on('keyup','#mobile_no', function () {
                 const mobile_no = $(this).val();
@@ -1160,74 +1177,119 @@
             // credit note function 
             $(document).on('click','.credit_note', function () {
                 var credit_note_id = $(this).val();
-                // alert(credit_note_id);
                 calculateCreditnoteReturnTotalAmount();
-                // calculateAmount();
+                payOnline();  
+                payCash();
+                payCard(); 
             });
-          
-                    //  $(document).on('click','#notedata', function (e) {
-                    //     var credit_note_id = $(this).val();
-                    //     // alert(credit_note_id)
-                    //      var total_amount =   $('#item_total_amount').val();
-                    //         var total_Return = 0;
-                    //         var total_note_amount = 0;
-                    //     if ($(this).is(":checked")) {
-                    //         $('.credit_note:checked').each(function() {
-                    //             var note_amount = parseFloat($(this).attr('credit-note-amount'));
-                    //             total_note_amount = total_note_amount + note_amount ;
-                    //             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
-                    //         });
-                    //         console.log(total_note_amount);
-                    //     }else{
-                    //         // $('.credit_note').prop('checked', false); 
-                    //         // console.log(total_note_amount);
-                    //             alert("callnot");
-                                
-                    //             // // getCustomerData();
-                    //             // var note_amount = parseFloat($(this).attr('credit-note-amount'));
-                    //             // total_Return =  total_Return +  note_amount;
-                    //             // console.log("🚀 ~ file: customer_bill_invoices.blade.php:1185 ~ total_Return", total_Return)
-                    //             // calculateAmount(object);
-                             
-                    //     }
 
-                        
-                    //     $("#item_total_amount").val(total_Return.toFixed(2));
-                    //     $("#credit_note_amount").val(total_note_amount.toFixed(2));
-                    // });
+                
+                // $(document).on('change','.barcode',function(){
+                //     // var qty = $('.qty').val();
+                //     // var barcode = $('#barcode').val();
+                //     // const product_code = $(object).val();
+                //     // const product_code = $(this).prev().prev().text('.product_code').val();
+                //     // var product_code = parseFloat($(this).parent().prev().find(".product_code").val());
+                //     // var product_code = $('#item_list.tr').parent().parent().prevAll(".product_code:first");
+                //     // console.log(product_code);
+                //     // var row = $('#item_list').closest('tr');
+                //     // // var next = row.next();
+                //     // var prev = row.prev();
+                //     // console.log('row--prev',prev)
+                //     // var product_code = parseFloat($(this).prev().prev().text('.product_code').val());
+                    
+                //         // $('#tablebox tr').each(function() {
+                //         //         // var customerId = $(this).find("td").eq().html();
+                //         //     var product_code = parseFloat($(object).parent().parent().find(".product_code").val());
+                //         //         alert(product_code)    
+                //         //         // if (barcode==product_code) {
+                //         //         //     alert(true)
+                //         //         //     // alert(product_code)
+                //         //         //     } else {
+                //         //         //         alert(false)
+                //         //         //     }
+                //         //     });
+                //             var object = $(this);
+                //         getProductDetail(object);
+
+                // })
+
+                
+
+                $(document).on('change','.paymentMode', function () {
+                     payOnline();  
+                     payCash();
+                     payCard(); 
+                     
+                    // alert("call"); 
+                });
+                
+         });
+
+            function payOnline(){
+                var pay_online = $('#online_payment').val();
+                var total_amount =   $('#item_total_amount').val();
+                var pay_credit = $('#credit_payment').val();
+                var pay_online_amount = parseFloat(total_amount - parseFloat(pay_online));
+                $("#credit_payment").val(pay_online_amount.toFixed(2));
+               
+               
+            }
+            function payCash(){
+                var pay_cash = $('#cash_payment').val();
+                var pay_credit = $('#credit_payment').val();
+                // var total_amount =   $('#item_total_amount').val();
+                var pay_cash_amount = parseFloat(pay_credit - parseFloat(pay_cash));
+                $("#credit_payment").val(pay_cash_amount.toFixed(2));
+                
+            }
+            function payCard(){
+                var pay_card = $('#card_payment').val();
+                var pay_credit = $('#credit_payment').val();
+                // var total_amount =   $('#item_total_amount').val();
+                var pay_card_amount = parseFloat(pay_credit - parseFloat(pay_card));
+                $("#credit_payment").val(pay_card_amount.toFixed(2));
+                // payOnline();
+            }
 
 
-             });
-
-
-        
-        
         function calculateCreditnoteReturnTotalAmount(){
              var gross_amount = $('#gross_amount').val();
              var total_amount =   $('#item_total_amount').val();
              var total_Return = 0;
              var total_note_amount = 0;
-            //  if(total_amount == "")
-            //  {
-            //     var total_amount = $('#item_total_amount').val();
-                
-            // }
 
             $('.credit_note:checked').each(function() {
                 var note_amount = parseFloat($(this).attr('credit-note-amount'));
                 total_note_amount = total_note_amount + note_amount ;
             });
+
             total_Return =  parseFloat(total_amount - parseFloat(total_note_amount));
+                // $("#gross_amount").val(total_Return.toFixed(2));
+                // $("#total_amount").val(total_Return.toFixed(2));
+                // $("#credit_note_amount").val(total_note_amount.toFixed(2));
+              
 
-            console.log(total_note_amount);
+            if(total_note_amount > total_amount){
+                $("#gross_amount").val(Math.abs(total_Return).toFixed(2));
+                $("#total_amount").val(Math.abs(total_Return).toFixed(2));
+                $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                
+            }else if(total_note_amount == total_amount){
+                $("#gross_amount").val("0.00");
+                $("#total_amount").val('0.00');
+                $("#credit_note_amount").val('0.00');
+            }else{
+                $("#gross_amount").val(total_Return.toFixed(2));
+                $("#total_amount").val(total_Return.toFixed(2));
+                $("#credit_note_amount").val(total_note_amount.toFixed(2));
+            }
+            // $("#credit_note_amount").val(total_note_amount.toFixed(2));
+                
 
-            $("#credit_note_amount").val(total_note_amount.toFixed(2));
-            // $("#item_total_amount").val(total_Return.toFixed(2));
-            $("#gross_amount").val(total_Return.toFixed(2));
-            // $("#total_amount").val(total_Return.toFixed(2));
         }
 
-
+       
         function getCustomerData(mobile_no) {
             $.ajax({
                 type: "get",
@@ -1236,13 +1298,14 @@
                 success: function(response) {
 
                     if (response.status == 200) {
-
+                        console.log(response)
                         $('#customer_name').val(response.customersData.customer_name);
                         $('#birthday_date').val(response.customersData.birthday_date);
                         $('#month_id').val(response.customersData.month_id);
                         $('#city_id').val(response.customersData.city_id);
                         $('#gst_no').val(response.customersData.gst_no);
                         $('#total_points').val(response.total_points);
+                        $('#anniversary_date').val(response.anniversary_date);
                         $('#credit_note').html('');
                         $('#credit_note').append(response.html);
                         
@@ -1276,27 +1339,44 @@
         }
 
         function getProductDetail(object){
-
-            // var product_code = $('#product_code').val();
+            // const barcode = $(object).val();
             const product_code = $(object).val();
+            // const product_id = $(object).val();
+            //     alert(product_id);
             $.ajax({
                 type: "get",
                 url: "get-product-detail/"+product_code,
                 dataType: "json",
                 success: function (response) {
                     if (response.status == 200) {
+                        console.log(response)
+                        // console.log(product_code)
                         // addItem();
-                        $(object).parent().parent().find(".price").val(response.product_detail.mrp);
-                        $(object).parent().parent().find(".product").val(response.product_detail.product);
-                        $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
-                        $(object).parent().parent().find(".size").val(response.product_detail.size);
-                        $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
+                        // if(response.product_detail.barcode==product_code){
+                        //     $(object).parent().parent().find(".qty").val(response.product_detail.qty++);
+                        // }else{
+                            $(object).parent().parent().find(".product_code").val(response.product_detail.barcode);
+                            $(object).parent().parent().find(".price").val(response.product_detail.mrp);
+                            $(object).parent().parent().find(".product").val(response.product_detail.product);
+                            $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
+                            $(object).parent().parent().find(".size").val(response.product_detail.size);
+                            $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
+                        // }
+                         addItem();
+                    }else{
+                        // console.log(response)
+                        $(object).parent().parent().find(".qty").val('');
+                        $(object).parent().parent().find(".price").val('');
+                        $(object).parent().parent().find(".product").val('');
+                        $(object).parent().parent().find(".product_id").val('');
+                        $(object).parent().parent().find(".size").val('');
+                        $(object).parent().parent().find(".mrp").val('');
 
-                        // $('.price').val(response.product_detail.mrp);
-                        // $(object).parent().parent().find(".size_id").val(response.product_detail.size.id);
                     }
                     calculateAmount(object);
+                    // $('.barcode').val("")
                 }
+
             });
 
         }
@@ -1333,11 +1413,14 @@
             $(object).parent().parent().find(".cgst").val(gst.cgst);
             $(object).parent().parent().find(".igst").val(gst.igst);
             $(object).parent().parent().find(".amount").val(taxable);
-            $(object).parent().parent().find(".taxable").val(taxable);
+            $(object).parent().parent().find(".taxable").val(gst.base_amount);
 
 
             calculateTotalAmount();
             calculateCreditnoteReturnTotalAmount();
+            payOnline();  
+            payCash();
+            payCard(); 
 
         }
 
@@ -1361,6 +1444,7 @@
 
             if (taxable < 1000) {
                 base_amount = parseFloat(taxable / 1.05);
+
             }else{
                 base_amount = parseFloat(taxable / 1.12);
             }
@@ -1385,6 +1469,7 @@
                 "sgst":sgst.toFixed(2),
                 "cgst":cgst.toFixed(2),
                 "igst":igst.toFixed(2),
+                "base_amount":base_amount.toFixed(2),
             }
 
             return(data);
@@ -1418,6 +1503,8 @@
             // new
             $("#gross_amount").val(gross_amount.toFixed(2));
             $("#total_amount").val(gross_amount.toFixed(2));
+            // $("#credit_payment").val(gross_amount.toFixed(2));
+
         }
 
         function calculateTotalDiscount(){
@@ -1591,13 +1678,13 @@
         // }
 
         function printInvoice(){
-        var backup = document.body.innerHTML;
-        var div_content = document.getElementById("invoiceModalPrint").innerHTML;
-        document.body.innerHTML = div_content;
-        window.print();
-        document.body.innerHTML = backup;
-        window.location.reload();
-    }
+            var backup = document.body.innerHTML;
+            var div_content = document.getElementById("invoiceModalPrint").innerHTML;
+            document.body.innerHTML = div_content;
+            window.print();
+            document.body.innerHTML = backup;
+            window.location.reload();
+        }
 
         // function generateInvoice(bill_id) {
         //  $.ajax({

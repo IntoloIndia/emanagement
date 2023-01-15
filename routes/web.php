@@ -28,6 +28,7 @@ use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PaymentReceivingController;
 
 use App\MyApp;
 /*
@@ -116,8 +117,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
     });
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('admin/barcode','index');
-        Route::get('admin/filter-product/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterProduct');
-          
+        Route::get('admin/filter-barcode/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterBarcode');
+        Route::get('admin/barcode-by-purchase-entry/{purchase_entry_id}','getBarcodeByPurchaseEntry');
+
     });
 
     Route::controller(ExcalProductDataController::class)->group(function () {
@@ -244,6 +246,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(PurchaseReturnController::class)->group(function () {
         Route::get('admin/purchase-return', 'index');
+        Route::get('admin/purchase-return-show-data', 'purchaseReturnShowData');
         Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
         Route::post('admin/save-return-item', 'saveReturnProduct');
         Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
@@ -267,6 +270,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(OfferController::class)->group(function () {
         Route::get('admin/offer', 'index');
         Route::post('admin/save-offer', 'saveOffer');
+        Route::post('admin/save-create-offer', 'saveCreateOffers');
         Route::get('admin/edit-offer/{offer_id}', 'editOffer');
         Route::post('admin/update-offer/{offer_id}', 'updateOffer');
         Route::get('admin/delete-offer/{offer_id}', 'deleteOffer');
@@ -302,6 +306,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
         Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
+
+        Route::post('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
+
     });
     
     Route::controller(ManageStockController::class)->group(function () {
@@ -333,6 +340,13 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-brand/{brand_id}','updateBrand');
         Route::get('admin/delete-brand/{brand_id}','deleteBrand');
 
+    });
+
+    Route::controller(PaymentReceivingController::class)->group(function () {
+        Route::get('admin/payment-receiving', 'index');
+        Route::get('admin/get-payment-receiving/{bill_id}', 'paymentReceiving');
+        Route::post('admin/save-payment-receiving', 'savePaymentReceiving');
+        
     });
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
@@ -371,6 +385,7 @@ Route::group(['middleware'=>'billing_auth'], function(){
         Route::get('purchase-return', 'index');
         
     });
+   
 
 
     Route::get('logout', [AuthController::class, 'logout']);

@@ -234,7 +234,7 @@
                                     {{-- <td>{{ucwords($list->address)}}</td> --}}
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm editSupplierBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban"></i></button>
+                                        {{-- <button type="button" class="btn btn-danger btn-sm deleteSupplierBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban"></i></button> --}}
                                     </td>
                                 </tr>
                             @endforeach

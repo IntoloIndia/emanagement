@@ -36,14 +36,14 @@
                         <p>User Management<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item ">
-                            <a href="admin" class="nav-link">
-                                <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="role" class="nav-link">
                                 <i class="fas fa-angle-right nav-icon"></i><p>Role </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="admin" class="nav-link">
+                                <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
                             </a>
                         </li>
                         <li class="nav-item ">
@@ -171,6 +171,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="payment-receiving" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Pending Payment Receiving</p>
+                </a>
+            </li>
             
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light">Stock Management</li>
@@ -209,11 +214,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
                 </a>
             </li> --}}
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="discount" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
                 </a>
-            </li> --}}
+            </li>
             
                 
         </ul>

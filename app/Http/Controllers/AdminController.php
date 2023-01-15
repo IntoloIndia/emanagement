@@ -16,8 +16,8 @@ class AdminController extends Controller
     //
     public function index(){
         // $admins = Admin::all()->sortBy('role');
-        $admins = Admin::all();
         $roles = Role::all();
+        $admins = Admin::join('roles','admins.role_id','=','roles.id')->get(['admins.*', 'roles.role']);
         return view('admin',[
             'admins' => $admins,
             'roles' => $roles

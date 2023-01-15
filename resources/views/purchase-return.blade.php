@@ -32,106 +32,142 @@
                     <b>Purchase Return / Debit Note</b>
                 </div>
                 <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                        <label for="exampleFormControlInput1" class="form-label" >Barcode</label>
-                        <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode" autocomplete="off">
-                    </div>
-                  </div>
-                  <div class="card mt-2">
-                      <div class="card-header">
-                          <b>Product Details</b>
-                          <button class="btn-primary btn-sm float-right" id="saveReturnItem">Add</button>
-                       </div> 
-                        <div class="card-body">
-                            <form id="returnItemsData" >
-                                @csrf
-                                <div class="return_item_err"></div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Supplier </th>
-                                                <th scope="col">Product </th>
-                                                <th scope="col">Size</th>
-                                                <th scope="col">Qty</th>
-                                                <th scope="col">Color</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="item_list">
-                                                
-                                            </tbody>
-                                        </table>
+                    <form id="returnItemsData">
+                        @csrf
+                        <div class="return_item_err"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <b>Supplier Details</b>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
+                                                    <option selected disabled value="0">Supplier</option>                                          
+                                                    @foreach ($suppliers as $list)
+                                                    <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                                    @endforeach
+                                                </select> 
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly >
+                                           </div>
+                                            <div class="col-md-4">
+                                                 <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly >
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12">
+                                                <textarea class="form-control" name="supplier_address" id="supplier_address" style="height: 40px;"  placeholder="Address"  readonly></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                      </div>
-                  </div>
+                        </div>
+                                {{-- <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="exampleFormControlInput1" class="form-label" >Barcode</label>
+                                        <input type="text" name="" id="barcode" class="form-control form-control-sm" placeholder="barcode" autocomplete="off">
+                                    </div>
+                                </div> --}}
+                        <div class="card mt-1">
+                            <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <b>Product Details</b>
+                                            {{-- <b style="margin-left: 100px">017791071723</b> --}}
+                                        </div>
+                                        <div class="col-md-3">
+                                            <b>017791071723</b>
+                                            {{-- <label for="exampleFormControlInput1" class="form-label" >Barcode</label> --}}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="barcode" id="barcode" class="form-control form-control-sm" placeholder="barcode" autocomplete="off">
+                                        </div>
+                                    
+                                    </div>
+                            </div> 
+                      
+                            <div class="card-body" >
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <small  ><b>Style no</b> </small>
+                                            <input type="hidden" name="style_no_id" id="style_no_id">
+                                            <input type="text" name="style_no" id="style_no"  class="form-control form-control-sm" placeholder="style no" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>Color</b> </small>
+                                            <input type="text" name="color" id="color" class="form-control form-control-sm" placeholder="color" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>Size</b> </small>
+                                            <input type="text" name="size" id="size" class="form-control form-control-sm" placeholder="size" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>Qty</b> </small>
+                                            <input type="text" name="qty" id="qty" class="form-control form-control-sm" placeholder="qty" value="1">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>Price</b> </small>
+                                            <input type="text" name="price" id="price" class="form-control form-control-sm" placeholder="price" readonly>
+                                        </div>
+                                    </div>
+
+                                    {{-- <div class="row">
+                                        <div class="col-md-2">
+                                            <small  ><b>Discount</b> </small>
+                                            <input type="text" name="discount" id="discount" class="form-control form-control-sm" placeholder="Discount" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>Taxable</b> </small>
+                                            <input type="text" name="taxable" id="taxable" class="form-control form-control-sm" placeholder="taxable" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>SGST</b> </small>
+                                            <input type="text" name="total_sgst" id="total_sgst" class="form-control form-control-sm sgst" placeholder="SGST"   readonly >
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small  ><b>CGST</b> </small>
+                                            <input type="text" name="total_cgst" id="total_cgst" class="form-control form-control-sm cgst" placeholder="CGST"  readonly >
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small ><b>IGST</b> </small>
+                                            <input type="text" name="total_igst" id="total_igst" class="form-control form-control-sm igst" placeholder="IGST"  readonly >
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small ><b>Amount</b> </small>
+                                            <input type="text" name="total_amount" id="total_amount" class="form-control form-control-sm total_amount" placeholder="Amount" readonly >
+                                        </div>
+                                    </div> --}}
+                                </div> 
+                            </div>
+                    </form>
+                    <div class="col-md-12">
+                       <button class="btn-primary btn-sm float-right" id="saveReturnItem">Add</button>
+                   </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-           @foreach ($purchase_return as $key1 => $list)
+        <div class="col-md-6" id="tableData">
+           {{-- @foreach ($purchase_return as $key1 => $list)
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title"> <b>{{ucwords($list->supplier_name)}}</b></h3>
+                        <button type="button" class="btn btn-success btn-sm ml-2 float-right generatePurchaseInvoice"  value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                        <button class="btn btn-warning btn-sm float-right releaseStatusBtn" id="release_date" value="{{$list->id}}">Relese</button>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Item name</th>
-                                    <th scope="col">Qty</th>
-                                    <th scope="col">Size</th>
-                                    <th scope="col">Color</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
-                                    {{-- <th scope="col">Action</th> --}}
-                                  </tr>
-                                </thead>
-                                 @php
-                                //  $purchase_return_item_data = purchaseReturnItemsdata($purchase_returns->supplier_id);   
-                                     $count =0
-                                 @endphp
-                                <tbody>
-                                    {{-- @if (MyApp::RELEASE_STATUS){
+                    <div class="card-body"> --}}
+                       <div id="panding_release_purchese_note">
 
-                                    }
-                                        
-                                    @endif --}}
-                                 @foreach ($purchase_return_items[$key1] as $item)
-                                     <tr>
-                                        <td>{{++$count}}</td>
-                                        <td>{{$item->sub_category}}</td>
-                                        <td>{{$item->qty}}</td>
-                                        <td>{{$item->size}}</td>
-                                        <td>{{$item->color}}</td>
-                                        <td>{{date('d-m-Y',strtotime($item->date))}}</td>
-                                        <td>{{$item->time}}</td>
-                                     </tr>
-                                 @endforeach
-                                </tbody>
-                                
-                              </table>
-                        </div>
-                    </div>
-                        {{-- <hr/> --}}
-                         {{-- card footer  --}}
-                        <div class="card-footer">
-                            <button class="btn btn-warning btn-sm float-right releaseStatusBtn" id="release_date" value="{{$list->id}}">Relese</button>
-                        </div>
-                          {{-- card footer  --}}
+                       </div>
+                    {{-- </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
     </div>
 
 <div class="row">
@@ -159,11 +195,13 @@
                             @foreach ($purchase_return_data as $list)
                             <tr>
                                 <td>{{++$count}}</td>
-                                <td>{{$list->supplier_name}}</td>   
+                                <td>{{ucwords($list->supplier_name)}}</td>   
                                 <td>{{date('d-m-Y',strtotime($list->release_date))}}</td>
                                 <td>{{$list->release_time}}</td>
                                 <td>
-                                <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice"  value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                {{-- <button type="button" class="btn btn-success btn-flat btn-sm generatePurchaseInvoiceModal" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
                                 </td>
                             </tr>
                             @endforeach
@@ -178,41 +216,61 @@
     <table class="hide">
         <tbody id="item_row">
             <tr>
-                <td id="count_item"></td>
+                {{-- <td id="count_item"></td> --}}
     
+              
                 <td>
-                    <input type="text"   class="form-control form-control-sm supplier_name" id="supplier_name" readonly >
-                    <input type="hidden" name="supplier_id" id="supplier_id">
-                </td>
-                <td>
-                    <input type="text" class="form-control form-control-sm" id="sub_category" readonly >
-                    <input type="hidden" name="sub_category_id"  id="sub_category_id">
-                </td>
-                <td>
-                    <input type="text"  name="size" class="form-control form-control-sm size" id="size" readonly>
-                    {{-- <input type="hidden" name="size_id[]" class="size_id"> --}}
-                </td>
-                <td>
-                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0"readonly>
+                    <input type="text"   class="form-control form-control-sm style_no" id="style_no" readonly >
+                    <input type="hidden" name="style_no_id" id="style_no_id">
                 </td>
                 <td>
                     <input type="text"  name="color" class="form-control form-control-sm" id="color" readonly>
                     {{-- <input type="hidden" name="size_id[]" class="size_id"> --}}
                 </td>
-                
+               
                 <td>
-                    <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
+                    <input type="text"  name="size" class="form-control form-control-sm size" id="size" readonly>
+                    {{-- <input type="hidden" name="size_id[]" class="size_id"> --}}
                 </td>
+                <td style="width: 50px;">
+                    <input type="text" id="qty" name="qty" value="1" class="form-control form-control-sm qty" min="1" value="0">
+                </td>
+                <td >
+                    <input type="text" name="price" id="price" class="form-control form-control-sm" readonly>
+                </td>
+                
+                <td style="width: 50px;">
+                    <input type="text" class="form-control form-control-sm discount" value="0">
+                    <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount" style="width: 100px;">
+                </td>
+                 
+                 <td style="width: 70px;" class="sgst_show_hide">
+                     <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0" readonly>
+                </td> 
+                <td style="width: 70px;" class="cgst_show_hide">
+                     <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0" readonly>
+                </td> 
+                <td style="width: 70px;" class="igst_show_hide ">
+                     <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0" readonly>
+                </td> 
+                <td style="width: 150px;">
+                    <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
+                    <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable" style="width: 150px;">
+               </td> 
+                
+                {{-- <td>
+                    <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i class="far fa-window-close"></i></button>
+                </td> --}}
             </tr>
         </tbody>
     </table>
     
-    <section>
+    {{-- <section>
         <div class="modal fade" id="viewAlterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="height: 550px;">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Supplier Details / Debit Note</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Debit Note Invoice</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="print_alter_voucher">
@@ -225,15 +283,15 @@
                         <div class="row mt-2">
                             {{-- <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
                             <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div> --}}
-                        </div>
+                        {{-- </div>
                         <hr>
-                        <div id='alter_item_list'></div>
-                        <div class="row">
+                        <div id='alter_item_list'></div> --}}
+                        {{-- <div class="row">
                             <div class="col-md-12 text-center">
                                 <p>Thankyou! Visit Again</p>
                             </div>
-                        </div>
-                    </div>
+                        </div> --}}
+                    {{-- </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
                     </div>
@@ -241,26 +299,60 @@
             </div>
         </div> 
     </section>
-   
-
+    --}} 
+    <section>
+        <div class="modal fade" id="generatePurchaseInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Debit Note Invoice</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="show_purchase_invoice"> </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm float-end" onClick="printAlterReceipt()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        
+    </section>
 @section('script')
 <script>
     $(document).ready(function(){
-        $(document).on('change','#barcode',function(){
-            addItem();
-        });
+        purchaseReturnShowData();
+        addItem();
+
+        // $(document).on('change','#barcode',function(){
+        // });
         // save funcation 
         $(document).on('click','#saveReturnItem',function(){
             // alert("call");
             saveReturnProduct();
         });
 
-        $(document).on('click','.returnproductBtn',function(){
+        $(document).on('click','.generatePurchaseInvoice',function(){
           var purchase_return_id = $(this).val();
-            $('#viewAlterVoucherModal').modal('show');
+            $('#generatePurchaseInvoiceModal').modal('show');
             purchaseReturnInvoice(purchase_return_id);
     
             
+        });
+
+        // supplier details 
+
+        $(document).on('change','#supplier_id', function (e) {
+                e.preventDefault();
+                var supplier_id = $('#supplier_id').val();
+
+                supplierDetail(supplier_id);
+
+                // $('#bill_no').val('');
+                // $('#discount').val('0');
+                // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
+
         });
 
         $(document).on('click','#printAlterReceiptBrn', function () {
@@ -281,6 +373,7 @@
                 updateReleaseStatus(supplier_id);
             });
 
+
           
     });
     
@@ -299,15 +392,33 @@
                     url: "get-return-product-item/"+barcode_code,
                     dataType: "json",
                     success: function (response) {
-                        // console.log(response);
+                        console.log(response);
                         if (response.status == 200) {
-                            $('#supplier_id').val(response.return_product.supplier_id);
-                            $('#supplier_name').val(response.return_product.supplier_name);
-                            $('#sub_category').val(response.return_product.sub_category);
-                            $('#sub_category_id').val(response.return_product.sub_category_id);
+                            $('#style_no').val(response.return_product.style_no);
+                            $('#style_no_id').val(response.return_product.style_no_id);
                             $('#size').val(response.return_product.size);
-                            $('#qty').val(response.return_product.qty);
+                            // $('#qty').val(response.return_product.qty);
                             $('#color').val(response.return_product.color);
+                            $('#price').val(response.return_product.price);
+                            $('#taxable').val(response.return_product.taxable);
+                            $('#discount').val(response.return_product.discount);
+                            $('#total_sgst').val(response.return_product.sgst);
+                            $('#total_cgst').val(response.return_product.cgst);
+                            $('#total_igst').val(response.return_product.igst);
+                            $('#total_amount').val(response.return_product.amount);
+                        }else{
+                            $('#style_no').val("");
+                            $('#style_no_id').val("");
+                            $('#size').val("");
+                            $('#color').val("");
+                            $('#price').val("");
+                            $('#discount').val("");
+                            $('#taxable').val("");
+                            $('#total_igst').val("");
+                            $('#total_sgst').val("");
+                            $('#total_cgst').val("");
+                            $('#total_amount').val("");
+                            $('#barcode').val("");
                         }
                        
                     }
@@ -315,6 +426,7 @@
                 
             });
 
+           
             function saveReturnProduct() {
             $.ajaxSetup({
                 headers: {
@@ -344,11 +456,27 @@
                     } else {
                         $('#return_item_err').html('');
                         // $('#brandModal').modal('hide');
-                        window.location.reload();
-                    }
+                        // window.location.reload();
+                            $('#style_no').val("");
+                            $('#style_no_id').val("");
+                            $('#size').val("");
+                            $('#color').val("");
+                            // $('#qty').val("");
+                            $('#price').val("");
+                            $('#discount').val("");
+                            $('#taxable').val("");
+                            $('#total_igst').val("");
+                            $('#total_sgst').val("");
+                            $('#total_cgst').val("");
+                            $('#total_amount').val("");
+                            $('#barcode').val("");
+                            purchaseReturnShowData();
+                        }
+                        
                 }
             });
         }
+        
 
         function updateReleaseStatus(supplier_id) {
         $.ajax({
@@ -374,8 +502,8 @@
             success: function (response) {
                 console.log(response);
                 if(response.status == 200){
-                    $('#alter_item_list').html("");
-                    $('#alter_item_list').append(response.html);
+                    $('#show_purchase_invoice').html("");
+                    $('#show_purchase_invoice').append(response.html);
                 }
             }
         });
@@ -383,12 +511,48 @@
 
     function printAlterReceipt(){
         var backup = document.body.innerHTML;
-        var div_content = document.getElementById("print_alter_voucher").innerHTML;
+        var div_content = document.getElementById("generatePurchaseInvoiceModal").innerHTML;
         document.body.innerHTML = div_content;
         window.print();
         document.body.innerHTML = backup;
         window.location.reload();
     }
+
+    function supplierDetail(supplier_id) {
+        $.ajax({
+            type: "get",
+            url: "supplier-detail/"+supplier_id,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if (response.status == 200) {
+                   $('#gst_no').val(response.supplier.gst_no) ;
+                   $('#supplier_code').val(response.supplier.supplier_code) ;
+                   $('#supplier_address').val(response.supplier.address) ;
+                   $('#payment_days').val(response.supplier.payment_days) ;
+                //    $('#state_type').val(response.supplier.state_type) ;
+
+                //    supplierStyleNo(response.supplier.id);
+                }
+            }
+        });
+    }
+
+        function purchaseReturnShowData(){
+                $.ajax({
+                type: "get",
+                url: `purchase-return-show-data`,
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        // console.log(response);
+                        $('#panding_release_purchese_note').html("");
+                        $('#panding_release_purchese_note').append(response.html);
+                        }
+                  }
+            });
+        }
+
 
 </script>
 @endsection

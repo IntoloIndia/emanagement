@@ -87,7 +87,6 @@ class CustomerBillInvoiceController extends Controller
                 $model->month_id = $req->input('month_id');
                 $model->anniversary_date = $req->input('anniversary_date');
                 $model->state_type = $req->input('state_type');
-                // $model->employee_id = $req->input('employee_id');
                 $model->city_id = $req->input('city_id');
                 $model->gst_no = $req->input('gst_no');
                 $model->date = date('Y-m-d');
@@ -95,82 +94,85 @@ class CustomerBillInvoiceController extends Controller
                 $model->save();
                 
                 $customer_id = $model->id;
-
+                
             }else{
                 $customer_id = $data->id;
             }
             $earn_point =0;
             $total_amount = $req->input('total_amount');
-            $pay_online = $req->input('total_amount');
+            $pay_online = $req->input('pay_online');
             $pay_cash = $req->input('pay_cash');
             $pay_card = $req->input('pay_card');
-            // $pay_credit = $req->input('pay_credit');
+            $balance_amount = $req->input('balance_amount');
             $redeem_points = $req->input('redeem_points');
-
-
+            $credit_note_amount = $req->input('credit_note_amount');
+            
+            
             $customer = CustomerPoint::where(['customer_id'=>$customer_id])->first(['id','total_points']);
-                
+            
             if ($customer) {
                 if ( $redeem_points > 0) {
                     $new_total = ($total_amount - $redeem_points) ; 
                     $earn_point = ($new_total * 10) / 100 ;
-
+                    
                     $remain_point = $customer->total_points - $redeem_points ;
                     $total_new_point = $remain_point + $earn_point ;
                 }else{
                     $earn_point = ($total_amount * 10) / 100 ;
-
+                    
                     $total_new_point = $customer->total_points + $earn_point ;
                 }
-
+                
                 $cutomerModal = CustomerPoint::find($customer->id);
                 $cutomerModal->total_points = $total_new_point;
                 $cutomerModal->save();
-
+                
             }else{
-
+                
                 $earn_point = ($total_amount * 10) / 100 ;
                 $cutomerModal = new CustomerPoint;
                 $cutomerModal->customer_id = $customer_id;
                 $cutomerModal->total_points = $earn_point;
                 $cutomerModal->save();
             }
-
+            
               // customer bills tables insert
-            //   $invoice_no = rand(000001,999999);
+            
               $billmodel = new CustomerBill;
-            //   $billmodel->invoice_no = $invoice_no;
               $billmodel->customer_id = $customer_id;   
               $billmodel->total_amount = $total_amount;
+              $billmodel->credit_note_amount = $credit_note_amount;
               $billmodel->pay_online = $pay_online;
               $billmodel->pay_cash = $pay_cash;
               $billmodel->pay_card = $pay_card;
-            //   $billmodel->pay_credit = $pay_credit;
+              $billmodel->balance_amount = $balance_amount;
               $billmodel->earned_point = $earn_point;
               $billmodel->redeem_point = $redeem_points;
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
-
-             
+              
+              
+              
+              
+              $product_id = $req->input('product_id');
+              $product_code = $req->input('product_code');
+              $price = $req->input('price');
+              $qty = $req->input('qty');
+              $size = $req->input('size');
+              $amount = $req->input('amount');
+              $employee_id = $req->input('employee_id');
+              $discount_amount = $req->input('discount_amount');
+              $taxfree_amount = $req->input('taxfree_amount');
+              $sgst = $req->input('sgst');
+              $cgst = $req->input('cgst');
+              $igst = $req->input('igst');
            
-               
-                $product_id = $req->input('product_id');
-                $product_code = $req->input('product_code');
-                $price = $req->input('price');
-                $qty = $req->input('qty');
-                $size = $req->input('size');
-                $amount = $req->input('amount');
-                $discount_amount = $req->input('discount_amount');
-                $taxfree_amount = $req->input('taxfree_amount');
-                $sgst = $req->input('sgst');
-                $cgst = $req->input('cgst');
-                $igst = $req->input('igst');
-                $employee_id = $req->input('employee_id');
-                // $result = manageCustomerPoint($customer_id, $redeem_point,$total_amount);
-
+              
+              // $result = manageCustomerPoint($customer_id, $redeem_point,$total_amount);
+              
             if($billmodel->save()){
-
+                
                 foreach ($product_id as $key => $list) {
                     // $categories = Customer::find($product_code[$key]);
                     $item = new CustomerBillInvoice;
@@ -198,17 +200,32 @@ class CustomerBillInvoiceController extends Controller
                     manageStock($stock_type, $purchase_item->purchase_entry_id, $size[$key], $qty[$key]);
                 } 
 
-                // $credit_note_id = $req->input('credit_note_id');
-                //         if($item->save()){
-                //         // $total_amount = $req->input('total_amount');
+                    $credit_note_id = $req->input('credit_note_id');
+                    if ( $credit_note_id) {
+                        
+                        foreach($credit_note_id as $key => $list) {
+                            $sales_return_model = SalesReturn::find($list);
+                            $sales_return_model->apply_bill_id = $billmodel->id;
+                            $sales_return_model->status = MyApp::USED;
+                            $sales_return_model->save();
+                        } 
+                    }
 
-                //             foreach($credit_note_id as $key => $list) {
-                //                 $sales_return_model = SalesReturn::find($list);
-                //                 $sales_return_model->status = MyApp::DEACTIVE;
-                //                 $sales_return_model->save();
-                //         } 
-                //     }      
+                    // dd($credit_note_amount); 
+                    // dd($total_amount); 
+                    // die();
+                    if($credit_note_amount > $total_amount){
 
+                        $model_item = new SalesReturn;
+                        $model_item->bill_id = $billmodel->id;
+                        $model_item->customer_id = $customer_id;
+                        $model_item->credit_note_total_amount = $total_amount;
+                        $model_item->create_date = date('Y-m-d');
+                        $model_item->create_time = date('g:i A');
+                        $model_item->save();
+                    }
+
+                         
                 return response()->json([   
                     'bill_id'=>$billmodel->id,
                     'status'=>200,
@@ -236,15 +253,9 @@ class CustomerBillInvoiceController extends Controller
                                 ->where(['status'=>MyApp::ACTIVE])
                                 ->select(['sales_returns.*'])
                                 ->get();
-        //     $credit_note_amount = array();
-        //    foreach ($credit_note_data as $key => $list) {
-        //     $credit_note_amount[] = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
-        //    }
-        //    $amount = array_sum($credit_note_amount);
-
-        //    dd($credit_note_amount);
-
-            $html = "";
+     
+        //    dd($credit_note_data);
+        $html = "";
          $html .= "<div class='row'>";
          $html .= "<div class='row'>";
             $html .= "<table class='table'>";
@@ -259,23 +270,27 @@ class CustomerBillInvoiceController extends Controller
                 //     $html .= "</tr>";
                 // $html .= "</thead>";
                 $html .= "<tbody>";
-                    $total_amount =0;
+                    // $credit_note_total_amount =0;
                     foreach ($credit_note_data as $key => $list) {
-                    $credit_note_amount = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
+                    // $credit_note_amount = SalesReturnItem::where(['sales_return_id'=>$list->id])->get()->sum('amount');
                         $html .= "<tr>";
                             $html .= "<td></td>";
                             $html .= "<td>" . ++$key . "</td>";
-                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='".$credit_note_amount."' >
                             $html .= "<td> <div class='form-check '>
-                             <input class='form-check-input credit_note' id='notedata' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='".$credit_note_amount."' >
+                             <input class='form-check-input credit_note' id='notedata' type='checkbox' name='credit_note_id[]' value='".$list->id."'credit-note-amount='". $list->credit_note_total_amount ."' >
                             </div></td>";
-                            // <input class='form-check-input credit_note' type='checkbox' name='credit_note_id[]' value='$credit_note_amount'>
                             $html .= "<td>" .$list->create_date. "</td>";
-                            $html .= "<td>" . $credit_note_amount ."</td>";           
+                            $html .= "<td>" . $list->credit_note_total_amount ."</td>";           
                         $html .= "</tr>";
-                        // $total_amount = $total_amount +$list->amount;
+                        // $credit_note_total_amount = $credit_note_total_amount + $credit_note_amount;
                     }
                 $html .= "<tbody>";
+                //     $html .="<tfoot>";
+                //     $html .="<tr>";
+                //         $html .="<td colspan='4'><b>Total :</b></td>";
+                //         $html .="<td><b>".$credit_note_total_amount."</b></td>";
+                //     $html .="</tr>";
+                // $html .="</tfoot>";
             $html .= "</table>";
         $html .= "</div>"; 
 
@@ -315,7 +330,7 @@ class CustomerBillInvoiceController extends Controller
         $html .="<div class='modal-dialog modal-lg'>";
             $html .="<div class='modal-content'>";
                 $html .="<div class='modal-header'>";
-                    $html .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                    $html .="<button type='button' class='btn-close' id='reload_invoice_print' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
                     $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
 
@@ -440,10 +455,10 @@ class CustomerBillInvoiceController extends Controller
                         $html .="<div class='col-md-8'>";
                         $html .="<span class='float-start'><b>Amount of Tax Subject to Reverse Charge :</b></span><br>";
                         $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
-                        $html .="<span class='ml-2'>Online :</span>".$bills->pay_online."<br>";
-                        $html .="<span class='ml-2'>Cash : </span>".$bills->pay_cash."<br>";
-                        $html .="<span class='ml-2'>Card : </span>".$bills->pay_card."<br>";
-                        $html .="<span class='ml-2'>Credit : </span>".$bills->pay_credit."<br>";
+                        $html .="<span class='ml-2'>Online :</span> <span class='ml-4'><b>".$bills->pay_online."</b></span><br>";
+                        $html .="<span class='ml-2'>Cash : </span><span class='ml-4'><b>".$bills->pay_cash."</b></span><br>";
+                        $html .="<span class='ml-2'>Card : </span><span class='ml-4'><b>".$bills->pay_card."</b></span><br>";
+                        $html .="<span class='ml-2'>Credit : </span><span class='ml-4'><b>".$bills->balance_amount."</b></span><br>";
                         $html.="</div>";
                            
                         $html .="</div>";
@@ -455,7 +470,7 @@ class CustomerBillInvoiceController extends Controller
                                 $html .="<span class='float-end'>CGST :</span> <br>";
                                 $html .="<span class='float-end'>IGST : </span><br>";
                                 $html .="<span class='float-end'>Points :</span> <br>";
-                                $html .="<span class='float-end'>R/Credit note amount :</span> <br>";
+                                $html .="<span class='float-end'>Note amount :</span> <br>";
                                 $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
 
                         $html .="</div>";
@@ -467,7 +482,8 @@ class CustomerBillInvoiceController extends Controller
                             $html .="<b class='text-center'>".$total_sgst."</b><br>";
                             $html .="<b class='text-center'>".$total_igst."</b><br>";
                             $html .="<b class='text-center'>".$bills->redeem_point."</b><br>";
-                            $html .="<b class='text-center'>0.00</b><br>";
+                            // $html .="<b class='text-center'>0.00</b><br>";
+                            $html .="<b class='text-center'>".$bills->credit_note_amount."</b><br>";
                             $html .="<b class='text-center'>".$bills->total_amount."</b><br>";
 
                     $html .="</div>";
@@ -503,6 +519,8 @@ class CustomerBillInvoiceController extends Controller
             'html'=>$html
         ]);
   }   
+
+  
 
 }
 

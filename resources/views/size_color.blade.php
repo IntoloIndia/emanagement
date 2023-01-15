@@ -162,7 +162,7 @@
                   <td>{{$list->size}}</td>
                   <td>
                     <button type="button" class="btn btn-info btn-sm editSizeBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm deleteSizeBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                    {{-- <button type="button" class="btn btn-danger btn-sm deleteSizeBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> --}}
                 </td> 
                 </tr>
                 @endforeach
@@ -211,7 +211,7 @@
                   </td>
                   <td>
                     <button type="button" class="btn btn-info btn-sm editColorBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm deleteColorBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button>
+                    {{-- <button type="button" class="btn btn-danger btn-sm deleteColorBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> --}}
                 </td> 
                 </tr>
                 @endforeach

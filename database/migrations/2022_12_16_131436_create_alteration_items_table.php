@@ -18,6 +18,7 @@ class CreateAlterationItemsTable extends Migration
             $table->integer('alteration_voucher_id')->default(0);
             $table->integer('product_id')->default(0);
             $table->integer('item_qty')->default(0);
+            $table->integer('delivery_date')->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

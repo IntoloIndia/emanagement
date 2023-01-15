@@ -24,7 +24,7 @@
                                 <th >SN</th>
                                 <th >Category</th>
                                 <th >Qty</th>
-                                <th >Amount</th>
+                                {{-- <th >Amount</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -38,7 +38,7 @@
                                         <th scope="row">{{++$key}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
                                         <td>{{$result['total_qty']}}</td>
-                                        <td>{{$result['total_amount']}}</td>
+                                        {{-- <td>{{$result['total_amount']}}</td> --}}
                                     </tr>
                             @endforeach
                         </tbody>
@@ -67,7 +67,7 @@
                                 <th >SN</th>
                                 <th >Sub Categoty</th>
                                 <th >Qty</th>
-                                <th >Amount</th>
+                                {{-- <th >Amount</th> --}}
                             </tr>
                         </thead>
                         <tbody >
@@ -81,7 +81,7 @@
                                     <th scope="row">{{++$key}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
                                     <td>{{$result['total_qty']}}</td>
-                                    <td>{{$result['total_amount']}}</td>
+                                    {{-- <td>{{$result['total_amount']}}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -203,14 +203,13 @@
             var brand_id = $('#brand_id').val();
             var style_no_id = $('#style_no_id').val();
             var color = $('#color option:selected').text();
-          
 
             $.ajax({
                 type: "get",
                 dataType: "json",
                 url: "show-product/"+ category_id + "/" + sub_category_id + "/" + brand_id + "/" + style_no_id + "/" + color,
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if(response.status == 200){
                         $('#show_product').html("");
                         $('#show_product').append(response.html)

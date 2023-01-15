@@ -45,6 +45,26 @@
         
         return $supplier_code;
     }
+    // $qty =0;
+    function calculateDiscount($price, $discount,$qty)
+    {
+        $total_discount_amount = 0;
+        if ($discount > 0) {
+            $discount_amount = ($price * $discount) / 100;
+            $taxable = ($price - $discount_amount) * $qty;
+            $total_discount_amount = ($discount_amount * $qty);
+            
+        }else{
+            $taxable = $price * $qty;
+        }
+        return $result = [
+            'taxable'=>$taxable,
+            'total_discount_amount'=>$total_discount_amount,
+        ]; 
+
+       
+        // return $discount_amount;    
+    }
 
     function calculateGst($state_type, $taxable){
 
@@ -87,11 +107,19 @@
     function getStockItems($purchase_entry_id)
     {
         $items = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get();
-        // $price = PurchaseEntryItem::where('purchase_entry_id',$purchase_entry_id)->get();
+        $total_quantity = ManageStock::where('purchase_entry_id',$purchase_entry_id)->get()->sum('total_qty');
         return $result = [
             'status'=>200,
             'items'=>$items,
-            // 'price'=>$price
+            'total_quantity'=>$total_quantity
+        ] ;
+    }
+
+    function getItemsDetail($purchase_entry_id, $size)
+    {
+        $item_detail = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$size])->first('price');
+        return $result = [
+            'price'=>$item_detail->price,
         ] ;
     }
 

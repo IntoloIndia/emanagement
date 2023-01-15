@@ -133,13 +133,17 @@ class ManageStockController extends Controller
                         $html .= "<th scope='col'>Brand</th>";
                         $html .= "<th scope='col'>Style No</th>";
                         $html .= "<th scope='col'>Color</th>";
+                        $html .= "<th scope='col'>Qty</th>";
+                        // $html .= "<th scope='col'>Amount</th>";
                     $html .= "</tr>";
                 $html .= "</thead>";
                 $html .= "<tbody >";
 
                 $total_quantity = 0;
+                $total_amount = 0;
 
                 foreach ($purchase_entry as $key => $list){
+                    $stock_items = getStockItems($list->id);
                    
                     $html .= "<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
                         $html .= "<td>" .++$key. "</td>";
@@ -148,13 +152,14 @@ class ManageStockController extends Controller
                         $html .= "<td>".ucwords($list->brand_name)."</td>";
                         $html .= "<td>".ucwords($list->style_no)."</td>";
                         $html .= "<td>".ucwords($list->color)."</td>";
+                        $html .= "<td>".$stock_items['total_quantity']."</td>";
+                        // $html .= "<td>00</td>";
                     $html .= "</tr>"; 
 
-                    $stock_items = getStockItems($list->id);
                     // $stock_price = getStockItems($list->id);
 
                     $html .= "<tr>";
-                        $html .= "<td colspan='5'>";
+                        $html .= "<td colspan='7'>";
                             $html .= "<div id='collapse_".$list->id."' class='accordion-collapse collapse' aria-labelledby='flush-headingOne' data-bs-parent='#accordionFlushExample'>";
                                 $html .= "<div class='accordion-body'>";
                                     $html .= "<table class='table'>";
@@ -163,23 +168,28 @@ class ManageStockController extends Controller
                                                 $html .= "<th> SN</th>";
                                                 $html .= "<th> Size</th>";
                                                 $html .= "<th> Qty</th>";
-                                                // $html .= "<th> Price</th>";
+                                                $html .= "<th> Price</th>";
+                                                $html .= "<th> Amount</th>";
                                             $html .= "</tr>";
                                         $html .= "</thead>";
                                         $html .= "<tbody>";
+                                            $total = 0;
                                             foreach ($stock_items['items'] as $key1 => $item){
+                                                $item_detail = getItemsDetail($item->purchase_entry_id, $item->size);
+                                                // echo($item_detail);
                                                 $html .= "<tr>";
                                                     $html .= "<td>".++$key1."</td>";
                                                     $html .= "<td>".strtoupper($item->size)."</td>";
                                                     $html .= "<td>".$item->total_qty."</td>";
+                                                    $html .= "<td>".$item_detail['price']."</td>";
+                                                    $html .= "<td>".( $item->total_qty * $item_detail['price'] )."</td>";
                                                     // foreach ($stock_price['price'] as $key => $list) {
                                                     //     $html .= "<td>".($list->price)."</td>";
-                                                    // }
-                                                  
-                                                   
+                                                    // }                                                   
                                                 $html .= "</tr>";
-
+                                                $total = $item->total_qty * $item_detail['price'];
                                                 $total_quantity = $total_quantity + $item->total_qty;
+                                                $total_amount = $total_amount + $total;
                                             }
                                         $html .= "</tbody>";
                                     $html .= "</table>";
@@ -191,9 +201,22 @@ class ManageStockController extends Controller
                 $html .= "</tbody>";
             $html .= "</table>";
             
-            $html .= "<div class='card-footer float-end'>";
-                $html .= "<b><span>Total Quantity : ".$total_quantity."</span></b>";
+            $html .= "<div class='card-footer '>";
+            
+                $html .= "<div class='row'>";
+                    $html .= "<div class='col-md-6'>";
+                    $html .= "</div>";
+
+                    $html .= "<div class='col-md-3'>";
+                        $html .= "<b><span>Quantity : ".$total_quantity."</span></b>";
+                    $html .= "</div>";
+                    $html .= "<div class='col-md-3'>";
+                        $html .= "<b><span>Amount : ".$total_amount."</span></b>";
+                    $html .= "</div>";
+                $html .= "</div>";
+
             $html .= "</div>";
+
         $html .= "</div>";
 
 

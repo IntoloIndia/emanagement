@@ -73,7 +73,7 @@ a {
             </div>
             <div class="col-sm-6">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                    <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button>
+                    {{-- <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button> --}}
                     <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
                 </div>
             </div>
@@ -131,7 +131,8 @@ a {
                                         <td >{{ucwords($list->supplier_name)}}</td>
                                         <td >{{$list->payment_days}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-info btn-sm viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
+                                            {{-- <button type='button' class='btn btn-warning btn-flat btn-sm barcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button> --}}
+                                            <button type="button" class="btn btn-info btn-sm mx-1 viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                         </td>
@@ -236,10 +237,23 @@ a {
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
             
-                $('#savePurchaseEntryBtn').removeClass('hide');
-                $('#updatePurchaseEntryBtn').addClass('hide');
+                $('#savePurchaseEntryExcelBtn').removeClass('hide');
+                $('#updatePurchaseEntryExcelBtn').addClass('hide');
             });
 
+            $(document).on('change','#import_csv_file', function (e) {
+                e.preventDefault();
+                var import_csv = $(this).is(":checked");
+                // console.log(import_csv);
+                if (import_csv == true) {
+                    $('.direct_entry').addClass('hide');
+                    $('.import_csv').removeClass('hide');
+                }else{
+                    $('.import_csv').addClass('hide');
+                    $('.direct_entry').removeClass('hide');
+                }
+
+            });
             $(document).on('change','#supplier_id', function (e) {
                 e.preventDefault();
                 var supplier_id = $('#supplier_id').val();
@@ -260,9 +274,7 @@ a {
                     calculateQtyPrice();
                 }
 
-
                 // calculateQtyPrice();
-                
             });
         
             
@@ -346,11 +358,12 @@ a {
 
             $(document).on('click','#savePurchaseEntryBtn', function (e) {
                 e.preventDefault();
-                // let productCode = Math.floor((Math.random() * 1000000) + 1);
-                // alert(productCode);
-
-                // savePurchaseEntry();
                 validateForm();
+            });
+
+            $(document).on('click','#savePurchaseEntryExcelBtn', function (e) {
+                e.preventDefault();
+                savePurchaseEntryExcel();
             });
 
             
@@ -368,6 +381,7 @@ a {
 
             $(document).on('click','#updatePurchaseEntryBtn', function (e) {
                 e.preventDefault();
+                
                 const purchase_id = $('#purchase_id').val();
                 const purchase_entry_id = $('#purchase_entry_id').val();
 
@@ -525,6 +539,37 @@ a {
 
                 // generatePurchaseInvoice(purchase_id);
             });
+
+            $(document).on('click','.barcodeBtn', function (e) {
+                e.preventDefault();
+                var purchase_entry_id = $(this).val();
+                getBarcodeByPurchaseEntry(purchase_entry_id);
+            });
+
+            $(document).on('click','.print', function (e) {
+                var print_section = $(this).attr('print-section');
+                printBarcode(print_section);
+            });
+
+            $(document).on('change','#formFileSm', function (e) {
+                e.preventDefault();
+
+                const file = this.files[0];
+                $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find("#take_photo").html('');
+                if (file){
+                    let reader = new FileReader();
+                    reader.onload = function(event){
+                        // $('#imgPreview').attr('src', event.target.result);
+                        $('#purchaseEntryModal').find('#purchaseEntryForm').find('#product_section').find('#take_photo').append('<img class="card-img-top img-thumbnail after_capture_frame" src="'+event.target.result+'" style="height: 100px;"/>');
+                        $("#product_image").val('');
+                        $("#product_image").val(event.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+           
+            });
+
+
 
             // $(document).on("click",".price", function(e){
                 // e.preventDefault();

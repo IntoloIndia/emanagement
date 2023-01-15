@@ -114,10 +114,11 @@ class SalesReturnController extends Controller
             // $data = SalesReturn::where(['bill_id'=>$req->input('bill_id'),'release_status'=>0])->first(['id','release_status']);
             
             // if ($data == null ) {
-                
+                $credit_note_total_amount = 0;
                 $model = new SalesReturn;
                 $model->bill_id = $req->input('bill_id');
                 $model->customer_id = $req->input('customer_id');
+                $model->credit_note_total_amount = $req->input('credit_note_total_amount');
                 $model->create_date = date('Y-m-d');
                 $model->create_time = date('g:i A');
                 $model->save();
@@ -145,7 +146,7 @@ class SalesReturnController extends Controller
                     $qty = $req->input('qty');
                     $size = $req->input('size');
                     $amount = $req->input('amount');
-
+                   
 
                 if($model->save()){
                 foreach ($sub_category_id as $key => $list) {
@@ -175,12 +176,10 @@ class SalesReturnController extends Controller
     function updateSalesReturnStatus($sales_return_id)
     {
         $status_data =SalesReturn::find($sales_return_id);
-        if($status_data->status){
+        if($status_data->status == MyApp::ACTIVE){
+            $status_data->status = MyApp::USED;
+        }else if($status_data->status = MyApp::USED){
             $status_data->status = MyApp::DEACTIVE;
-
-        }else if($status_data->status){
-            $status_data->status = MyApp::USAGE;
-
         }else{
             $status_data->status = MyApp::ACTIVE;
         }
@@ -197,8 +196,10 @@ class SalesReturnController extends Controller
         $sales_return = SalesReturn::join('sales_return_items','sales_return_items.sales_return_id','=','sales_returns.id')
                          ->join('customers','customers.id','=','sales_returns.customer_id')
                         ->where('sales_returns.id', $sales_return_id)
-                        ->first(['sales_returns.*','customers.customer_name','customers.mobile_no']);
-            // dd($purchase_return);
+                        ->first(['sales_returns.*',
+                        'customers.customer_name','customers.mobile_no'
+                    ]);
+            // dd($sales_return);
 
         $sales_return_item = SalesReturnItem::join('sub_categories','sub_categories.id','=','sales_return_items.sub_category_id')
                     ->where('sales_return_items.sales_return_id',$sales_return_id)
@@ -209,7 +210,7 @@ class SalesReturnController extends Controller
         $html = "";
          $html .= "<div class='row'>";
              $html .= "<div class='col-6'><h6 style='text-transform: capitalize;'>".$sales_return->customer_name."</h6> 
-             <h6>Mobile No : ".$sales_return->mobile_no."</h6>
+                    <h6>Mobile No : ".$sales_return->mobile_no."</h6>
               </div>";
             
              $html .= "<div class='col-6 text-end'><h6>Time : ".$sales_return->create_time."</h6>
@@ -228,7 +229,7 @@ class SalesReturnController extends Controller
                     $html .= "</tr>";
                 $html .= "</thead>";
                 $html .= "<tbody>";
-                    $total_amount =0;
+                    // $total_amount =0;
                     foreach ($sales_return_item as $key => $list) {
                         $html .= "<tr>";
                             $html .= "<td></td>";
@@ -239,7 +240,7 @@ class SalesReturnController extends Controller
                             $html .= "<td>" . $list->amount ."</td>";
                             // $html .= "<td>" . $list->item_qty ."</td>";
                         $html .= "</tr>";
-                        $total_amount = $total_amount +$list->amount;
+                        // $total_amount = $list->$credit_note_total_amount;
                     }
                 $html .= "<tbody>";
                 $html .="<tfoot>";
@@ -247,7 +248,7 @@ class SalesReturnController extends Controller
                 $html .="<td colspan='3'></td>";
                 // $html .="<td>".$total_qty."</td>";
                     $html .="<td colspan='2'><b>Total :</b></td>";  
-                    $html .="<td><b>".$total_amount."</b></td>";
+                    $html .="<td><b>".$sales_return->credit_note_total_amount."</b></td>";
                 $html .="</tr>";
             $html .="</tfoot>";
             $html .= "</table>";
