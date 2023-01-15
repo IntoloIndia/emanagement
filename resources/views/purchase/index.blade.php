@@ -131,7 +131,8 @@ a {
                                         <td >{{ucwords($list->supplier_name)}}</td>
                                         <td >{{$list->payment_days}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-info btn-sm viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
+                                            {{-- <button type='button' class='btn btn-warning btn-flat btn-sm barcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button> --}}
+                                            <button type="button" class="btn btn-info btn-sm mx-1 viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                         </td>

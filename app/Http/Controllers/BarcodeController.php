@@ -127,6 +127,7 @@ class BarcodeController extends Controller
 
     public function getBarcodeByPurchaseEntry($purchase_entry_id)
     {
+        
         $purchase_entry = PurchaseEntry::join('sub_categories','sub_categories.id','=','purchase_entries.sub_category_id')
                 ->join('brands','brands.id','=','purchase_entries.brand_id')
                 ->join('style_nos','style_nos.id','=','purchase_entries.style_no_id')

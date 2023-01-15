@@ -720,7 +720,11 @@
                 // console.log(response);
                 if (response.status == 200) {
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_total_qty').html('');
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_total_value').html('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').append(response.html);
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_total_qty').append(response.total_qty);
+                    $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_total_value').append(response.total_value);
                 }
             }
         });
@@ -1274,11 +1278,21 @@
     }
 
     function savePurchaseEntryExcel() {
-
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    
+        var formData = new FormData($("#purchaseEntryForm")[0]);
         $.ajax({
-            type: "get",
+            type: "post",
             url: "save-purchase-entry-excel",
+            data: formData,
             dataType: "json",
+            cache: false,
+            contentType: false, 
+            processData: false, 
             success: function (response) {
                 console.log(response);
                 // if (response.status == 200) {

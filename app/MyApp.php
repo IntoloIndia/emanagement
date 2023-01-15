@@ -50,7 +50,8 @@ class MyApp {
     const WITHOUT_SIZE = 3;
     
     const DELIVERY = 1;
-    const IMPORT_CSV_FILE = 1;
+    const DIRECT_ENTRY = 1;
+    const IMPORT_CSV_FILE = 2;
    
     const RELEASE_STATUS = 1;
     const RELEASE_PANDDING_STATUS = 0;
@@ -68,5 +69,14 @@ class MyApp {
 
     const PLUS_MANAGE_STOCK = 'PLUS_MANAGE_STOCK';
     const MINUS_MANAGE_STOCK = 'MINUS_MANAGE_STOCK';
+
+    const PRODUCT = 1;
+    const STORE = 2;
+
+    const PERCENTAGE = 1;
+    const VALUES = 2;
+    const PICES = 3;
+    const SLAB = 4;
+
 
 }

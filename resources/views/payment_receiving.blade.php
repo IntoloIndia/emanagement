@@ -92,7 +92,7 @@
                                 <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0">
                         </div>
                         <div class="col-md-3">
-                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1 ">Payment</button></div>
+                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1 ">Receivings</button></div>
                         </div>
                     </div>
                 </form>

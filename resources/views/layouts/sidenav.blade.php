@@ -214,11 +214,11 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
                 </a>
             </li> --}}
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="discount" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
                 </a>
-            </li> --}}
+            </li>
             
                 
         </ul>

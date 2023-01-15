@@ -246,6 +246,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     Route::controller(PurchaseReturnController::class)->group(function () {
         Route::get('admin/purchase-return', 'index');
+        Route::get('admin/purchase-return-show-data', 'purchaseReturnShowData');
         Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
         Route::post('admin/save-return-item', 'saveReturnProduct');
         Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
@@ -269,6 +270,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::controller(OfferController::class)->group(function () {
         Route::get('admin/offer', 'index');
         Route::post('admin/save-offer', 'saveOffer');
+        Route::post('admin/save-create-offer', 'saveCreateOffers');
         Route::get('admin/edit-offer/{offer_id}', 'editOffer');
         Route::post('admin/update-offer/{offer_id}', 'updateOffer');
         Route::get('admin/delete-offer/{offer_id}', 'deleteOffer');
@@ -305,9 +307,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
 
-        Route::get('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
-
-
+        Route::post('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
 
     });
     

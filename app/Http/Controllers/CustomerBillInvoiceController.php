@@ -103,7 +103,7 @@ class CustomerBillInvoiceController extends Controller
             $pay_online = $req->input('pay_online');
             $pay_cash = $req->input('pay_cash');
             $pay_card = $req->input('pay_card');
-            // $balance_amount = $req->input('balance_amount');
+            $balance_amount = $req->input('balance_amount');
             $redeem_points = $req->input('redeem_points');
             $credit_note_amount = $req->input('credit_note_amount');
             
@@ -145,7 +145,7 @@ class CustomerBillInvoiceController extends Controller
               $billmodel->pay_online = $pay_online;
               $billmodel->pay_cash = $pay_cash;
               $billmodel->pay_card = $pay_card;
-            //   $billmodel->balance_amount = $balance_amount;
+              $billmodel->balance_amount = $balance_amount;
               $billmodel->earned_point = $earn_point;
               $billmodel->redeem_point = $redeem_points;
               $billmodel->bill_date = date('Y-m-d');

@@ -45,6 +45,26 @@
         
         return $supplier_code;
     }
+    // $qty =0;
+    function calculateDiscount($price, $discount,$qty)
+    {
+        $total_discount_amount = 0;
+        if ($discount > 0) {
+            $discount_amount = ($price * $discount) / 100;
+            $taxable = ($price - $discount_amount) * $qty;
+            $total_discount_amount = ($discount_amount * $qty);
+            
+        }else{
+            $taxable = $price * $qty;
+        }
+        return $result = [
+            'taxable'=>$taxable,
+            'total_discount_amount'=>$total_discount_amount,
+        ]; 
+
+       
+        // return $discount_amount;    
+    }
 
     function calculateGst($state_type, $taxable){
 

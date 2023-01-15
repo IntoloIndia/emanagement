@@ -50,11 +50,13 @@ Route::controller(ProductAPIController::class)->group(function () {
     // Route::get('filter-available-stock/{category_id?}/{sub_category_id?}/{size?}/{color?}', 'filterAvailableStock');
     Route::post('filter-available-stock', 'filterAvailableStock');
     Route::post('filter-sales-invoice', 'filterSalesInvoice');
+    Route::get('show-product/{category_id}/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','showProduct');
 });
 
 Route::controller(CustomerAPIController::class)->group(function () {
     Route::get('customer', 'getCustomer');
     Route::get('customer-bill/{customer_id}', 'getCustomerBill');
+    Route::get('today-sales', 'todaySales');
 });
 
 Route::get('/admin', [AdminController::class, 'index']);

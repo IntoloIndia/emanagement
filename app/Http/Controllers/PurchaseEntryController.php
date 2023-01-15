@@ -1602,6 +1602,9 @@ class PurchaseEntryController extends Controller
 
         $taxable = 0;
         $total_discount_amount = 0;
+
+        // $taxable = calculateDiscount($price, $discount);
+
         if ($discount > 0) {
            $discount_amount = ($price * $discount) / 100;
            $taxable = ($price - $discount_amount) * $qty;
@@ -1609,6 +1612,7 @@ class PurchaseEntryController extends Controller
         }else{
             $taxable = $price * $qty;
         }
+
         $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
         
         $gst = calculateGst($supplier->state_type, $taxable);
@@ -1688,10 +1692,12 @@ class PurchaseEntryController extends Controller
                         $html .="</tr>";
                     $html .="</thead>";
                     $html .="<tbody >";
-                        
+                    $total_qty = 0;
+                    $total_value = 0;
                     foreach ($purchase_entry as $key => $list) {
                         $result = getSumOfPurchaseEntryItems($list->id);
-                       
+                        $total_qty = $total_qty + $result['qty'];
+                        $total_value = $total_value + $result['amount'];
                         $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
@@ -1740,6 +1746,8 @@ class PurchaseEntryController extends Controller
         return $result = [
             'status'=>200,
             'html'=>$html,
+            'total_qty'=>$total_qty,
+            'total_value'=>$total_value,
         ] ;
 
 
@@ -2447,37 +2455,70 @@ class PurchaseEntryController extends Controller
     }
 
 
-    public function savePurchaseEntryExcel()
+    public function savePurchaseEntryExcel(Request $req)
     {
-        $path = public_path();
-        // $csv_data = [];
-        // // $open = fopen(base_path()."public/demo.csv","r") ;
-        // if ($open = fopen(public_path()."/demo.csv","r") != FALSE) {
-        //     while ( ($data = fgetcsv($open,",")) != FALSE) {
-        //         $csv_data[] = $data[0];
-        //     }
-        //     fclose($open);
-        // }
 
+        if($req->hasfile('pretty_file')){
+            $fileName = time() . '_' . $req->supplier_id . '_' . $req->file('pretty_file')->getClientOriginalName();
+            $filePath = $req->file('pretty_file')->storeAs('files', $fileName, 'public');
+        }
+
+        $storage_path = storage_path('app/public/files/'.$fileName);
+        // $storage_path = storage_path('app/public/files/demo.csv');
+        
         $csv_data = [];
-        if (($csv_file = fopen(base_path()."/public/demo.csv", "r")) !== FALSE) {
+        $data = [];
+        $start_row = 0;
+        if (($csv_file = fopen($storage_path, "r")) !== FALSE) {
             while (($read_data = fgetcsv($csv_file, 1000, ",")) !== FALSE) {
                 // $column_count = count($read_data);
+                $start_row++;
+                if($start_row == 1) continue;
                 // for ($c=0; $c < $column_count; $c++) {
-                //     $csv_data[] = $read_data[0] ;
+                //     $data = [
+                //         'name'=> $read_data[0],
+                //         'mobile'=> $read_data[1],
+                //         'email'=> $read_data[2],
+                //     ];
                 // }
-                $csv_data[] = $read_data[0] ;
+                $data = [
+                    'bill_date'=> $read_data[0],
+                    'bill_no'=> $read_data[1],
+                    'category'=> $read_data[2],
+                    'sub_category'=> $read_data[3],
+                    'brand'=> $read_data[4],
+                    'style_no'=> $read_data[5],
+                    'color'=> $read_data[6],
+                    'size'=> $read_data[7],
+                    'qty'=> $read_data[8],
+                    'price'=> $read_data[9],
+                    'mrp'=> $read_data[10],
+                ];
+
+                $csv_data[] = $data ;
+                
             }
             fclose($csv_file);
         }
+
+        $count = 0;
+        $detail = array();
+        foreach ($csv_data as $key => $list) {
+            $count = $count+1;
+            // $dataa = [
+            //     'cate'=>$list->category,
+            // ];
+
+            // $detail[] = $dataa;
+        }
+
         
-        // dd($read_data);
-
-
 
         return response()->json([
             'status'=>200,
-            'csv_data'=>$csv_data
+            'csv_data'=>$csv_data,
+            // 'count'=>$count,
+            // 'detail'=>$detail,
         ]);
     }
 
