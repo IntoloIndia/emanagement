@@ -1295,11 +1295,11 @@
             processData: false, 
             success: function (response) {
                 console.log(response);
-                // if (response.status == 200) {
-                //     $('#barcodeModal').modal('show');
-                //     $('#view_barcode').html('');
-                //     $('#view_barcode').append(response.html);
-                // }
+                if (response.status == 200) {
+                    // $('#barcodeModal').modal('show');
+                    $('#show_pt_file_data').html('');
+                    $('#show_pt_file_data').append(response.html);
+                }
             }
         });
     }
