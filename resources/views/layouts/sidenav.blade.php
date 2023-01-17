@@ -122,6 +122,25 @@
                 {{-- <a href="billing" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Billing</p></a> --}}
             </li>
 
+            <hr style="margin: 0px; color:#ffffff;">
+            <li class="nav-header text-light ">Inter Company Transfer</li>
+            <hr style="margin: 0px; color:#ffffff;">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Company Supplier</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Company Purchase</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Company Sales</p>
+                </a>
+            </li>
+
             
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-header text-light ">Purchase Management</li>

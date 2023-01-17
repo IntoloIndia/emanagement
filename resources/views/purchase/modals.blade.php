@@ -31,55 +31,62 @@
                                         
                                         <div class="row">
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="row">
-                                                    <div class="col-md-12" id="supplier_div">
-                                                        {{-- <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);"> --}}
-                                                        <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
-                                                            <option selected disabled value="0">Supplier</option>                                          
-                                                            @foreach ($suppliers as $list)
-                                                            <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
-                                                            @endforeach
-                                                        </select>  
-
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-md-12" id="supplier_div">
+                                                                {{-- <select id="supplier_id" name="supplier_id" class="form-select form-select-sm" onchange="supplierDetail(this.value);"> --}}
+                                                                <select id="supplier_id" name="supplier_id" class="form-select form-select-sm">
+                                                                    <option selected disabled value="0">Supplier</option>                                          
+                                                                    @foreach ($suppliers as $list)
+                                                                    <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                                                    @endforeach
+                                                                </select>  
+        
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="row mt-2">
+                                                            <div class="col-md-12">
+                                                                <textarea class="form-control" id="supplier_address" style="height: 70px;"  placeholder="Address" disabled readonly></textarea>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
-                                                        <textarea class="form-control" id="supplier_address" style="height: 70px;"  placeholder="Address" disabled readonly></textarea>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-1">
+                                                            <div class="col-md-12">
+                                                                <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <input type="text"  name="payment_days"  id="payment_days" class="form-control form-control-sm" placeholder="Payment Days">
+                                                            </div>
+                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <input type="text" name="supplier_code" id="supplier_code" class="form-control form-control-sm" placeholder="Supplier Code" readonly disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-1">
-                                                    <div class="col-md-12">
-                                                        <input type="text"  name="gst_no"  id="gst_no" class="form-control form-control-sm" placeholder="GSTIN" readonly disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <input type="text"  name="payment_days"  id="payment_days" class="form-control form-control-sm" placeholder="Payment Days">
-                                                    </div>
-                                                </div>
-                                               
-                                            </div>
+                                            <div class="col-md-6">
 
-                                            <div class="col-md-3 direct_entry">
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <input type="date"  name="bill_date"  id="bill_date" class="form-control form-control-sm" placeholder="Bill Date">
+                                                    </div>
                                                 </div>
-                                                
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
+
+                                                <div class="row mt-2 direct_entry">
+                                                    <div class="col-md-6">
                                                         <div class="input-group">
                                                             <select id="category_id" name="category_id" class="form-select select_chosen_80" onchange="getSubCategoryByCategory(this.value);">
                                                                 <option selected disabled value="0">Category</option>
@@ -92,9 +99,7 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="input-group">
                                                             <select id="sub_category_id" name="sub_category_id" class="form-select select_chosen_80">
                                                                 <option selected disabled >Sub Category</option>
@@ -105,16 +110,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-3 direct_entry">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <input type="date"  name="bill_date"  id="bill_date" class="form-control form-control-sm" placeholder="Bill Date">
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
+                                                <div class="row mt-2 direct_entry">
+                                                    <div class="col-md-6">
                                                         <div class="input-group">
                                                             <select id="brand_id" name="brand_id" class="form-select select_chosen_80" >
                                                                 <option selected disabled value="0">Brand</option>
@@ -127,9 +125,7 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="input-group">
                                                             <select id="style_no_id" name="style_no_id" class="form-select select_chosen_80">
                                                                 <option selected disabled >Style No</option>
@@ -140,25 +136,97 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
-                                            </div>
 
-                                            <div class="col-md-6 import_csv hide">
-                                                <div class="row">
+                                                {{-- <div class="row">
+                                                    <div class="col-md-6 ">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="bill_no"  id="bill_no" class="form-control form-control-sm" placeholder="Bill no">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="row mt-2 ">
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select id="category_id" name="category_id" class="form-select select_chosen_80" onchange="getSubCategoryByCategory(this.value);">
+                                                                        <option selected disabled value="0">Category</option>
+                                                                        @foreach ($categories as $list)
+                                                                        <option value="{{$list->id}}" size-type="{{$list->size_type}}"> {{ucwords($list->category)}} </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                        <i class="fas fa-plus cursor_pointer" id="categoryBtn"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 ">
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select id="sub_category_id" name="sub_category_id" class="form-select select_chosen_80">
+                                                                        <option selected disabled >Sub Category</option>
+                                                                    </select>
+                                                                    <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                        <i class="fas fa-plus cursor_pointer" id="subCategoryBtn"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+        
+                                                    <div class="col-md-6 ">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <input type="date"  name="bill_date"  id="bill_date" class="form-control form-control-sm" placeholder="Bill Date">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 ">
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select id="brand_id" name="brand_id" class="form-select select_chosen_80" >
+                                                                        <option selected disabled value="0">Brand</option>
+                                                                        @foreach ($brands as $list)
+                                                                            <option value="{{$list->id}}"> {{ucwords($list->brand_name)}} </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                        <i class="fas fa-plus cursor_pointer" id="addBrandBtn"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2 ">
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select id="style_no_id" name="style_no_id" class="form-select select_chosen_80">
+                                                                        <option selected disabled >Style No</option>
+                                                                    </select>
+                                                                    <span class="input-group-text" style=" padding: 3px 5px 3px 5px;">
+                                                                        <i class="fas fa-plus cursor_pointer" id="styleNoBtn"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+
+                                                </div> --}}
+
+                                                <div class="row import_csv hide mt-2">
                                                     <div class="col-md-9">
-                                                        <input type="file" name="pretty_file" id="pretty_file" accept=".csv" class="form-control form-control-sm">
+                                                        <input type="file" name="pt_file" id="pt_file" accept=".csv" class="form-control form-control-sm">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="d-grid gap-2">
                                                             <button type="button" id="savePurchaseEntryExcelBtn" class="btn btn-primary btn-sm ">Save Data </button>
-                                                          </div>
+                                                        </div>
                                                     </div>
+                                                    <small>PT File Header - caegory, sub category, brand, style no, color, size</small>
                                                 </div>
+                                        
                                             </div>
 
                                         </div>
-
-                                        
 
                                     </div>
                                 </div>
@@ -166,6 +234,10 @@
                                 
 
                             </div>
+                        </div>
+
+                        <div class="row import_csv">
+                            <div id="show_pt_file_data"></div>
                         </div>
                         
                         <div class="row direct_entry">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Purchase;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
@@ -2457,15 +2458,91 @@ class PurchaseEntryController extends Controller
 
     public function savePurchaseEntryExcel(Request $req)
     {
+        if($req->hasfile('pt_file')){
 
-        if($req->hasfile('pretty_file')){
-            $fileName = time() . '_' . $req->supplier_id . '_' . $req->file('pretty_file')->getClientOriginalName();
-            $filePath = $req->file('pretty_file')->storeAs('files', $fileName, 'public');
+            $replace_dash = str_replace('-', ' ', $req->file('pt_file')->getClientOriginalName());
+            $file_name =  $req->supplier_id . '_' . $req->bill_no . '_' . str_replace(' ', '_', $replace_dash) ; 
+
+            // $file_name = time() . '_' . $req->supplier_id . '_' . $req->bill_no . '_' . $req->file('pt_file')->getClientOriginalName();
+            $filePath = $req->file('pt_file')->storeAs('files', $file_name, 'public');
+        }
+
+        $storage_path = storage_path('app/public/files/'.$file_name);
+        // $storage_path = storage_path('app/public/files/demo.csv');
+
+        $column_header = array();
+        $final_data = array();
+        $file_data = file_get_contents($storage_path);
+        $data_array = array_map("str_getcsv", explode("\n", $file_data));
+        $labels = array_shift($data_array);
+        foreach($labels as $label)
+        {
+            $column_header[] = strtolower($label);
+        }
+        $count = count($data_array) - 1;
+        for($i = 0; $i < $count; $i++)
+        {
+            $data = array_combine($column_header, $data_array[$i]);
+            $final_data[$i] = $data;
+        }
+
+        // Laravel using Storage
+        Storage::disk('public')->put('files/'.explode('.', $file_name)[0].'.json', json_encode($final_data)); 
+
+        $html = '';
+        $html .="<div class='card'>";
+            $html .="<div class='card-header'>PT File Data</div>";
+            $html .=" <div class='card-body'>";
+
+            $html .="<table class='table table-striped'>";
+                $html .="<thead>";
+                    $html .="<tr style='position: sticky;z-index: 1;'>";
+                        $html .="<th>SN</th>";
+                        $html .="<th>Category</th>";
+                        $html .="<th>Sub Category</th>";
+                        $html .="<th>Brand</th>";
+                        $html .="<th>Style No</th>";
+                    $html .="</tr>";
+                $html .="</thead>";
+                $html .="<tbody>";
+                foreach ($final_data as $key => $list) {
+                    $html .="<tr>";
+                        $html .="<td>".++$key."</td>";
+                        $html .="<td>". $list['category'] ."</td>";
+                        $html .="<td>SN</td>";
+                        $html .="<td>SN</td>";
+                        $html .="<td>SN</td>";
+                    $html .="</tr>";
+                }
+                $html .="</tbody >";
+
+            $html .="</table >";
+
+                
+            $html .="</div>";
+        $html .="</div>";
+
+      
+        return response()->json([
+            'status'=>200,
+            'column_header'=>$column_header,
+            'labels'=>$labels,
+            'data_array'=>$data_array,
+            'final_data'=>$final_data,
+            'html'=>$html,
+        ]);
+    }
+
+    public function oldsavePurchaseEntryExcel(Request $req)
+    {
+        if($req->hasfile('pt_file')){
+            $fileName = time() . '_' . $req->supplier_id . '_' . $req->file('pt_file')->getClientOriginalName();
+            $filePath = $req->file('pt_file')->storeAs('files', $fileName, 'public');
         }
 
         $storage_path = storage_path('app/public/files/'.$fileName);
         // $storage_path = storage_path('app/public/files/demo.csv');
-        
+
         $csv_data = [];
         $data = [];
         $start_row = 0;
@@ -2482,18 +2559,23 @@ class PurchaseEntryController extends Controller
                 //     ];
                 // }
                 $data = [
-                    'bill_date'=> $read_data[0],
-                    'bill_no'=> $read_data[1],
-                    'category'=> $read_data[2],
-                    'sub_category'=> $read_data[3],
-                    'brand'=> $read_data[4],
-                    'style_no'=> $read_data[5],
-                    'color'=> $read_data[6],
-                    'size'=> $read_data[7],
-                    'qty'=> $read_data[8],
-                    'price'=> $read_data[9],
-                    'mrp'=> $read_data[10],
+                    'name'=> $read_data[0],
+                    'mobile'=> $read_data[1],
+                    'email'=> $read_data[2],
                 ];
+                // $data = [
+                //     'bill_date'=> $read_data[0],
+                //     'bill_no'=> $read_data[1],
+                //     'category'=> $read_data[2],
+                //     'sub_category'=> $read_data[3],
+                //     'brand'=> $read_data[4],
+                //     'style_no'=> $read_data[5],
+                //     'color'=> $read_data[6],
+                //     'size'=> $read_data[7],
+                //     'qty'=> $read_data[8],
+                //     'price'=> $read_data[9],
+                //     'mrp'=> $read_data[10],
+                // ];
 
                 $csv_data[] = $data ;
                 
@@ -2512,14 +2594,16 @@ class PurchaseEntryController extends Controller
             // $detail[] = $dataa;
         }
 
-        
-
         return response()->json([
             'status'=>200,
             'csv_data'=>$csv_data,
-            // 'count'=>$count,
-            // 'detail'=>$detail,
+            'column_header'=>$column_header,
+            'labels'=>$labels,
+            'data_array'=>$data_array,
+            'final_data'=>$final_data,
+            'data'=>$data,
         ]);
+
     }
 
 
