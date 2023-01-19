@@ -213,15 +213,15 @@
                                                 </div> --}}
 
                                                 <div class="row import_csv hide mt-2">
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-12">
                                                         <input type="file" name="pt_file" id="pt_file" accept=".csv" class="form-control form-control-sm">
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    {{-- <div class="col-md-3">
                                                         <div class="d-grid gap-2">
-                                                            <button type="button" id="savePurchaseEntryExcelBtn" class="btn btn-primary btn-sm ">Save Data </button>
+                                                            <button type="button" id="savePurchaseEntryExcelBtn" class="btn btn-primary btn-sm ">Load PT File Data</button>
                                                         </div>
                                                     </div>
-                                                    <small>PT File Header - caegory, sub category, brand, style no, color, size</small>
+                                                    <small>PT File Header - caegory, sub category, brand, style no, color, size</small> --}}
                                                 </div>
                                         
                                             </div>
@@ -230,8 +230,6 @@
 
                                     </div>
                                 </div>
-
-                                
 
                             </div>
                         </div>

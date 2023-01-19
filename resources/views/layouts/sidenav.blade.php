@@ -126,17 +126,17 @@
             <li class="nav-header text-light ">Inter Company Transfer</li>
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="company-supplier" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Company Supplier</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="company-purchase" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Company Purchase</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="company-sales" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Company Sales</p>
                 </a>
             </li>

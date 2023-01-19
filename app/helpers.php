@@ -11,6 +11,7 @@
     use App\Models\CustomerBill;
     use App\Models\Purchase;
     use App\Models\ManageStock;
+    use App\Models\StyleNo;
    
 
     // use App\MyApp;
@@ -234,6 +235,12 @@
         
         return 'ok';
 
+    }
+
+    function getStyleNO($style_no_id)
+    {
+        $data = StyleNo::where(['id'=>$style_no_id])->pluck('style_no')->first();
+        return $data;
     }
 
 

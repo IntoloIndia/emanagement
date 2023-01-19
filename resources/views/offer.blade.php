@@ -19,8 +19,8 @@
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <div class="form-check product">
-                                            <input class="form-check-input" type="radio" name="offer_on" id="product" value="1" checked>
-                                            <label class="form-check-label" id="">
+                                            <input class="form-check-input" type="radio" name="offer_on" id="product" value="{{MyApp::PRODUCT}}"  checked>
+                                            <label class="form-check-label">
                                                 <b>Product</b>
                                             </label>
                                         </div>
@@ -31,8 +31,8 @@
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <div class="form-check store">
-                                            <input class="form-check-input " type="radio" name="offer_on" id="store" value="2" >
-                                            <label class="form-check-label" id="" >
+                                            <input class="form-check-input " type="radio" name="offer_on" id="store" value="{{MyApp::STORE}}">
+                                            <label class="form-check-label">
                                                 <b>Store</b>
                                             </label>
                                         </div>
@@ -59,10 +59,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-2">
+                        </div>                        
+                        <div class="row mt-2 hide_column">
                             <div class="col-md-5">
-                                <div class="row">
+                                <div class="row ">
                                     <div class="col-md-12 mt-2">
                                         <select id="category_id" name="category_id" class="form-select form-select-sm select_chosen_100" onchange="getSubCategoryByCategory(this.value);">
                                             <option selected disabled value="0">Category</option>
@@ -119,11 +119,11 @@
 
 <div class="hide">
 
-    <div id="purcentage_offer" class="hide mt-3">
+    <div id="discount_offer" class="hide mt-3">
         <div class="row">
             <div class="col-md-12">
                 <label class="form-label">Purcentage</label>
-                <input type="number" name="purcentage"  class="form-control form-control-sm" placeholder="percentage" min="0" >
+                <input type="number" name="discount_offer"  class="form-control form-control-sm" placeholder="discount_offer" min="0" >
             </div>
         </div>
     </div>
@@ -135,16 +135,19 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Purcentage</label>
-                <input type="text"   name="purcentage"   class="form-control form-control-sm" placeholder="purcentage" min="0">
+                <input type="text"   name="discount_offer"   class="form-control form-control-sm" placeholder="discount_offer" min="0">
             </div>
         </div>
     </div>
     <div id="pices_offer" class="hide mt-3">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label class="form-label">Pices</label>
-                <input type="text"   name="summary"   class="form-control form-control-sm" placeholder="summary">
-                <span class="">But 1 get 1 free</span>
+                <input type="text"   name="summary"   class="form-control form-control-sm" placeholder="Pices">              
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Free</label>
+                <input type="text" name="discount_offer"   class="form-control form-control-sm" placeholder="Free Pices">              
             </div>
         </div>
     </div>
@@ -152,12 +155,11 @@
         <div class="row">
             <div class="col-md-6">
                 <label class="form-label">Pices</label>
-                <input type="text"   name="summary"   class="form-control form-control-sm" placeholder="summary">
-
+                <input type="text"   name="summary"   class="form-control form-control-sm" placeholder="Pices">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Purcentage</label>
-                <input type="number"  name="purcentage"   class="form-control form-control-sm" placeholder="purcentage" min="0">
+                <input type="number"  name="discount_offer"   class="form-control form-control-sm" placeholder="discount_offer" min="0">
             </div>
         </div>
     </div>
@@ -195,43 +197,14 @@
 <div class="row">
     <div class="col-md-12">
         {{-- <button class="btn btn-success btn-sm float-right ml-4" id="addOfferNew"><i class="fas fa-plus"></i>  Create Offer</button> --}}
-        <button class="btn btn-primary btn-sm float-right " id="addOffer"><i class="fas fa-plus"></i>Apply Offer</button>
+        <button class="btn btn-primary btn-sm float-right" id="addOffer" ><i class="fas fa-plus"></i>Apply Offer</button>
     </div>
 </div>
 
 <div class="card mt-3">
     <div class="card-header"><h5><strong>Offers</strong></h5></div>
-    <div class="card-body">
+    {{-- <div class="card-body">
         <div class="row">
-            {{-- <div class="col-md-3">
-                       
-                <div class="card mt-2">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6"><small><b>From Date</b></small></b></div>
-                            <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6"><b></b></div>
-                            <div class="col-md-6 text-end"><b>{{$list->offer_to}}</b></div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col-md-12 text-red" ><strong style="font-size:25px;"> 25% Off</strong></div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-6"><b>Jara</b></div>
-                            <div class="col-md-6 text-end"><b> A-1145</b></div>
-                        </div>
-                    </div>
-                </div>
-              
-            </div>   --}}
-            {{-- second card --}}
-
             @foreach ($offers as $list)  
                 @if($list->status == MyApp::ACTIVE)   
                     <div class="col-md-3">
@@ -296,96 +269,114 @@
                 @endif
             @endforeach
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <div class="row">
     @foreach ($offers as $list)
     <div class="col-md-3">
-        <div class="card">
+        <div class="card"> 
             <div class="card-header">
-                <div class="card-header">
+        
                     @if ($list->offer_type==MyApp::PERCENTAGE)
                         <b>PERCENTAGE</b>
+                        <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                     @endif
                     @if($list->offer_type==MyApp::VALUES)
                         <b>VALUES</b>
+                       <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                     @endif
                 
                     @if($list->offer_type==MyApp::PICES)
                         <b>PICES</b>
+                      <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                     @endif
                 
                     @if($list->offer_type==MyApp::SLAB)
                         <b>SLAB</b>
+                        <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                     @endif
             </div>
             <div class="card-body">
-                {{-- <div class="row">
-                    <div class="col-md-6">
-                        Date:15/01/2022
-                    </div>
-                    <div class="col-md-6">
-                        Date:16/01/2022
-                    </div>
-                </div> --}}
                 <div>
                     <div class="row m-0">
                         <div class="col-md-12 text-center" style="font-size: 18px">
                             <b>{{ucwords($list->brand_name)}}</b>
                         </div>
                     </div>
-                    {{-- <hr> --}}
                     <div class="row">
                         <div class="col-md-12 text-center"style="font-size: 22px; color:red ">
                             @if ($list->offer_type==MyApp::PERCENTAGE)
-                                <b class="text-center">{{$list->purcentage}}%</b>
+                                <b class="text-center">{{$list->discount_offer}}%</b>
                                 <b class="text-center">Discount</b>
                             @endif
                             @if($list->offer_type==MyApp::VALUES)
                                 <b class="float-left">{{ucwords($list->summary)}}</b>
-                                <b class="text-center">{{$list->purcentage}}%</b>
+                                <b class="text-center">{{$list->discount_offer}}%</b>
                                 <b class="float-right ">Discount</b>
-                            @endif
-                        
-                            @if($list->offer_type==MyApp::PICES)
-                            <b class="text-center">{{ucwords($list->summary)}}</b>
+                                @endif
+                                
+                                @if($list->offer_type==MyApp::PICES)
+                                <b class="text-center">{{ucwords($list->summary)}}</b>                                
                             @endif
                         
                             @if($list->offer_type==MyApp::SLAB)
                             <b class="float-left">{{ucwords($list->summary)}}</b>
-                            <b class="text-center">{{$list->purcentage}}%</b>
+                            <b class="text-center">{{$list->discount_offer}}%</b>
                             <b class="float-right ">Discount</b>
                             @endif
                         </div>
                     </div>
                 </div>
                 {{-- <hr> --}}
-                <div class="row mt-2">
-                    @foreach(explode(',', $list->style_no_id) as $item)
+                {{-- <div class="row mt-2">
+                    @foreach(explode(',', $list->style_no_id) as $style_no_id)
                         <div class="col-md-4 mt-1">
-                            {{-- <ul class="list-group"> --}}
-                                <li class="list-group-item">{{$item}}</li>
-                            {{-- </ul> --}}
+                                @php
+                                    $style_name = getStyleNO($style_no_id);
+                                @endphp
+                                <li class="list-group-item">{{$style_name}}</li>
                         </div>
                     @endforeach
+                </div> --}}
+            </div>
+            @if($list->status == MyApp::ACTIVE)
+                <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#A3E4D7">
+            @else
+                <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#BDC3C7">
+            @endif
+                <div class="row">
+                    <div class="col-md-6"><small><b>From Date</b></small></b></div>
+                    <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><b>{{date('d-m-Y',strtotime($list->offer_from))}}</b></div>
+                    <div class="col-md-6 text-end"><b>{{date('d-m-Y',strtotime($list->offer_to))}}</b></div>
+                </div>
+            </div>
+            {{-- end footer --}}
+            <div class="collapse" id="collapseExample_{{$list->id}}">
+                <div class="card card-body table-responsive p-0" style="height: 130px;">
+                    <table class="table" >                        
+                        <tbody>
+                            @foreach( explode(',', $list->style_no_id) as $key => $style_no_id)
+                                @php
+                                    $result = getStyleNO($style_no_id);
+                                @endphp
+                                <tr>
+                                    <td>{{++$key}}</td>
+                                    <td>{{$result}}</td>
+                                </tr>
+                            @endforeach 
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-md-6"><small><b>From Date</b></small></b></div>
-                <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><b>{{date('d-m-Y',strtotime($list->offer_from))}}</b></div>
-                <div class="col-md-6 text-end"><b>{{date('d-m-Y',strtotime($list->offer_to))}}</b></div>
-            </div>
-        </div>
-     </div>
     </div>
     @endforeach
 </div>
+  
 
 
 
@@ -444,21 +435,7 @@
             $('#updateOfferBtn').addClass('hide');
             });
 
-            // $(document).on('click','#addOfferNew', function (e) {
-            //     e.preventDefault();
-            //     $('#offerModalNew').modal('show');
-            //     $('#offer_err').html('');
-            //     $('#offer_err').removeClass('alert alert-danger');
-            //     $("#offerDataForm").trigger("reset"); 
-            //     $('#saveOfferBtn').removeClass('hide');
-            //     $('#updateOfferBtn').addClass('hide');
-            // });
-
-            // $(document).on('click','#saveOfferBtn', function (e) {
-            //     e.preventDefault();
-            //     // alert("call");
-            //     saveCreateOffer();
-            // });
+          
             $(document).on('click','#saveOfferBtn', function (e) {
                 e.preventDefault();
                 // alert("call");
@@ -473,6 +450,7 @@
             $(document).on('click','.editOfferBtn', function (e) {
                 e.preventDefault();
                 const offer_id = $(this).val();
+                // alert(offer_id);
                 editOffer(offer_id);
             });
 
@@ -496,26 +474,26 @@
                 deleteOffer(offer_id);
             });
 
-            $(document).on('change','.store', function (e) {
+            $(document).on('change','#store', function (e) {
                 e.preventDefault();
-                // alert("fg");
-               $('.brand_id').addClass('hide');
-               $('.style_no_id').addClass('hide');
+                $('.hide_column').addClass('hide');               
             });
 
-            $(document).on('change','.product', function (e) {
+            
+            $(document).on('change','#product', function (e) {
                 e.preventDefault();
-                // alert("fg");
-               $('.brand_id').removeClass('hide');
-               $('.style_no_id').removeClass('hide');
+               
+                $('.hide_column').removeClass('hide');               
             });
 
+           
+            
             $(document).on('change','#offer_type', function (e) {
                 var offer_type = $(this).val();
                 $('#inner_html').html('');
                 if(offer_type ==1){
                     // $('#purcentage_offer').removeClass('hide');
-                    $('#inner_html').append($('#purcentage_offer').html());
+                    $('#inner_html').append($('#discount_offer').html());
 
                     // $('#pices_offer').addClass('hide');
                     // $('#value_offer').addClass('hide');
@@ -544,6 +522,8 @@
                 }
               
             });
+
+
 
         });
 
@@ -583,40 +563,7 @@
         }
 
 
-        // function saveCreateOffer(){
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
-
-        //     var formData = new FormData($("#offerDataForm")[0]);
-        //     $.ajax({
-        //         type: "post",
-        //         url: "save-create-offer",
-        //         data: formData,
-        //         dataType: "json",
-        //         cache: false,
-        //         contentType: false, 
-        //         processData: false, 
-        //         success: function (response) {
-        //             if(response.status === 400)
-        //             {
-        //                 $('#offer_err').html('');
-        //                 $('#offer_err').addClass('alert alert-danger');
-        //                 var count = 1;
-        //                 $.each(response.errors, function (key, err_value) { 
-        //                     $('#offer_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
-        //                 });
-
-        //             }else{
-        //                 $('#offer_err').html('');
-        //                 $('#offerModalNew').modal('hide');
-        //                 window.location.reload();
-        //             }
-        //         }
-        //     });
-        // }
+      
 
         function editOffer(offer_id){
             $.ajax({
@@ -628,12 +575,23 @@
                         $('#offerModal').modal('show');
                         $('#offer_err').html('');
                         $('#offer_err').removeClass('alert alert-danger');
-                        $("#offerForm").trigger( "reset" ); 
+                        $("#offerForm").trigger("reset"); 
                         $('#saveOfferBtn').addClass('hide');
                         $('#updateOfferBtn').removeClass('hide');
+                        if (response.offer.offer_on > 1) {
+                            $('#store').prop('checked', true);
+                        }else{
+                            $('#product').prop('checked', true);
+                        }                      
+                        $('#offer_type').val(response.offer.offer_type);
+                        $('#category_id').val(response.offer.category_id);
+                        $('#sub_category_id').val(response.offer.sub_category_id);
+                        // $('#summary').val(response.offer.summary);                       
                         $('#brand_id').val(response.offer.brand_id);
                         $('#style_no_id').val(response.offer.style_no_id);
                         $('#discount_offer').val(response.offer.discount_offer);
+                        $('#offer_from').val(response.offer.offer_from);
+                        $('#offer_to').val(response.offer.offer_to);                       
 
                         $('#updateOfferBtn').val(response.offer.id);
                     }

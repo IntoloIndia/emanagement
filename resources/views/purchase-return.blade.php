@@ -3,26 +3,26 @@
 
 @section('content')
 
- {{-- delete modal start  --}}
-
- <div class="modal fade" id="releaseStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div class="modal fade" id="releaseStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                {{-- <div class="modal-header"> --}}
                 {{-- <h5 class="modal-title" id="exampleModalLabel"> Delete Brand </h5> --}}
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <center>
-                    <h5> Do you want to release purchase return item?</h5>
-                        <button type="button" id="yesReleaseStatusBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
-                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
-                    <hr>
-                </center>
+                {{-- </div> --}}
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation Modal</h5>
+                </div>
+                <div class="modal-body">
+                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                    <h6> Do you want to release purchase return item?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="yesReleaseStatusBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                    <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-  </div>
 
 {{-- delete modal end  --}}
     <div class="row">

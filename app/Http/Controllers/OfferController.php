@@ -17,14 +17,15 @@ class OfferController extends Controller
         $brands = Brand::all();
         $get_style_no= StyleNo::all();
         $Categories = Category::all();
+        // $get_date = Offer::whereBetween('date', ['offer_from' , 'offer_to'] )->get();
 
-        $offers = Offer::join('brands','brands.id','=','offers.brand_id')
-           
-            ->select(['offers.*','brands.brand_name',])
-            // ->groupBy('offers.id','offers.brand_id')
+        $offers = Offer::join('brands','brands.id','=','offers.brand_id')           
+            ->select(['offers.*','brands.brand_name'])
+            ->orderBy('offer_from','DESC')
+            ->orderBy('offer_to','DESC')
+            ->orderBy('status','DESC')
             ->get();
             // dd($offers);
-
 
         return view('offer',[
             'brands' => $brands,
@@ -51,24 +52,26 @@ class OfferController extends Controller
             $model = new Offer;
             if($offer_type==1){
                 $model->offer_type = $req->input('offer_type');
-                $model->purcentage = $req->input('purcentage');
+                $model->discount_offer = $req->input('discount_offer');
               
 
             }elseif($offer_type==2){
                 $model->offer_type = $req->input('offer_type');
                 $model->summary = $req->input('summary');
-                $model->purcentage = $req->input('purcentage');
-              
+                $model->discount_offer = $req->input('discount_offer');
+                
             }elseif($offer_type==3){
                 $model->offer_type = $req->input('offer_type');
                 $model->summary = $req->input('summary'); 
+                $model->discount_offer = $req->input('discount_offer');
               
             }elseif($offer_type==4){
                 $model->offer_type = $req->input('offer_type');
                 $model->summary = $req->input('summary');
-                $model->purcentage = $req->input('purcentage');
+                $model->discount_offer = $req->input('discount_offer');
             }
-
+            $model->category_id = $req->input('category_id');
+            $model->sub_category_id = $req->input('sub_category_id');
             $model->offer_on = $req->input('offer_on');
             $model->brand_id = $req->input('brand_id');
             $model->style_no_id = implode(",",$req->input('style_no_id'));
@@ -85,7 +88,7 @@ class OfferController extends Controller
                 $model->status = MyApp::ACTIVE;
             }
             else{
-                $model->status = STATUS;
+                $model->status = INACTIVE;
             }
             $model->save();
             return response()->json([
@@ -99,9 +102,19 @@ class OfferController extends Controller
     public function editOffer($offer_id)
     {
         $offer = Offer::find($offer_id);
+        // $Categories = Category::where(['id' => $offer->category_id])->get();
+        // $html = "";
+        // foreach ($Categories as $key => $category) {
+        //     if($offer->category_id == $Categories->id){
+        //         $html .= "<option value='".$category->id."' selected>" . $category->state  . "</option>" ;
+        //     }else{
+        //         $html .= "<option value='".$category->id."'>" . $category->state  . "</option>";
+        //     }
+        // }
         return response()->json([
             'status'=>200,
-            'offer'=>$offer
+            // 'offer'=>$offer,
+            // 'states'=>$html
         ]);
     }
 
@@ -109,7 +122,7 @@ class OfferController extends Controller
     {
         $validator = Validator::make($req->all(),[
             // 'brand_id' => 'required|max:191',
-             'discount_offer' => 'required|max:191',
+          
         ]);
         if($validator->fails())
         {
@@ -120,9 +133,15 @@ class OfferController extends Controller
         }else{
             $model = Offer::find($offer_id);
             $model->offer_on = $req->input('offer_on');
+            $model->offer_type = $req->input('offer_type');
+            $model->category_id = $req->input('category_id');
+            $model->sub_category_id = $req->input('sub_category_id');
             $model->brand_id = $req->input('brand_id');
-            $model->style_no_id = $req->input('style_no_id');
             $model->discount_offer = $req->input('discount_offer');
+            $model->style_no_id = implode(",",$req->input('style_no_id'));
+            // $model->style_no_id = $req->input('style_no_id');
+            $model->brand_id = $req->input('brand_id');
+            // $model->discount_offer = $req->input('discount_offer');
             $model->offer_from = $req->input('offer_from');
             $model->offer_to = $req->input('offer_to');
             $model->date = date('Y-m-d');

@@ -1277,7 +1277,7 @@
 
     }
 
-    function savePurchaseEntryExcel() {
+    function loadPtFileData() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1287,18 +1287,42 @@
         var formData = new FormData($("#purchaseEntryForm")[0]);
         $.ajax({
             type: "post",
-            url: "save-purchase-entry-excel",
+            url: "load-pt-file-data",
             data: formData,
             dataType: "json",
             cache: false,
             contentType: false, 
             processData: false, 
             success: function (response) {
-                console.log(response);
+                $('#show_pt_file_data').html('');
                 if (response.status == 200) {
                     // $('#barcodeModal').modal('show');
-                    $('#show_pt_file_data').html('');
                     $('#show_pt_file_data').append(response.html);
+                }
+            }
+        });
+    }
+
+    function savePtFile(formData) {
+        $.ajax({
+            type: "post",
+            url: "save-pt-file",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if(response.status === 400)
+                {
+                    $('#purchase_entry_err').html('');
+                    $('#purchase_entry_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) { 
+                        $('#purchase_entry_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                    });
+                }else{
+                    $('#purchase_entry_err').html('');
+                    $('#purchaseEntryModal').modal('hide');
+                    window.location.reload();
                 }
             }
         });

@@ -313,7 +313,7 @@
             });
         }
 
-        function updateSubCategoey(sub_category_id){
+        function updateSubCategory(sub_category_id){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

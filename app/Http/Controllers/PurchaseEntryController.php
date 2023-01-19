@@ -1774,7 +1774,7 @@ class PurchaseEntryController extends Controller
                 $html .= "</div>";
                 $html .= "</div>";
     
-                $html .= "<div class='ard-body table-responsive p-0'style='height: 450px;' >";
+                $html .= "<div class='card-body table-responsive p-0'style='height: 450px;' >";
                 $html .="<div class='accordion accordion-flush' id='accordionFlushExample'>";
                 $html .="<table class='table table-striped'>";
                     $html .="<thead>";
@@ -2456,14 +2456,17 @@ class PurchaseEntryController extends Controller
     }
 
 
-    public function savePurchaseEntryExcel(Request $req)
+    public function loadPtFileData(Request $req)
     {
         if($req->hasfile('pt_file')){
 
             $replace_dash = str_replace('-', ' ', $req->file('pt_file')->getClientOriginalName());
             $file_name =  $req->supplier_id . '_' . $req->bill_no . '_' . str_replace(' ', '_', $replace_dash) ; 
-
-            // $file_name = time() . '_' . $req->supplier_id . '_' . $req->bill_no . '_' . $req->file('pt_file')->getClientOriginalName();
+            
+            $file_exist = public_path('storage/files').$file_name;
+            if(file_exists($file_exist)){
+                @unlink($file_exist ); 
+            }
             $filePath = $req->file('pt_file')->storeAs('files', $file_name, 'public');
         }
 
@@ -2477,7 +2480,7 @@ class PurchaseEntryController extends Controller
         $labels = array_shift($data_array);
         foreach($labels as $label)
         {
-            $column_header[] = strtolower($label);
+            $column_header[] = strtolower(str_replace(' ', '_', $label));
         }
         $count = count($data_array) - 1;
         for($i = 0; $i < $count; $i++)
@@ -2491,47 +2494,247 @@ class PurchaseEntryController extends Controller
 
         $html = '';
         $html .="<div class='card'>";
-            $html .="<div class='card-header'>PT File Data</div>";
-            $html .=" <div class='card-body'>";
-
-            $html .="<table class='table table-striped'>";
-                $html .="<thead>";
-                    $html .="<tr style='position: sticky;z-index: 1;'>";
-                        $html .="<th>SN</th>";
-                        $html .="<th>Category</th>";
-                        $html .="<th>Sub Category</th>";
-                        $html .="<th>Brand</th>";
-                        $html .="<th>Style No</th>";
-                    $html .="</tr>";
-                $html .="</thead>";
-                $html .="<tbody>";
-                foreach ($final_data as $key => $list) {
-                    $html .="<tr>";
-                        $html .="<td>".++$key."</td>";
-                        $html .="<td>". $list['category'] ."</td>";
-                        $html .="<td>SN</td>";
-                        $html .="<td>SN</td>";
-                        $html .="<td>SN</td>";
-                    $html .="</tr>";
-                }
-                $html .="</tbody >";
-
-            $html .="</table >";
-
-                
+            $html .="<div class='card-header'>";
+                $html .= "<div class='row'>";
+                $html .= "<div class='col-md-6'>";
+                    $html .= "<b>PT File Data</b>";
+                $html .= "</div>";
+                $html .= "<div class='col-md-6'>";
+                    $html .= "<div class='d-grid gap-2 d-md-flex justify-content-md-end '>";
+                        $html .= "<button type='button' id='savePtFileBtn' value='" . explode('.', $file_name)[0] . '.json' . "' class='btn btn-primary btn-flat btn-sm'> Save File Data </button>";
+                    $html .= "</div>";
+                $html .= "</div>";
+                $html .= "</div>";
+            $html .="</div>";
+            $html .=" <div class='card-body table-responsive p-0' style='height: 350px;'>";
+                $html .="<table class='table table-striped table-head-fixed text-nowrap'>";
+                    $html .="<thead>";
+                        $html .="<tr style='position: sticky;z-index: 1;'>";
+                            $html .="<th>SN</th>";
+                            $html .="<th>Category</th>";
+                            $html .="<th>Sub Category</th>";
+                            $html .="<th>Brand</th>";
+                            $html .="<th>Style No</th>";
+                            $html .="<th>Color</th>";
+                            $html .="<th>Size</th>";
+                            $html .="<th>Qty</th>";
+                            $html .="<th>Sale Rate</th>";
+                            $html .="<th>MRP</th>";
+                            $html .="<th>Tax(%)</th>";
+                            $html .="<th>Tax(rs)</th>";
+                            $html .="<th>Barcode</th>";
+                        $html .="</tr>";
+                    $html .="</thead>";
+                    $html .="<tbody>";
+                    foreach ($final_data as $key => $list) {
+                        $html .="<tr>";
+                            $html .="<td>". ++$key ."</td>";
+                            $html .="<td>". $list['category'] ."</td>";
+                            $html .="<td>". $list['sub_category'] ."</td>";
+                            $html .="<td>". $list['brand'] ."</td>";
+                            $html .="<td>". $list['style_no'] ."</td>";
+                            $html .="<td>". $list['color'] ."</td>";
+                            $html .="<td>". $list['size'] ."</td>";
+                            $html .="<td>". $list['qty'] ."</td>";
+                            $html .="<td>". $list['sale_rate'] ."</td>";
+                            $html .="<td>". $list['mrp'] ."</td>";
+                            $html .="<td>". $list['tax(%)'] ."</td>";
+                            $html .="<td>". $list['tax(rs)'] ."</td>";
+                            $html .="<td>". $list['barcode'] ."</td>";
+                        $html .="</tr>";
+                    }
+                    $html .="</tbody >";
+                $html .="</table >";
             $html .="</div>";
         $html .="</div>";
 
-      
         return response()->json([
             'status'=>200,
-            'column_header'=>$column_header,
-            'labels'=>$labels,
-            'data_array'=>$data_array,
             'final_data'=>$final_data,
             'html'=>$html,
         ]);
     }
+
+    public function savePtFile(Request $req)
+    {
+        
+        $validator = Validator::make($req->all(),[
+            'supplier_id' => 'required|max:191',
+            'bill_no' => 'required|max:191',
+            'bill_date' => 'required|max:191',
+            'payment_days' => 'required|max:191',
+            'file_name' => 'required|max:191',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+
+            $supplier_id = $req->supplier_id;
+            $bill_no = $req->bill_no;
+            $bill_date = $req->bill_date;
+            $payment_days = $req->payment_days;
+
+            $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
+        
+            // $gst = calculateGst($supplier->state_type, $taxable);
+            // $total_gst = $gst['sgst'] + $gst['cgst'] + $gst['igst'];
+            // $amount = $taxable + $total_gst ;
+
+            $file = storage_path('app/public/files/'.$req->file_name);
+            if(file_exists($file)){
+                $data = json_decode(file_get_contents($file), true);
+
+                //purchase
+                $purchase = Purchase::where(['supplier_id'=>$supplier_id,'bill_no'=>$bill_no])->first('id');
+                if ($purchase == null) {
+                    $model = new Purchase;
+                    
+                    $model->supplier_id = $supplier_id;
+                    $model->bill_no = $bill_no;
+                    $model->bill_date = $bill_date;
+                    $model->payment_days = $payment_days;
+                    $model->time = date('g:i A');
+                    $model->save();
+                    
+                    $purchase_id = $model->id;
+                }else{
+                    $purchase_id = $purchase->id;
+                }
+
+                foreach ($data as $key => $list) {
+                    $category_data = Category::where(['category'=>$list['category'] ])->first('id');
+                    if (!$category_data) {
+                        $categoryModel = new Category;
+                        $categoryModel->category = strtolower($list['category']);
+                        $categoryModel->save();
+                        $category_id = $categoryModel->id;
+                    }else{
+                        $category_id = $category_data->id;
+                    }
+
+                    $sub_category_data = SubCategory::where(['category_id'=>$category_id, 'sub_category'=>$list['sub_category'] ])->first('id');
+                    if (!$sub_category_data) {
+                        $subCategoryModel = new SubCategory;
+                        $subCategoryModel->category_id = $category_id;
+                        $subCategoryModel->sub_category = strtolower($list['sub_category']);
+                        $subCategoryModel->save();
+                        $sub_category_id = $subCategoryModel->id;
+                    }else{
+                        $sub_category_id = $sub_category_data->id;
+                    }
+
+                    $brand_data = Brand::where(['brand_name'=>$list['brand'] ])->first('id');
+                    if (!$brand_data) {
+                        $brandModel = new Brand;
+                        $brandModel->brand_name = strtolower($list['brand']);
+                        $brandModel->save();
+                        $brand_id = $brandModel->id;
+                    }else{
+                        $brand_id = $brand_data->id;
+                    }
+
+                    $style_no_data = StyleNo::where(['supplier_id'=>$supplier_id, 'style_no'=>$list['style_no'] ])->first('id');
+                    if (!$style_no_data) {
+                        $styleNoModel = new StyleNo;
+                        $styleNoModel->supplier_id = $supplier_id;
+                        $styleNoModel->style_no = strtoupper($list['style_no']); 
+                        $styleNoModel->save();
+                        $style_no_id = $styleNoModel->id;
+                    }else{
+                        $style_no_id = $style_no_data->id;
+                    }
+
+
+                    $purchase_entry_data = PurchaseEntry::where(['purchase_id'=>$purchase_id,'style_no_id'=>$style_no_id, 'color'=>$list['color']])->first('id');
+                    $purchase_entry_id = 0;
+                    if ($purchase_entry_data == null) {
+                        $purchase_entry = new PurchaseEntry;
+
+                        $purchase_entry->purchase_id = $purchase_id;
+                        $purchase_entry->category_id = $category_id;
+                        $purchase_entry->sub_category_id = $sub_category_id;
+                        $purchase_entry->brand_id = $brand_id;
+                        $purchase_entry->style_no_id = $style_no_id;
+                        $purchase_entry->color = strtolower($list['color']);
+                        $purchase_entry->save();
+
+                        $purchase_entry_id = $purchase_entry->id;
+                    }else{
+                        $purchase_entry_id = $purchase_entry_data->id;
+                    }
+
+                    $item_exist = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_entry_id, 'size'=>$list['size']])->exists();
+                    if ($item_exist != true) {
+                        
+                        $purchase_item = new PurchaseEntryItem;
+
+                        $taxable = 0;
+                        $sgst = 0;
+                        $cgst = 0;
+                        $igst = 0;
+
+                        $taxable = $list['qty'] * $list['sale_rate'];
+                        if ($supplier->state_type == MyApp::WITH_IN_STATE) {
+                            if ($list['sale_rate'] < 1000) {
+                                $sgst = $list['tax(rs)'] / 2;
+                                $cgst = $sgst;
+                            }else{
+                                $igst = $list['tax(rs)'];
+                            }
+                        }else {
+                            $igst = $list['tax(rs)'];
+                        }
+
+                        $total_gst = $sgst + $cgst + $igst;
+                        $amount = $taxable + $total_gst ;
+
+                        $purchase_item->purchase_entry_id = $purchase_entry_id;
+                        $purchase_item->size = $list['size'];
+                        $purchase_item->qty = $list['qty'];
+                        $purchase_item->price = $list['sale_rate'];
+                        $purchase_item->mrp = $list['mrp'];
+                        $purchase_item->taxable = $taxable;
+                        $purchase_item->sgst = $sgst;
+                        $purchase_item->cgst = $cgst;
+                        $purchase_item->igst = $igst;
+                        $purchase_item->amount = $amount;
+                        
+                        $purchase_item->barcode = $list['barcode'];
+
+                        $purchase_item->save();
+                    }
+                    
+                    // return response()->json([
+                    //     'status'=>200,
+                    //     'data'=>$data,
+                    //     'category_data'=>$category_data,
+                    //     'category_id'=>$category_id,
+                    // ]);
+                }
+
+                return response()->json([
+                    'status'=>200,
+                    'data'=>$data,
+                    
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>400,
+                    'file'=>$file,
+                    'data'=>$data,
+                    'supplier_id'=>$req->supplier_id,
+                    'bill_no'=>$req->bill_no,
+                ]);
+            }
+
+        }
+
+    }
+
 
     public function oldsavePurchaseEntryExcel(Request $req)
     {

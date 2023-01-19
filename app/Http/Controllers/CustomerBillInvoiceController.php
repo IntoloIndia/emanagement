@@ -16,6 +16,8 @@ use App\Models\User;
 use App\Models\SalesReturn;
 use App\Models\SalesReturnItem;
 use App\Models\CustomerPoint;
+use App\Models\Offer;
+use App\Models\Brand;
 use App\MyApp;
 use Validator;
 
@@ -25,6 +27,10 @@ class CustomerBillInvoiceController extends Controller
         $products = PurchaseEntry::all();
         $product_barcode = PurchaseEntryItem::all();
         $sizes = Size::all();
+        // $allOffers = Offer::all();
+        $brands = Brand::all(); 
+        $allOffers = Offer::join('brands','brands.id','=','offers.brand_id')
+                    ->select(['offers.*','brands.brand_name'])->get();
         // $customers_billing = CustomerBill::all();
         $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')->get([
             'customers.*','customer_bills.*'
@@ -45,7 +51,8 @@ class CustomerBillInvoiceController extends Controller
             'months' => $months,
             'cities' => $cities,
             'users' => $users,
-            'sales_return_data' => $sales_return_data
+            'sales_return_data' => $sales_return_data,
+            'allOffers' => $allOffers,
         ]);
         
     }

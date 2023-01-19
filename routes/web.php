@@ -29,6 +29,9 @@ use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PaymentReceivingController;
+use App\Http\Controllers\CompanySupplierController;
+use App\Http\Controllers\CompanyPurchaseController;
+use App\Http\Controllers\CompanySalesController;
 
 use App\MyApp;
 /*
@@ -78,6 +81,27 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-company-details/{company_id}','updateCompanyDetails');
         Route::get('admin/delete-company-details/{company_id}','deleteCompanyDetail');
 
+    });
+
+    Route::controller(CompanySupplierController::class)->group(function () {
+        Route::get('admin/company-supplier','index');
+
+        Route::post('admin/save-company-supplier', 'saveCompanySupplier');
+        Route::get('admin/edit-company-supplier/{supplier_id}', 'editCompanySupplier');
+        Route::post('admin/update-company-supplier/{supplier_id}', 'updateCompanySupplier');
+        Route::get('admin/delete-company-supplier/{supplier_id}', 'deleteCompanySupplier');
+        Route::get('admin/company-supplier-detail/{supplier_id}', 'companySupplierDetail');
+        
+    });
+    
+    Route::controller(CompanyPurchaseController::class)->group(function () {
+        Route::get('admin/company-purchase','index');
+        
+    });
+
+    Route::controller(CompanySalesController::class)->group(function () {
+        Route::get('admin/company-sales','index');
+        
     });
 
     Route::controller(CountryStateCityController::class)->group(function () {
@@ -307,7 +331,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
 
-        Route::post('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
+        Route::post('admin/load-pt-file-data','loadPtFileData');
+        Route::post('admin/save-pt-file','savePtFile');
 
     });
     

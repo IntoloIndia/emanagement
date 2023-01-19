@@ -84,7 +84,7 @@ a {
 @section('content')
     <div class="row">
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             <div class="card">
     
                 <div class="card-header">
@@ -145,7 +145,7 @@ a {
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-6">
             <div id="view_purchase_entry"></div>
         </div>
 
@@ -237,8 +237,8 @@ a {
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
             
-                $('#savePurchaseEntryExcelBtn').removeClass('hide');
-                $('#updatePurchaseEntryExcelBtn').addClass('hide');
+                // $('#savePurchaseEntryExcelBtn').removeClass('hide');
+                // $('#updatePurchaseEntryExcelBtn').addClass('hide');
             });
 
             $(document).on('change','#import_csv_file', function (e) {
@@ -291,6 +291,7 @@ a {
 
                 addItem();
             });
+           
 
             $(document).on("click",".delete_item", function(){
 
@@ -361,9 +362,32 @@ a {
                 validateForm();
             });
 
-            $(document).on('click','#savePurchaseEntryExcelBtn', function (e) {
+            $(document).on('change','#pt_file', function (e) {
                 e.preventDefault();
-                savePurchaseEntryExcel();
+                    $('#show_pt_file_data').html('');
+                    // var supplier_id = $('#supplier_id').val();
+                    // var bill_no = $('#bill_no').val();
+                    
+                    loadPtFileData();          
+            });
+
+            $(document).on('click','#savePtFileBtn', function (e) {
+                e.preventDefault();
+
+                var supplier_id = $('#supplier_id').val();
+                var bill_no = $('#bill_no').val();
+                var bill_date = $('#bill_date').val();
+                var payment_days = $('#payment_days').val();
+                var file_name = $(this).val();
+
+                var formData = {
+                    'supplier_id':supplier_id,
+                    'bill_no':bill_no,
+                    'bill_date':bill_date,
+                    'payment_days':payment_days,
+                    'file_name':file_name,
+                };
+                savePtFile(formData);
             });
 
             

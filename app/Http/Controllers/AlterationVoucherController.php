@@ -113,6 +113,7 @@ class AlterationVoucherController extends Controller
                                 $html .= "<th>SN</th>";
                                 $html .= "<th>Product</th>";
                                 $html .= "<th>Qty</th>";
+                                $html .= "<th>Remark</th>";
                                 $html .= "<input type='hidden' id='customer_id' name='customer_id' value='".$bill_date->customer_id."' class='form-control form-control-sm'>";
                                 $html .= "<input type='hidden' id='bill_id' name='bill_id' value='".$bill_id."' class='form-control form-control-sm'>";
                                 $html .= "</tr>";
@@ -124,7 +125,8 @@ class AlterationVoucherController extends Controller
                                     $html .= "<td><input class='form-check-input product_id' id='product_id_".$list->product_id."' type='checkbox' name='product_id[]' value='$list->product_id'></td>";
                                     $html .= "<td>" . ++$key . "</td>";
                                     $html .= "<td>" . $list->sub_category ."</td>";
-                                    $html .= "<td><input class='form-control form-control-sm item_qty' id='item_qty_".$list->product_id."' type='number' name='item_qty[]' min='1' max='$list->qty' value='$list->qty' style='width:60px;' disabled='disabled'></td>";
+                                    $html .= "<td><input  type='number' class='form-control form-control-sm item_qty' id='item_qty_".$list->product_id."' name='item_qty[]' min='1' max='$list->qty' value='$list->qty' style='width:60px;' disabled='disabled'></td>";
+                                    $html .= "<td><input  type='text' class='form-control form-control-sm remark'  id='' name='remark[]' value='$list->remark'></td>";
                                 $html .= "</tr>";
                                 $html .= "<tr><p id='show_alert'></p></tr>";
                             }
@@ -154,7 +156,8 @@ class AlterationVoucherController extends Controller
             $validator = Validator::make($req->all(),[
                 'customer_id' => 'required|max:191',
                 'bill_id' => 'required|max:191',
-                'delivery_date' => 'required|max:191'
+                'delivery_date' => 'required|max:191',
+                'remark' => 'required|max:191'
             ]);
     
             if($validator->fails())
@@ -179,6 +182,7 @@ class AlterationVoucherController extends Controller
                         $alter_model->product_id = $req->product_id[$i];
                         $alter_model->item_qty = $req->item_qty[$i];
                         $alter_model->delivery_date = $req->delivery_date;
+                        $alter_model->remark = $req->remark[$i];
                         $alter_model->save();
                       
                     }
