@@ -27,6 +27,7 @@ class CreateCustomerBillsTable extends Migration
             $table->integer('balace_amount')->default(0);
             $table->float('earned_point')->default(0);
             $table->float('redeem_point')->default(0);
+            $table->integer('pending_amount_status')->default(0);
             $table->timestamps();
         });
     }

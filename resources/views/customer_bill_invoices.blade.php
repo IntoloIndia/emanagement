@@ -621,6 +621,8 @@
                 </select> --}}
                     <input type="text" name="product[]" class="form-control form-control-sm product" readonly>
                     <input type="hidden" name="product_id[]" class="product_id">
+                    {{-- <input type="" name="offer_amount[]" class="offer_amount"> --}}
+                    {{-- <span id="offers_type" style="color:green">offer</span> --}}
                 </td>
 
                 <td style="width: 80px;">
@@ -657,6 +659,11 @@
                     <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"
                         style="width: 150px;">
                 </td>
+                {{-- <td style="width: 150px;">
+                    <input type="text" name="amount[]" class="form-control form-control-sm offer_amount" readonly>
+                    <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"
+                        style="width: 150px;">
+                </td> --}}
                 <td>
                     <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i
                             class="far fa-window-close"></i></button>
@@ -694,17 +701,22 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <b>Customer Details</b>
-                                        <button class="btn btn-success btn-sm float-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Bills</button>
+                                        <button class="btn btn-success btn-sm float-right" type="button"
+                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                            aria-controls="offcanvasRight">Bills</button>
                                         {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button> --}}
-                                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                                            aria-labelledby="offcanvasRightLabel">
                                             <div class="offcanvas-header">
                                                 <h5 id="offcanvasRightLabel">Customers Bills</h5>
-                                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                <button type="button" class="btn-close text-reset"
+                                                    data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                             </div>
                                             <div class="offcanvas-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="col-md-12 table-responsive p-0" style="height: 550px;">
+                                                        <div class="col-md-12 table-responsive p-0"
+                                                            style="height: 550px;">
                                                             <table class="table table-head-fixed">
                                                                 <thead>
                                                                     <tr>
@@ -729,23 +741,23 @@
                                                                             <td>{{ $item->bill_date }}</td>
                                                                             <td>
                                                                                 {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
-                                                                                {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
-                                                                                {{-- <button type="button"
+                                                                    {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
+                                                                    {{-- <button type="button"
                                                                                     class="btn btn-success btn-flat btn-sm orderInvoiceBtn"
                                                                                     value="{{ $item->id }}" data-bs-toggle="tooltip"
                                                                                     data-bs-placement="top" title="Invoice"><i
                                                                                         class="fas fa-file-invoice"></i></button>
                                                                                 {{-- <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button> --}}
-                                                                            {{-- </td>
+                                                                    {{-- </td>
                                                                         </tr>
-                                                                    @endforeach --}} 
+                                                                    @endforeach --}}
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -841,8 +853,8 @@
                                                     aria-controls="offcanvasBottom">Show offers</Button>
 
 
-                                                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasBottom"
-                                                    aria-labelledby="offcanvasBottomLabel">
+                                                <div class="offcanvas offcanvas-start" tabindex="-1"
+                                                    id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
                                                     <div class="offcanvas-header">
                                                         <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offers</h5>
                                                         <button type="button" class="btn-close text-reset"
@@ -1049,6 +1061,15 @@
                                     </div>
                                 </div>
                                 <div class="card-footer ">
+                                    <div class="row">
+                                        <div class="col-md-10 text-end">
+                                            <b>Offer Amount :</b>
+                                        </div>
+                                        <div class="col-md-2 justify-content-end">
+                                            <input type="text" name="" class="form-control form-control-sm offer_amount"
+                                                id="offer_amount">
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-10 text-end">
                                             <b>Total Amount :</b>
@@ -1269,9 +1290,8 @@
                 e.preventDefault();
 
                 var state_type = $('input[name=state_type]:checked', '#orderForm').val();
-                if (state_type == '{{ MyApp::WITH_IN_STATE }}') {
+                if (state_type == '{{ MyApp::WITH_IN_STATE }}') {}
 
-                }
                 addItem();
 
                 // $(".product_code").focus();
@@ -1615,18 +1635,16 @@
                 success: function(response) {
                     if (response.status == 200) {
                         console.log(response)
-                        // console.log(product_code)
-                        // addItem();
-                        // if(response.product_detail.barcode==product_code){
-                        //     $(object).parent().parent().find(".qty").val(response.product_detail.qty++);
-                        // }else{
+
                         $(object).parent().parent().find(".product_code").val(response.product_detail.barcode);
                         $(object).parent().parent().find(".price").val(response.product_detail.mrp);
                         $(object).parent().parent().find(".product").val(response.product_detail.product);
                         $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
                         $(object).parent().parent().find(".size").val(response.product_detail.size);
                         $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
-                        // }
+                        // $(object).parent().parent().find(".offer_amount").val(response.offer_data.discount_offer);
+                        // $(".offer_amount").val(response.offer_data[0].discount_offer);
+
                         addItem();
                     } else {
                         // console.log(response)
@@ -1749,6 +1767,7 @@
                 }
             });
             $("#item_total_amount").val(item_total_amount.toFixed(2));
+            // $("#offer_amount").val(offers.discount_offer);
 
 
             // returnAmount();

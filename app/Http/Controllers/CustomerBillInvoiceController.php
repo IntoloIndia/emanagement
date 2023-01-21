@@ -505,8 +505,6 @@ class CustomerBillInvoiceController extends Controller
 
                     // $html .="</div>";
                 
-
-
              $html .="</div>";
 
                 $html .="<div class='modal-footer'>";

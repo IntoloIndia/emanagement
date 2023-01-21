@@ -32,6 +32,7 @@ use App\Http\Controllers\PaymentReceivingController;
 use App\Http\Controllers\CompanySupplierController;
 use App\Http\Controllers\CompanyPurchaseController;
 use App\Http\Controllers\CompanySalesController;
+use App\Http\Controllers\ReportController;
 
 use App\MyApp;
 /*
@@ -99,9 +100,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
         
     });
 
+    
+
     Route::controller(CompanySalesController::class)->group(function () {
         Route::get('admin/company-sales','index');
         
+        Route::post('admin/save-company-sales', 'saveCompanySales');
     });
 
     Route::controller(CountryStateCityController::class)->group(function () {
@@ -373,6 +377,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-payment-receiving', 'savePaymentReceiving');
         
     });
+
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('admin/offer-report','offerReport');
+        
+    });
+
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
 });

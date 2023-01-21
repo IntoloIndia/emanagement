@@ -3,13 +3,13 @@
 
 @section('content-header')
     <div class="content-header">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-6">
                 <h3 class="m-0"><b>Company Supplier</b></h3>
-            </div>
+            </div>  
             <div class="col-sm-6">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                    <button type="button" id="addsuplier" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
+                    <button type="button" id="addCompanySupplier" class="btn btn-primary btn-flat btn-sm mt-2"><i class="fas fa-plus"></i> Add</button>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <div class="modal-body">
                     <form id="companySupplierForm">
                         @csrf
-                        <div id="supplier_err"></div>
+                        <div id="company_supplier_err"></div>
                         <div class="row">
                             <div class="col-md-5">
                                 <input type="text" name="supplier_name" id="supplier_name" class="form-control-sm form-control" placeholder="Name">
@@ -204,11 +204,11 @@
             $(".state_chosen").chosen({ width: '100%' });
             $(".select_chosen").chosen({ width: '80%' });
 
-            $(document).on('click','#addsuplier', function (e) {
+            $(document).on('click','#addCompanySupplier', function (e) {
                 e.preventDefault();
                 $('#companySupplierModal').modal('show');
-                $('#supplier_err').html('');
-                $('#supplier_err').removeClass('alert alert-danger');
+                $('#company_supplier_err').html('');
+                $('#company_supplier_err').removeClass('alert alert-danger');
                 $("#companySupplierForm").trigger("reset"); 
                 $('#saveCompanySupplierBtn').removeClass('hide');
                 $('#updateCompanySupplierBtn').addClass('hide');
@@ -316,15 +316,15 @@
                 processData: false,
                 success: function (response) {
                     if (response.status === 400) {
-                        $('#supplier_err').html('');
-                        $('#supplier_err').addClass('alert alert-danger');
+                        $('#company_supplier_err').html('');
+                        $('#company_supplier_err').addClass('alert alert-danger');
                         var count = 1;
                         $.each(response.errors, function (key, err_value) {
-                            $('#supplier_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                            $('#company_supplier_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
                         });
 
                     } else {
-                        $('#supplier_err').html('');
+                        $('#company_supplier_err').html('');
                         $('#companySupplierModal').modal('hide');
                         window.location.reload();
                     }
@@ -340,8 +340,8 @@
                 success: function (response) {
                     if(response.status == 200){
                         $('#companySupplierModal').modal('show');
-                        $('#supplier_err').html('');
-                        $('#supplier_err').removeClass('alert alert-danger');
+                        $('#company_supplier_err').html('');
+                        $('#company_supplier_err').removeClass('alert alert-danger');
                         $("#companySupplierForm").trigger( "reset" ); 
                         $('#saveCompanySupplierBtn').addClass('hide');
                         $('#updateCompanySupplierBtn').removeClass('hide');
@@ -390,15 +390,15 @@
                     console.log(response);
                     if(response.status === 400)
                     {
-                        $('#supplier_err').html('');
-                        $('#supplier_err').addClass('alert alert-danger');
+                        $('#company_supplier_err').html('');
+                        $('#company_supplier_err').addClass('alert alert-danger');
                         var count = 1;
                         $.each(response.errors, function (key, err_value) { 
-                            $('#supplier_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                            $('#company_supplier_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
                         });
 
                     }else{
-                        $('#supplier_err').html('');
+                        $('#company_supplier_err').html('');
                         $('#companySupplierModal').modal('hide');
                         window.location.reload();
                     }

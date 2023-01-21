@@ -77,6 +77,7 @@ class MyApp {
     const VALUES = 2;
     const PICES = 3;
     const SLAB = 4;
-
+    
+    const PENDING_AMOUNT = 1;
 
 }

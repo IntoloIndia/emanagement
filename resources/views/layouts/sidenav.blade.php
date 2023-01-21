@@ -238,6 +238,33 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
                 </a>
             </li>
+
+            <hr style="margin: 0px; color:#ffffff;">
+            <li class="nav-header text-light">Report Management</li>
+            <hr style="margin: 0px; color:#ffffff;">
+
+            <li class="nav-item">
+                <a href="offer-report" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Offer Report</p>
+                </a>
+            </li>
+            <hr style="margin: 0px; color:#ffffff;">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                </a>
+            </li>
             
                 
         </ul>

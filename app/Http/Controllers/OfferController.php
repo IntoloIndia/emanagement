@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\StyleNo;
 use App\Models\Offer;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Validator;
 use App\MyApp;
 
@@ -19,13 +20,14 @@ class OfferController extends Controller
         $Categories = Category::all();
         // $get_date = Offer::whereBetween('date', ['offer_from' , 'offer_to'] )->get();
 
-        $offers = Offer::join('brands','brands.id','=','offers.brand_id')           
-            ->select(['offers.*','brands.brand_name'])
+        $offers = Offer::leftjoin('brands','brands.id','=','offers.brand_id')   
+            ->leftjoin('sub_categories','offers.sub_category_id','=','sub_categories.id')           
             ->orderBy('offer_from','DESC')
             ->orderBy('offer_to','DESC')
             ->orderBy('status','DESC')
+            ->select(['offers.*','brands.brand_name','sub_categories.sub_category'])
             ->get();
-            // dd($offers);
+            // print_r($offers);
 
         return view('offer',[
             'brands' => $brands,
@@ -34,6 +36,7 @@ class OfferController extends Controller
             'Categories' => $Categories,
         ]);
     }
+
     public function saveOffer(Request $req)
     {
         $validator = Validator::make($req->all(),[
@@ -48,34 +51,21 @@ class OfferController extends Controller
                 'errors'=>$validator->messages(),
             ]);
         }else{
+            $offer_section =  $req->input('offer_section');
             $offer_type =  $req->input('offer_type');
             $model = new Offer;
-            if($offer_type==1){
-                $model->offer_type = $req->input('offer_type');
-                $model->discount_offer = $req->input('discount_offer');
-              
 
-            }elseif($offer_type==2){
-                $model->offer_type = $req->input('offer_type');
-                $model->summary = $req->input('summary');
-                $model->discount_offer = $req->input('discount_offer');
-                
-            }elseif($offer_type==3){
-                $model->offer_type = $req->input('offer_type');
-                $model->summary = $req->input('summary'); 
-                $model->discount_offer = $req->input('discount_offer');
-              
-            }elseif($offer_type==4){
-                $model->offer_type = $req->input('offer_type');
-                $model->summary = $req->input('summary');
-                $model->discount_offer = $req->input('discount_offer');
+            if ($offer_section == MyApp::PRODUCT) {
+                $model->category_id = $req->input('category_id');
+                $model->sub_category_id = $req->input('sub_category_id');
+                $model->style_no_id = implode(",",$req->input('style_no_id'));
+                $model->brand_id = $req->input('brand_id');
             }
-            $model->category_id = $req->input('category_id');
-            $model->sub_category_id = $req->input('sub_category_id');
-            $model->offer_on = $req->input('offer_on');
-            $model->brand_id = $req->input('brand_id');
-            $model->style_no_id = implode(",",$req->input('style_no_id'));
-            // $model->discount_offer = $req->input('discount_offer');
+
+            $model->offer_section = $req->input('offer_section');
+            $model->offer_type = $req->input('offer_type');
+            $model->summary = $req->input('summary');
+            $model->discount_offer = $req->input('discount_offer');
             $model->offer_from = $req->input('offer_from');
             $model->offer_to = $req->input('offer_to');
             $model->date = date('Y-m-d');
@@ -102,19 +92,17 @@ class OfferController extends Controller
     public function editOffer($offer_id)
     {
         $offer = Offer::find($offer_id);
-        // $Categories = Category::where(['id' => $offer->category_id])->get();
-        // $html = "";
-        // foreach ($Categories as $key => $category) {
-        //     if($offer->category_id == $Categories->id){
-        //         $html .= "<option value='".$category->id."' selected>" . $category->state  . "</option>" ;
-        //     }else{
-        //         $html .= "<option value='".$category->id."'>" . $category->state  . "</option>";
-        //     }
-        // }
+        $sub_categories = SubCategory::where(['id' => $offer->sub_category_id])->get();
+        $html = "";
+        foreach ($sub_categories as $key => $sub_category) {
+            if($offer->sub_category_id == $sub_category->id){
+                $html .= "<option value='".$sub_category->id."' selected>" . $sub_category->sub_category  . "</option>" ;
+            }        
+        }
         return response()->json([
             'status'=>200,
-            // 'offer'=>$offer,
-            // 'states'=>$html
+            'offer'=>$offer,
+            'sub_categories'=>$html
         ]);
     }
 
@@ -139,9 +127,9 @@ class OfferController extends Controller
             $model->brand_id = $req->input('brand_id');
             $model->discount_offer = $req->input('discount_offer');
             $model->style_no_id = implode(",",$req->input('style_no_id'));
-            // $model->style_no_id = $req->input('style_no_id');
+            // $model->style_no_id = explode(',',$req->input('style_no_id'));
             $model->brand_id = $req->input('brand_id');
-            // $model->discount_offer = $req->input('discount_offer');
+            $model->discount_offer = $req->input('discount_offer');
             $model->offer_from = $req->input('offer_from');
             $model->offer_to = $req->input('offer_to');
             $model->date = date('Y-m-d');

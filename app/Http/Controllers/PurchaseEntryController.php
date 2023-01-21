@@ -15,6 +15,7 @@ use App\Models\Size;
 use App\Models\Color;
 use App\Models\Supplier;
 use App\Models\Brand;
+use App\Models\Offer;
 use App\MyApp;
 
 use Validator;
@@ -2135,24 +2136,46 @@ class PurchaseEntryController extends Controller
     public function getProductDetail($product_code)
     {
 
-        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode']);
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode','price']);
         if($purchase_entry_item){
         $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
                 ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
-                ->first(['purchase_entries.id','purchase_entries.sub_category_id','sub_categories.sub_category']);
+                ->first(['purchase_entries.id','purchase_entries.style_no_id','purchase_entries.brand_id','purchase_entries.sub_category_id','sub_categories.sub_category']);
                 
+
+                $offers = Offer::where(['status'=>MyApp::ACTIVE])
+
+                    // ->whereRaw("find_in_set('".$purchase_entry->style_no_id."',offers.style_no_id)")
+                    ->select("offers.*"); 
+                    if($purchase_entry->brand_id){
+                        $offers->where('offers.brand_id', '=', $purchase_entry->brand_id);
+                    }
+                    if($purchase_entry->style_no_id){
+                          $offers->whereRaw("find_in_set('".$purchase_entry->style_no_id."',offers.style_no_id)");
+                    }
+
+                    $offer_data = $offers->get();
+                    
         $result = collect([
             'product_id' => $purchase_entry->sub_category_id,
+            'brand_id' => $purchase_entry->brand_id,
+            'style_no_id' => $purchase_entry->style_no_id,
             'product' => $purchase_entry->sub_category,
             'size' => $purchase_entry_item->size,
             'mrp' => $purchase_entry_item->mrp,
             'qty' => $purchase_entry_item->qty,
             'barcode' => $purchase_entry_item->barcode,
+            'price' => $purchase_entry_item->price,
         ]);
+
+    
                        
             return response()->json([
                 'status'=>200,
                 'product_detail'=>$result,
+                // 'offers'=>$offers,
+                'offer_data'=>$offer_data,
+               
             ]);
         }else{
             return response()->json([
@@ -2578,6 +2601,8 @@ class PurchaseEntryController extends Controller
             $bill_date = $req->bill_date;
             $payment_days = $req->payment_days;
 
+            $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+
             $supplier = Supplier::where(['id'=>$supplier_id])->first('state_type');
         
             // $gst = calculateGst($supplier->state_type, $taxable);
@@ -2691,6 +2716,8 @@ class PurchaseEntryController extends Controller
 
                         $total_gst = $sgst + $cgst + $igst;
                         $amount = $taxable + $total_gst ;
+                        $barcode_img = 'data:image/png;base64,' . base64_encode($generator->getBarcode($list['barcode'], $generator::TYPE_CODE_128, 3, 50)) ;
+
 
                         $purchase_item->purchase_entry_id = $purchase_entry_id;
                         $purchase_item->size = $list['size'];
@@ -2704,6 +2731,7 @@ class PurchaseEntryController extends Controller
                         $purchase_item->amount = $amount;
                         
                         $purchase_item->barcode = $list['barcode'];
+                        $purchase_item->barcode_img = $barcode_img;
 
                         $purchase_item->save();
                     }

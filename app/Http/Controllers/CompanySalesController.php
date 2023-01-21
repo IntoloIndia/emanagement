@@ -16,4 +16,9 @@ class CompanySalesController extends Controller
             'companySuppliers' =>$companySuppliers,
         ]);
     }
+
+    function saveCompanySales(Request $req)
+    {
+
+    }
 }

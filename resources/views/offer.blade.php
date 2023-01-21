@@ -19,7 +19,7 @@
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <div class="form-check product">
-                                            <input class="form-check-input" type="radio" name="offer_on" id="product" value="{{MyApp::PRODUCT}}"  checked>
+                                            <input class="form-check-input" type="radio" name="offer_section" id="product" value="{{MyApp::PRODUCT}}"  checked>
                                             <label class="form-check-label">
                                                 <b>Product</b>
                                             </label>
@@ -31,7 +31,7 @@
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <div class="form-check store">
-                                            <input class="form-check-input " type="radio" name="offer_on" id="store" value="{{MyApp::STORE}}">
+                                            <input class="form-check-input " type="radio" name="offer_section" id="store" value="{{MyApp::STORE}}">
                                             <label class="form-check-label">
                                                 <b>Store</b>
                                             </label>
@@ -131,7 +131,7 @@
         <div class="row">
             <div class="col-md-6">
                 <label class="form-label">Amount</label>
-                <input type="text"  name="summary"   class="form-control form-control-sm" placeholder="summary">
+                <input type="text"  name="summary"   class="form-control form-control-sm" placeholder="Amount">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Purcentage</label>
@@ -273,107 +273,181 @@
 </div>
 
 <div class="row">
-    @foreach ($offers as $list)
-    <div class="col-md-3">
-        <div class="card"> 
-            <div class="card-header">
+    @foreach ($offers as $list)    
+        @php
+            $offer_type = '';
+            if ($list->offer_type==MyApp::PERCENTAGE) {
+                $offer_type = 'PERCENTAGE';
+            } else if ($list->offer_type==MyApp::VALUES) {
+                $offer_type = 'VALUES';
+            }elseif ($list->offer_type==MyApp::PICES) {
+                $offer_type = 'PICES';
+            }elseif ($list->offer_type==MyApp::SLAB) {
+                $offer_type = 'SLAB';
+            } 
+            $offer_section ='';
+            if($list->offer_section == MyApp::PRODUCT)
+            {
+                $offer_section = 'PRODUCT';
+            }
+            else {
+                $offer_section = 'STORE';           
+            }
         
-                    @if ($list->offer_type==MyApp::PERCENTAGE)
-                        <b>PERCENTAGE</b>
-                        <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    @endif
-                    @if($list->offer_type==MyApp::VALUES)
-                        <b>VALUES</b>
-                       <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    @endif
-                
-                    @if($list->offer_type==MyApp::PICES)
-                        <b>PICES</b>
-                      <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    @endif
-                
-                    @if($list->offer_type==MyApp::SLAB)
-                        <b>SLAB</b>
-                        <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                    @endif
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="row m-0">
-                        <div class="col-md-12 text-center" style="font-size: 18px">
-                            <b>{{ucwords($list->brand_name)}}</b>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center"style="font-size: 22px; color:red ">
-                            @if ($list->offer_type==MyApp::PERCENTAGE)
-                                <b class="text-center">{{$list->discount_offer}}%</b>
-                                <b class="text-center">Discount</b>
-                            @endif
-                            @if($list->offer_type==MyApp::VALUES)
-                                <b class="float-left">{{ucwords($list->summary)}}</b>
-                                <b class="text-center">{{$list->discount_offer}}%</b>
-                                <b class="float-right ">Discount</b>
+        @endphp
+        <div class="col-md-3">
+            <div class="card"> 
+                <div class="card-header">
+                    <h3 class='card-title'>{{$offer_type}}</h3>
+                    {{-- <button class="editOfferBtn float-right"  value="{{$list->id}}"><i class="fas fa-edit"></i></button> --}}
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row m-0">
+                            <div class="col-md-12 text-center" style="font-size: 18px">
+                                <b>{{$offer_section}}</b>                           
+                            </div>
+                        </div>                        
+                        <div class="row">
+                            <div class="col-md-12 text-center"> 
+                                                                                        
+                                @if ($list->offer_type==MyApp::PERCENTAGE)
+                                <div class="row">
+                                    <div class="col-md-10 float-end">
+                                        <b style="font-size: 22px; color:red">{{$list->discount_offer}}%</b>
+                                    </div>
+                                    <div class="col-md-2 float-end"><b  style="font-size: 22px; color:red">Off</b></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <b class="float-left">{{$list->sub_category}}</b>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <b class="float-right">{{ucwords($list->brand_name)}}</b>
+                                    </div>
+                                </div>
+                                @endif
+                                
+                                @if($list->offer_type==MyApp::VALUES)
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <b style="font-size: 22px; color:rgb(44, 101, 155)">{{ucwords($list->summary)}}</b>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b class="text-center"  style="font-size: 22px; color:red ">{{$list->discount_offer}}%</b>
+                                        </div>
+                                        <div class="col-md-4"><b  style="font-size: 22px; color:red">Off</b></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <b class="float-left">{{ucwords($list->sub_category)}}</b>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <b class="float-right">{{ucwords($list->brand_name)}}</b> 
+                                        </div>
+                                    </div>
+                                   
                                 @endif
                                 
                                 @if($list->offer_type==MyApp::PICES)
-                                <b class="text-center">{{ucwords($list->summary)}}</b>                                
-                            @endif
-                        
-                            @if($list->offer_type==MyApp::SLAB)
-                            <b class="float-left">{{ucwords($list->summary)}}</b>
-                            <b class="text-center">{{$list->discount_offer}}%</b>
-                            <b class="float-right ">Discount</b>
-                            @endif
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <b class="text-center" style="font-size: 22px; color:red">{{ucwords($list->summary)}}</b>                                
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b class="text-center" style="font-size: 22px; color:red">{{ucwords($list->discount_offer)}}pcs</b>                               
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b  style="font-size: 22px; color:red">Free</b>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <b class="float-left">{{$list->sub_category}}</b>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <b class="float-right">{{ucwords($list->brand_name)}}</b>
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                @if($list->offer_type==MyApp::SLAB)
+                                    <div class="row">
+                                        <div class="col-md-4" style="font-size: 22px; color:rgb(44, 101, 155)">
+                                            <b >{{ucwords($list->summary)}}</b>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b style="font-size: 22px; color:red ">{{$list->discount_offer}}%</b>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b style="font-size: 22px; color:rgb(44, 101, 155)">Off</b> 
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <b class="float-left">{{$list->sub_category}}</b>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <b class="float-right">{{ucwords($list->brand_name)}}</b>
+                                        </div>
+                                    </div>
+
+                                @endif
+
+
+
+                            </div>
                         </div>
                     </div>
+                    {{-- <hr> --}}
+                    {{-- <div class="row mt-2">
+                        @foreach(explode(',', $list->style_no_id) as $style_no_id)
+                            <div class="col-md-4 mt-1">
+                                    @php
+                                        $style_name = getStyleNO($style_no_id);
+                                    @endphp
+                                    <li class="list-group-item">{{$style_name}}</li>
+                            </div>
+                        @endforeach
+                    </div> --}}
                 </div>
-                {{-- <hr> --}}
-                {{-- <div class="row mt-2">
-                    @foreach(explode(',', $list->style_no_id) as $style_no_id)
-                        <div class="col-md-4 mt-1">
-                                @php
-                                    $style_name = getStyleNO($style_no_id);
-                                @endphp
-                                <li class="list-group-item">{{$style_name}}</li>
-                        </div>
-                    @endforeach
-                </div> --}}
-            </div>
-            @if($list->status == MyApp::ACTIVE)
-                <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#A3E4D7">
-            @else
-                <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#BDC3C7">
-            @endif
-                <div class="row">
-                    <div class="col-md-6"><small><b>From Date</b></small></b></div>
-                    <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                @if($list->status == MyApp::ACTIVE)
+                    <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#A3E4D7">
+                @else
+                    <div class="card-footer"  data-bs-toggle="collapse" href="#collapseExample_{{$list->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color:#BDC3C7">
+                @endif
+                    <div class="row">
+                        <div class="col-md-6"><small><b>From Date</b></small></b></div>
+                        <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><b>{{date('d-m-Y',strtotime($list->offer_from))}}</b></div>
+                        <div class="col-md-6 text-end"><b>{{date('d-m-Y',strtotime($list->offer_to))}}</b></div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6"><b>{{date('d-m-Y',strtotime($list->offer_from))}}</b></div>
-                    <div class="col-md-6 text-end"><b>{{date('d-m-Y',strtotime($list->offer_to))}}</b></div>
-                </div>
-            </div>
-            {{-- end footer --}}
-            <div class="collapse" id="collapseExample_{{$list->id}}">
-                <div class="card card-body table-responsive p-0" style="height: 130px;">
-                    <table class="table" >                        
-                        <tbody>
-                            @foreach( explode(',', $list->style_no_id) as $key => $style_no_id)
-                                @php
-                                    $result = getStyleNO($style_no_id);
-                                @endphp
-                                <tr>
-                                    <td>{{++$key}}</td>
-                                    <td>{{$result}}</td>
-                                </tr>
-                            @endforeach 
-                        </tbody>
-                    </table>
+                {{-- end footer --}}
+                <div class="collapse" id="collapseExample_{{$list->id}}">
+                    <div class="card card-body table-responsive p-0" style="height: 130px;">
+                        <table class="table" >                        
+                            <tbody>
+                                @foreach( explode(',', $list->style_no_id) as $key => $style_no_id)
+                                    @php
+                                        $result = getStyleNO($style_no_id);
+                                    @endphp
+                                    <tr>
+                                        <td>{{++$key}}</td>
+                                        <td>{{$result}}</td>
+                                    </tr>
+                                @endforeach 
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endforeach
 </div>
   
@@ -571,6 +645,7 @@
                 url: "edit-offer/"+offer_id,
                 dataType: "json",
                 success: function (response) {
+                    console.log(response);
                     if(response.status == 200){
                         $('#offerModal').modal('show');
                         $('#offer_err').html('');
@@ -578,17 +653,28 @@
                         $("#offerForm").trigger("reset"); 
                         $('#saveOfferBtn').addClass('hide');
                         $('#updateOfferBtn').removeClass('hide');
-                        if (response.offer.offer_on > 1) {
+                        if (response.offer.offer_section > 1) {
                             $('#store').prop('checked', true);
                         }else{
                             $('#product').prop('checked', true);
                         }                      
                         $('#offer_type').val(response.offer.offer_type);
-                        $('#category_id').val(response.offer.category_id);
-                        $('#sub_category_id').val(response.offer.sub_category_id);
+                        $('#category_id').val(response.offer.category_id);                     
+                        $('#sub_category_id').html(response.sub_categories); 
                         // $('#summary').val(response.offer.summary);                       
                         $('#brand_id').val(response.offer.brand_id);
-                        $('#style_no_id').val(response.offer.style_no_id);
+                    //    $arr = [response.offer.style_no_id];
+                      
+                      
+                            // $("#style_no_id").val($ar);
+
+                            $("#style_no_id").val(response.offer.style_no_id);
+                       
+                        // $("#style_no_id").val(response.offer.style_no_id).chosen("destroy");
+                        // $("#style_no_id").find("option:selected" ).val(response.offer.style_no_id);
+                        // $('#style_no_id').val(response.offer.style_no_id).trigger("chosen:updated");
+                        console.log(response.offer.style_no_id);
+                        // $('#style_no_id').val(response.offer.style_no_id);
                         $('#discount_offer').val(response.offer.discount_offer);
                         $('#offer_from').val(response.offer.offer_from);
                         $('#offer_to').val(response.offer.offer_to);                       

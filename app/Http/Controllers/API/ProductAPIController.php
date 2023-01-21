@@ -70,7 +70,6 @@ class ProductAPIController extends Controller
 
             $data = $products->get();
 
-            
             // $users = User::where('is_active', true);
             // if ($request->has('age_more_than')) {
             //     $users->where('age', '>', $request->age_more_than);
