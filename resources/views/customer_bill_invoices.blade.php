@@ -595,83 +595,8 @@
 
     {{-- </div> --}}
 
-    <table class="hide">
-        <tbody id="item_row">
-            <tr>
-                <td id="count_item"></td>
-
-                <td style="width: 200px;">
-                    <select name="employee_id[]" id="employee_id" class="form-select">
-                        <option selected disabled>Emp</option>
-                        @foreach ($users as $item)
-                            <option value="{{ $item->id }}">{{ ucwords($item->code) }}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td style="width: 200px;">
-                    <input type="text" name="product_code[]" class="form-control form-control-sm product_code">
-                </td>
-
-                <td style="width:150px;">
-                    {{-- <select name="product_id[]"  id="product_id" class=" form-select form-select-sm product_id">
-                    <option selected>Choose..</option>
-                    @foreach ($products as $item)
-                        <option value="{{$item->id}}">{{ucwords($item->product)}}</option>
-                    @endforeach
-                </select> --}}
-                    <input type="text" name="product[]" class="form-control form-control-sm product" readonly>
-                    <input type="hidden" name="product_id[]" class="product_id">
-                    {{-- <input type="" name="offer_amount[]" class="offer_amount"> --}}
-                    {{-- <span id="offers_type" style="color:green">offer</span> --}}
-                </td>
-
-                <td style="width: 80px;">
-                    <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty"
-                        min="1" value="0">
-                </td>
-                <td style="width: 80px;">
-                    <input type="text" name="size[]" class="form-control form-control-sm size" readonly>
-                    <input type="hidden" name="size_id[]" class="size_id">
-                </td>
-                <td style="width: 100px;">
-                    <input type="text" name="price[]" class="form-control form-control-sm price">
-                </td>
-                <td style="width: 50px;">
-                    <input type="text" class="form-control form-control-sm discount" value="0">
-                    <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount"
-                        style="width: 100px;">
-                </td>
-
-                <td style="width: 80px;" class="sgst_show_hide">
-                    <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0"
-                        readonly>
-                </td>
-                <td style="width: 80px;" class="cgst_show_hide">
-                    <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0"
-                        readonly>
-                </td>
-                <td style="width: 80px;" class="igst_show_hide hide">
-                    <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0"
-                        readonly>
-                </td>
-                <td style="width: 150px;">
-                    <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
-                    <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"
-                        style="width: 150px;">
-                </td>
-                {{-- <td style="width: 150px;">
-                    <input type="text" name="amount[]" class="form-control form-control-sm offer_amount" readonly>
-                    <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"
-                        style="width: 150px;">
-                </td> --}}
-                <td>
-                    <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i
-                            class="far fa-window-close"></i></button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+  
+    
     <section>
         <div id="newcontent">
             <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -1025,9 +950,23 @@
                         <div class="col-md-9">
                             <div class="card">
                                 <div class="card-header">
+                                    {{-- <div class="row">
+                                        <div class="col-md-1">
+                                            <b>Item</b>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <b>Barcode</b>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" name="" id="barcode" class="barcode" style="margin-left: 100px;">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-primary btn-sm  float-right" id="addItemBtn"> Add item</button>
+                                        </div>
+                                    </div> --}}
                                     <b>Item</b>
-                                    {{-- <input type="text" name="" class="barcode" style="margin-left: 100px;"> --}}
-                                    <b style="margin-left: 200px">017791071723</b>
+                                    <input type="text" name="" id="barcode" class="barcode" style="margin-left: 100px;">
+                                    <b style="margin-left: 100px">80000001010322</b>
                                     <button class="btn btn-primary btn-sm  float-right" id="addItemBtn"> Add item</button>
                                 </div>
                                 <div class="card-body">
@@ -1052,7 +991,10 @@
                                                             <th scope="col">Delete</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="item_list">
+                                                    <tbody id="offer_item_list" class="bg-success" >
+
+                                                    </tbody>
+                                                    <tbody id="item_list"  class="bg-info" >
 
                                                     </tbody>
                                                 </table>
@@ -1061,15 +1003,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer ">
-                                    <div class="row">
-                                        <div class="col-md-10 text-end">
-                                            <b>Offer Amount :</b>
-                                        </div>
-                                        <div class="col-md-2 justify-content-end">
-                                            <input type="text" name="" class="form-control form-control-sm offer_amount"
-                                                id="offer_amount">
-                                        </div>
-                                    </div>
+                                   
                                     <div class="row">
                                         <div class="col-md-10 text-end">
                                             <b>Total Amount :</b>
@@ -1116,6 +1050,17 @@
                                                 class="form-control form-control-sm " value="0" readonly>
                                         </div>
                                     </div>
+                                    {{-- offer amount --}}
+                                    {{-- <div class="row">
+                                        <div class="col-md-10 text-end">
+                                            <b>Offer Amount :</b>
+                                        </div>
+                                        <div class="col-md-2 justify-content-end">
+                                            <input type="text" name="offer_id" class="form-control form-control-sm offer_amount"
+                                                id="offer_amount">
+                                        </div>
+                                    </div> --}}
+                                    {{-- offer amount --}}
                                     <div class="row">
                                         <div class="col-md-10 text-end">
                                             <b>Points :</b>
@@ -1251,6 +1196,10 @@
     </div>
     </div>
     </div>
+    
+    {{-- @foreach ($offers as $item)
+        {{$item}}
+    @endforeach --}}
 
 @endsection
 
@@ -1261,8 +1210,10 @@
         $(document).ready(function() {
 
             // print modal open
-            addItem();
-            // $(".barcode").focus();
+
+            // addItem();
+            // addOfferItem();
+            $("#barcode").focus();
 
 
             $(document).on('click', '.deleteBrandBtn', function(e) {
@@ -1293,6 +1244,7 @@
                 if (state_type == '{{ MyApp::WITH_IN_STATE }}') {}
 
                 addItem();
+                // addOfferItem();
 
                 // $(".product_code").focus();
             });
@@ -1336,11 +1288,11 @@
             });
 
 
-            $(document).on('change', '.product_code', function() {
-                var object = $(this);
-                getProductDetail(object);
+            // $(document).on('change', '.product_code', function() {
+            //     var object = $(this);
+            //     getProductDetail(object);
 
-            });
+            // });
 
 
             $(document).on('click', '#with_in_state', function(e) {
@@ -1467,35 +1419,11 @@
             });
 
 
-            // $(document).on('change','.barcode',function(){
-            //     // var qty = $('.qty').val();
-            //     // var barcode = $('#barcode').val();
-            //     // const product_code = $(object).val();
-            //     // const product_code = $(this).prev().prev().text('.product_code').val();
-            //     // var product_code = parseFloat($(this).parent().prev().find(".product_code").val());
-            //     // var product_code = $('#item_list.tr').parent().parent().prevAll(".product_code:first");
-            //     // console.log(product_code);
-            //     // var row = $('#item_list').closest('tr');
-            //     // // var next = row.next();
-            //     // var prev = row.prev();
-            //     // console.log('row--prev',prev)
-            //     // var product_code = parseFloat($(this).prev().prev().text('.product_code').val());
+            $(document).on('change','#barcode',function(){
+                        var object = $(this);
+                    getProductDetail(object);
 
-            //         // $('#tablebox tr').each(function() {
-            //         //         // var customerId = $(this).find("td").eq().html();
-            //         //     var product_code = parseFloat($(object).parent().parent().find(".product_code").val());
-            //         //         alert(product_code)    
-            //         //         // if (barcode==product_code) {
-            //         //         //     alert(true)
-            //         //         //     // alert(product_code)
-            //         //         //     } else {
-            //         //         //         alert(false)
-            //         //         //     }
-            //         //     });
-            //             var object = $(this);
-            //         getProductDetail(object);
-
-            // })
+            })
 
 
 
@@ -1617,53 +1545,148 @@
 
         }
 
-        function addItem() {
-            $('#item_list').append($('#item_row').html());
-            $(".product_code").focus();
-            // $("#item_list tr").find(".item").chosen();
-        }
 
         function getProductDetail(object) {
-            // const barcode = $(object).val();
-            const product_code = $(object).val();
+            const barcode = $(object).val();
+            // const product_code = $(object).val();
             // const product_id = $(object).val();
-            //     alert(product_id);
+                // alert(product_code);
             $.ajax({
                 type: "get",
-                url: "get-product-detail/" + product_code,
+                url: "get-product-detail/" + barcode,
                 dataType: "json",
                 success: function(response) {
+                    console.log(response)
                     if (response.status == 200) {
-                        console.log(response)
+                        
 
-                        $(object).parent().parent().find(".product_code").val(response.product_detail.barcode);
-                        $(object).parent().parent().find(".price").val(response.product_detail.mrp);
-                        $(object).parent().parent().find(".product").val(response.product_detail.product);
-                        $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
-                        $(object).parent().parent().find(".size").val(response.product_detail.size);
-                        $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
-                        // $(object).parent().parent().find(".offer_amount").val(response.offer_data.discount_offer);
-                        // $(".offer_amount").val(response.offer_data[0].discount_offer);
 
-                        addItem();
+                                    var table_list = `
+                                                <tr>
+                                                <td id="count_item"></td>
+
+                                                <td style="width: 200px;">
+                                                    <select name="employee_id[]" id="employee_id" class="form-select">
+                                                        <option selected disabled>Emp</option>
+                                                        @foreach ($users as $item)
+                                                            <option value="{{ $item->id }}">{{ ucwords($item->code) }}</option>
+                                                        @endforeach
+                                                        
+                                                    </select>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <input type="text" name="product_code[]" class="form-control form-control-sm product_code" value='${response.product_detail.barcode}'>
+                                                    <input type="text" name="offer_id[]" class="form-control form-control-sm product_code" value='${response.offers?response.offers[0].id:0}'>
+                                                </td>
+
+                                                <td style="width:150px;">
+                                                    <input type="text" name="product[]" class="form-control form-control-sm product" value='${response.product_detail.product}' readonly>
+                                                    <input  type="hidden" name="product_id[]" class="product_id" value='${response.product_detail.product_id}'>
+                                                
+                                                    {{-- <span id="offers_type" style="color:green">offer</span> --}}
+                                                </td>
+
+                                                <td style="width: 80px;">
+                                                    <input type="text" name="qty[]" value="1" class="form-control form-control-sm qty"
+                                                        min="1">
+                                                </td>
+                                                <td style="width: 80px;">
+                                                    <input type="text" name="size[]" class="form-control form-control-sm size" value='${response.product_detail.size}' readonly>
+                                                    <input type="hidden" name="size_id[]" class="size_id">
+                                                </td>
+                                                <td style="width: 100px;">
+                                                    <input type="text" name="price[]" class="form-control form-control-sm price" value='${response.product_detail.mrp}'>
+                                                </td>
+                                               
+                                                <td style="width: 50px;">
+                                                    <input type="text" name='discount_percentage[]' class="form-control form-control-sm discount" value='${response.offers?response.offers[0].discount_offer:0}'>
+                                                    <input type="hidden" name="discount_amount[]" class="form-control form-control-sm discount_amount" style="width: 100px;" value='0'>
+                                                </td>
+
+                                                <td style="width: 80px;" class="sgst_show_hide">
+                                                    <input type="text" name="sgst[]" class="form-control form-control-sm sgst " value="0"
+                                                        readonly>
+                                                </td>
+                                                <td style="width: 80px;" class="cgst_show_hide">
+                                                    <input type="text" name="cgst[]" class="form-control form-control-sm cgst " value="0"
+                                                        readonly>
+                                                </td>
+                                                <td style="width: 80px;" class="igst_show_hide hide">
+                                                    <input type="text" name="igst[]" class="form-control form-control-sm igst " value="0"
+                                                        readonly>
+                                                </td>
+                                                <td style="width: 150px;">
+                                                    <input type="text" name="amount[]" class="form-control form-control-sm amount" readonly>
+                                                    <input type="hidden" name="taxfree_amount[]" class="form-control form-control-sm taxable"
+                                                        style="width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-flat btn-sm delete_item"><i
+                                                            class="far fa-window-close"></i></button>
+                                                </td>
+                                            </tr>
+                                `;
+                                // $('#item_list').append(table_list);
+
+                                    if(response.offers_data.length>0){
+                                        // alert("offer table")
+                                        $('#offer_item_list').append(table_list);
+                                        
+                                        
+                                    }else{
+                                        // alert("table")
+                                        $('#item_list').append(table_list);
+                                       
+                                    }
+                                    
+                            // response.offer_section.discount_offer=0;
+                        // var discount_amount = ((response.offer_data.discount_offer*response.product_detail.mrp)/100)
+
+                        // $(object).parent().parent().find(".product_code").val(response.product_detail.barcode);
+                        // $(object).parent().parent().find(".price").val(response.product_detail.mrp);
+                        // $(object).parent().parent().find(".product").val(response.product_detail.product);
+                        // $(object).parent().parent().find(".product_id").val(response.product_detail.product_id);
+                        // $(object).parent().parent().find(".size").val(response.product_detail.size);
+                        // $(object).parent().parent().find(".mrp").val(response.product_detail.mrp);
+
+                        // $(object).parent().parent().find(".offer_discount_amount").val(discount_amount);
+                        // $(object).parent().parent().find(".offer_amount").val(response.offer_data.offer_id);
+                        // $("#offer_amount").val(response.offer_data[0].discount_offer);
+
+                        // addItem(response.product_detail.barcode);
                     } else {
-                        // console.log(response)
                         $(object).parent().parent().find(".qty").val('');
                         $(object).parent().parent().find(".price").val('');
                         $(object).parent().parent().find(".product").val('');
                         $(object).parent().parent().find(".product_id").val('');
                         $(object).parent().parent().find(".size").val('');
                         $(object).parent().parent().find(".mrp").val('');
-
                     }
                     calculateAmount(object);
-                    // $('.barcode').val("")
+                    $('#barcode').val("")
+                    $("#barcode").focus();
                 }
 
             });
 
         }
 
+
+        // function addItem(name) {
+        //     alert(name);
+        //     // alert(JSON.stringify(product_detail));
+           
+        //     $(".product_code").focus();
+        //     // $("#item_list tr").find(".item").chosen();
+        // }
+
+        // function addOfferItem() {
+        //     $('#offer_item_list').append($('#offer_item_row').html());
+        //     $(".product_code").focus();
+        //     // $("#item_list tr").find(".item").chosen();
+        // }
+
+       
 
 
         function calculateAmount(object) {
@@ -1689,6 +1712,7 @@
             discount_amount = (amount - taxable);
             var gst = calculateGst(taxable)
 
+            // $(object).parent().parent().find(".discount_amount").val(0);
             $(object).parent().parent().find(".discount_amount").val(discount_amount.toFixed(2));
             $(object).parent().parent().find(".sgst").val(gst.sgst);
             $(object).parent().parent().find(".cgst").val(gst.cgst);
@@ -1989,3 +2013,6 @@
     </script>
 
 @endsection
+
+
+ 

@@ -38,7 +38,7 @@
                 <div class="modal-body">
                     <form id="alterVoucherForm">
                         @csrf
-                      <div id='alterationvoucher_err'></div>
+                        <div id='alterationvoucher_err'></div>
                        
                         <div id="show_alteration_items"></div>
                     </form>
@@ -62,13 +62,17 @@
                     <div class="modal-body" id="print_alter_voucher">
                         <div class="row">
                             <div class="col-12 text-center">
-                                <h6><b>Mangaldeep (Jabalpur)<br>
-                                Samdariya Mall Jabalpur-482002</b></h6>
+                                <h6><b>{{$business_detail->business_name}}</b></h6>                               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-10 offset-1 text-center">
+                                <p style="inline-size:400px">{{$business_detail->company_address}}<p>
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
-                            <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div>
+                            <div class="col-6"><h6>GSTNO : {{$business_detail->gst}}</h6></div>
+                            <div class="col-6 text-end"><h6>Mobile No : {{$business_detail->mobile_no}}</h6></div>
                         </div>
                         <hr>
                         <div id='alter_item_list'></div>

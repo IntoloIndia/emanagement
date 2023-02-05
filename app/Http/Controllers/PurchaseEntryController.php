@@ -16,6 +16,7 @@ use App\Models\Color;
 use App\Models\Supplier;
 use App\Models\Brand;
 use App\Models\Offer;
+use App\Models\ApplyOffer;
 use App\MyApp;
 
 use Validator;
@@ -1699,7 +1700,8 @@ class PurchaseEntryController extends Controller
                     foreach ($purchase_entry as $key => $list) {
                         $result = getSumOfPurchaseEntryItems($list->id);
                         $total_qty = $total_qty + $result['qty'];
-                        $total_value = $total_value + $result['amount'];
+                        $total_value = round($total_value + $result['amount'] ,2 , PHP_ROUND_HALF_EVEN) ;
+
                         $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
                             $html .="<td>".++$key."</td>";
                             $html .="<td>".ucwords($list->style_no)."</td>";
@@ -2135,47 +2137,167 @@ class PurchaseEntryController extends Controller
 
     public function getProductDetail($product_code)
     {
-
         $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode','price']);
         if($purchase_entry_item){
-        $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
-                ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
-                ->first(['purchase_entries.id','purchase_entries.style_no_id','purchase_entries.brand_id','purchase_entries.sub_category_id','sub_categories.sub_category']);
+
+            $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
+                    ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
+                    ->first(['purchase_entries.id','purchase_entries.style_no_id','purchase_entries.brand_id','purchase_entries.sub_category_id','sub_categories.sub_category']);
+
+            // $offers_data = ApplyOffer::join('offers','offers.id','=','apply_offers.offer_id')->select('apply_offers.*','offers.discount_offer')
+            //             ->where(['apply_offers.status'=>MyApp::ACTIVE])->get();
+            $offers_data = ApplyOffer::where(['status'=>MyApp::ACTIVE])->get();
+            $offers="";
+            $count = 0;
+            
+            
+            // $offer_section = ''; 
+
+            //$offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'barcode'=>$product_code ])->first();
+
+            // $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE])->whereRaw("FIND_IN_SET($purchase_entry_item->barcode , barcode)")->first();
+            // if ( $offer != null ) {
+            //     $offer_section = $offer->offer_section;
+            // }else{
+            //     if ($purchase_entry->brand_id > 0) {
+            //         $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>$purchase_entry->brand_id ])->first();
+            //         if ($offer == null) {
+            //             $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'sub_category_id'=>$purchase_entry->sub_category_id ])->first();
+            //         }
+            //         $offer_section = $offer->offer_section;
+            //     }else{
+
+            //     }
+            // }
+
+
+            //$offer = ApplyOffer::whereRaw("FIND_IN_SET($purchase_entry_item->barcode, apply_offers.barcode)")->first();
+
+            // if ($purchase_entry->brand_id > 0) {
+            //     $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>$purchase_entry->brand_id ])->first();
+            //     if ($offer == null) {
+            //         $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'sub_category_id'=>$purchase_entry->sub_category_id ])->first();
+            //     }
+            //     $offer_section = $offer->offer_section;
+            // }else{
+
+            // }
+            
+
+
+            if (count($offers_data) > 0) {
+
+
+                foreach ($offers_data as $key => $list) {
+
+                    if ($list->offer_section == MyApp::PRODUCT) {
+
+                        if ($list->offer_type == MyApp::PERCENTAGE) {
+
+                            if($purchase_entry->brand_id){
+
+                                    $data = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                            ->where(['offer_section'=>MyApp::PRODUCT])
+                                            ->where("apply_offers.brand_id",$purchase_entry->brand_id)
+                                            
+                                            ->join('offers','offers.id','=','apply_offers.offer_id')
+                                            ->select('apply_offers.*','offers.discount_offer')->get();  
+                                }
+
+                                if (count($data) > 0) {
+                                        $offers =   $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                            ->where(['offer_section'=>MyApp::PRODUCT])
+                                            ->join('offers','offers.id','=','apply_offers.offer_id')
+                                            ->select('apply_offers.*','offers.discount_offer')->get();  
+                                            break;
+                                    }else{
+                                        $offers= $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                        ->where(['offer_section'=>MyApp::PRODUCT])
+                                        ->get('apply_offers.id');
+                                    }
+
+                        }
+                        
+                        // $count = $count+1;
+                    } else{
+                        //store offer
+                    if ($list->offer_type == MyApp::PERCENTAGE) {
+                        $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                ->where(['offer_section'=>MyApp::STORE])
+                                ->join('offers','offers.id','=','apply_offers.offer_id')
+                                ->select('apply_offers.*','offers.discount_offer')->get();
+                                break;
+                            
+                        }
+
+                    if ($list->offer_type == MyApp::VALUES) {
+                        
+                        $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                ->where(['offer_section'=>MyApp::STORE])
+                                ->join('offers','offers.id','=','apply_offers.offer_id')
+                                ->select('apply_offers.*','offers.discount_offer')->get();
+                                break;
+                            
+                        }
+                        
+                        else{
+                            $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                                ->where(['offer_section'=>MyApp::STORE])
+                                ->get('apply_offers.id');
+                        }
+                     
+                    }
+
+                    // if ($list->offer_type == MyApp::PERCENTAGE) {
+
+                    //     $data = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+                    //             ->where(['offer_section'=>MyApp::PRODUCT])
+                    //             ->whereRaw("FIND_IN_SET($purchase_entry_item->barcode, apply_offers.barcode)")
+                    //             ->join('offers','offers.id','=','apply_offers.offer_id')
+                    //             ->select('apply_offers.*','offers.discount_offer')->get(); 
+
+                    // }
+                    // if ($list->offer_type == MyApp::VALUES) {
+
+                      
+
+                    // }
+                    // if ($list->offer_type == MyApp::PICES) {
+                    //     dd("true3");
+
+                    // }
+                    // if ($list->offer_type == MyApp::SLAB) {
+                    //     dd("true4");
+
+                    // }
+
+                }
+                // dd($count);  
                 
-
-                $offers = Offer::where(['status'=>MyApp::ACTIVE])
-
-                    // ->whereRaw("find_in_set('".$purchase_entry->style_no_id."',offers.style_no_id)")
-                    ->select("offers.*"); 
-                    if($purchase_entry->brand_id){
-                        $offers->where('offers.brand_id', '=', $purchase_entry->brand_id);
-                    }
-                    if($purchase_entry->style_no_id){
-                          $offers->whereRaw("find_in_set('".$purchase_entry->style_no_id."',offers.style_no_id)");
-                    }
-
-                    $offer_data = $offers->get();
+            }  
+           
                     
-        $result = collect([
-            'product_id' => $purchase_entry->sub_category_id,
-            'brand_id' => $purchase_entry->brand_id,
-            'style_no_id' => $purchase_entry->style_no_id,
-            'product' => $purchase_entry->sub_category,
-            'size' => $purchase_entry_item->size,
-            'mrp' => $purchase_entry_item->mrp,
-            'qty' => $purchase_entry_item->qty,
-            'barcode' => $purchase_entry_item->barcode,
-            'price' => $purchase_entry_item->price,
-        ]);
+            $result = collect([
+                'product_id' => $purchase_entry->sub_category_id,
+                'brand_id' => $purchase_entry->brand_id,
+                'style_no_id' => $purchase_entry->style_no_id,
+                'product' => $purchase_entry->sub_category,
+                'size' => $purchase_entry_item->size,
+                'mrp' => $purchase_entry_item->mrp,
+                'qty' => $purchase_entry_item->qty,
+                'barcode' => $purchase_entry_item->barcode,
+                'price' => $purchase_entry_item->price,
+            ]);
 
-    
-                       
             return response()->json([
                 'status'=>200,
                 'product_detail'=>$result,
-                // 'offers'=>$offers,
-                'offer_data'=>$offer_data,
-               
+                'offers_data'=>$offers_data,
+                'offers'=>$offers,
+                // 'offer'=>$offer,
+                // 'offer_section'=>$offer_section
+            
+            
             ]);
         }else{
             return response()->json([
@@ -2733,7 +2855,13 @@ class PurchaseEntryController extends Controller
                         $purchase_item->barcode = $list['barcode'];
                         $purchase_item->barcode_img = $barcode_img;
 
-                        $purchase_item->save();
+                        // $purchase_item->save();
+                        if ($purchase_item->save()) {
+                            
+                            $stock_type = MyApp::PLUS_MANAGE_STOCK;
+                            $res = manageStock($stock_type, $purchase_entry_id, $list['size'], $list['qty']);
+                        }
+
                     }
                     
                     // return response()->json([

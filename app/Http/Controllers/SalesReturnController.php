@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BusinessDetails;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
 use App\Models\CustomerBillInvoice;
@@ -16,6 +17,7 @@ use Validator;
 class SalesReturnController extends Controller
 {
     public function index(){
+        $business_detail = BusinessDetails::first();
         $sales_return = SalesReturn::join('customers','customers.id','=','sales_returns.customer_id')
                                         ->whereDate('sales_returns.create_date',date('Y-m-d'))
                                         ->select(['sales_returns.*','customers.customer_name'])->get();
@@ -41,6 +43,7 @@ class SalesReturnController extends Controller
             // dd($sales_return_data);
 
         return view('sales-return',[
+            'business_detail' => $business_detail,
             'sales_return' => $sales_return,
             'sales_return_data' => $sales_return_data,
             // 'sales_return_items' => $sales_return_items,

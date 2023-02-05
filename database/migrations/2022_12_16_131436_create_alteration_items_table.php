@@ -16,7 +16,7 @@ class CreateAlterationItemsTable extends Migration
         Schema::create('alteration_items', function (Blueprint $table) {
             $table->id();
             $table->integer('alteration_voucher_id')->default(0);
-            $table->integer('product_id')->default(0);
+            $table->integer('customer_bill_invoice_id')->default(0);
             $table->integer('item_qty')->default(0);
             $table->integer('delivery_date')->default(0);
             $table->string('remark')->nullable();

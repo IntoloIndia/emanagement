@@ -15,10 +15,17 @@ class CreateBusinessDetailsTable extends Migration
     {
         Schema::create('business_details', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name')->nullable();
             $table->string('business_name')->nullable();
-            $table->string('email')->nullable();
+            $table->string('owner_name')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->string('ladline_no')->nullable();
+            $table->string('gst')->nullable();
+            $table->integer('country_id')->default(0);
+            $table->integer('state_id')->default(0);
+            $table->integer('city_id')->default(0);
+            $table->string('company_address')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('pincode')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->timestamps();

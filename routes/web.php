@@ -297,11 +297,13 @@ Route::group(['middleware'=>'admin_auth'], function(){
     // offer return 
     Route::controller(OfferController::class)->group(function () {
         Route::get('admin/offer', 'index');
-        Route::post('admin/save-offer', 'saveOffer');
+        Route::post('admin/save-offer-apply', 'saveApplyOffer');
         Route::post('admin/save-create-offer', 'saveCreateOffers');
         Route::get('admin/edit-offer/{offer_id}', 'editOffer');
         Route::post('admin/update-offer/{offer_id}', 'updateOffer');
         Route::get('admin/delete-offer/{offer_id}', 'deleteOffer');
+        Route::get('admin/offer-type/{offer_type}', 'getOfferType');
+        Route::get('admin/applye_offer_update_status/{apply_offer_id}', 'applyOfferUpdateStatus');
 
     });
 
@@ -314,7 +316,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
         // Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
 
-        Route::get('admin/get-product-detail/{product_code}', 'getProductDetail');
+        // Route::get('admin/get-product-detail/{product_code}', 'getProductDetail');
+        Route::get('admin/get-product-detail/{barcode}', 'getProductDetail');
 
         // Route::get('admin/barcode', 'getBarcode');
         Route::get('admin/get-color_code/{color_code}','getcolorcode');
@@ -380,6 +383,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(ReportController::class)->group(function () {
         Route::get('admin/offer-report','offerReport');
+        Route::get('admin/sales-report','salesReport');
+        Route::get('admin/sales-report-detail','salesReportDetail');
+        // Route::get('admin/brand-report/{from_date}','brandReport');
+        Route::get('admin/brand-report','brandReport');
+        Route::get('admin/get-sales-payment/{customer_id}','getSalesPayment');
+        // Route::get('admin/get-sales-payment/{customer_id}/{month}','getSalesPayment');
         
     });
 

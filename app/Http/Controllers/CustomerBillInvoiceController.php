@@ -17,6 +17,7 @@ use App\Models\SalesReturn;
 use App\Models\SalesReturnItem;
 use App\Models\CustomerPoint;
 use App\Models\Offer;
+use App\Models\ApplyOffer;
 use App\Models\Brand;
 use App\MyApp;
 use Validator;
@@ -29,8 +30,8 @@ class CustomerBillInvoiceController extends Controller
         $sizes = Size::all();
         // $allOffers = Offer::all();
         $brands = Brand::all(); 
-        $allOffers = Offer::join('brands','brands.id','=','offers.brand_id')
-                    ->select(['offers.*','brands.brand_name'])->get();
+        $allOffers = ApplyOffer::join('brands','brands.id','=','apply_offers.brand_id')
+                    ->select(['apply_offers.*','brands.brand_name'])->get();
         // $customers_billing = CustomerBill::all();
         $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')->get([
             'customers.*','customer_bills.*'
@@ -67,8 +68,7 @@ class CustomerBillInvoiceController extends Controller
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
             'state_type'=>'required|max:191',
-            // 'city_id'=>'required|max:191',
-            // 'gst_no'=>'required|max:191',
+          
 
         ]);
 
@@ -146,6 +146,7 @@ class CustomerBillInvoiceController extends Controller
               // customer bills tables insert
             
               $billmodel = new CustomerBill;
+              $billmodel->user_id = session('LOGIN_ID');   
               $billmodel->customer_id = $customer_id;   
               $billmodel->total_amount = $total_amount;
               $billmodel->credit_note_amount = $credit_note_amount;
@@ -169,6 +170,8 @@ class CustomerBillInvoiceController extends Controller
               $size = $req->input('size');
               $amount = $req->input('amount');
               $employee_id = $req->input('employee_id');
+              $offer_id = $req->input('offer_id');
+              $discount_percentage = $req->input('discount_percentage');
               $discount_amount = $req->input('discount_amount');
               $taxfree_amount = $req->input('taxfree_amount');
               $sgst = $req->input('sgst');
@@ -192,11 +195,13 @@ class CustomerBillInvoiceController extends Controller
                     $item->size = $size[$key];
                     $item->amount = $amount[$key];
                     $item->discount_amount = $discount_amount[$key];
+                    $item->discount_percentage = $discount_percentage[$key];
                     $item->taxfree_amount = $taxfree_amount[$key];
                     $item->sgst = $sgst[$key];
                     $item->cgst = $cgst[$key];
                     $item->igst= $igst[$key];
                     $item->employee_id = $employee_id[$key];
+                    $item->offer_id = $offer_id[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();

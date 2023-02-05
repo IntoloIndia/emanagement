@@ -24,7 +24,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
@@ -57,7 +57,7 @@
                             } 
                             
                         @endphp
-                        <div class='card card-outline card-primary' >
+                        <div class='card card-outline card-primary offer' offer-id='{{$list->id}}'>
                             <div class='card-header'>
                                 <h3 class='card-title'>{{$offer_type}}</h3>
                             </div>
@@ -95,20 +95,48 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-9"><b>Offers</b></div>
+                        <div class="col-md-2"><b>Offers</b></div>
+                        <div class="col-md-2">
+                            <select id="filter_category_id" class="form-select form-select-sm select_chosen" onchange="getSubCategoryByCategory(this.value);" >
+                                <option selected disabled >Category</option>
+                                @foreach ($categories as $key => $list)
+                                    <option value="{{$list->id}}" >{{ucwords($list->category)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-3">
-                            <select  name="offer_type" id="offer_type" class="form-select select_chosen_100">
-                                <option selected disabled>Category</option>
-                                
+                            <select id="sub_category_id" class="form-select form-select-sm select_chosen">
+                                <option selected disabled >Choose...</option>
+                                {{-- @foreach ($sub_categories as $items)
+                                    <option value="{{$items->id}}">{{$items->sub_category}}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="brand_id" class="form-select form-select-sm select_chosen" >
+                                <option selected value="0">Brand</option>
+                                @foreach ($brands as $key => $list)
+                                    <option value="{{$list->id}}">{{ucwords($list->brand_name)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select id="style_no_id" class="form-select form-select-sm select_chosen" >
+                                <option selected value="0" >Style No</option>
+                                @foreach ($style_nos as $key => $list)
+                                    <option value="{{$list->id}}" >{{$list->style_no}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class='card-body table-responsive' style='height: 500px;'>
+                    <div id="show_offer_report"></div> 
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
@@ -157,6 +185,13 @@
     <script>
         $(document).ready(function () {
             $(".select_chosen_100").chosen({ width: '100%' });
+
+            $(document).on('click',".offer",function(e){
+                e.preventDefault();
+
+                var offer_id = $(this).attr('offer-id');
+                
+            });
 
         });
     </script>

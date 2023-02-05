@@ -255,16 +255,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="print_alter_voucher">
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <h6><b>Mangaldeep Clothing LLP<br/></b>
-                                501/2 A k towers 
-                                Main road katanga
-                                Near mittal <br/> gas agency 
-                                Narmada road 
-                                482005</h6>
+                 
+                        <div class="row">
+                            <div class="col-12 text-center">                            
+                                <h6><b>{{$business_detail->business_name}}</b></h6>                                
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-10 offset-1 text-center">                            
+                                <p style="inline-size: 400px">{{$business_detail->company_address}}</p>
+                            </div>
+                        </div>
+                       
+                
+                           
                     <div class="row mt-2">
                         {{-- <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
                         <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div> --}}

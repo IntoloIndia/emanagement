@@ -12,6 +12,8 @@
     use App\Models\Purchase;
     use App\Models\ManageStock;
     use App\Models\StyleNo;
+    use App\Models\Offer;
+    use App\Models\ApplyOffer;
    
 
     // use App\MyApp;
@@ -243,7 +245,43 @@
         return $data;
     }
 
+    function getOfferData($offer_id)
+    {
+        $data = Offer::where(['id'=>$offer_id])->first();
+        return $data;
+    }
 
+    function getSalesPayment($customer_id)
+    // function getSalesPayment($customer_id,$month)
+    {
+        $get_sales_payment = CustomerBill::join('customer_bill_invoices','customer_bills.id','=','customer_bill_invoices.bill_id')
+            ->join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
+            ->where('customer_id' ,$customer_id)           
+            ->select('customer_bills.*','customer_bill_invoices.qty','customer_bill_invoices.size','customer_bill_invoices.price','customer_bill_invoices.amount','customer_bill_invoices.discount_amount','customer_bill_invoices.date','customer_bill_invoices.time','sub_categories.sub_category')
+            ->get();
+            return $get_sales_payment;
+    }
+
+    function getOffers($offer_type)
+    {
+        $data = Offer::where(['offer_type'=> $offer_type])->get();
+        return $data;
+    }
+
+    function getBrands($brand_id)
+    {
+        $brands = ApplyOffer::join('brands','apply_offers.brand_id','=','brands.id')
+        ->where(['brand_id'=>$brand_id])
+        ->select('apply_offers.*','brands.brand_name')
+        ->get();
+        return $brands;
+        
+    }
+
+    // function brandOfferItems($brand_id){
+    //     $brand_offer_items = ApplyOffer::where(['brand_id'=>$brand_id])->get();
+    //     return $brand_offer_items; 
+    // }
 
     // show alter item
     // function getAlterationItem($alteration_voucher_id){
@@ -261,4 +299,11 @@
     //     $invoice_no = "SH".$count ."D";
     //     return $invoice_no;
     // }
+
+
+    // 80000001010323
+    // 80000001009771
+    // 80000001006988
+    // 80000001009772
+    // 80000001009780
 

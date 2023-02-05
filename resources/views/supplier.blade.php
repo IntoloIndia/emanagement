@@ -272,27 +272,27 @@
             });
 
             $(document).on('click','#cityBtn', function (e) {
-            e.preventDefault();
-            if ($.trim($("#state_id").val()) == "") {
-                alert("Please Select state!");
-            }
-            else{
-                $('#cityModal').modal('show');
-                $('#city_err').html('');
-                $('#city_err').removeClass('alert alert-danger');
-                $("#cityForm").trigger( "reset"); 
-                $('#saveCityBtn').removeClass('hide');
-                $('#updateCityBtn').addClass('hide');
-    
-                // const country_id = $('#city_country_id').val();
-                var country = $("#country_id").val();
-                $("#put_country_id").val(country);
-                var state = $("#state_id").val();
-                // alert(state);
-                $("#city_state_id").val(state);
-                // getStateByCountry(country_id);
-            }
-        });
+                e.preventDefault();
+                if ($.trim($("#state_id").val()) == "") {
+                    alert("Please Select state!");
+                }
+                else{
+                    $('#cityModal').modal('show');
+                    $('#city_err').html('');
+                    $('#city_err').removeClass('alert alert-danger');
+                    $("#cityForm").trigger( "reset"); 
+                    $('#saveCityBtn').removeClass('hide');
+                    $('#updateCityBtn').addClass('hide');
+        
+                    // const country_id = $('#city_country_id').val();
+                    var country = $("#country_id").val();
+                    $("#put_country_id").val(country);
+                    var state = $("#state_id").val();
+                    // alert(state);
+                    $("#city_state_id").val(state);
+                    // getStateByCountry(country_id);
+                }
+            });
 
         $(document).on('click','#saveCityBtn', function (e) {
             e.preventDefault();
@@ -408,7 +408,7 @@
                 //     }
                 // });
 
-        });
+            });
 
     })
 

@@ -222,11 +222,11 @@
                 </a>
             </li>
             
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="business-details" class="nav-link">
                     <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
                 </a>
-            </li> --}}
+            </li>
             
             {{-- <li class="nav-item">
                 <a href="excel_data" class="nav-link">
@@ -248,6 +248,17 @@
                     <i class="fas fa-angle-right nav-icon"></i><p>Offer Report</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="sales-report" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Report</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="brand-report" class="nav-link">
+                    <i class="fas fa-angle-right nav-icon"></i><p>Brand Report</p>
+                </a>
+            </li>
+           
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
                 <a href="#" class="nav-link">

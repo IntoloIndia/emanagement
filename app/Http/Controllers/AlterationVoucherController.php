@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BusinessDetails;
 use App\Models\Customer;
 use App\Models\CustomerBillInvoice;
 use App\Models\AlterationVoucher;
 use App\Models\CustomerBill;
 use App\Models\AlterationItem;
+use App\Models\SubCategory;
 use App\MyApp;
 
 use Validator;
@@ -15,6 +17,9 @@ use Validator;
 class AlterationVoucherController extends Controller
 {
         public function index(){
+            $business_detail = BusinessDetails::first();
+
+            
             $customers_billing = Customer::all();
             $alteration_vouchers = AlterationVoucher::join('customers','alteration_vouchers.customer_id','=','customers.id')
                 ->where('voucher_status','MyApp::STATUS')
@@ -31,6 +36,7 @@ class AlterationVoucherController extends Controller
                 ->get();
 
             return view('alteration_voucher',[
+                'business_detail' => $business_detail,
                 'customers_billing' => $customers_billing,
                 'alteration_vouchers'=>$alteration_vouchers,
                 'delivered_vouchers'=>$delivered_vouchers,
@@ -83,17 +89,20 @@ class AlterationVoucherController extends Controller
         {
             $bill_date = CustomerBill::where(['id'=>$bill_id])->first(['bill_date','customer_id']);
           
+
+
             $alter_voucher = CustomerBillInvoice::join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
                 ->where('bill_id',$bill_id)
                 ->select('customer_bill_invoices.*','sub_categories.sub_category')
                 ->get();
-          
+
+         
             $html = "";
             $html .="<div class='card'>";
                 $html .="<div class='card-body'>";
                     $html .="<div class='row'>";
                         $html .="<div class='col-md-8'>Bill No : " .$bill_id."</div>";
-                        $html .="<div class='col-md-4 '>Delivery Date";
+                        $html .="<div class='col-md-4 '>Delivery Date1";
                           
                         $html .= "</div>";
                     $html .="</div>";
@@ -113,6 +122,7 @@ class AlterationVoucherController extends Controller
                                 $html .= "<th>SN</th>";
                                 $html .= "<th>Product</th>";
                                 $html .= "<th>Qty</th>";
+                                $html .= "<th>Size</th>";
                                 $html .= "<th>Remark</th>";
                                 $html .= "<input type='hidden' id='customer_id' name='customer_id' value='".$bill_date->customer_id."' class='form-control form-control-sm'>";
                                 $html .= "<input type='hidden' id='bill_id' name='bill_id' value='".$bill_id."' class='form-control form-control-sm'>";
@@ -122,10 +132,11 @@ class AlterationVoucherController extends Controller
                                 foreach ($alter_voucher as $key => $list) {
                                     $html .= "<tr>";
                                     $html .= "<td></td>";
-                                    $html .= "<td><input class='form-check-input product_id' id='product_id_".$list->product_id."' type='checkbox' name='product_id[]' value='$list->product_id'></td>";
+                                    $html .= "<td><input class='form-check-input product_id' id='product_id_".$list->id."' type='checkbox' name='customer_bill_invoice_id[]' value='$list->id'></td>";
                                     $html .= "<td>" . ++$key . "</td>";
                                     $html .= "<td>" . $list->sub_category ."</td>";
-                                    $html .= "<td><input  type='number' class='form-control form-control-sm item_qty' id='item_qty_".$list->product_id."' name='item_qty[]' min='1' max='$list->qty' value='$list->qty' style='width:60px;' disabled='disabled'></td>";
+                                    $html .= "<td><input  type='number' class='form-control form-control-sm item_qty' id='item_qty_".$list->id."' name='item_qty[]' min='1' max='$list->qty' value='$list->qty' style='width:60px;' disabled='disabled'></td>";
+                                    $html .= "<td>" . $list->size ."</td>";
                                     $html .= "<td><input  type='text' class='form-control form-control-sm remark'  id='' name='remark[]' value='$list->remark'></td>";
                                 $html .= "</tr>";
                                 $html .= "<tr><p id='show_alert'></p></tr>";
@@ -176,10 +187,10 @@ class AlterationVoucherController extends Controller
 
                 if($model->save()){
 
-                    for ($i=0; $i < count($req->product_id); $i++) { 
+                    for ($i=0; $i < count($req->customer_bill_invoice_id); $i++) { 
                         $alter_model = new AlterationItem;
                         $alter_model->alteration_voucher_id =  $model->id;
-                        $alter_model->product_id = $req->product_id[$i];
+                        $alter_model->customer_bill_invoice_id = $req->customer_bill_invoice_id[$i];
                         $alter_model->item_qty = $req->item_qty[$i];
                         $alter_model->delivery_date = $req->delivery_date;
                         $alter_model->remark = $req->remark[$i];
@@ -204,10 +215,20 @@ class AlterationVoucherController extends Controller
                 ->where('alteration_vouchers.id', $alteration_voucher_id)
                 ->first(['alteration_vouchers.*','customers.customer_name','customers.gst_no','customers.mobile_no']);
 
-            $alteration_items = AlterationItem::join('sub_categories','alteration_items.product_id','=','sub_categories.id')
-                ->where('alteration_voucher_id',$alteration_voucher_id)
-                ->get(['alteration_items.*','sub_categories.sub_category']);
-               
+            // $alteration_items = AlterationItem::join('sub_categories','alteration_items.customer_bill_invoice_id','=','sub_categories.id')
+            //     ->where('alteration_voucher_id',$alteration_voucher_id)
+            //     ->get(['alteration_items.*','sub_categories.sub_category']);
+            
+
+            $alteration_items = AlterationItem::where('alteration_voucher_id',$alteration_voucher_id)->get();
+                
+            $aleration = array(); 
+            foreach ($alteration_items as $key => $list) {
+                $aleration[] = CustomerBillInvoice::where(['customer_bill_invoices.id'=>$list->customer_bill_invoice_id])
+                    ->join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')                 
+                    ->first(['customer_bill_invoices.id','customer_bill_invoices.product_id','customer_bill_invoices.qty','customer_bill_invoices.size','sub_categories.sub_category']);
+            }         
+                         
             $html = "";
              $html .= "<div class='row'>";
                  $html .= "<div class='col-6'><h6>Name :  ".$alteration_voucher->customer_name."</h6><h6>Mobile No : ".$alteration_voucher->mobile_no."</h6>
@@ -222,19 +243,17 @@ class AlterationVoucherController extends Controller
                             $html .= "<th>SN</th>";
                             $html .= "<th>Item</th>";
                             $html .= "<th>Qty</th>";
-                            // $html .= "<th>Size</th>";
-                            // $html .= "<th>Color</th>";
+                            $html .= "<th>Size</th>";
                         $html .= "</tr>";
                     $html .= "</thead>";
                     $html .= "<tbody>";
-                        foreach ($alteration_items as $key => $list) {
+                        foreach ($aleration as $key => $item) {
                             $html .= "<tr>";
                                 $html .= "<td></td>";
                                 $html .= "<td>" . ++$key . "</td>";
-                                $html .= "<td>" . $list->sub_category ."</td>";
-                                $html .= "<td>" . $list->item_qty ."</td>";
-                                // $html .= "<td>" . $list->item_qty ."</td>";
-                                // $html .= "<td>" . $list->item_qty ."</td>";
+                                $html .= "<td>" . $item->sub_category."</td>";
+                                $html .= "<td>" . $item->qty ."</td>";
+                                $html .= "<td>" . $item->size."</td>";
                             $html .= "</tr>";
                         }
                     $html .= "<tbody>";
