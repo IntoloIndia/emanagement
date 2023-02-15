@@ -266,8 +266,8 @@
                 e.preventDefault();
                 const user_id = $(this).val();
                 const user_role_id = $(this).attr('user-role-id');
-                alert(user_id);
-                alert(user_role_id);
+                // alert(user_id);
+                // alert(user_role_id);
 
                 userIsActive(user_id,user_role_id);
                 
