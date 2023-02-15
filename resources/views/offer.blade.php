@@ -48,11 +48,11 @@
                             <div class="col-md-6">
                                 <label class="form-label ">Offer Type</label>
                                 <select name="offer_type" id="apply_offer_type" class="form-select select_chosen_100">
-                                    <option selected disabled>Offer type</option>
+                                    <option selected value="0">Offer type</option>
                                     <option value="{{ MyApp::PERCENTAGE }}">PERCENTAGE</option>
-                                    <option value="{{ MyApp::VALUES }}">VALUES</option>
+                                    {{-- <option value="{{ MyApp::VALUES }}">VALUES</option>
                                     <option value="{{ MyApp::PICES }}">PICES</option>
-                                    <option value="{{ MyApp::SLAB }}">SLAB</option>
+                                    <option value="{{ MyApp::SLAB }}">SLAB</option> --}}
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -175,9 +175,9 @@
                                 <select name="offer_type" id="offer_type" class="form-select select_chosen_100">
                                     <option selected disabled>Offer type</option>
                                     <option value="{{ MyApp::PERCENTAGE }}">PERCENTAGE</option>
-                                    <option value="{{ MyApp::VALUES }}">VALUES</option>
-                                    <option value="{{ MyApp::PICES }}">PICES</option>
-                                    <option value="{{ MyApp::SLAB }}">SLAB</option>
+                                        {{-- <option value="{{ MyApp::VALUES }}">VALUES</option>
+                                        <option value="{{ MyApp::PICES }}">PICES</option>
+                                        <option value="{{ MyApp::SLAB }}">SLAB</option> --}}
                                 </select>
                             </div>
                             <div class="col-md-12">
@@ -190,13 +190,9 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="button" id="saveCreateOfferBtn" class="btn btn-primary btn-sm ">Create
-                                Offer</button>
-                            <button type="button" id="updateCreateOfferBtn" class="btn btn-primary btn-sm hide">Update
-                                Create
-                                Offer</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="saveCreateOfferBtn" class="btn btn-primary btn-sm ">Create Offer</button>
+                            <button type="button" id="updateCreateOfferBtn" class="btn btn-primary btn-sm hide">Update Create Offer</button>
                         </div>
                     </form>
                 </div>
@@ -458,8 +454,8 @@
                     <b>Apply Offer</b>
                     <button class="btn btn-primary btn-sm float-right ml-4" id="addOffer"><i class="fas fa-plus"></i>
                         Apply Offer</button>
-                    <button class="btn btn-info btn-sm float-right ml-4" id="get_time"><i class="fas fa-plus"></i>
-                        Get time </button>
+                    {{-- <button class="btn btn-info btn-sm float-right ml-4" id="get_time"><i class="fas fa-plus"></i>
+                        Get time </button> --}}
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -516,22 +512,10 @@
                                                 <b style="font-size: 20px;">{{ $offer_section }}</b>
                                             </div>
                                         </div>
-                                        {{-- <hr> --}}
-                                        {{-- <div class="row"> --}}
-                                        {{-- <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-md-12 mt-1">
-                                                        <b>{{ ucwords($list->brand_name) }}</b>
-                                                    </div>
-                                                    <div class="col-md-12 mt-1">
-                                                        <b>{{ ucwords($list->sub_category) }}</b>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-                                        {{-- <div class="col-md-6"> --}}
-                                        @foreach (explode(',', $list->offer_id) as $offer_id)
+                                        
+                                        @foreach (explode(',', $list->offer_type_id) as $offer_type_id)
                                             @php
-                                                $offer = getOfferData($offer_id);
+                                                $offer = getOfferData($offer_type_id);
                                             @endphp
 
                                             {{-- <li class="list-group-item">{{ $offer->discount_offer }}%</li> --}}
@@ -554,8 +538,7 @@
                                                             style="font-size: 18px; color:red ">{{ $offer->discount_offer }}%</b>
                                                         <b style="color:red">Off</b>
                                                     </div>
-                                                    {{-- <div class="col-md-6 text-center">
-                                                        </div> --}}
+                                                    
                                                 </div>
                                             @endif
                                             @if ($list->offer_type == MyApp::PICES)
@@ -583,8 +566,6 @@
                                                 </div>
                                             @endif
                                         @endforeach
-                                        {{-- </div> --}}
-                                        {{-- </div> --}}
                                         <div class="row" style="font-size: 20px">
                                             <div class="col-md-6">
                                                 {{-- <small>Brand Name</small><br> --}}
@@ -610,26 +591,29 @@
                                                     <b>{{ date('d-m-Y', strtotime($list->offer_to)) }}</b>
                                                 </div>
                                             </div>
-                                        @else
-                                            <div class="card-footer"style="background-color:#BDC3C7">
-
-                                                <div class="row" style="colo">
-                                                    <div class="col-md-6"><small><b>From Date</b></small></b></div>
-                                                    <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                                        </div>
+                                    @else
+                                        <div class="card-footer"style="background-color:#BDC3C7">
+                                            <div class="row" style="colo">
+                                                <div class="col-md-6"><small><b>From Date</b></small></b></div>
+                                                <div class="col-md-6 text-end"><small><b>To Date</b></small></b></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <b>{{ date('d-m-Y', strtotime($list->offer_from)) }}</b>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <b>{{ date('d-m-Y', strtotime($list->offer_from)) }}</b>
-                                                    </div>
-                                                    <div class="col-md-6 text-end">
-                                                        <b>{{ date('d-m-Y', strtotime($list->offer_to)) }}</b>
-                                                    </div>
+                                                <div class="col-md-6 text-end">
+                                                    <b>{{ date('d-m-Y', strtotime($list->offer_to)) }}</b>
                                                 </div>
+                                            </div>
+                                        </div>
                                     @endif
+
                                 </div>
                             </div>
+                        @endforeach
                     </div>
-                    @endforeach
+                
                 </div>
             </div>
         </div>
@@ -944,7 +928,7 @@
             $(document).on('change', '.barcode', function(e) {
                 e.preventDefault();
                 var barcode = $('.barcode').val();
-                alert(barcode);
+                // alert(barcode);
                 addBarcode();
 
             });
@@ -1003,7 +987,7 @@
             $(document).on('click', '.offerStatusUpdateBtn', function(e) {
                 e.preventDefault();
                 const apply_offer_id = $(this).val();
-                alert(apply_offer_id);
+                // alert(apply_offer_id);
                 applyOfferUpdateStatus(apply_offer_id);
             });
 
@@ -1023,11 +1007,11 @@
 
             });
             
-            $(document).on('click', '#get_time', function(e) {
-                var time = new Date();
-                    getTime =time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                    alert(getTime);
-            });
+            // $(document).on('click', '#get_time', function(e) {
+            //     var time = new Date();
+            //         getTime =time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            //         alert(getTime);
+            // });
 
         });
 
@@ -1160,21 +1144,26 @@
                             $('#offer_type').val(response.offer.offer_type);
                             $('#summary').val(response.offer.summary);
                             $('#discount_offer').val(response.offer.discount_offer);
+                            $('#Purcentage_row').addClass('hide');
+
                         }
                         if (response.offer.offer_type == 2) {
                             $('#offer_type').val(response.offer.offer_type);
                             $('#summary').val(response.offer.summary);
                             $('#discount_offer').val(response.offer.discount_offer);
+                            $('#add_row').addClass('hide');
                         }
                         if (response.offer.offer_type == 3) {
                             $('#offer_type').val(response.offer.offer_type);
                             $('#summary').val(response.offer.summary);
                             $('#discount_offer').val(response.offer.discount_offer);
+                            $('#add_row').addClass('hide');
                         }
                         if (response.offer.offer_type == 4) {
                             $('#offer_type').val(response.offer.offer_type);
                             $('#summary').val(response.offer.summary);
                             $('#discount_offer').val(response.offer.discount_offer);
+                            $('#add_row').addClass('hide');
                         }
 
 

@@ -41,11 +41,7 @@
                                         <option selected disabled >Choose...</option>
                                         @foreach ($roles as $list)
                                             @if ($list->id != MyApp::ADMINISTRATOR)
-                                                @if ($list->id == MyApp::OTHER)
-                                                    <option selected value="{{$list->id}}">{{ucwords($list->role)}}</option>
-                                                @else
-                                                    <option value="{{$list->id}}">{{ucwords($list->role)}}</option>
-                                                @endif
+                                                <option  value="{{$list->id}}">{{ucwords($list->role)}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -157,6 +153,7 @@
                                 <th>Email</th>
                                 <th>Percentage</th>
                                 <th>QR</th>
+                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -175,14 +172,19 @@
                                     <td>{{$list->percentage}}</td>
                                     <td><img src="{{$list->qrcode}}" width="40px" height="40px"><br/></td>
                                     <td>
-                                        <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
-                                      @if ($list->status==MyApp::ACTIVE)
-                                      <button type="button" class="btn btn-success deleteUserBtn btn-sm  ml-1" value="{{$list->id}}">Active</button>  
-                                      @endif
-                                      @if ($list->status==MyApp::DEACTIVE)
-                                      <button type="button" class="btn btn-danger  deleteUserBtn btn-sm  ml-1" value="{{$list->id}}">Deactive</button>
-                                      @endif
-                                      
+                                        @php
+                                            
+                                            $getIsActive = checkIsActive($list->id, $list->role_id);
+                                        @endphp
+                                            @if ($getIsActive == MyApp::ACTIVE)
+                                                <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button>  
+                                            @else
+                                            <button type="button" class="btn btn-warning isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Deactive</button>  
+                                            @endif
+                                            
+                                     </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button> 
                                     </td>
                                 </tr>
                             @endforeach
@@ -201,12 +203,12 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Status Update </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <center>
-                        <h5>Are you sure ?</h5>
+                        <h5>Are you sure ?  Deactive</h5>
                             <button type="button" id="yesDeleteUserBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
                             <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
                         <hr>
@@ -250,19 +252,33 @@
                 // alert(user_id);
             });
 
-            $(document).on('click','.deleteUserBtn', function (e) {
+            // $(document).on('click','.deleteUserBtn', function (e) {
+            //     e.preventDefault();
+            //     const user_id = $(this).val();
+            //     const user_role_id = $(this).val();
+            //     alert(user_role_id);
+            //     // alert(user_id);
+            //     $('#deleteUserModal').modal('show');
+            //     $('#yesDeleteUserBtn').val(user_id,user_role_id);
+            // });
+
+            $(document).on('click','.isActive', function (e) {
                 e.preventDefault();
                 const user_id = $(this).val();
-                // alert(user_id);
-                $('#deleteUserModal').modal('show');
-                $('#yesDeleteUserBtn').val(user_id);
+                const user_role_id = $(this).attr('user-role-id');
+                alert(user_id);
+                alert(user_role_id);
+
+                userIsActive(user_id,user_role_id);
+                
             });
 
-            $(document).on('click','#yesDeleteUserBtn', function (e) {
-                e.preventDefault();
-                const user_id = $(this).val();
-                updateStatus(user_id);
-            });
+            // $(document).on('click','#yesDeleteUserBtn', function (e) {
+            //     e.preventDefault();
+            //     const user_id = $(this).val();
+            //      const user_role_id = $(this).val();
+            //     // updateStatus(user_id,user_role_id);
+            // });
 
 
         });
@@ -375,10 +391,10 @@
         //     });
         // }
 
-        function updateStatus(user_id){
+        function userIsActive(user_id,user_role_id){
             $.ajax({
                 type: "get",
-                url: "status-update/"+user_id,
+                url: `user-is-active/${user_id}/${user_role_id}`,
                 dataType: "json",
                 success: function (response) {
                     console.log(response);

@@ -75,28 +75,27 @@ class RoleController extends Controller
 
     public function activeDeactiveRole($role_id)
     {
-        $role_id = Role::find($role_id);
-        if($role_id->active_role == MyApp::DEACTIVE)
+        $role = Role::find($role_id);
+        if($role->active == MyApp::INACTIVE)
         {
-            $role_id->active_role = MyApp::ACTIVE;
+            $role->active = MyApp::ACTIVE;
+        }else{
+            $role->active = MyApp::INACTIVE;
         }
-        else{
-            $role_id->active_role = MyApp::DEACTIVE;
-        }
-        $role_id->save();
+        $role->save();
         return response()->json([
             'status'=>200,
-            'role_id'=>$role_id
+            'role'=>$role
         ]);
     }
 
     public function deleteRole($role_id)
     {
-        $role_id = Role::find($role_id);
-        $role_id->delete();
+        $role = Role::find($role_id);
+        $role->delete();
         return response()->json([
             'status'=>200,
-            'role_id'=>$role_id
+            'role'=>$role
         ]);
     }
 }

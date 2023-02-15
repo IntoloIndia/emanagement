@@ -19,6 +19,7 @@ class CreateCustomerBillInvoicesTable extends Migration
             $table->integer('bill_id')->nullable();
             $table->integer('product_code')->nullable();
             $table->integer('product_id')->nullable();
+            $table->integer('purchase_entry_item_id')->nullable();
             $table->integer('qty')->nullable();
             $table->string('size')->nullable();
             $table->string('price')->nullable();

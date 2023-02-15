@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\SystemKey;
 use Validator;
 use App\MyApp;
 use DNS2D;
@@ -15,11 +16,12 @@ use QrCode;
 class UserController extends Controller
 {
     public function index(){
-        $roles = Role::all();
+        $roles = Role::where(['active'=>MyApp::ACTIVE])->get();
         $department = Department::all();                     
         $Users = User::join('roles','roles.id','=','users.role_id')
+                        // ->join('system_keys','system_keys.user_id','=','users.id')
                        ->join('departments','departments.id','=','users.department_id')
-                    //    ->where(['users.status' => MyApp::ACTIVE])
+                    //    ->where(['system_keys.is_active' => MyApp::ACTIVE])
                        ->get(['users.*','roles.role','departments.department']);
         // $Users = User::all();
         return view('users',[
@@ -196,19 +198,18 @@ class UserController extends Controller
     //     ]);
     // }
 
-    function updateStatus($user_id)
+    function userIsActive($user_id, $user_role_id)
     {
-        $status_data =User::find($user_id);
-        if($status_data->status){
-            $status_data->status = MyApp::DEACTIVE;
+        $status_data =SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->first();
+        if($status_data->is_active == 1){
+            $status_data->is_active = MyApp::INACTIVE;
         }else{
-            $status_data->status = MyApp::ACTIVE;
+            $status_data->is_active = MyApp::ACTIVE;
         }
         $status_data->save();
         
         return response()->json([
             'status'=>200,
-            // 'active'=>$status_data->status
         ]);
     }
     

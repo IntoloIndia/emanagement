@@ -97,6 +97,7 @@ a {
                                 <option selected disabled value="0">Supplier</option>                                          
                                 @foreach ($suppliers as $list)
                                 <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                
                                 @endforeach
                             </select>
                         </div>
@@ -124,6 +125,7 @@ a {
                             @else
                                 {{$count = "";}}
                                 @foreach ($purchases as $list)
+                                    {{-- {{$list}} --}}
                                     <tr>
                                         <td >{{++$count}}</td>
                                         <td >{{date('d-m-Y', strtotime($list->bill_date))}}</td>
@@ -131,7 +133,7 @@ a {
                                         <td >{{ucwords($list->supplier_name)}}</td>
                                         <td >{{$list->payment_days}}</td>
                                         <td>
-                                            {{-- <button type='button' class='btn btn-warning btn-flat btn-sm barcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button> --}}
+                                            <button type='button' class='btn btn-secondary btn-flat btn-sm allbarcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button>
                                             <button type="button" class="btn btn-info btn-sm mx-1 viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
@@ -150,6 +152,8 @@ a {
         </div>
 
     </div>
+
+    {{-- <button onclick="alert('call')">click</button> --}}
 
     {{-- dummy --}}
 
@@ -567,7 +571,17 @@ a {
             $(document).on('click','.barcodeBtn', function (e) {
                 e.preventDefault();
                 var purchase_entry_id = $(this).val();
+                // alert(purchase_entry_id);
                 getBarcodeByPurchaseEntry(purchase_entry_id);
+            });
+
+
+            // all barcode data 
+            $(document).on('click','.allbarcodeBtn', function (e) {
+                e.preventDefault();
+                var purchases_id = $(this).val();
+                // alert(purchases_id);
+                getAllBarcodeByPurchaseEntry(purchases_id);
             });
 
             $(document).on('click','.print', function (e) {

@@ -45,13 +45,12 @@ class StatusUpdate extends Command
 
          $allOffers =  ApplyOffer::where('status',1)->get();
         foreach ($allOffers as $key => $offers) {
-          $apply_offer_date =Carbon::parse($offers->offer_start_time);
-            // $offer_end_date = $apply_offer_date->diffInDays($offers->offer_to);
-            $offer_end_date = $apply_offer_date->diffInMinutes($offers->offer_end_time);
+          $apply_offer_date =Carbon::parse($offers->offer_form);
+            $offer_end_date = $apply_offer_date->diffInDays($offers->offer_to);
             if($offer_end_date > 0){
                 ApplyOffer::where('id',$offers->id)->update(['status'=>0]);
             }
-            \Log::info($offer_end_date);
+            \Log::info($apply_offer_date);
         }
     }
 }

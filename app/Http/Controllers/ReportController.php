@@ -11,7 +11,9 @@ use App\Models\CustomerBillInvoice;
 use App\Models\Customer;
 use App\Models\CustomerBill;
 use App\Models\ApplyOffer;
+use App\Models\Month;
 use App\MyApp;
+use DB;
 
 class ReportController extends Controller
 {
@@ -40,19 +42,25 @@ class ReportController extends Controller
         ]);
     }
 
-    public function salesReportDetail()
-    // public function salesReportDetail($month)
+    // public function salesReportDetail()
+    public function salesReportDetail($month)
     {
-        // if($month != "")
-        // {
+        // dd($month);
+        if($month != "")
+        {
             $month = date('Y-m-d');
-        // }
-        $customers = Customer::whereDate('date', '=',$month)
-            ->orderBy('date','DESC')
-            ->orderBy('time','DESC')       
-            ->get();
+            // dd($month);
+         }
+        // $customers = Customer::whereDate('date', date('Y-m-d', strtotime($month)))
+                $customers = Customer::whereDate('date', '=', $month)
+                    ->orderBy('date','DESC')
+                    ->orderBy('time','DESC')       
+                    ->get();
+                // $customers = Customer::whereMonth('created_at', '=', '02')
+                // ->get(); 
+                    
         
-
+// dd($customers);
         $html = "";
        
             // $html .="<div class='row'>";
@@ -89,6 +97,7 @@ class ReportController extends Controller
                  $card = 0;    
                  $amount = 0;    
                  $total_balance_amount = 0;    
+                 $received_amount = 0;    
                 //  $month = date('d-m-Y');
                  foreach ($customers as $key => $list) 
                  {                          
@@ -194,50 +203,65 @@ class ReportController extends Controller
         ]);
     }
 
-    public function brandReport()
+    public function brandReport($month_id=0)
     {
-    
-        $offers = CustomerBillInvoice::groupBy(['offer_id'])
-                ->whereMonth('date', date('m'))
-                ->selectRaw('offer_id')
-                ->get();
-
-     
-        $free_brands = array();
-        foreach ($offers as $key => $list) { 
-            // foreach($list as $item) {
-            
-            $data = ApplyOffer::where(['apply_offers.id'=>$list->offer_id])->where('brand_id','>',0)
-            ->join('sub_categories','apply_offers.sub_category_id','=','sub_categories.id')
-            ->join('brands','apply_offers.brand_id','=','brands.id')
-            ->select('apply_offers.*','sub_categories.sub_category','brands.brand_name')
-            ->first();
-         
-            $free_brands[] = $data;
-
-            
-        
-            //     $free_brands = ApplyOffer::where(['offer_section'=>MyApp::PRODUCT])   
-            //     // leftjoin('brands','apply_offers.brand_id','=','brands.id')
-            //         // ->leftjoin('sub_categories','apply_offers.sub_category_id','=','sub_categories.id')
-            //         ->whereMonth('apply_offers.date', date('m'))                
-            // //         ->orderBy('offer_from','DESC')
-            // //         ->orderBy('offer_to','DESC')
-            //         ->select('apply_offers.*','brands.id','brands.brand_name','sub_category')
-            //         ->get()->groupBy('brand_id','brand_name');
-
-
-                    // dd($free_brands);
-            // }
+        if($month_id > 0){
+            $selected_month = $month_id;
+        }else {
+            $selected_month = date('m');
         }
 
+        $months = Month::all();
+        $all_brand = Brand::all();
 
+        $brands = ApplyOffer::whereMonth('offer_to', $selected_month)
+            ->join('brands','brands.id','=','apply_offers.brand_id')
+            ->select('apply_offers.brand_id','brands.brand_name')
+            ->groupBy('apply_offers.brand_id','brands.brand_name')
+            ->get();
 
-
+       
+        $brand_detail = array();
+        foreach($brands as $key => $list)
+        {
+            $offers = ApplyOffer::where(['brand_id'=>$list->brand_id])
+                ->select('apply_offers.*')
+                ->get();
+                
+        
+                foreach($offers as $key1 => $offer_list){
+                    $brand_detail[] = CustomerBillInvoice::where(['offer_id'=>$offer_list->id])
+                    ->join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')               
+                    ->groupBy(['id','offer_id','product_id','qty','size','price','amount','discount_amount','discount_percentage','sgst','cgst','igst','sub_category'])                               
+                    ->select('customer_bill_invoices.id','customer_bill_invoices.offer_id','customer_bill_invoices.product_id','customer_bill_invoices.qty','customer_bill_invoices.size','customer_bill_invoices.price','customer_bill_invoices.amount','customer_bill_invoices.discount_amount','customer_bill_invoices.discount_percentage','customer_bill_invoices.cgst','customer_bill_invoices.sgst','customer_bill_invoices.igst','sub_categories.sub_category')
+                    ->get(['customer_bill_invoices.*']); 
+                    
+                }                
+            }
+            // dd($brand_detail);
+            // dd($offer_list);
+            
         return view('report.brand_report',[
             'status'=>200,
-            'offers'=>$offers,
-            'free_brands'=>$free_brands
+            'all_brand'=>$all_brand,
+            'brands'=>$brands,
+            'brand_detail'=>$brand_detail,
+            'months'=>$months,
+            'selected_month'=>$selected_month,
         ]);
+
     }
+    // function filterOfferReport(){
+    //    $months = CustomerBillInvoice::whereMonth('date', date('m'))->get();
+    // //    dd($months);
+
+
+    //    return response()->json([
+    //     'status'=>200,
+    //     'months'=>$months,
+        
+    //    ]);
+    // }
+
 }
+   

@@ -64,7 +64,7 @@
                         <div class="card mt-3">
                             <div class="card-header">
                                 <b>Customer Details</b>
-                                <b style="margin-left: 100px">017791071723</b>
+                                {{-- <b style="margin-left: 100px">017791071723</b> --}}
                             </div>
                             <div class="card-body">
                                 <div class="row">

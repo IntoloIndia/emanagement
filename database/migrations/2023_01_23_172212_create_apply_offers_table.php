@@ -16,7 +16,7 @@ class CreateApplyOffersTable extends Migration
         Schema::create('apply_offers', function (Blueprint $table) {
             $table->id();
             $table->integer('offer_section')->default(0);
-            $table->integer('offer_id')->default(0);
+            $table->integer('offer_type_id')->default(0);
             $table->integer('offer_type')->default(0);
             $table->integer('category_id')->default(0);
             $table->integer('sub_category_id')->default(0);

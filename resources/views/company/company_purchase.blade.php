@@ -51,9 +51,9 @@
                                     <div class="col-md-3">
                                         <b>Product Details</b>
                                     </div>
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <b>017791071723</b>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-4">
                                         <input type="text" name="barcode" id="barcode" class="form-control form-control-sm" placeholder="barcode" autocomplete="off">
                                     </div>

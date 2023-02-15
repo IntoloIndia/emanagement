@@ -1277,6 +1277,22 @@
 
     }
 
+    function getAllBarcodeByPurchaseEntry(purchases_id){
+        $.ajax({
+            type: "get",
+            url: "barcode-all-purchase-entry/"+purchases_id,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    $('#barcodeModal').modal('show');
+                    $('#view_barcode').html('');
+                    $('#view_barcode').append(response.html);
+                }
+            }
+        });
+    }
+
     function loadPtFileData() {
         $.ajaxSetup({
             headers: {

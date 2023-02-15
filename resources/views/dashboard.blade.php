@@ -15,6 +15,64 @@
 
 <div class="row ">
 
+  {{-- <h3>Mac Address {{$macAddr}}</h3> --}}
+
+  @php
+      // $string=exec('getmac');
+      // $mac=substr($string, 0, 17);
+      // echo $mac; 
+
+      // $MAC = exec('getmac');
+      // $MAC = strtok($MAC, ' ');
+      // echo " MAC address of Server is: $MAC";
+      
+      // $ipAddress=$_SERVER['REMOTE_ADDR'];
+      // $macAddr=false;
+
+      // #run the external command, break output into lines
+      // $arp=`arp -a $ipAddress`;
+      // $lines=explode("\n", $arp);
+
+      // #look for the output line describing our IP address
+      // foreach($lines as $line)
+      // {
+      //   $cols=preg_split('/\s+/', trim($line));
+      //   if ($cols[0]==$ipAddress)
+      //   {
+      //       $macAddr=$cols[1];
+      //   }
+      // }
+
+      // echo " dsadjajs - ". $macAddr;
+
+      // $ipAddress=$_SERVER['REMOTE_ADDR']; 
+
+      // echo "sssssssssssssssssss". $mac = shell_exec('arp -a ');
+      
+      // $ipAddress=$_SERVER['REMOTE_ADDR'];
+      // $macAddr=false;
+
+      // $arp=`arp -a $ipAddress`;
+      // $lines=explode("\n", $arp);
+
+      // foreach($lines as $line)
+      // {
+      //   $cols=preg_split('/\s+/', trim($line));
+      //   if ($cols[0]==$ipAddress)
+      //   {
+      //       $macAddr=$cols[1];
+      //   }
+      // }
+
+      // echo "mac---------------". $macAddr;
+
+      // $handle = fopen("E:\\demo\\resource.txt", "r");
+      // print($handle);
+
+      
+
+  @endphp
+
     {{-- <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
@@ -629,15 +687,46 @@
   </div>
 
 
+
 @endsection
 
 
 @section('script')
 {{-- <script src="{{asset('public/sdpl-assets/user/js/slider.js')}}"></script> --}}
   <script>
+
+
+
+// navigator.usb.getDevices()
+// .then((devices) => {
+//   console.log(`Total devices: ${devices.length}`);
+//   devices.forEach((device) => {
+//     console.log(`Product name: ${device.productName}, serial number ${device.serialNumber}`);
+//   });
+// });
     // $(document).ready(function () {
     //   alert("hiii");
     // });
+
+    // var macAddress = "";
+    // var ipAddress = "";
+    // var computerName = "";
+    // var wmi = GetObject("winmgmts:{impersonationLevel=impersonate}");
+    // e = new Enumerator(wmi.ExecQuery("SELECT * FROM Win32_NetworkAdapterConfiguration WHERE IPEnabled = True"));
+    // for(; !e.atEnd(); e.moveNext()) {
+    //     var s = e.item();
+    //     macAddress = s.MACAddress;
+    //     ipAddress = s.IPAddress(0);
+    //     computerName = s.DNSHostName;
+    // }
+    // console.log(macAddress);
+    // console.log(ipAddress);
+    // console.log(computerName);
+    // document.getElementById("txtMACAdress").value = unescape(macAddress);
+    // document.getElementById("txtIPAdress").value = unescape(ipAddress);
+    // document.getElementById("txtComputerName").value = unescape(computerName);
+</script>
+
   </script>
 
 @endsection

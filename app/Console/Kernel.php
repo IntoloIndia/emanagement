@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     // ];
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('offer:statusupdate')->cron('2 * * * *');
+        // $schedule->command('offer:statusupdate')->cron('1 * * * *');
     }
 
     /**

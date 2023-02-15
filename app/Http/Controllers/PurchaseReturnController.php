@@ -12,6 +12,7 @@ use App\Models\Color;
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnItem;
 use App\Models\Supplier;
+use App\Models\BusinessDetails;
 use App\MyApp;
 use Validator;
 
@@ -280,7 +281,7 @@ class PurchaseReturnController extends Controller
     public function purchaseReturnInvoice($purchase_return_id)
     {
         
-
+            $business_detail = BusinessDetails::first();
             $purchase_return = PurchaseReturn::join('suppliers','suppliers.id','=','purchase_returns.supplier_id')
                     ->where('purchase_returns.id', $purchase_return_id)
                     ->first(['purchase_returns.*','suppliers.supplier_name',
@@ -304,19 +305,21 @@ class PurchaseReturnController extends Controller
         $html .= "<div class='row'>";
             $html .= "<div class='col-sm-12 text-center'>";
                 $html .= "<small class='modal-title'>";
-                    $html .= "<h5><b>Mangaldeep (Jabalpur) </b> <h5>";
-                    $html .= "Samdariya Mall Jabalpur-482002<br>";
+                    $html .= "<h5><b>".$business_detail->business_name."</b> <h5>";                   
                 $html .= "</small>";
             $html .= "</div>";
+        $html .= "</div>";
 
-            $html .= "<div class='row'>";
-                $html .= "<div class='col-md-6'>";
-                $html .= "<b>GSTNO -  </b> 1245GDFTE4587<br>";
-                $html .= "</div>";
-                $html .= "<div class='col-md-6'>";
-                $html .= "<b class='float-right'>Mobile no - 09826683399</b><br>";
-                $html .= "</div>";
-            $html .= "</div>";
+        $html .= "<div class='row'>";
+            $html .= "<div class='col-sm-4 offset-3 text-center'>";
+                $html .= "<p style='inline-size:400px;'>".$business_detail->company_address."</p>";
+            $html .= "</div>"; 
+        $html .= "</div>"; 
+
+        $html .= "<div class='row'>";
+            $html .= "<div class='col-md-6'><b>GSTNO - </b>".$business_detail->gst."</div>";
+            $html .= "<div class='col-md-6'><p class=' float-right'><b>Mobile no - </b>".$business_detail->mobile_no."</p></div>";
+        $html .= "</div>";
 
         $html .= "<div class='row'>";
             $html .= "<div class='card text-dark bg-light mt-2' >";

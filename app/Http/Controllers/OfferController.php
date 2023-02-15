@@ -126,7 +126,7 @@ class OfferController extends Controller
 
             $model_data->offer_section = $req->input('offer_section');
             $model_data->offer_type = $req->input('offer_type');
-            $model_data->offer_id = implode(",", $req->input('offer_id'));
+            $model_data->offer_type_id = implode(",", $req->input('offer_type_id'));
             $model_data->offer_from = $req->input('offer_from');
             $model_data->offer_to = $req->input('offer_to');
             $model_data->offer_start_time = $req->input('offer_start_time');
@@ -242,13 +242,13 @@ class OfferController extends Controller
                     
                     if($offer_type==MyApp::PERCENTAGE){
                     $html .="<div class='form-check'>";
-                        $html .="<input class='form-check-input' type='radio' name='offer_id[]' value='".$list->id."'>";
+                        $html .="<input class='form-check-input' type='radio' name='offer_type_id[]' value='".$list->id."'>";
                         $html .= $offer_data;
                     $html .="</div>";
                     }
                     else{
                         $html .="<div class='form-check'>";
-                        $html .="<input class='form-check-input' type='checkbox' name='offer_id[]' value='".$list->id."'>";
+                        $html .="<input class='form-check-input' type='checkbox' name='offer_type_id[]' value='".$list->id."'>";
                         $html .= $offer_data;
                     $html .="</div>";
                     }    

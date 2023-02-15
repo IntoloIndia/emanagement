@@ -5,12 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ApplyOffer extends Model
+class SystemKey extends Model
 {
     use HasFactory;
-    
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
 }

@@ -220,8 +220,8 @@
                                                         <div class="d-grid gap-2">
                                                             <button type="button" id="savePurchaseEntryExcelBtn" class="btn btn-primary btn-sm ">Load PT File Data</button>
                                                         </div>
-                                                    </div>
-                                                    <small>PT File Header - caegory, sub category, brand, style no, color, size</small> --}}
+                                                    </div>--}}
+                                                    <small> <b>PT File Headers -</b> bill no, caegory, sub category, brand, style no, color, size, qty, sale rate, mrp, tax(%), tax(Rs), barcode</small> 
                                                 </div>
                                         
                                             </div>

@@ -14,9 +14,16 @@
     use App\Models\StyleNo;
     use App\Models\Offer;
     use App\Models\ApplyOffer;
+    use App\Models\SystemKey;
    
 
     // use App\MyApp;
+
+    function checkIsActive($user_id, $user_role_id)
+    {
+        $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->value('is_active');
+        return $data;
+    }
 
     function subCategoryItems($category_id){
         $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
@@ -268,15 +275,6 @@
         return $data;
     }
 
-    function getBrands($brand_id)
-    {
-        $brands = ApplyOffer::join('brands','apply_offers.brand_id','=','brands.id')
-        ->where(['brand_id'=>$brand_id])
-        ->select('apply_offers.*','brands.brand_name')
-        ->get();
-        return $brands;
-        
-    }
 
     // function brandOfferItems($brand_id){
     //     $brand_offer_items = ApplyOffer::where(['brand_id'=>$brand_id])->get();

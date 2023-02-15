@@ -19,6 +19,7 @@ use App\Models\CustomerPoint;
 use App\Models\Offer;
 use App\Models\ApplyOffer;
 use App\Models\Brand;
+use App\Models\BusinessDetails;
 use App\MyApp;
 use Validator;
 
@@ -26,12 +27,23 @@ class CustomerBillInvoiceController extends Controller
 {
     public function index(){
         $products = PurchaseEntry::all();
+        $customer_offer_report_data = CustomerBillInvoice::all();
         $product_barcode = PurchaseEntryItem::all();
         $sizes = Size::all();
         // $allOffers = Offer::all();
         $brands = Brand::all(); 
-        $allOffers = ApplyOffer::join('brands','brands.id','=','apply_offers.brand_id')
-                    ->select(['apply_offers.*','brands.brand_name'])->get();
+        // $allOffers = ApplyOffer::join('brands','brands.id','=','apply_offers.brand_id')
+        //             ->select(['apply_offers.*','brands.brand_name'])->get();
+
+        $allOffers = ApplyOffer::where(['status'=>MyApp::ACTIVE])
+                ->leftjoin('brands', 'brands.id', '=', 'apply_offers.brand_id')
+                ->leftjoin('sub_categories', 'apply_offers.sub_category_id', '=', 'sub_categories.id')
+                ->orderBy('offer_from', 'DESC')
+                ->orderBy('offer_to', 'DESC')
+                ->select(['apply_offers.*','brands.brand_name','sub_categories.sub_category'])
+                ->get();
+
+
         // $customers_billing = CustomerBill::all();
         $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')->get([
             'customers.*','customer_bills.*'
@@ -44,6 +56,7 @@ class CustomerBillInvoiceController extends Controller
                                         ->join('sales_return_items','sales_return_items.sales_return_id','=','sales_returns.id')
                              ->select(['sales_returns.*','customers.customer_name','sales_return_items.amount'])->get();
 
+        // dd($customer_offer_report_data);
         return view('customer_bill_invoices',[ 
             'products'=> $products,
             'product_barcode'=> $product_barcode,
@@ -54,6 +67,7 @@ class CustomerBillInvoiceController extends Controller
             'users' => $users,
             'sales_return_data' => $sales_return_data,
             'allOffers' => $allOffers,
+            'customer_offer_report_data' => $customer_offer_report_data,
         ]);
         
     }
@@ -164,14 +178,15 @@ class CustomerBillInvoiceController extends Controller
               
               
               $product_id = $req->input('product_id');
+              $purchase_entry_item_id = $req->input('purchase_entry_item_id');
               $product_code = $req->input('product_code');
               $price = $req->input('price');
               $qty = $req->input('qty');
               $size = $req->input('size');
               $amount = $req->input('amount');
               $employee_id = $req->input('employee_id');
-              $offer_id = $req->input('offer_id');
-              $discount_percentage = $req->input('discount_percentage');
+            //   $offer_id = $req->input('offer_id');
+            //   $discount_percentage = $req->input('discount_percentage');
               $discount_amount = $req->input('discount_amount');
               $taxfree_amount = $req->input('taxfree_amount');
               $sgst = $req->input('sgst');
@@ -189,19 +204,20 @@ class CustomerBillInvoiceController extends Controller
                     
                     $item->bill_id = $billmodel->id;
                     $item->product_id = $product_id[$key];
+                    $item->purchase_entry_item_id = $purchase_entry_item_id[$key];
                     $item->product_code = $product_code[$key];
                     $item->price = $price[$key];
                     $item->qty = $qty[$key];
                     $item->size = $size[$key];
                     $item->amount = $amount[$key];
                     $item->discount_amount = $discount_amount[$key];
-                    $item->discount_percentage = $discount_percentage[$key];
+                    // $item->discount_percentage = $discount_percentage[$key];
                     $item->taxfree_amount = $taxfree_amount[$key];
                     $item->sgst = $sgst[$key];
                     $item->cgst = $cgst[$key];
                     $item->igst= $igst[$key];
                     $item->employee_id = $employee_id[$key];
-                    $item->offer_id = $offer_id[$key];
+                    // $item->offer_id = $offer_id[$key];
                     $item->date = date('Y-m-d');
                     $item->time = date('g:i A');
                     $item->save();
@@ -327,6 +343,7 @@ class CustomerBillInvoiceController extends Controller
 
     public function generateInvoice($bill_id)
     {
+        $business_detail = BusinessDetails::first();
         $bills = CustomerBill::join('customers','customer_bills.customer_id','=','customers.id')
             ->join('cities','customers.city_id','=','cities.id')
             ->where('customer_bills.id',$bill_id)
@@ -349,20 +366,18 @@ class CustomerBillInvoiceController extends Controller
                         $html .="<div class='row mb-1'>";
                                 $html .="<div class='col-md-3 '>";
                                     $html .="<span></span><br>";
-                                    $html .="<span>GST NO: <small>41256668</small></span><br>";
+                                    $html .="<span><b>GST NO : </b><small>".$business_detail->gst."</small></span><br>";
                                     $html .="<span></span><br>";
                                 $html .="</div>";
                             $html .="<div class='col-md-6 text-center'>";
-                                    $html .="<span>SALES INVOICE</span><br>";
-                                    $html .="<span>ERENOWN CLOTHING CO </span><br>";
-                                    $html .="<span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>";
-                                    $html .="<span>Jabalpur -482002 </span><br>";
+                                    $html .="<span><b>".$business_detail->business_name."</b></span><br>";
+                                    $html .="<span>".$business_detail->company_address."</span><br>";
+                                    // $html .="<span>ERENOWN CLOTHING CO </span><br>";
+                                    // $html .="<span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>";
                             $html .="</div>";
                             $html .="<div class='col-md-3' >";
-                                    $html .="<span>Phone no: 0761-4047699</span><br>";
-                                    $html .="<span></span><br>";
-                                    $html .="<span>Mobile no : 09826683399<small></small></span><br>";
-                                    $html .="<span></span><br>";
+                                    $html .="<p><b>Phone no : </b>0761-4047699</p><br>";                                  
+                                    $html .="<p><b>Mobile no : </b>".$business_detail->mobile_no."</p>";                                  
                             $html .="</div>";
                         $html .="</div>";
                         $html .="<div class='row '>";

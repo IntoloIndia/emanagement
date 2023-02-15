@@ -17,6 +17,8 @@ use App\Models\Supplier;
 use App\Models\Brand;
 use App\Models\Offer;
 use App\Models\ApplyOffer;
+use App\Models\BusinessDetails;
+use App\Models\User;
 use App\MyApp;
 
 use Validator;
@@ -63,7 +65,6 @@ class PurchaseEntryController extends Controller
                 ]);
 
 
-
         return view('purchase.index',[
             'suppliers' => $suppliers,
             "categories"=>$categories,
@@ -84,7 +85,6 @@ class PurchaseEntryController extends Controller
             $result = $this->purchaseEntryWithoutSizeValidation($req);
         }
 
-        // return $result;
 
         if ($result['status'] == 400) {
             return response()->json([   
@@ -940,651 +940,6 @@ class PurchaseEntryController extends Controller
         }
         
     }
-    
-
-    // public function savePurchaseEntry(Request $req){
-    //     if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
-    //     {
-    //         $xs_qty_validation = '';
-    //         $xs_price_validation = '';
-    //         $xs_mrp_validation = '';
-    //     }else{
-    //         $xs_qty_validation = 'required';
-    //         $xs_price_validation = 'required';
-    //         $xs_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('s_qty') == "" &&  $req->input('s_price') == "" && $req->input('s_mrp') == "")
-    //     {
-    //         $s_qty_validation = '';
-    //         $s_price_validation = '';
-    //         $s_mrp_validation = '';
-    //     }else{
-    //         $s_qty_validation = 'required';
-    //         $s_price_validation = 'required';
-    //         $s_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('m_qty') == "" &&  $req->input('m_price') == "" && $req->input('m_mrp') == "")
-    //     {
-    //         $m_qty_validation = '';
-    //         $m_price_validation = '';
-    //         $m_mrp_validation = '';
-    //     }else{
-    //         $m_qty_validation = 'required';
-    //         $m_price_validation = 'required';
-    //         $m_mrp_validation = 'required';
-    //     }
-    //     if($req->input('l_qty') == "" &&  $req->input('l_price') == "" && $req->input('l_mrp') == "")
-    //     {
-    //         $l_qty_validation = '';
-    //         $l_price_validation = '';
-    //         $l_mrp_validation = '';
-    //     }else{
-    //         $l_qty_validation = 'required';
-    //         $l_price_validation = 'required';
-    //         $l_mrp_validation = 'required';
-    //     }
-    //     if($req->input('xl_qty') == "" &&  $req->input('xl_price') == "" && $req->input('xl_mrp') == "")
-    //     {
-    //         $xl_qty_validation = '';
-    //         $xl_price_validation = '';
-    //         $xl_mrp_validation = '';
-    //     }else{
-    //         $xl_qty_validation = 'required';
-    //         $xl_price_validation = 'required';
-    //         $xl_mrp_validation = 'required';
-    //     }
-    //     if($req->input('xxl_qty') == "" &&  $req->input('xxl_price') == "" && $req->input('xxl_mrp') == "")
-    //     {
-    //         $xxl_qty_validation = '';
-    //         $xxl_price_validation = '';
-    //         $xxl_mrp_validation = '';
-    //     }else{
-    //         $xxl_qty_validation = 'required';
-    //         $xxl_price_validation = 'required';
-    //         $xxl_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('three_xl_qty') == "" &&  $req->input('three_xl_price') == "" && $req->input('three_xl_mrp') == "")
-    //     {
-    //         $three_xl_qty_validation = '';
-    //         $three_xl_price_validation = '';
-    //         $three_xl_mrp_validation = '';
-    //     }else{
-    //         $three_xl_qty_validation = 'required';
-    //         $three_xl_price_validation = 'required';
-    //         $three_xl_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('four_xl_qty') == "" &&  $req->input('four_xl_price') == "" && $req->input('four_xl_mrp') == "")
-    //     {
-    //         $four_xl_qty_validation = '';
-    //         $four_xl_price_validation = '';
-    //         $four_xl_mrp_validation = '';
-    //     }else{
-    //         $four_xl_qty_validation = 'required';
-    //         $four_xl_price_validation = 'required';
-    //         $four_xl_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('five_xl_qty') == "" &&  $req->input('five_xl_price') == "" && $req->input('five_xl_mrp') == "")
-    //     {
-    //         $five_xl_qty_validation = '';
-    //         $five_xl_price_validation = '';
-    //         $five_xl_mrp_validation = '';
-    //     }else{
-    //         $five_xl_qty_validation = 'required';
-    //         $five_xl_price_validation = 'required';
-    //         $five_xl_mrp_validation = 'required';
-    //     }
-
-    //     $validator = Validator::make($req->all(),[
-    //         'supplier_id' => 'required|max:191',
-    //         'bill_no'=>'required|max:191',
-    //         // 'bill_no'=>'required|unique:purchase_entries,bill_no,'.$req->input('bill_no'),
-    //         'bill_date'=>'required|max:191',
-    //         'payment_days'=>'required|max:191',
-    //         'category_id'=>'required|max:191',
-    //         'sub_category_id'=>'required|max:191',
-    //         'brand_id'=>'required|max:191',
-    //         'style_no_id'=>'required|max:191',
-    //         'color'=>'required|max:191',
-    //         'xs_qty'=>$xs_qty_validation,
-    //         'xs_price'=>$xs_price_validation,
-    //         'xs_mrp'=>$xs_mrp_validation,
-    //         's_qty'=>$s_qty_validation,
-    //         's_price'=>$s_price_validation,
-    //         's_mrp'=>$s_mrp_validation,
-    //         'm_qty'=>$m_qty_validation,
-    //         'm_price'=>$m_price_validation,
-    //         'm_mrp'=>$m_mrp_validation,
-    //         'l_qty'=>$l_qty_validation,
-    //         'l_price'=>$l_price_validation,
-    //         'l_mrp'=>$l_mrp_validation,
-    //         'xl_qty'=>$xl_qty_validation,
-    //         'xl_price'=>$xl_price_validation,
-    //         'xl_mrp'=>$xl_mrp_validation,
-    //         'xxl_qty'=>$xxl_qty_validation,
-    //         'xxl_price'=>$xxl_price_validation,
-    //         'xxl_mrp'=>$xxl_mrp_validation,
-    //         'three_xl_qty'=>$three_xl_qty_validation,
-    //         'three_xl_price'=>$three_xl_price_validation,
-    //         'three_xl_mrp'=>$three_xl_mrp_validation,
-    //         'four_xl_qty'=>$four_xl_qty_validation,
-    //         'four_xl_price'=>$four_xl_price_validation,
-    //         'four_xl_mrp'=>$four_xl_mrp_validation,
-    //         'five_xl_qty'=>$five_xl_qty_validation,
-    //         'five_xl_price'=>$five_xl_price_validation,
-    //         'five_xl_mrp'=>$five_xl_mrp_validation,
-    //     ]);
-
-    //     if($validator->fails())
-    //     {
-    //         return response()->json([
-    //             'status'=>400,
-    //             'errors'=>$validator->messages(),
-    //         ]);
-           
-    //     }else{
-    //         $purchase_id = 0;
-    //         $supplier_id = $req->input('supplier_id');
-    //         $bill_no = $req->input('bill_no');
-
-    //         $data = Purchase::where(['supplier_id'=>$supplier_id,'bill_no'=>$bill_no])->first('id');
-            
-    //         if ($data == null) {
-    //             $model = new Purchase;
-                
-    //             $model->supplier_id = $supplier_id;
-    //             $model->bill_no = $bill_no;
-    //             $model->bill_date = $req->input('bill_date');
-    //             $model->payment_days = $req->input('payment_days');
-    //             $model->time = date('g:i A');
-    //             $model->save();
-                
-    //             $purchase_id = $model->id;
-    //         }else{
-    //             $purchase_id = $data->id;
-    //         }
-            
-    //         $category_id = $req->input('category_id');
-    //         $sub_category_id = $req->input('sub_category_id');
-    //         $brand_id = $req->input('brand_id');
-    //         $style_no_id = $req->input('style_no_id');
-    //         $color = $req->input('color');
-    //         $product_image = $req->input('product_image');
-            
-    //         $purchase_entry_data = PurchaseEntry::where(['purchase_id'=>$purchase_id,'style_no_id'=>$style_no_id, 'color'=>$color])->first('id');
-    //         $purchase_entry_id = 0;
-    //         if ($purchase_entry_data == null) {
-    //             $purchase_entry = new PurchaseEntry;
-
-    //             $purchase_entry->purchase_id = $purchase_id;
-    //             $purchase_entry->category_id = $category_id;
-    //             $purchase_entry->sub_category_id = $sub_category_id;
-    //             $purchase_entry->brand_id = $brand_id;
-    //             $purchase_entry->style_no_id = $style_no_id;
-    //             $purchase_entry->color = $color;
-    //             if ($product_image) {
-    //                 $purchase_entry->img = $product_image;
-    //             }
-
-    //             $purchase_entry->save();
-
-    //             $purchase_entry_id = $purchase_entry->id;
-    //         }else{
-    //             $purchase_entry_id = $purchase_entry_data->id;
-    //         }
-
-    //         $xs_qty = $req->input('xs_qty');
-    //         $s_qty = $req->input('s_qty');
-    //         $m_qty = $req->input('m_qty');
-    //         $l_qty = $req->input('l_qty');
-    //         $xl_qty = $req->input('xl_qty');
-    //         $xxl_qty = $req->input('xxl_qty');
-    //         $three_xl_qty = $req->input('three_xl_qty');
-    //         $four_xl_qty = $req->input('four_xl_qty');
-    //         $five_xl_qty = $req->input('five_xl_qty');
-
-    //         $xs_price = $req->input('xs_price');
-    //         $s_price = $req->input('s_price');
-    //         $m_price = $req->input('m_price');
-    //         $l_price = $req->input('l_price');
-    //         $xl_price = $req->input('xl_price');
-    //         $xxl_price = $req->input('xxl_price');
-    //         $three_xl_price = $req->input('three_xl_price');
-    //         $four_xl_price = $req->input('four_xl_price');
-    //         $five_xl_price = $req->input('five_xl_price');
-
-    //         $xs_mrp = $req->input('xs_mrp');
-    //         $s_mrp = $req->input('s_mrp');
-    //         $m_mrp = $req->input('m_mrp');
-    //         $l_mrp = $req->input('l_mrp');
-    //         $xl_mrp = $req->input('xl_mrp');
-    //         $xxl_mrp = $req->input('xxl_mrp');
-    //         $three_xl_mrp = $req->input('three_xl_mrp');
-    //         $four_xl_mrp = $req->input('four_xl_mrp');
-    //         $five_xl_mrp = $req->input('five_xl_mrp');
-
-    //         $qty = 0;
-    //         $size = "";
-    //         $price = 0;
-    //         $mrp = 0;
-    //         $discount = 0 ;
-    //         if ($req->input('discount') > 0) {
-    //             $discount = $req->input('discount');
-    //         }
-
-    //         if ($xs_qty > 0) {
-    //             $qty = $xs_qty;
-    //             $size = 'xs';
-    //             $price = $xs_price;
-    //             $mrp = $xs_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);                
-    //         }
-
-    //         if ($s_qty > 0) {
-    //             $qty = $s_qty;
-    //             $size = 's';
-    //             $price = $s_price;
-    //             $mrp = $s_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);             
-    //         }
-
-    //         if ($m_qty > 0) {
-    //             $qty = $m_qty;
-    //             $size = 'm';
-    //             $price = $m_price;
-    //             $mrp = $m_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($l_qty > 0) {
-    //             $qty = $l_qty;
-    //             $size = 'l';
-    //             $price = $l_price;
-    //             $mrp = $l_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($xl_qty > 0) {
-    //             $qty = $xl_qty;
-    //             $size = 'xl';
-    //             $price = $xl_price;
-    //             $mrp = $xl_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($xxl_qty > 0) {
-    //             $qty = $xxl_qty;
-    //             $size = 'xxl';
-    //             $price = $xxl_price;
-    //             $mrp = $xxl_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($three_xl_qty > 0) {
-    //             $qty = $three_xl_qty;
-    //             $size = '3xl';
-    //             $price = $three_xl_price;
-    //             $mrp = $three_xl_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($four_xl_qty > 0) {
-    //             $qty = $four_xl_qty;
-    //             $size = '4xl';
-    //             $price = $four_xl_price;
-    //             $mrp = $four_xl_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         if ($five_xl_qty > 0) {
-    //             $qty = $five_xl_qty;
-    //             $size = '5xl';
-    //             $price = $five_xl_price;
-    //             $mrp = $five_xl_mrp;
-    //             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //         }
-
-    //         $purchase_entry_result = $this->getPurchaseEntry($supplier_id, $bill_no);
-
-    //         if ($purchase_entry_result['status'] == 400) {
-    //             return response()->json([
-    //                 'status'=>400,
-    //                 'errors'=>['This product is already exists if you want to change detail go to update product.'],
-    //             ]);
-    //         }
-
-    //         return response()->json([   
-    //             'status'=>200,
-    //             'html'=>$purchase_entry_result['html'],
-    //         ]);
-    //     }
-    // }
-
-    // public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
-    // {
-    //     if(( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") && ($req->input('three_xl_qty') == "") && ($req->input('four_xl_qty') == "") && ($req->input('five_xl_qty') == "")){
-            
-    //         return response()->json([
-    //             'status'=>400,
-    //             'errors'=>['Please enter atleast 1 product detail'],
-    //         ]);
-    //     }
-
-    //     if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
-    //     {
-    //         $xs_qty_validation = '';
-    //         $xs_price_validation = '';
-    //         $xs_mrp_validation = '';
-    //     }else{
-    //         $xs_qty_validation = 'required';
-    //         $xs_price_validation = 'required';
-    //         $xs_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('s_qty') == "" &&  $req->input('s_price') == "" && $req->input('s_mrp') == "")
-    //     {
-    //         $s_qty_validation = '';
-    //         $s_price_validation = '';
-    //         $s_mrp_validation = '';
-    //     }else{
-    //         $s_qty_validation = 'required';
-    //         $s_price_validation = 'required';
-    //         $s_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('m_qty') == "" &&  $req->input('m_price') == "" && $req->input('m_mrp') == "")
-    //     {
-    //         $m_qty_validation = '';
-    //         $m_price_validation = '';
-    //         $m_mrp_validation = '';
-    //     }else{
-    //         $m_qty_validation = 'required';
-    //         $m_price_validation = 'required';
-    //         $m_mrp_validation = 'required';
-    //     }
-    //     if($req->input('l_qty') == "" &&  $req->input('l_price') == "" && $req->input('l_mrp') == "")
-    //     {
-    //         $l_qty_validation = '';
-    //         $l_price_validation = '';
-    //         $l_mrp_validation = '';
-    //     }else{
-    //         $l_qty_validation = 'required';
-    //         $l_price_validation = 'required';
-    //         $l_mrp_validation = 'required';
-    //     }
-    //     if($req->input('xl_qty') == "" &&  $req->input('xl_price') == "" && $req->input('xl_mrp') == "")
-    //     {
-    //         $xl_qty_validation = '';
-    //         $xl_price_validation = '';
-    //         $xl_mrp_validation = '';
-    //     }else{
-    //         $xl_qty_validation = 'required';
-    //         $xl_price_validation = 'required';
-    //         $xl_mrp_validation = 'required';
-    //     }
-    //     if($req->input('xxl_qty') == "" &&  $req->input('xxl_price') == "" && $req->input('xxl_mrp') == "")
-    //     {
-    //         $xxl_qty_validation = '';
-    //         $xxl_price_validation = '';
-    //         $xxl_mrp_validation = '';
-    //     }else{
-    //         $xxl_qty_validation = 'required';
-    //         $xxl_price_validation = 'required';
-    //         $xxl_mrp_validation = 'required';
-    //     }
-    //     if($req->input('three_xl_qty') == "" &&  $req->input('three_xl_price') == "" && $req->input('three_xl_mrp') == "")
-    //     {
-    //         $three_xl_qty_validation = '';
-    //         $three_xl_price_validation = '';
-    //         $three_xl_mrp_validation = '';
-    //     }else{
-    //         $three_xl_qty_validation = 'required';
-    //         $three_xl_price_validation = 'required';
-    //         $three_xl_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('four_xl_qty') == "" &&  $req->input('four_xl_price') == "" && $req->input('four_xl_mrp') == "")
-    //     {
-    //         $four_xl_qty_validation = '';
-    //         $four_xl_price_validation = '';
-    //         $four_xl_mrp_validation = '';
-    //     }else{
-    //         $four_xl_qty_validation = 'required';
-    //         $four_xl_price_validation = 'required';
-    //         $four_xl_mrp_validation = 'required';
-    //     }
-
-    //     if($req->input('five_xl_qty') == "" &&  $req->input('five_xl_price') == "" && $req->input('five_xl_mrp') == "")
-    //     {
-    //         $five_xl_qty_validation = '';
-    //         $five_xl_price_validation = '';
-    //         $five_xl_mrp_validation = '';
-    //     }else{
-    //         $five_xl_qty_validation = 'required';
-    //         $five_xl_price_validation = 'required';
-    //         $five_xl_mrp_validation = 'required';
-    //     }
-
-    //     $validator = Validator::make($req->all(),[
-    //         'supplier_id' => 'required|max:191',
-    //         'bill_no'=>'required|max:191',
-    //         // 'bill_no'=>'required|unique:purchase_entries,bill_no,'.$req->input('bill_no'),
-    //         'bill_date'=>'required|max:191',
-    //         'payment_days'=>'required|max:191',
-    //         'category_id'=>'required|max:191',
-    //         'sub_category_id'=>'required|max:191',
-    //         'brand_id'=>'required|max:191',
-    //         'style_no_id'=>'required|max:191',
-    //         'color'=>'required|max:191',
-    //         'xs_qty'=>$xs_qty_validation,
-    //         'xs_price'=>$xs_price_validation,
-    //         'xs_mrp'=>$xs_mrp_validation,
-    //         's_qty'=>$s_qty_validation,
-    //         's_price'=>$s_price_validation,
-    //         's_mrp'=>$s_mrp_validation,
-    //         'm_qty'=>$m_qty_validation,
-    //         'm_price'=>$m_price_validation,
-    //         'm_mrp'=>$m_mrp_validation,
-    //         'l_qty'=>$l_qty_validation,
-    //         'l_price'=>$l_price_validation,
-    //         'l_mrp'=>$l_mrp_validation,
-    //         'xl_qty'=>$xl_qty_validation,
-    //         'xl_price'=>$xl_price_validation,
-    //         'xl_mrp'=>$xl_mrp_validation,
-    //         'xxl_qty'=>$xxl_qty_validation,
-    //         'xxl_price'=>$xxl_price_validation,
-    //         'xxl_mrp'=>$xxl_mrp_validation,
-    //         'three_xl_qty'=>$three_xl_qty_validation,
-    //         'three_xl_price'=>$three_xl_price_validation,
-    //         'three_xl_mrp'=>$three_xl_mrp_validation,
-    //         'four_xl_qty'=>$four_xl_qty_validation,
-    //         'four_xl_price'=>$four_xl_price_validation,
-    //         'four_xl_mrp'=>$four_xl_mrp_validation,
-    //         'five_xl_qty'=>$five_xl_qty_validation,
-    //         'five_xl_price'=>$five_xl_price_validation,
-    //         'five_xl_mrp'=>$five_xl_mrp_validation,
-    //     ]);
-
-    //     if($validator->fails())
-    //     {
-    //         return response()->json([
-    //             'status'=>400,
-    //             'errors'=>$validator->messages(),
-    //         ]);
-    //     }else{
-
-    //         $supplier_id = $req->input('supplier_id');
-
-    //         $model = Purchase::find($purchase_id);
-                
-    //         // $model->supplier_id = $supplier_id;
-    //         $model->bill_no = $req->input('bill_no');
-    //         $model->bill_date = $req->input('bill_date');
-    //         $model->payment_days = $req->input('payment_days');
-    //         $model->time = date('g:i A');
-    //         // $model->save();
-    //         if ($model->save()) {
-
-    //             $category_id = $req->input('category_id');
-    //             $sub_category_id = $req->input('sub_category_id');
-    //             $brand_id = $req->input('brand_id');
-    //             $style_no_id = $req->input('style_no_id');
-    //             $color = $req->input('color');
-    //             $product_image = $req->input('product_image');
-                
-    //             $purchase_entry = PurchaseEntry::find($purchase_entry_id);
-                
-    //             $purchase_entry->category_id = $category_id;
-    //             $purchase_entry->sub_category_id = $sub_category_id;
-    //             $purchase_entry->brand_id = $brand_id;
-    //             $purchase_entry->style_no_id = $style_no_id;
-    //             $purchase_entry->color = $color;
-
-    //             if ($product_image) {
-    //                 $purchase_entry->img = $product_image;
-    //             }
-    //             $purchase_entry->save();
-
-    //             //delete purchase entry items
-    //             // $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
-    //             // $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
-
-    //             $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id','size','qty']);
-    //             foreach ($purchase_entry_items as $key => $list) {
-    //                 $items = PurchaseEntryItem::find($list->id);
-    //                 $items->delete();
-
-    //                 $stock_type = MyApp::MINUS_MANAGE_STOCK;
-    //                 manageStock($stock_type, $purchase_entry_id, $list->size, $list->qty);
-    //             }
-
-    //             // if ($items_deleted > 0) {
-
-    //                 $xs_qty = $req->input('xs_qty');
-    //                 $s_qty = $req->input('s_qty');
-    //                 $m_qty = $req->input('m_qty');
-    //                 $l_qty = $req->input('l_qty');
-    //                 $xl_qty = $req->input('xl_qty');
-    //                 $xxl_qty = $req->input('xxl_qty');
-    //                 $three_xl_qty = $req->input('three_xl_qty');
-    //                 $four_xl_qty = $req->input('four_xl_qty');
-    //                 $five_xl_qty = $req->input('five_xl_qty');
-
-    //                 $xs_price = $req->input('xs_price');
-    //                 $s_price = $req->input('s_price');
-    //                 $m_price = $req->input('m_price');
-    //                 $l_price = $req->input('l_price');
-    //                 $xl_price = $req->input('xl_price');
-    //                 $xxl_price = $req->input('xxl_price');
-    //                 $three_xl_price = $req->input('three_xl_price');
-    //                 $four_xl_price = $req->input('four_xl_price');
-    //                 $five_xl_price = $req->input('five_xl_price');
-
-    //                 $xs_mrp = $req->input('xs_mrp');
-    //                 $s_mrp = $req->input('s_mrp');
-    //                 $m_mrp = $req->input('m_mrp');
-    //                 $l_mrp = $req->input('l_mrp');
-    //                 $xl_mrp = $req->input('xl_mrp');
-    //                 $xxl_mrp = $req->input('xxl_mrp');
-    //                 $three_xl_mrp = $req->input('three_xl_mrp');
-    //                 $four_xl_mrp = $req->input('four_xl_mrp');
-    //                 $five_xl_mrp = $req->input('five_xl_mrp');
-
-    //                 $qty = 0;
-    //                 $size = "";
-    //                 $price = 0;
-    //                 $mrp = 0;
-    //                 $discount = 0 ;
-
-    //                 if ($xs_qty > 0) {
-    //                     $qty = $xs_qty;
-    //                     $size = 'xs';
-    //                     $price = $xs_price;
-    //                     $mrp = $xs_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);                
-    //                 }
-        
-    //                 if ($s_qty > 0) {
-    //                     $qty = $s_qty;
-    //                     $size = 's';
-    //                     $price = $s_price;
-    //                     $mrp = $s_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);             
-    //                 }
-        
-    //                 if ($m_qty > 0) {
-    //                     $qty = $m_qty;
-    //                     $size = 'm';
-    //                     $price = $m_price;
-    //                     $mrp = $m_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-        
-    //                 if ($l_qty > 0) {
-    //                     $qty = $l_qty;
-    //                     $size = 'l';
-    //                     $price = $l_price;
-    //                     $mrp = $l_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-        
-    //                 if ($xl_qty > 0) {
-    //                     $qty = $xl_qty;
-    //                     $size = 'xl';
-    //                     $price = $xl_price;
-    //                     $mrp = $xl_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-        
-    //                 if ($xxl_qty > 0) {
-    //                     $qty = $xxl_qty;
-    //                     $size = 'xxl';
-    //                     $price = $xxl_price;
-    //                     $mrp = $xxl_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-
-    //                 if ($three_xl_qty > 0) {
-    //                     $qty = $three_xl_qty;
-    //                     $size = '3xl';
-    //                     $price = $three_xl_price;
-    //                     $mrp = $three_xl_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-
-    //                 if ($four_xl_qty > 0) {
-    //                     $qty = $four_xl_qty;
-    //                     $size = '4xl';
-    //                     $price = $four_xl_price;
-    //                     $mrp = $four_xl_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-
-    //                 if ($five_xl_qty > 0) {
-    //                     $qty = $five_xl_qty;
-    //                     $size = '5xl';
-    //                     $price = $five_xl_price;
-    //                     $mrp = $five_xl_mrp;
-    //                     $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
-    //                 }
-
-    //             // }
-
-    //             // $purchase_entry_html = $this->viewPurchaseEntry($purchase_id);
-    //         }
-
-    //     }
-        
-
-    //     return response()->json([   
-    //         'status'=>200,
-    //         // 'html'=>$purchase_entry_html['html'],
-    //     ]);
-    // }
 
     public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
 
@@ -1867,6 +1222,7 @@ class PurchaseEntryController extends Controller
     public function generatePurchaseInvoice($purchase_id)
     {
 
+        $business_detail = BusinessDetails::first();
         $purchase = Purchase::find($purchase_id);
         // $supplier = Supplier::find($purchase->supplier_id);
 
@@ -1904,13 +1260,11 @@ class PurchaseEntryController extends Controller
             $html .= "<div class='col-sm-6 '>";
                 $html .= "<small class='modal-title'>";
                     $html .= "<b>GSTNO -  </b> ".$supplier->gst_no."<br>";
-                    // $html .= "<b>PAN -  </b> AVT12547GH<br>";
                 $html .= "</small>";
             $html .= "</div>";
             $html .= "<div class='col-sm-6 text-right'>";
                 $html .= "<small class='modal-title'>";
                     $html .= "<b>Mobile -  </b> ".$supplier->mobile_no."<br>";
-                    // $html .= "<b>Email -  </b> abc@gmail.com<br>";
                 $html .= "</small>";
             $html .= "</div>";
             
@@ -1924,9 +1278,10 @@ class PurchaseEntryController extends Controller
                     $html .= "<div class='row'>";
                         $html .= "<div class='col-md-6'>";
                         $html .= "<small class='modal-title'>";
-                            $html .= "<b>Mangaldeep (Jabalpur) </b> <br>";
-                            $html .= "Samdariya Mall Jabalpur-482002<br>";
-                            $html .= "<b>GSTNO -  </b> 1245GDFTE4587<br>";
+                        
+                            $html .= "<b>".$business_detail->business_name." </b>";
+                            $html .= "<p style='inline-size:180px'>".$business_detail->company_address." </p>";
+                            $html .= "<b>GSTNO - ".$business_detail->gst." </b><br>";
                         $html .= "</small>";
                         $html .= "</div>";
                         $html .= "<div class='col-md-6'>";
@@ -2126,155 +1481,131 @@ class PurchaseEntryController extends Controller
         ]);
     }
 
-    // public function deleteProduct($product_id)
-    // {
-    //     $delete_product = PurchaseEntry::find($product_id);
-    //     $delete_product->delete();
-    //     return response()->json([
-    //         'status'=>200
-    //     ]);
-    // }
-
     public function getProductDetail($product_code)
     {
-        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode','price']);
+        $purchase_entry_item = PurchaseEntryItem::where(['barcode'=> $product_code])->first(['purchase_entry_id','size','mrp','qty','barcode','price','id']);
         if($purchase_entry_item){
+
+            $employee = User::all(['id' , 'code']);
+
+            $emp_html = "";
+            $emp_html .= "<option selected disabled value='0'>Emp</option>";
+            foreach($employee as $list)
+            {
+                $emp_html.= "<option value='" . $list->id . "'>" . strtoupper($list->code) . "</option>";
+            }
 
             $purchase_entry = PurchaseEntry::join('sub_categories','purchase_entries.sub_category_id','=','sub_categories.id')
                     ->where(['purchase_entries.id'=> $purchase_entry_item->purchase_entry_id])
                     ->first(['purchase_entries.id','purchase_entries.style_no_id','purchase_entries.brand_id','purchase_entries.sub_category_id','sub_categories.sub_category']);
 
-            // $offers_data = ApplyOffer::join('offers','offers.id','=','apply_offers.offer_id')->select('apply_offers.*','offers.discount_offer')
-            //             ->where(['apply_offers.status'=>MyApp::ACTIVE])->get();
-            $offers_data = ApplyOffer::where(['status'=>MyApp::ACTIVE])->get();
-            $offers="";
-            $count = 0;
             
-            
-            // $offer_section = ''; 
+            $offers="";             
+            $offer = '';
+            // dd($purchase_entry_item->barcode);
+            // $barcode_offer = ApplyOffer::where(['status'=>MyApp::ACTIVE])->whereRaw("FIND_IN_SET($purchase_entry_item->barcode, barcode)")->first();
+            $barcode_offer = ApplyOffer::whereRaw("find_in_set('".$purchase_entry_item->barcode."',barcode)")->where(['status'=>MyApp::ACTIVE])->first();
 
-            //$offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'barcode'=>$product_code ])->first();
-
-            // $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE])->whereRaw("FIND_IN_SET($purchase_entry_item->barcode , barcode)")->first();
-            // if ( $offer != null ) {
-            //     $offer_section = $offer->offer_section;
-            // }else{
-            //     if ($purchase_entry->brand_id > 0) {
-            //         $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>$purchase_entry->brand_id ])->first();
-            //         if ($offer == null) {
-            //             $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'sub_category_id'=>$purchase_entry->sub_category_id ])->first();
-            //         }
-            //         $offer_section = $offer->offer_section;
-            //     }else{
-
-            //     }
-            // }
-
-
-            //$offer = ApplyOffer::whereRaw("FIND_IN_SET($purchase_entry_item->barcode, apply_offers.barcode)")->first();
-
-            // if ($purchase_entry->brand_id > 0) {
-            //     $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>$purchase_entry->brand_id ])->first();
-            //     if ($offer == null) {
-            //         $offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'sub_category_id'=>$purchase_entry->sub_category_id ])->first();
-            //     }
-            //     $offer_section = $offer->offer_section;
-            // }else{
-
-            // }
-            
-
-
-            if (count($offers_data) > 0) {
-
-
-                foreach ($offers_data as $key => $list) {
-
-                    if ($list->offer_section == MyApp::PRODUCT) {
-
-                        if ($list->offer_type == MyApp::PERCENTAGE) {
-
-                            if($purchase_entry->brand_id){
-
-                                    $data = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                            ->where(['offer_section'=>MyApp::PRODUCT])
-                                            ->where("apply_offers.brand_id",$purchase_entry->brand_id)
-                                            
-                                            ->join('offers','offers.id','=','apply_offers.offer_id')
-                                            ->select('apply_offers.*','offers.discount_offer')->get();  
-                                }
-
-                                if (count($data) > 0) {
-                                        $offers =   $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                            ->where(['offer_section'=>MyApp::PRODUCT])
-                                            ->join('offers','offers.id','=','apply_offers.offer_id')
-                                            ->select('apply_offers.*','offers.discount_offer')->get();  
-                                            break;
-                                    }else{
-                                        $offers= $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                        ->where(['offer_section'=>MyApp::PRODUCT])
-                                        ->get('apply_offers.id');
-                                    }
-
+            if ( $barcode_offer != null ) {
+                $offer = $barcode_offer;
+            }else{
+                if ($purchase_entry->brand_id > 0) {
+                    $brand_offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>$purchase_entry->brand_id ])->first();
+                    if ($brand_offer == null) {
+                        $sub_category_offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'sub_category_id'=>$purchase_entry->sub_category_id ])->first();
+                        if($sub_category_offer == null){
+                            $store_offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>0,'sub_category_id'=>0 ])->first();
+                            $offer = $store_offer;
+                        }else{
+                            $offer = $sub_category_offer;
                         }
-                        
-                        // $count = $count+1;
-                    } else{
-                        //store offer
-                    if ($list->offer_type == MyApp::PERCENTAGE) {
-                        $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                ->where(['offer_section'=>MyApp::STORE])
-                                ->join('offers','offers.id','=','apply_offers.offer_id')
-                                ->select('apply_offers.*','offers.discount_offer')->get();
-                                break;
-                            
-                        }
-
-                    if ($list->offer_type == MyApp::VALUES) {
-                        
-                        $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                ->where(['offer_section'=>MyApp::STORE])
-                                ->join('offers','offers.id','=','apply_offers.offer_id')
-                                ->select('apply_offers.*','offers.discount_offer')->get();
-                                break;
-                            
-                        }
-                        
-                        else{
-                            $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                                ->where(['offer_section'=>MyApp::STORE])
-                                ->get('apply_offers.id');
-                        }
-                     
+                    }else{
+                        $offer = $brand_offer;
                     }
-
-                    // if ($list->offer_type == MyApp::PERCENTAGE) {
-
-                    //     $data = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
-                    //             ->where(['offer_section'=>MyApp::PRODUCT])
-                    //             ->whereRaw("FIND_IN_SET($purchase_entry_item->barcode, apply_offers.barcode)")
-                    //             ->join('offers','offers.id','=','apply_offers.offer_id')
-                    //             ->select('apply_offers.*','offers.discount_offer')->get(); 
-
-                    // }
-                    // if ($list->offer_type == MyApp::VALUES) {
-
-                      
-
-                    // }
-                    // if ($list->offer_type == MyApp::PICES) {
-                    //     dd("true3");
-
-                    // }
-                    // if ($list->offer_type == MyApp::SLAB) {
-                    //     dd("true4");
-
-                    // }
-
+                }else{
+                    //store offers
+                    $store_offer = ApplyOffer::where(['status'=>MyApp::ACTIVE, 'brand_id'=>0,'sub_category_id'=>0 ])->first();
+                    $offer = $store_offer;
                 }
-                // dd($count);  
+            }
+
+            // if($offer_section == MyApp::PRODUCT){
+            //     if($offer_type == MyApp::PERCENTAGE){
+
+            //     }
+            // }else {
                 
-            }  
+            // }
+
+
+
+
+            // if (count($offers_data) > 0) {
+
+
+            //     foreach ($offers_data as $key => $list) {
+
+            //         if ($list->offer_section == MyApp::PRODUCT) {
+
+            //             if ($list->offer_type == MyApp::PERCENTAGE) {
+
+            //                 if($purchase_entry->brand_id){
+
+            //                     $data = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                             ->where(['offer_section'=>MyApp::PRODUCT])
+            //                             ->where("apply_offers.brand_id",$purchase_entry->brand_id)
+                                        
+            //                             ->join('offers','offers.id','=','apply_offers.offer_type_id')
+            //                             ->select('apply_offers.*','offers.discount_offer')->get();  
+            //                 }
+
+            //                 if (count($data) > 0) {
+            //                     $offers =   $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                         ->where(['offer_section'=>MyApp::PRODUCT])
+            //                         ->join('offers','offers.id','=','apply_offers.offer_type_id')
+            //                         ->select('apply_offers.*','offers.discount_offer')->get();  
+            //                         break;
+            //                 }else{
+            //                     $offers= $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                     ->where(['offer_section'=>MyApp::PRODUCT])
+            //                     ->get('apply_offers.id');
+            //                 }
+
+            //             }
+                        
+            //         } else{
+            //             //store offer
+            //             if ($list->offer_type == MyApp::PERCENTAGE) {
+            //                 $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                         ->where(['offer_section'=>MyApp::STORE])
+            //                         ->join('offers','offers.id','=','apply_offers.offer_type_id')
+            //                         ->select('apply_offers.*','offers.discount_offer')->get();
+            //                         break;
+                            
+            //             }
+
+            //             if ($list->offer_type == MyApp::VALUES) {
+                            
+            //                 $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                         ->where(['offer_section'=>MyApp::STORE])
+            //                         ->join('offers','offers.id','=','apply_offers.offer_type_id')
+            //                         ->select('apply_offers.*','offers.discount_offer')->get();
+            //                         break;
+                                
+            //                 }
+                            
+            //                 else{
+            //                     $offers = $list->where(['apply_offers.status'=>MyApp::ACTIVE])
+            //                         ->where(['offer_section'=>MyApp::STORE])
+            //                         ->get('apply_offers.id');
+            //                 }
+                        
+            //             }
+
+            //         }
+                  
+                
+            // }  
            
                     
             $result = collect([
@@ -2287,16 +1618,20 @@ class PurchaseEntryController extends Controller
                 'qty' => $purchase_entry_item->qty,
                 'barcode' => $purchase_entry_item->barcode,
                 'price' => $purchase_entry_item->price,
+                'purchase_entry_item_id' => $purchase_entry_item->id,
             ]);
 
             return response()->json([
                 'status'=>200,
+                // 'emp_html'=>$emp_html,
                 'product_detail'=>$result,
-                'offers_data'=>$offers_data,
-                'offers'=>$offers,
-                // 'offer'=>$offer,
-                // 'offer_section'=>$offer_section
-            
+                // 'offers_data'=>$offers_data,
+                // 'offers'=>$offers,
+
+                // 'offer_section'=>$offer->offer_section,
+                // 'offer_type'=>$offer->offer_type,
+                'offer'=>$offer,
+                'barcode_offer'=>$barcode_offer,
             
             ]);
         }else{
@@ -2436,36 +1771,6 @@ class PurchaseEntryController extends Controller
         return back();
     }
 
-    // save category of purchase entry
-    // function saveCategory(Request $req)
-    // {
-    //     // return view('employee');
-    //     $validator = Validator::make($req->all(),[
-    //         "category" => 'required|unique:categories,category,'.$req->input('category'),
-    //         'category_img' => 'required|max:191',
-    //     ]);
-    //     if($validator->fails())
-    //     {
-    //         return response()->json([
-    //             'status'=>400,
-    //             'errors'=>$validator->messages("plz fill all field required"),
-    //         ]);
-    //     }else{
-    //         $model = new Category;
-    //         $model->category = $req->input('category');
-    //                 $CategoryImage = public_path('storage/').$model->category_img;
-    //                 if(file_exists($CategoryImage)){
-    //                     @unlink($CategoryImage); 
-    //                 }
-    //             $model->category_img = $req->file('category_img')->store('image/category'. $req->input('category_img'),'public');
-    //         if($model->save()){
-    //             return response()->json([   
-    //                 'status'=>200,
-    //             ]);
-    //         }
-    //     }
-    // }
-
     // save subcategory of purchase entry
     function saveSubCategory(Request $req)
     {
@@ -2568,7 +1873,6 @@ class PurchaseEntryController extends Controller
     public function updateBrand(Request $req, $brand_id)
     {
        
-
         $validator = Validator::make($req->all(),[
             'brand_name' => 'required|max:191',
         ]);
@@ -2599,7 +1903,6 @@ class PurchaseEntryController extends Controller
             'status'=>200
         ]);
     }
-
 
     public function loadPtFileData(Request $req)
     {
@@ -2891,7 +2194,6 @@ class PurchaseEntryController extends Controller
 
     }
 
-
     public function oldsavePurchaseEntryExcel(Request $req)
     {
         if($req->hasfile('pt_file')){
@@ -2965,9 +2267,5 @@ class PurchaseEntryController extends Controller
 
     }
 
-
-
-
-    
 
 }

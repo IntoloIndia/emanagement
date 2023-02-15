@@ -158,22 +158,22 @@
         $(document).ready(function () {
             
           
-            salesReportDetail();
+            // salesReportDetail();
             // salesReportDetail(month ='');
-            // $(document).on('change','#month', function (e) {
-            //     var month = $(this).val();
-            //     alert(month);
-            //     salesReportDetail(month);
-            // });
+            $(document).on('change','#month', function (e) {
+                var month = $(this).val();
+                alert(month);
+                salesReportDetail(month);
+            });
         });
         
-    function salesReportDetail()
-    // function salesReportDetail(month)
+    // function salesReportDetail()
+    function salesReportDetail(month)
     {
         $.ajax({
             type: "get",
             dataType: "json",
-            url: "sales-report-detail",
+            url: "sales-report-detail/"+month,
             success: function (response) {
                 console.log(response);
                 if(response.status == 200){

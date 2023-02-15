@@ -16,7 +16,7 @@
                 </li>
             @else
                 <li class="nav-item">
-                    <a class="dropdown-item active" aria-current="page" href="logout">{{session('BILLING_NAME')}} Logout</a>
+                    <a class="dropdown-item active" aria-current="page" href="logout">{{session('USER_NAME')}} Logout</a>
                 </li>
             @endif
         </ul>
@@ -25,11 +25,12 @@
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+            <li class="nav-item menu-open">
+                <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Dashboard</p></a>
+            </li>
+
             @if (session('ADMIN_LOGIN'))
-                <li class="nav-item menu-open">
-                    <a href="dashboard" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Dashboard</p></a>
-                </li>
-                
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
@@ -102,7 +103,142 @@
                     </ul>
                 </li>
 
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-header text-light">Inter Company Transfer </li>
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-item">
+                    <a href="company-supplier" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Company Supplier</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="company-purchase" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Company Purchase</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="company-sales" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Company Sales</p>
+                    </a>
+                </li>
+
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-header text-light ">Purchase Management</li>
+                <hr style="margin: 0px; color:#ffffff;">
+            
+                <li class="nav-item">
+                    <a href="supplier" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="style-no" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Style No</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="purchase-entry" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="purchase-return" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Purchase Return</p>
+                    </a>
+                </li>
+            
+
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-header text-light">Sales Management</li>
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-item">
+                    <a href="customer" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Customers</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="customer_bill_invoices" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales-return" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Sales Return</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="alteration_voucher" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="payment-receiving" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Pending Payment Receiving</p>
+                    </a>
+                </li>
+            
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-header text-light">Stock Management</li>
+                <hr style="margin: 0px; color:#ffffff;">
+            
+                <li class="nav-item">
+                    <a href="manage-stock" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">      
+                    <a href="" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
+                    </a>
+                </li> --}}
+
+                <li class="nav-item">
+                    <a href="barcode" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="offer" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Offer</p>
+                    </a>
+                </li>
                 
+                <li class="nav-item">
+                    <a href="business-details" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
+                    </a>
+                </li>
+            
+                {{-- <li class="nav-item">
+                    <a href="excel_data" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
+                    </a>
+                </li> --}}
+                {{-- <li class="nav-item">
+                    <a href="discount" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
+                    </a>
+                </li> --}}
+
+                <hr style="margin: 0px; color:#ffffff;">
+                <li class="nav-header text-light">Report Management</li>
+                <hr style="margin: 0px; color:#ffffff;">
+
+                <li class="nav-item">
+                    <a href="offer-report" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Offer Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales-report" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Sales Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="brand-report" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Brand Report</p>
+                    </a>
+                </li>
 
                 {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -117,148 +253,72 @@
                         </li>
                     </ul>
                 </li> --}}
+
+            @else
+            
+                @if (session('LOGIN_ROLE') == MyApp::BILLING)
+                    <hr style="margin: 0px; color:#ffffff;">
+                    <li class="nav-header text-light">Sales Management</li>
+                    <hr style="margin: 0px; color:#ffffff;">
+                    <li class="nav-item">
+                        <a href="customer" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Customers</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="customer_bill_invoices" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="sales-return" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Sales Return</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="alteration_voucher" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="payment-receiving" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Pending Payment Receiving</p>
+                        </a>
+                    </li>
+                @elseif(session('LOGIN_ROLE') == MyApp::PURCHASE)
+                    <hr style="margin: 0px; color:#ffffff;">
+                    <li class="nav-header text-light ">Purchase Management</li>
+                    <hr style="margin: 0px; color:#ffffff;">
+                
+                    <li class="nav-item">
+                        <a href="supplier" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="style-no" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Style No</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="purchase-entry" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="purchase-return" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Purchase Return</p>
+                        </a>
+                    </li>
+                @elseif(session('LOGIN_ROLE') == MyApp::ACCOUNTANT)
+                    
+                @endif
+
             @endif
-            <li class="nav-item ">
-                {{-- <a href="billing" class="nav-link "><i class="nav-icon fas fa-th"></i><p>Billing</p></a> --}}
-            </li>
 
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light ">Inter Company Transfer</li>
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-item">
-                <a href="company-supplier" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Company Supplier</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="company-purchase" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Company Purchase</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="company-sales" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Company Sales</p>
-                </a>
-            </li>
-
-            
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light ">Purchase Management</li>
-            <hr style="margin: 0px; color:#ffffff;">
-            
-            <li class="nav-item">
-                <a href="supplier" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Supplier</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="style-no" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Style No</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="purchase-entry" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="purchase-return" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Purchase Return</p>
-                </a>
-            </li>
-
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light">Sales Management</li>
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-item">
-                <a href="customer" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Customers</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="customer_bill_invoices" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Invoice</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="sales-return" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Return</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="alteration_voucher" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="payment-receiving" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Pending Payment Receiving</p>
-                </a>
-            </li>
-            
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light">Stock Management</li>
-            <hr style="margin: 0px; color:#ffffff;">
            
-            <li class="nav-item">
-                <a href="manage-stock" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
-                </a>
-            </li>
-            {{-- <li class="nav-item">      
-                <a href="" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
-                </a>
-            </li> --}}
 
-            <li class="nav-item">
-                <a href="barcode" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="offer" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Offer</p>
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a href="business-details" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Business </p>
-                </a>
-            </li>
-            
-            {{-- <li class="nav-item">
-                <a href="excel_data" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Excel</p>
-                </a>
-            </li> --}}
-            <li class="nav-item">
-                <a href="discount" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Discount</p>
-                </a>
-            </li>
 
-            <hr style="margin: 0px; color:#ffffff;">
-            <li class="nav-header text-light">Report Management</li>
-            <hr style="margin: 0px; color:#ffffff;">
-
-            <li class="nav-item">
-                <a href="offer-report" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Offer Report</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="sales-report" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Sales Report</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="brand-report" class="nav-link">
-                    <i class="fas fa-angle-right nav-icon"></i><p>Brand Report</p>
-                </a>
-            </li>
-           
             <hr style="margin: 0px; color:#ffffff;">
             <li class="nav-item">
                 <a href="#" class="nav-link">
