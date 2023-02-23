@@ -9,6 +9,7 @@ class MyApp {
     const PURCHASE = 3;
     const ACCOUNTANT = 4;
     // const OTHER = ;
+    const BARCODE = 9;
 
     const ACTIVE = 1;
     const USED = 2;

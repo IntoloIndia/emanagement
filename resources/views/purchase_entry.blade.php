@@ -540,6 +540,7 @@ a {
 </div>
 
 
+
 <div class="modal fade" id="captureLivePhotoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -556,6 +557,8 @@ a {
         </div>
     </div>
 </div>
+
+
 
 {{-- camera modal end --}}
 
@@ -579,7 +582,7 @@ a {
                         <h3 class="card-title">Purchase</h3>
                     </div>
                     <div class=" col-md-6 col-lg-6 col-xl-6">
-                        <select id="filter_supplier_id" name="filter_supplier_id" class="form-select form-select-sm select_chosen">
+                        <select id="filter_supplier_id" name="filter_supplier_id" class="form-select form-select-sm">
                             <option selected disabled value="0">Supplier</option>                                          
                             @foreach ($suppliers as $list)
                             <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
@@ -1164,7 +1167,7 @@ a {
                 // alert(product_id)
                 deleteProduct(product_id);
             });
-
+          
 
             $(document).on('click','#openBtn', function (e) {
                 e.preventDefault();
@@ -1203,6 +1206,8 @@ a {
 
                 // printBarcode();
             });
+
+          
             
             // $(document).on("focusin","[rel=popover]", function(e){
             //     var price = parseFloat($(this).val());

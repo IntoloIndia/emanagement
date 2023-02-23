@@ -391,8 +391,10 @@
 
                                     <div class="card-footer ">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
-                                            <button type="button" id="savePurchaseEntryBtn" class="btn btn-primary btn-sm ">Save </button>
-                                            <button type="button" id="updatePurchaseEntryBtn" class="btn btn-primary btn-sm hide">Update</button>
+                                            @if (session('LOGIN_ROLE') != MyApp::BARCODE)
+                                                <button type="button" id="savePurchaseEntryBtn" class="btn btn-primary btn-sm ">Save </button>
+                                                <button type="button" id="updatePurchaseEntryBtn" class="btn btn-primary btn-sm hide">Update</button>
+                                            @endif
                                         </div>
                                     </div>
                                         
@@ -417,6 +419,7 @@
         <tbody >
             <tr >
                 <th>Size</th>
+                <td>F/R </td>
                 <td>XS </td>
                 <td>S </td>
                 <td>M </td>
@@ -426,10 +429,12 @@
                 <td>3XL </td>
                 <td>4XL </td>
                 <td>5XL </td>
+                <td>6XL </td>
                
             </tr>
             <tr>
                 <th>Qty</th>
+                <td><input type="text" id="fr_qty" name="fr_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 <td><input type="text" id="xs_qty" name="xs_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 <td><input type="text" id="s_qty" name="s_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 <td><input type="text" id="m_qty" name="m_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
@@ -439,10 +444,12 @@
                 <td><input type="text" id="three_xl_qty" name="three_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 <td><input type="text" id="four_xl_qty" name="four_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 <td><input type="text" id="five_xl_qty" name="five_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
+                <td><input type="text" id="six_xl_qty" name="six_xl_qty" class="form-control form-control-sm qty" placeholder="Qty"></td>
                 
             </tr>
             <tr>
                 <th>Price</th>
+                <td><input type="text" rel="popover" id="fr_price" name="fr_price" class="form-control form-control-sm fr_price price example-popover" placeholder="Price" ></td>
                 <td><input type="text" rel="popover" id="xs_price" name="xs_price" class="form-control form-control-sm xs_price price example-popover" placeholder="Price" ></td>
                 <td><input type="text" rel="popover" id="s_price" name="s_price" class="form-control form-control-sm s_price price" placeholder="Price"  ></td>
                 <td><input type="text" rel="popover" id="m_price" name="m_price" class="form-control form-control-sm m_price price" placeholder="Price"  ></td>
@@ -452,9 +459,11 @@
                 <td><input type="text" rel="popover" id="three_xl_price" name="three_xl_price" class="form-control form-control-sm three_xl_price price" placeholder="Price"></td>
                 <td><input type="text" rel="popover" id="four_xl_price" name="four_xl_price" class="form-control form-control-sm four_xl_price price" placeholder="Price"></td>
                 <td><input type="text" rel="popover" id="five_xl_price" name="five_xl_price" class="form-control form-control-sm five_xl_price price" placeholder="Price"></td>
+                <td><input type="text" rel="popover" id="six_xl_price" name="six_xl_price" class="form-control form-control-sm six_xl_price price" placeholder="Price"></td>
             </tr>
             <tr>
                 <th>MRP</th>
+                <td><input type="text" id="fr_mrp" name="fr_mrp" class="form-control form-control-sm fr_mrp mrp" placeholder="MRP" value=""></td>
                 <td><input type="text" id="xs_mrp" name="xs_mrp" class="form-control form-control-sm xs_mrp mrp" placeholder="MRP" value=""></td>
                 <td ><input type="text" id="s_mrp" name="s_mrp" class="form-control form-control-sm s_mrp mrp" placeholder="MRP" value=""></td>
                 <td ><input type="text" id="m_mrp" name="m_mrp" class="form-control form-control-sm m_mrp mrp" placeholder="MRP" value=""></td>
@@ -464,6 +473,7 @@
                 <td><input type="text" id="three_xl_mrp" name="three_xl_mrp" class="form-control form-control-sm three_xl_mrp mrp" placeholder="MRP"></td>
                 <td><input type="text" id="four_xl_mrp" name="four_xl_mrp" class="form-control form-control-sm four_xl_mrp mrp" placeholder="MRP"></td>
                 <td><input type="text" id="five_xl_mrp" name="five_xl_mrp" class="form-control form-control-sm five_xl_mrp mrp" placeholder="MRP"></td>
+                <td><input type="text" id="six_xl_mrp" name="six_xl_mrp" class="form-control form-control-sm six_xl_mrp mrp" placeholder="MRP"></td>
             </tr>
             
         </tbody>
@@ -545,6 +555,44 @@
 
 </div>
 
+{{-- delete purchase entery item wise modal --}}
+<div class="modal fade" id="deletePurchaseEntryItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Purchase Entry Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5>Are you sure?</h5>
+                        <button type="button" id="yesPurchaseEntryItemBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    <hr>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- delete purchase entry style wise modal --}}
+<div class="modal fade" id="deletePurchaseEntryStyleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Purchase Entry</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5>Are you sure?</h5>
+                        <button type="button" id="yesPurchaseEntryItemStyleBtn" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    <hr>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

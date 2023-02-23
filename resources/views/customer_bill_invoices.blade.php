@@ -617,8 +617,8 @@
                 <div class="card-body">
                     <form id="orderForm">
                         @csrf
-                        <div class="order_err"></div>
                         <div class="row">
+                            <div class="order_err"></div>
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-header">
@@ -688,12 +688,14 @@
                                                 <input type="number" class="form-control form-control-sm "
                                                     id="mobile_no" name="mobile_no" minlength="10" maxlength="10"
                                                     required id="moblie_no" placeholder="mobile number">
+                                                
                                             </div>
                                             <div class="col-md-7">
                                                 <label for="customerName" class="form-label">Customer name</label>
                                                 <input type="text" class="form-control form-control-sm"
                                                     id="customer_name" required name="customer_name"
                                                     placeholder="Enter name">
+                                                 
                                             </div>
                                         </div>
                                         <div class="row mt-1">
@@ -953,7 +955,7 @@
                                     </div> --}}
                                     <b>Item</b>
                                     {{-- <input type="text" name="" id="barcode" class="barcode " style="margin-left: 100px;"> --}}
-                                    <b style="margin-left: 100px">02380172623, 02189213223, 02173344023, 02418410423</b>
+                                    <b style="margin-left: 100px">02654187423,02263296423</b>
                                     <button class="btn btn-primary btn-sm  float-right" id="addItemBtn"> Add item</button>
                                 </div>
                                 <div class="card-body">
@@ -1196,6 +1198,11 @@
                             <option value="{{$item->id}}">{{ucwords($item->code)}}</option>
                         @endforeach
                     </select>
+                    <span class="text-danger">
+                        @error('employee_id')
+                            {{$message}}
+                         @enderror
+                    </span>
                 </td>
                 <td style="width: 250px;">
                     <input type="text" name="product_code[]"  class="form-control form-control-sm product_code">
@@ -1859,7 +1866,12 @@
             var pay_card_amount = parseFloat(pay_credit - parseFloat(pay_card));
             $("#credit_payment").val(pay_card_amount.toFixed(2));
             // payOnline();
+            // invalideamount();
         }
+
+        // function invalideamount(){
+        //     alert("call");
+        // }
 
 
         function calculateCreditnoteReturnTotalAmount() {
@@ -2206,9 +2218,9 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    if (response.status === 400) {
+                    if (response.status == 400) {
                         $('#order_err').html('');
-                        $('#order_err').addClass('alert alert-danger');
+                        $('#order_err').removeClass('alert alert-danger');
                         var count = 1;
                         $.each(response.errors, function(key, err_value) {
                             $('#order_err').append('<span>' + count++ + '. ' + err_value +

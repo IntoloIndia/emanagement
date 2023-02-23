@@ -19,9 +19,20 @@
 
     // use App\MyApp;
 
+    function generateRandomString($length = 10) {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     function checkIsActive($user_id, $user_role_id)
     {
-        $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->value('is_active');
+        $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->get(['is_active','key','created_at']);
+        // $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->value('is_active');
         return $data;
     }
 
@@ -273,6 +284,54 @@
     {
         $data = Offer::where(['offer_type'=> $offer_type])->get();
         return $data;
+    }
+
+    function convertNumberToWords($amount){
+        // $number = 190908100.25;
+        $no = floor($amount);
+        $point = round($amount - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'One', '2' => 'Two',
+            '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+            '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+            '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+            '13' => 'Thirteen', '14' => 'Fourteen',
+            '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+            '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+            '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+            '60' => 'Sixty', '70' => 'Seventy',
+            '80' => 'Sighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' And ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ? ". " . $words[$point / 10] . " " . $words[$point = $point % 10] : '' ; 
+
+        if (floor( $amount ) != $amount) 
+        {
+            return $result . "Rupees" . $points . " Paise"; 
+        }
+        else{
+            return $result . "Rupees";
+        }
     }
 
 

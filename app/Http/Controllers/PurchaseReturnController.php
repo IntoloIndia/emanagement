@@ -465,6 +465,7 @@ class PurchaseReturnController extends Controller
                                     $totalDiscount = $totalDiscount +  $dis_data['total_discount_amount'];
 
                                     $grand_taxable_amount = $grand_taxable_amount +  $dis_data['taxable'];
+
                                     $grand_total = $grand_total +  $totalAmount;
                                     $grand_total_sgst =  $grand_total_sgst +  $gst['sgst'];
                                     $grand_total_cgst =  $grand_total_cgst +  $gst['cgst'];
@@ -481,10 +482,13 @@ class PurchaseReturnController extends Controller
                     //     $html .= "<td  >Total Price</td>";
                     // $html .= "</tr> ";
 
+                  
                     $html .= "<tr>";
                         $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
-                            $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>";
-                        $html .= "</td>  ";
+                                 
+                        $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'> ".convertNumberToWords($grand_total)."</textarea>";
+                    
+                        $html .= "</td>";
                         $html .= "<td colspan='3' ><b>Total Amount :</b></td>";
                         $html .= "<td colspan='2'><input type='text' class='form-control form-control-sm' value='". $grand_taxable_amount."' readonly></td>";
                     $html .= "</tr> ";
@@ -528,6 +532,7 @@ class PurchaseReturnController extends Controller
             'purchase_return'=>$purchase_return,
             'purchase_return_item'=>$purchase_return_item,
             'html'=>$html,
+            
         ]);
 
     }

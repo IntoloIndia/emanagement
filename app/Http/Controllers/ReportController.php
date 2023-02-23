@@ -222,7 +222,7 @@ class ReportController extends Controller
 
        
         $brand_detail = array();
-        foreach($brands as $key => $list)
+        foreach($brands as $key => $list)   
         {
             $offers = ApplyOffer::where(['brand_id'=>$list->brand_id])
                 ->select('apply_offers.*')

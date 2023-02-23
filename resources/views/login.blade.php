@@ -59,7 +59,7 @@
                                 </p>
                             </div>
                         </div>
-                        <input type="hidden" name="key" id="key" >
+                        <input type="hidden" name="key" id="key">
                         @if(session()->has('error'))
                             <div class="alert alert-danger mt-2" role="alert">
                                 {{session('error')}} 

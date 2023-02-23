@@ -81,7 +81,7 @@
                                             {{-- <b style="margin-left: 100px">017791071723</b> --}}
                                         </div>
                                         <div class="col-md-3">
-                                            <b>017791071723</b>
+                                            {{-- <b>017791071723</b> --}}
                                             {{-- <label for="exampleFormControlInput1" class="form-label" >Barcode</label> --}}
                                         </div>
                                         <div class="col-md-4">

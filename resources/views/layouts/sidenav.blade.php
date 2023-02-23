@@ -1,5 +1,5 @@
 <a href="index3.html" class="brand-link">
-    <span class="brand-text text-light">I-MANAGE</span>
+    <span class="brand-text text-light">I-MANAGE GARMENTS</span>
 </a>
 
 <div class="sidebar">
@@ -186,11 +186,6 @@
                         <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">      
-                    <a href="" class="nav-link">
-                        <i class="fas fa-angle-right nav-icon"></i><p>Report</p>
-                    </a>
-                </li> --}}
 
                 <li class="nav-item">
                     <a href="barcode" class="nav-link">
@@ -310,8 +305,31 @@
                             <i class="fas fa-angle-right nav-icon"></i><p>Purchase Return</p>
                         </a>
                     </li>
-                @elseif(session('LOGIN_ROLE') == MyApp::ACCOUNTANT)
+
+                    <hr style="margin: 0px; color:#ffffff;">
+                    <li class="nav-header text-light">Stock Management</li>
+                    <hr style="margin: 0px; color:#ffffff;">
+            
+                    <li class="nav-item">
+                        <a href="manage-stock" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="barcode" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Barcodes</p>
+                        </a>
+                    </li>
                     
+                @elseif(session('LOGIN_ROLE') == MyApp::ACCOUNTANT)
+
+                @elseif(session('LOGIN_ROLE') == MyApp::BARCODE)
+                    <li class="nav-item">
+                        <a href="purchase-entry" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Purchase Entry</p>
+                        </a>
+                    </li>
                 @endif
 
             @endif

@@ -58,12 +58,13 @@ a {
     margin: 5px;
 }  */
 
-
- 
 </style>
 @endsection
 
 @include('purchase.modals')
+
+
+
 
 @section('content-header')
     <div class="content-header">
@@ -74,7 +75,9 @@ a {
             <div class="col-sm-6">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
                     {{-- <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button> --}}
-                    <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                    @if (session('LOGIN_ROLE') != MyApp::BARCODE)
+                        <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -84,7 +87,7 @@ a {
 @section('content')
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
     
                 <div class="card-header">
@@ -105,7 +108,7 @@ a {
                     </div>
                 </div>
     
-                <div class="card-body table-responsive p-0" style="height: 450px;" >
+                <div class="card-body table-responsive p-0" style="height: 500px;" >
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
@@ -147,7 +150,7 @@ a {
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div id="view_purchase_entry"></div>
         </div>
 
@@ -415,6 +418,31 @@ a {
 
                 updatePurchaseEntry(purchase_id, purchase_entry_id);
             });
+
+            $(document).on('click','#deletePurchaseEntryItemBtn',function(e) {
+                var purchase_entry_item_id = $(this).val();
+                $('#deletePurchaseEntryItemModal').modal('show');
+                $('#yesPurchaseEntryItemBtn').val(purchase_entry_item_id);
+            });
+            
+            $(document).on('click','#yesPurchaseEntryItemBtn',function(e) {
+                var purchase_entry_item_id = $(this).val();
+                deletePurchaseEntryItemWise(purchase_entry_item_id);
+            });
+
+            $(document).on('click','#deletePurchaseEntryStyleBtn',function(e) {
+                var purchase_entry_id = $(this).val();
+                // alert(purchase_entry_id);
+                $('#deletePurchaseEntryStyleModal').modal('show');
+                $('#yesPurchaseEntryItemStyleBtn').val(purchase_entry_id);
+            });
+
+            $(document).on('click','#yesPurchaseEntryItemStyleBtn',function(e) {
+                var purchase_entry_id = $(this).val();
+                deletePurchaseEntryStyleWise(purchase_entry_id);
+            });
+            
+
             
             $(document).on('click','.deleteProductBtn', function (e) {
                 e.preventDefault();
@@ -575,7 +603,6 @@ a {
                 getBarcodeByPurchaseEntry(purchase_entry_id);
             });
 
-
             // all barcode data 
             $(document).on('click','.allbarcodeBtn', function (e) {
                 e.preventDefault();
@@ -607,7 +634,7 @@ a {
            
             });
 
-
+           
 
             // $(document).on("click",".price", function(e){
                 // e.preventDefault();

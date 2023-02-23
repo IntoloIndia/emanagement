@@ -19,6 +19,7 @@ use App\Models\Offer;
 use App\Models\ApplyOffer;
 use App\Models\BusinessDetails;
 use App\Models\User;
+use App\Models\Role;
 use App\MyApp;
 
 use Validator;
@@ -168,12 +169,23 @@ class PurchaseEntryController extends Controller
 
     public function purchaseEntryNormalSizeValidation($req)
     {
-        if(( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") && ($req->input('three_xl_qty') == "") && ($req->input('four_xl_qty') == "") && ($req->input('five_xl_qty') == "")){
-            
+        if( ( $req->input('fr_qty') == "") && ( $req->input('xs_qty') == "") && ($req->input('s_qty') == "") && ($req->input('m_qty') == "") && ($req->input('l_qty') == "") && ($req->input('xl_qty') == "") && ($req->input('xxl_qty') == "") && ($req->input('three_xl_qty') == "") && ($req->input('four_xl_qty') == "") && ($req->input('five_xl_qty') == "") && ($req->input('six_xl_qty') == "")){
+
             return [
                 'status'=>400,
                 'errors'=>['Please enter atleast 1 product detail'],
             ];
+        }
+
+        if($req->input('fr_qty') == "" &&  $req->input('fr_price') == "" && $req->input('fr_mrp') == "")
+        {
+            $fr_qty_validation = '';
+            $fr_price_validation = '';
+            $fr_mrp_validation = '';
+        }else{
+            $fr_qty_validation = 'required';
+            $fr_price_validation = 'required';
+            $fr_mrp_validation = 'required';
         }
 
         if($req->input('xs_qty') == "" &&  $req->input('xs_price') == "" && $req->input('xs_mrp') == "")
@@ -272,6 +284,17 @@ class PurchaseEntryController extends Controller
             $five_xl_mrp_validation = 'required';
         }
 
+        if($req->input('six_xl_qty') == "" &&  $req->input('six_xl_price') == "" && $req->input('six_xl_mrp') == "")
+        {
+            $six_xl_qty_validation = '';
+            $six_xl_price_validation = '';
+            $six_xl_mrp_validation = '';
+        }else{
+            $six_xl_qty_validation = 'required';
+            $six_xl_price_validation = 'required';
+            $six_xl_mrp_validation = 'required';
+        }
+
         $validator = Validator::make($req->all(),[
             'supplier_id' => 'required|max:191',
             'bill_no'=>'required|max:191',
@@ -283,6 +306,9 @@ class PurchaseEntryController extends Controller
             'brand_id'=>'required|max:191',
             'style_no_id'=>'required|max:191',
             'color'=>'required|max:191',
+            'fr_qty'=>$fr_qty_validation,
+            'fr_price'=>$fr_price_validation,
+            'fr_mrp'=>$fr_mrp_validation,
             'xs_qty'=>$xs_qty_validation,
             'xs_price'=>$xs_price_validation,
             'xs_mrp'=>$xs_mrp_validation,
@@ -310,6 +336,9 @@ class PurchaseEntryController extends Controller
             'five_xl_qty'=>$five_xl_qty_validation,
             'five_xl_price'=>$five_xl_price_validation,
             'five_xl_mrp'=>$five_xl_mrp_validation,
+            'six_xl_qty'=>$six_xl_qty_validation,
+            'six_xl_price'=>$six_xl_price_validation,
+            'six_xl_mrp'=>$six_xl_mrp_validation,
         ]);
 
         if($validator->fails())
@@ -550,6 +579,7 @@ class PurchaseEntryController extends Controller
 
     public function saveNormalSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id)
     {
+        $fr_qty = $req->input('fr_qty');
         $xs_qty = $req->input('xs_qty');
         $s_qty = $req->input('s_qty');
         $m_qty = $req->input('m_qty');
@@ -559,7 +589,9 @@ class PurchaseEntryController extends Controller
         $three_xl_qty = $req->input('three_xl_qty');
         $four_xl_qty = $req->input('four_xl_qty');
         $five_xl_qty = $req->input('five_xl_qty');
+        $six_xl_qty = $req->input('six_xl_qty');
 
+        $fr_price = $req->input('fr_price');
         $xs_price = $req->input('xs_price');
         $s_price = $req->input('s_price');
         $m_price = $req->input('m_price');
@@ -569,7 +601,9 @@ class PurchaseEntryController extends Controller
         $three_xl_price = $req->input('three_xl_price');
         $four_xl_price = $req->input('four_xl_price');
         $five_xl_price = $req->input('five_xl_price');
+        $six_xl_price = $req->input('six_xl_price');
 
+        $fr_mrp = $req->input('fr_mrp');
         $xs_mrp = $req->input('xs_mrp');
         $s_mrp = $req->input('s_mrp');
         $m_mrp = $req->input('m_mrp');
@@ -579,6 +613,7 @@ class PurchaseEntryController extends Controller
         $three_xl_mrp = $req->input('three_xl_mrp');
         $four_xl_mrp = $req->input('four_xl_mrp');
         $five_xl_mrp = $req->input('five_xl_mrp');
+        $six_xl_mrp = $req->input('six_xl_mrp');
 
         $qty = 0;
         $size = "";
@@ -587,6 +622,14 @@ class PurchaseEntryController extends Controller
         $discount = 0 ;
         if ($req->input('discount') > 0) {
             $discount = $req->input('discount');
+        }
+
+        if ($fr_qty > 0) {
+            $qty = $fr_qty;
+            $size = 'fr';
+            $price = $fr_price;
+            $mrp = $fr_mrp;
+            $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount);                
         }
 
         if ($xs_qty > 0) {
@@ -658,6 +701,14 @@ class PurchaseEntryController extends Controller
             $size = '5xl';
             $price = $five_xl_price;
             $mrp = $five_xl_mrp;
+            $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
+        }
+
+        if ($six_xl_qty > 0) {
+            $qty = $six_xl_qty;
+            $size = '6xl';
+            $price = $six_xl_price;
+            $mrp = $six_xl_mrp;
             $result = $this->saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount); 
         }
 
@@ -853,94 +904,7 @@ class PurchaseEntryController extends Controller
 
     }
 
-    public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
-    {
-
-        if ($req->size_type_id == MyApp::NORMAL_SIZE) {
-            $result = $this->purchaseEntryNormalSizeValidation($req);
-        }elseif ($req->size_type_id == MyApp::KIDS_SIZE) {
-            $result = $this->purchaseEntryKidsSizeValidation($req);
-        }elseif ($req->size_type_id == MyApp::WITHOUT_SIZE) {
-            $result = $this->purchaseEntryWithoutSizeValidation($req);
-        }
-
-        if ($result['status'] == 400) {
-            return response()->json([   
-                'status'=>$result['status'],
-                'errors'=>$result['errors'],
-            ]);
-        }
-
-        $supplier_id = $req->input('supplier_id');
-        $bill_no = $req->input('bill_no');
-        $model = Purchase::find($purchase_id);
-            
-        $model->bill_no = $bill_no;
-        $model->bill_date = $req->input('bill_date');
-        $model->payment_days = $req->input('payment_days');
-        $model->time = date('g:i A');
-
-        if ($model->save()) {
-
-            $category_id = $req->input('category_id');
-            $sub_category_id = $req->input('sub_category_id');
-            $brand_id = $req->input('brand_id');
-            $style_no_id = $req->input('style_no_id');
-            $color = $req->input('color');
-            $product_image = $req->input('product_image');
-            
-            $purchase_entry = PurchaseEntry::find($purchase_entry_id);
-            
-            $purchase_entry->category_id = $category_id;
-            $purchase_entry->sub_category_id = $sub_category_id;
-            $purchase_entry->brand_id = $brand_id;
-            $purchase_entry->style_no_id = $style_no_id;
-            $purchase_entry->color = $color;
-
-            if ($product_image != '') {
-                $purchase_entry->img = $product_image;
-            }
-
-            if ($purchase_entry->save()) {
-                //delete purchase entry items
-                // $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
-                // $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
-    
-                $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id','size','qty']);
-                foreach ($purchase_entry_items as $key => $list) {
-                    $items = PurchaseEntryItem::find($list->id);
-                    $items->delete();
-    
-                    $stock_type = MyApp::MINUS_MANAGE_STOCK;
-                    manageStock($stock_type, $purchase_entry_id, $list->size, $list->qty);
-                }
-            }
-
-            
-            if ($req->size_type_id == MyApp::NORMAL_SIZE) {
-                $result = $this->saveNormalSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
-            }elseif ($req->size_type_id == MyApp::KIDS_SIZE) {
-                $result = $this->saveKidsSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
-            }elseif ($req->size_type_id == MyApp::WITHOUT_SIZE) {
-                $result = $this->saveWithoutSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
-            }
-
-            if ($result['status'] == 400) {
-                return response()->json([   
-                    'status'=>$result['status'],
-                    'errors'=>$result['errors'],
-                ]);
-            }else{
-                return response()->json([   
-                    'status'=>$result['status'],
-                    // 'html'=>$result['html'],
-                ]);
-            }        
-     
-        }
-        
-    }
-
+  
     public function saveItem($supplier_id, $purchase_entry_id, $qty, $size, $price, $mrp, $discount){
 
 
@@ -1132,7 +1096,7 @@ class PurchaseEntryController extends Controller
                 $html .= "</div>";
                 $html .= "</div>";
     
-                $html .= "<div class='card-body table-responsive p-0'style='height: 450px;' >";
+                $html .= "<div class='card-body table-responsive p-0'style='height: 500px;' >";
                 $html .="<div class='accordion accordion-flush' id='accordionFlushExample'>";
                 $html .="<table class='table table-striped'>";
                     $html .="<thead>";
@@ -1159,7 +1123,8 @@ class PurchaseEntryController extends Controller
                             $html .="<td>".ucwords($list->color)."</td>";
                             $html .="<td>";
                                 $html .="<button type='button' class='btn btn-info btn-flat btn-sm mx-1 barcodeBtn' value='".$list->id."' > <i class='fas fa-barcode'></i></button>";
-                                $html .="<button type='button' class='btn btn-secondary btn-flat btn-sm editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button>";
+                                $html .="<button type='button' class='btn btn-secondary btn-flat btn-sm mx-1 editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button>";
+                                $html .="<button type='button' class='btn btn-danger btn-flat btn-sm ' id='deletePurchaseEntryStyleBtn' value='".$list->id."' ><i class='fa fa-trash'></i></button>";
                             $html .="</td>";
                         $html .="</tr> ";
 
@@ -1174,6 +1139,7 @@ class PurchaseEntryController extends Controller
                                                     $html .="<th> Size</th>";
                                                     $html .="<th> Qty</th>";
                                                     $html .="<th> Price</th>";
+                                                    $html .="<th> Action</th>";
                                                 $html .="</tr>";
                                             $html .="</thead>";
                                             $html .="<tbody>";
@@ -1185,6 +1151,7 @@ class PurchaseEntryController extends Controller
                                                     $html .="<td>".$item->size."</td>";
                                                     $html .="<td>".$item->qty."</td>";
                                                     $html .="<td>".$item->price."</td>";
+                                                    $html .="<td><button type='button' class='btn btn-danger btn-sm' id='deletePurchaseEntryItemBtn' value='".$item->id."'>Delete</button></td>";
                                                 $html .="</tr>";
                                             }
 
@@ -1373,8 +1340,7 @@ class PurchaseEntryController extends Controller
                         $total_igst = $total_igst + $igst ;
                         $discount_amount = $discount_amount + $discount ;
                         $grand_total = $grand_total + $amount ;
-                        $total_taxable = $total_taxable + $taxable ;
-
+                        $total_taxable = $total_taxable + $taxable ;                        
                         $html .= "</td>";
                         
                     $html .= "</tr>";
@@ -1392,7 +1358,7 @@ class PurchaseEntryController extends Controller
 
                     $html .= "<tr>";
                         $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
-                            $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'></textarea>";
+                            $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'>".convertNumberToWords($grand_total)."</textarea>";
                         $html .= "</td>  ";
                         $html .= "<td colspan='3' ><b>Total Amount :</b></td>";
                         $html .= "<td colspan='2'><input type='text' class='form-control form-control-sm' value='".$total_taxable."' readonly></td>";
@@ -1423,15 +1389,13 @@ class PurchaseEntryController extends Controller
             $html .= "</table>";
         $html .= "</div>";
 
-
-        
-
         return response()->json([
             'status'=>200,
             'html'=>$html,
             'purchase'=>$purchase,
             'supplier'=>$supplier,
-            // 'purchase_entry_items'=>$purchase_entry_items
+            // 'grand_total'=>round($grand_total ,0 , PHP_ROUND_HALF_EVEN)
+
         ]);
     }
     
@@ -1480,6 +1444,128 @@ class PurchaseEntryController extends Controller
             'size_type'=>$size_type,
         ]);
     }
+
+    public function updatePurchaseEntry(Request $req, $purchase_id, $purchase_entry_id)
+    {
+
+        if ($req->size_type_id == MyApp::NORMAL_SIZE) {
+            $result = $this->purchaseEntryNormalSizeValidation($req);
+        }elseif ($req->size_type_id == MyApp::KIDS_SIZE) {
+            $result = $this->purchaseEntryKidsSizeValidation($req);
+        }elseif ($req->size_type_id == MyApp::WITHOUT_SIZE) {
+            $result = $this->purchaseEntryWithoutSizeValidation($req);
+        }
+
+        if ($result['status'] == 400) {
+            return response()->json([   
+                'status'=>$result['status'],
+                'errors'=>$result['errors'],
+            ]);
+        }
+
+        $supplier_id = $req->input('supplier_id');
+        $bill_no = $req->input('bill_no');
+        $model = Purchase::find($purchase_id);
+            
+        $model->bill_no = $bill_no;
+        $model->bill_date = $req->input('bill_date');
+        $model->payment_days = $req->input('payment_days');
+        $model->time = date('g:i A');
+
+        if ($model->save()) {
+
+            $category_id = $req->input('category_id');
+            $sub_category_id = $req->input('sub_category_id');
+            $brand_id = $req->input('brand_id');
+            $style_no_id = $req->input('style_no_id');
+            $color = $req->input('color');
+            $product_image = $req->input('product_image');
+            
+            $purchase_entry = PurchaseEntry::find($purchase_entry_id);
+            
+            $purchase_entry->category_id = $category_id;
+            $purchase_entry->sub_category_id = $sub_category_id;
+            $purchase_entry->brand_id = $brand_id;
+            $purchase_entry->style_no_id = $style_no_id;
+            $purchase_entry->color = $color;
+
+            if ($product_image != '') {
+                $purchase_entry->img = $product_image;
+            }
+
+            if ($purchase_entry->save()) {
+                //delete purchase entry items
+                // $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
+                // $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+    
+                $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id','size','qty']);
+                foreach ($purchase_entry_items as $key => $list) {
+                    $items = PurchaseEntryItem::find($list->id);
+                    $items->delete();
+    
+                    $stock_type = MyApp::MINUS_MANAGE_STOCK;
+                    manageStock($stock_type, $purchase_entry_id, $list->size, $list->qty);
+                }
+            }
+
+            
+            if ($req->size_type_id == MyApp::NORMAL_SIZE) {
+                $result = $this->saveNormalSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
+            }elseif ($req->size_type_id == MyApp::KIDS_SIZE) {
+                $result = $this->saveKidsSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
+            }elseif ($req->size_type_id == MyApp::WITHOUT_SIZE) {
+                $result = $this->saveWithoutSizePurchaseEntry($req, $bill_no, $supplier_id, $purchase_entry_id);
+            }
+
+            if ($result['status'] == 400) {
+                return response()->json([   
+                    'status'=>$result['status'],
+                    'errors'=>$result['errors'],
+                ]);
+            }else{
+                return response()->json([   
+                    'status'=>$result['status'],
+                    // 'html'=>$result['html'],
+                ]);
+            }        
+     
+        }
+        
+    }
+
+    public function deletePurchaseEntryStyleWise($purchase_entry_id)
+    {
+       
+        $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
+        $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+        if($items_deleted)
+        {
+            $purchase_entry = PurchaseEntry::find($purchase_entry_id);
+            $purchase_entry->delete();
+        }
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
+
+    public function deletePurchaseEntryItemWise($purchase_entry_item_id)
+    {
+
+        $purchase_item = PurchaseEntryItem::where(['id'=>$purchase_entry_item_id])->first(['id','purchase_entry_id']);
+        $purchase_entry_items_count = PurchaseEntryItem::where(['purchase_entry_id'=>$purchase_item->purchase_entry_id])->count();
+        $purchase_item->delete();
+
+        if ($purchase_entry_items_count == 1) {
+            $purchase_entry = PurchaseEntry::where(['id'=>$purchase_item->purchase_entry_id]);
+            $purchase_entry->delete();
+        }
+
+        return response()->json([
+            'status'=>200,
+            // 'purchase_entry_items'=>$purchase_entry_items
+        ]);
+    }
+
 
     public function getProductDetail($product_code)
     {
@@ -2267,5 +2353,5 @@ class PurchaseEntryController extends Controller
 
     }
 
-
+  
 }

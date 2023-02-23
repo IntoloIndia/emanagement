@@ -77,13 +77,13 @@ class CustomerBillInvoiceController extends Controller
         // return $req;
         // die();
         $validator = Validator::make($req->all(),[
-            'customer_name'=>'required|max:191',
+            'customer_name'=>'required',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             'birthday_date'=>'required|max:191',
             'month_id'=>'required|max:191',
             'state_type'=>'required|max:191',
+            'employee_id'=>'required',
           
-
         ]);
 
         if($validator->fails())

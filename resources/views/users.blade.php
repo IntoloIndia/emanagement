@@ -38,10 +38,10 @@
                                 </div>
                                 <div class="col-md-8">
                                     <select id="role_id" name="role_id" class="form-select form-select-sm">
-                                        <option selected disabled >Choose...</option>
+                                        <option selected>Choose...</option>
                                         @foreach ($roles as $list)
                                             @if ($list->id != MyApp::ADMINISTRATOR)
-                                                <option  value="{{$list->id}}">{{ucwords($list->role)}}</option>
+                                                <option  value="{{$list->id}}" >{{ucwords($list->role)}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -53,9 +53,9 @@
                                 </div>
                                 <div class="col-md-8">
                                     <select id="department_id" name="department_id" class="form-select form-select-sm">
-                                        <option selected>Choose...</option>
+                                        <option disabled selected>Choose...</option>
                                         @foreach ($department as $list)
-                                        <option value="{{$list->id}}">{{$list->department}}</option>
+                                        <option value="{{$list->id}}" >{{ucwords($list->department)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -88,8 +88,11 @@
                                 <div class="col-md-4">
                                     <label for="adminEmail" class="form-label">Password</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="password" name="password" id="password" class="form-control form-control-sm">
+                                <div class="col-md-5">
+                                    <input type="text" name="password" id="password" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-primary btn-sm" id="generate_password">Generate</button>
                                 </div>
                             </div>
                             <div class="row mt-1">
@@ -122,7 +125,7 @@
     </div> --}}
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
 
                 <div class="card-header">
@@ -154,6 +157,7 @@
                                 <th>Percentage</th>
                                 <th>QR</th>
                                 <th>Active</th>
+                                {{-- <th>Login User </th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -175,15 +179,49 @@
                                         @php
                                             
                                             $getIsActive = checkIsActive($list->id, $list->role_id);
+                                            // echo $getIsActive;
+                                            
+                                            foreach ($getIsActive as $key => $item) {
+                                               
+                                            }
                                         @endphp
-                                            @if ($getIsActive == MyApp::ACTIVE)
-                                                <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button>  
-                                            @else
-                                            <button type="button" class="btn btn-warning isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Deactive</button>  
-                                            @endif
+
+                                            @foreach ($getIsActive as $key => $item)
+
+                                                <ul class="list-group list-group-horizontal">
+                                                    <li class="list-group-item"><b>System Key</b></li>
+                                                    <li class="list-group-item">{{$item->created_at}}</li>
+                                                    <li class="list-group-item"><button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></li>
+                                                </ul>
+                                                
+                                            {{-- <ul style="list-style: none">
+                                                @if ($item->is_active == MyApp::ACTIVE) 
+                                                    <li><span><b>System Key</b></span>{{$item->created_at}} <span><button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></span></li>
+                                                    @else
+                                                    <li><span><b>System Key</b></span> {{$item->created_at}}<span> <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></span> </li>
+                                                @endif
+                                            </ul> --}}
+                                            @endforeach
+
+                                             {{-- @if ($item->is_active == MyApp::ACTIVE) 
+                                                 <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button>  
+                                                 <ul style="list-style: none">
+                                                    {{-- <li>{{$item->key}}</li> --}}
+                                                {{-- </ul> --}}
+                                            {{-- @else
+                                            <button type="button" class="btn btn-warning isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Deactive</button> 
+                                            <ul style="list-style: none">
+                                                {{-- <li>{{$item->key}}</li> --}}
+                                            {{-- </ul> 
+                                            @endif --}} 
                                             
                                      </td>
-                                    <td>
+                                     {{-- <td>
+                                        <ul style="list-style: none">
+                                            <li>{{$item->key}}</li>
+                                        </ul>
+                                     </td> --}}
+                                    <td>    
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button> 
                                     </td>
                                 </tr>
@@ -195,7 +233,7 @@
             </div>
         </div>
     </div>
-
+    
 
     {{-- delete user modal  --}}
 
@@ -268,7 +306,6 @@
                 const user_role_id = $(this).attr('user-role-id');
                 // alert(user_id);
                 // alert(user_role_id);
-
                 userIsActive(user_id,user_role_id);
                 
             });
@@ -281,7 +318,53 @@
             // });
 
 
+            // $(document).on('change','#role_id', function (e) {
+            //     e.preventDefault();
+            //     const user_role_name = $(this).attr('user-role-name');
+            //     alert(user_role_name);
+            //     // $('#name').
+
+            // });
+
+            $(document).on('change','#role_id,#department_id,#name', function (e) {
+                e.preventDefault();
+                createCode();
+            });
+
+            $(document).on('click','#generate_password', function (e) {
+                e.preventDefault();
+                var pass_length = 6;
+                var randomString = generateRandomString(pass_length);
+                $('#password').val(randomString);
+            });
+            
+
         });
+
+        function generateRandomString(pass_length) {
+            var randomString = "";
+            var charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (var i = 0; i < pass_length; i++){
+                randomString += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            // alert(randomString);
+            return randomString;
+        }
+
+        function createCode(){
+            var role =$("#role_id option:selected").text().substr(0, 1);
+            var department = $("#department_id option:selected").text().substr(0, 1);
+            var name = $("#name").val().substr(0, 2);
+            // var newcode = `${role}${department}${name}`
+            var code = role + department + name.toUpperCase();
+
+            // console.log(role);
+            // console.log(department);
+            // console.log(name);
+            // console.log(code);
+
+            $('#code').val(code);
+        }
 
         function saveUser() {
             $.ajaxSetup({
@@ -410,3 +493,4 @@
   </script>
 
 @endsection
+
