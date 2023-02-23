@@ -27,9 +27,6 @@ class DashboardController extends Controller
             "categories"=>$categories,
         ]);
         
-        // return response()->json([
-        //     'status'=>200,
-        //     'messege'=>"ok",
-        // ]);
+        
     }
 }
