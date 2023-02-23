@@ -20,7 +20,6 @@ class AdminAuth
         if($request->session()->has('ADMIN_LOGIN'))
         {
             // return redirect('/'. $path);
-
         }else{
             $request->session()->flash('msg','Access denied');
             return redirect('/');

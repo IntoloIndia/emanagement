@@ -30,7 +30,7 @@ class CategoryController extends Controller
             ]);
         }else{
             $model = new Category;
-            $model->category = $req->input('category');
+            $model->category = strtolower($req->input('category'));
             $model->size_type = $req->input('size_type');
             // $model->category_img = $req->input('category_img');
             
@@ -100,7 +100,7 @@ class CategoryController extends Controller
             // $model->category = $req->input('category');
             // $model->category_img = $req->input('category_img');
             
-            $model->category = $req->input('category');
+            $model->category = strtolower($req->input('category'));
             $model->size_type = $req->input('size_type');
             if ($req->hasFile('category_img')){
                 if($req->input('category') > 0)

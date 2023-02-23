@@ -58,12 +58,13 @@ a {
     margin: 5px;
 }  */
 
-
- 
 </style>
 @endsection
 
 @include('purchase.modals')
+
+
+
 
 @section('content-header')
     <div class="content-header">
@@ -74,7 +75,9 @@ a {
             <div class="col-sm-6">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
                     {{-- <button type="button" id="purchaseExcelEntry" class="btn btn-info btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Excel Entry</button> --}}
-                    <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                    @if (session('LOGIN_ROLE') != MyApp::BARCODE)
+                        <button type="button" id="purchaseEntry" class="btn btn-primary btn-flat btn-sm "><i class="fas fa-plus"></i> Purchase Entry</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -97,6 +100,7 @@ a {
                                 <option selected disabled value="0">Supplier</option>                                          
                                 @foreach ($suppliers as $list)
                                 <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
+                                
                                 @endforeach
                             </select>
                         </div>
@@ -104,7 +108,7 @@ a {
                     </div>
                 </div>
     
-                <div class="card-body table-responsive p-0" style="height: 450px;" >
+                <div class="card-body table-responsive p-0" style="height: 500px;" >
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
@@ -124,6 +128,7 @@ a {
                             @else
                                 {{$count = "";}}
                                 @foreach ($purchases as $list)
+                                    {{-- {{$list}} --}}
                                     <tr>
                                         <td >{{++$count}}</td>
                                         <td >{{date('d-m-Y', strtotime($list->bill_date))}}</td>
@@ -131,7 +136,7 @@ a {
                                         <td >{{ucwords($list->supplier_name)}}</td>
                                         <td >{{$list->payment_days}}</td>
                                         <td>
-                                            {{-- <button type='button' class='btn btn-warning btn-flat btn-sm barcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button> --}}
+                                            <button type='button' class='btn btn-secondary btn-flat btn-sm allbarcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button>
                                             <button type="button" class="btn btn-info btn-sm mx-1 viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
@@ -150,6 +155,8 @@ a {
         </div>
 
     </div>
+
+    {{-- <button onclick="alert('call')">click</button> --}}
 
     {{-- dummy --}}
 
@@ -237,8 +244,8 @@ a {
                 $('#purchase_entry_err').removeClass('alert alert-danger');
                 $("#purchaseEntryForm").trigger("reset"); 
             
-                $('#savePurchaseEntryExcelBtn').removeClass('hide');
-                $('#updatePurchaseEntryExcelBtn').addClass('hide');
+                // $('#savePurchaseEntryExcelBtn').removeClass('hide');
+                // $('#updatePurchaseEntryExcelBtn').addClass('hide');
             });
 
             $(document).on('change','#import_csv_file', function (e) {
@@ -291,6 +298,7 @@ a {
 
                 addItem();
             });
+           
 
             $(document).on("click",".delete_item", function(){
 
@@ -361,9 +369,32 @@ a {
                 validateForm();
             });
 
-            $(document).on('click','#savePurchaseEntryExcelBtn', function (e) {
+            $(document).on('change','#pt_file', function (e) {
                 e.preventDefault();
-                savePurchaseEntryExcel();
+                    $('#show_pt_file_data').html('');
+                    // var supplier_id = $('#supplier_id').val();
+                    // var bill_no = $('#bill_no').val();
+                    
+                    loadPtFileData();          
+            });
+
+            $(document).on('click','#savePtFileBtn', function (e) {
+                e.preventDefault();
+
+                var supplier_id = $('#supplier_id').val();
+                var bill_no = $('#bill_no').val();
+                var bill_date = $('#bill_date').val();
+                var payment_days = $('#payment_days').val();
+                var file_name = $(this).val();
+
+                var formData = {
+                    'supplier_id':supplier_id,
+                    'bill_no':bill_no,
+                    'bill_date':bill_date,
+                    'payment_days':payment_days,
+                    'file_name':file_name,
+                };
+                savePtFile(formData);
             });
 
             
@@ -387,6 +418,31 @@ a {
 
                 updatePurchaseEntry(purchase_id, purchase_entry_id);
             });
+
+            $(document).on('click','#deletePurchaseEntryItemBtn',function(e) {
+                var purchase_entry_item_id = $(this).val();
+                $('#deletePurchaseEntryItemModal').modal('show');
+                $('#yesPurchaseEntryItemBtn').val(purchase_entry_item_id);
+            });
+            
+            $(document).on('click','#yesPurchaseEntryItemBtn',function(e) {
+                var purchase_entry_item_id = $(this).val();
+                deletePurchaseEntryItemWise(purchase_entry_item_id);
+            });
+
+            $(document).on('click','#deletePurchaseEntryStyleBtn',function(e) {
+                var purchase_entry_id = $(this).val();
+                // alert(purchase_entry_id);
+                $('#deletePurchaseEntryStyleModal').modal('show');
+                $('#yesPurchaseEntryItemStyleBtn').val(purchase_entry_id);
+            });
+
+            $(document).on('click','#yesPurchaseEntryItemStyleBtn',function(e) {
+                var purchase_entry_id = $(this).val();
+                deletePurchaseEntryStyleWise(purchase_entry_id);
+            });
+            
+
             
             $(document).on('click','.deleteProductBtn', function (e) {
                 e.preventDefault();
@@ -543,7 +599,16 @@ a {
             $(document).on('click','.barcodeBtn', function (e) {
                 e.preventDefault();
                 var purchase_entry_id = $(this).val();
+                // alert(purchase_entry_id);
                 getBarcodeByPurchaseEntry(purchase_entry_id);
+            });
+
+            // all barcode data 
+            $(document).on('click','.allbarcodeBtn', function (e) {
+                e.preventDefault();
+                var purchases_id = $(this).val();
+                // alert(purchases_id);
+                getAllBarcodeByPurchaseEntry(purchases_id);
             });
 
             $(document).on('click','.print', function (e) {
@@ -569,7 +634,7 @@ a {
            
             });
 
-
+           
 
             // $(document).on("click",".price", function(e){
                 // e.preventDefault();

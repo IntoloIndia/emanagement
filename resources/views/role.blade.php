@@ -87,11 +87,14 @@
                         <tr>
                             <th>SN</th>
                             <th>Role</th>
-                            <th colspan="2">Action</th>
+                            <th >Action</th>
                         </tr>
                     </thead>
                     <tbody id="filter_table">
                        {{$count = "";}}
+                       @php
+                           
+                       @endphp
                         @foreach ($roles as $list)
                             <tr class="">
                                 <td>{{++$count}}</td>
@@ -99,12 +102,18 @@
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm editRoleBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button>
                                     {{-- <button type="button" class="btn btn-danger btn-sm deleteRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-trash"></i></button> --}}
-                                    @if($list->active_role == MyApp::ACTIVE)
-                                        <button type="button" class="btn  btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban" style="font-size:24px;color:lightcoral"></i></button> 
+
+                                    @if ($list->id == MyApp::ADMINISTRATOR || $list->id == MyApp::BILLING || $list->id == MyApp::PURCHASE || $list->id == MyApp::ACCOUNTANT)
                                         
                                     @else
-                                        <button type="button" class="btn btn btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="far fa-check-circle" style="font-size:24px;color:rgb(5, 119, 5)"></i></button> 
+                                        @if($list->active == MyApp::ACTIVE)
+                                            <button type="button" class="btn btn btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="far fa-check-circle" style="font-size:24px;color:rgb(5, 119, 5)"></i></button> 
+                                        @else
+                                            <button type="button" class="btn  btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban" style="font-size:24px;color:lightcoral"></i></button> 
+                                        @endif
+
                                     @endif
+
                                 </td>
                             </tr>
                         @endforeach 

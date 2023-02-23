@@ -11,9 +11,30 @@
     use App\Models\CustomerBill;
     use App\Models\Purchase;
     use App\Models\ManageStock;
+    use App\Models\StyleNo;
+    use App\Models\Offer;
+    use App\Models\ApplyOffer;
+    use App\Models\SystemKey;
    
 
     // use App\MyApp;
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    function checkIsActive($user_id, $user_role_id)
+    {
+        $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->get(['is_active','key','created_at']);
+        // $data = SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->value('is_active');
+        return $data;
+    }
 
     function subCategoryItems($category_id){
         $subCategory_item = SubCategory::where(['category_id'=>$category_id])->get();
@@ -236,7 +257,88 @@
 
     }
 
+    function getStyleNO($style_no_id)
+    {
+        $data = StyleNo::where(['id'=>$style_no_id])->pluck('style_no')->first();
+        return $data;
+    }
 
+    function getOfferData($offer_id)
+    {
+        $data = Offer::where(['id'=>$offer_id])->first();
+        return $data;
+    }
+
+    function getSalesPayment($customer_id)
+    // function getSalesPayment($customer_id,$month)
+    {
+        $get_sales_payment = CustomerBill::join('customer_bill_invoices','customer_bills.id','=','customer_bill_invoices.bill_id')
+            ->join('sub_categories','customer_bill_invoices.product_id','=','sub_categories.id')
+            ->where('customer_id' ,$customer_id)           
+            ->select('customer_bills.*','customer_bill_invoices.qty','customer_bill_invoices.size','customer_bill_invoices.price','customer_bill_invoices.amount','customer_bill_invoices.discount_amount','customer_bill_invoices.date','customer_bill_invoices.time','sub_categories.sub_category')
+            ->get();
+            return $get_sales_payment;
+    }
+
+    function getOffers($offer_type)
+    {
+        $data = Offer::where(['offer_type'=> $offer_type])->get();
+        return $data;
+    }
+
+    function convertNumberToWords($amount){
+        // $number = 190908100.25;
+        $no = floor($amount);
+        $point = round($amount - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'One', '2' => 'Two',
+            '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+            '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+            '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+            '13' => 'Thirteen', '14' => 'Fourteen',
+            '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+            '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+            '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+            '60' => 'Sixty', '70' => 'Seventy',
+            '80' => 'Sighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' And ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ? ". " . $words[$point / 10] . " " . $words[$point = $point % 10] : '' ; 
+
+        if (floor( $amount ) != $amount) 
+        {
+            return $result . "Rupees" . $points . " Paise"; 
+        }
+        else{
+            return $result . "Rupees";
+        }
+    }
+
+
+    // function brandOfferItems($brand_id){
+    //     $brand_offer_items = ApplyOffer::where(['brand_id'=>$brand_id])->get();
+    //     return $brand_offer_items; 
+    // }
 
     // show alter item
     // function getAlterationItem($alteration_voucher_id){
@@ -254,4 +356,11 @@
     //     $invoice_no = "SH".$count ."D";
     //     return $invoice_no;
     // }
+
+
+    // 80000001010323
+    // 80000001009771
+    // 80000001006988
+    // 80000001009772
+    // 80000001009780
 

@@ -15,20 +15,24 @@ class CreateCustomerBillInvoicesTable extends Migration
     {
         Schema::create('customer_bill_invoices', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->nullable();
             $table->integer('bill_id')->nullable();
             $table->integer('product_code')->nullable();
             $table->integer('product_id')->nullable();
+            $table->integer('purchase_entry_item_id')->nullable();
             $table->integer('qty')->nullable();
             $table->string('size')->nullable();
             $table->string('price')->nullable();
             $table->float('amount')->nullable();
             $table->float('discount_amount')->nullable();
+            $table->integer('discount_percentage')->default(0);
             $table->float('taxfree_amount')->nullable();
             $table->float('sgst')->default(0);
             $table->float('cgst')->default(0);
             $table->float('igst')->nullable(0);
             $table->integer('alteration_voucher')->nullable(0);
             $table->integer('employee_id')->default(0);
+            $table->integer('offer_id')->default(0);
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->integer('status')->default(0);

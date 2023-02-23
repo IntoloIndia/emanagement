@@ -233,7 +233,7 @@
             $(document).on('click','#updatesubCategoryBtn', function (e) {
                 e.preventDefault();
                 const sub_category_id = $(this).val();
-                updateSubCategoey(sub_category_id);
+                updateSubCategory(sub_category_id);
                 // alert(sub_category_id);
             });
 
@@ -313,7 +313,7 @@
             });
         }
 
-        function updateSubCategoey(sub_category_id){
+        function updateSubCategory(sub_category_id){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

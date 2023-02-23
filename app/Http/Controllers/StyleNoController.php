@@ -92,18 +92,18 @@ class StyleNoController extends Controller
                     $html .= "<th>Action</th>";
                 $html .= "</tr>";
             $html .= "</thead>";
-            $html .= "<tbody>";
+            $html .= "<tbody id='filter_style_no'>";
                 foreach ($styles_no as $key => $list) {
                     $html .= "<tr class='client_project_row' project-id='".$list->id."'>";
-                        $html .= "<td>" . ++$key . "</td>";
-                        $html .= "<td>" . $list->style_no ."</td>";
-                        $html .= "<td> 
-                            <button type='button' class='btn btn-info btn-sm editStyleNoBtn mr-1'  value='".$list->id."'><i class='fas fa-edit'></i></button>
-                            <button type='button' class='btn btn-danger btn-sm deleteStyleNoBtn ml-1'  value='".$list->id."'><i class='fas fa-trash'></i></button>
-                            </td>";
-                        $html .= "</tr>";
+                    $html .= "<td>" . ++$key . "</td>";
+                    $html .= "<td>" . $list->style_no ."</td>";
+                    $html .= "<td> 
+                        <button type='button' class='btn btn-info btn-sm editStyleNoBtn mr-1'  value='".$list->id."'><i class='fas fa-edit'></i></button>
+                        <button type='button' class='btn btn-danger btn-sm deleteStyleNoBtn ml-1'  value='".$list->id."'><i class='fas fa-trash'></i></button>
+                        </td>";
+                    $html .= "</tr>";
                 }
-            $html .= "<tbody>";
+            $html .= "</tbody>";
            
 
         // $html .= "</table>";

@@ -93,7 +93,7 @@
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                            <input type="text" name="table_search" id="search_style_no" class="form-control float-right" placeholder="Search">
 
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default">
@@ -160,6 +160,13 @@
                 e.preventDefault();
                 const style_id = $(this).val();
                 manageStyleNo(style_id);
+            });
+            $(document).on('keyup','#search_style_no', function (e) {
+                e.preventDefault();
+                var value = $(this).val().toLowerCase();
+                $("#filter_style_no tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
             });
             
             // $(document).on('click','.deleteStyleNoBtn', function (e) {

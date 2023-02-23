@@ -6,7 +6,10 @@ class MyApp {
 
     const ADMINISTRATOR = 1;
     const BILLING = 2;
-    const OTHER = 3;
+    const PURCHASE = 3;
+    const ACCOUNTANT = 4;
+    // const OTHER = ;
+    const BARCODE = 9;
 
     const ACTIVE = 1;
     const USED = 2;
@@ -77,6 +80,7 @@ class MyApp {
     const VALUES = 2;
     const PICES = 3;
     const SLAB = 4;
-
+    
+    const PENDING_AMOUNT = 1;
 
 }

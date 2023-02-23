@@ -29,6 +29,10 @@ use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PaymentReceivingController;
+use App\Http\Controllers\CompanySupplierController;
+use App\Http\Controllers\CompanyPurchaseController;
+use App\Http\Controllers\CompanySalesController;
+use App\Http\Controllers\ReportController;
 
 use App\MyApp;
 /*
@@ -41,6 +45,14 @@ use App\MyApp;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+// Route::get('/getmacshellexec',function()
+//     {
+//         $shellexec = shell_exec('getmac'); 
+//         dd($shellexec);
+//     }
+// );
 
 Route::get('/', function () {
     return view('/login');
@@ -80,6 +92,28 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     });
 
+    Route::controller(CompanySupplierController::class)->group(function () {
+        Route::get('admin/company-supplier','index');
+
+        Route::post('admin/save-company-supplier', 'saveCompanySupplier');
+        Route::get('admin/edit-company-supplier/{supplier_id}', 'editCompanySupplier');
+        Route::post('admin/update-company-supplier/{supplier_id}', 'updateCompanySupplier');
+        Route::get('admin/delete-company-supplier/{supplier_id}', 'deleteCompanySupplier');
+        Route::get('admin/company-supplier-detail/{supplier_id}', 'companySupplierDetail');
+        
+    });
+    
+    Route::controller(CompanyPurchaseController::class)->group(function () {
+        Route::get('admin/company-purchase','index');
+        
+    });
+
+    Route::controller(CompanySalesController::class)->group(function () {
+        Route::get('admin/company-sales','index');
+        
+        Route::post('admin/save-company-sales', 'saveCompanySales');
+    });
+
     Route::controller(CountryStateCityController::class)->group(function () {
         Route::get('admin/country-state-city','index');
 
@@ -109,28 +143,27 @@ Route::group(['middleware'=>'admin_auth'], function(){
     
     });
 
-
     // discount route 
     Route::controller(DiscountController::class)->group(function () {
         Route::get('admin/discount','index');
           
     });
+
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('admin/barcode','index');
         Route::get('admin/filter-barcode/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterBarcode');
         Route::get('admin/barcode-by-purchase-entry/{purchase_entry_id}','getBarcodeByPurchaseEntry');
 
+        Route::get('admin/barcode-all-purchase-entry/{purchases_id}','getAllBarcodeByPurchaseEntry');
     });
 
     Route::controller(ExcalProductDataController::class)->group(function () {
         Route::get('admin/excel_data','index');
         Route::get('admin/import-data-product','import');
-        Route::post('admin/export-excel-data-product','export');
-          
+        Route::post('admin/export-excel-data-product','export'); 
     });
 
     // supplier 
-
     Route::controller(SupplierController::class)->group(function () {
         Route::get('admin/supplier','index');
         Route::post('admin/save-supplier-order', 'saveSupplier');
@@ -138,7 +171,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/update-supplier-order/{supplier_id}', 'updateSupplier');
         Route::get('admin/delete-supplier-order/{supplier_id}', 'deleteSupplier');
         Route::get('admin/supplier-detail/{supplier_id}', 'supplierDetail');
-
     
         // Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
         // Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
@@ -155,11 +187,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/delete-style-no/{style_no_id}','deleteStyleNo');
 
     });
-    
 
-     // sales invoice 
-
-     Route::controller(CustomerBillInvoiceController::class)->group(function () {
+    // sales invoice 
+    Route::controller(CustomerBillInvoiceController::class)->group(function () {
         Route::get('admin/customer_bill_invoices','index');
         Route::post('admin/save-order', 'saveOrder');
         Route::get('admin/get-customer-data/{mobile_no}', 'getCustomerData');
@@ -202,7 +232,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-user/{user_id}', 'editUser');
         Route::post('admin/update-user/{user_id}', 'updateUser');
         // Route::get('admin/delete-user/{user_id}', 'deleteUser');
-        Route::get('admin/status-update/{user_id}', 'updateStatus');
+        Route::get('admin/user-is-active/{user_id}/{user_role_id}', 'userIsActive');
     });
     
     Route::controller(CategoryController::class)->group(function () {
@@ -211,8 +241,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-category/{category_id}', 'editCategory');
         Route::post('admin/update-category/{category_id}', 'updateCategory');
         Route::get('admin/delete-category/{category_id}', 'deleteCategory');
-        
-
         // Route::post('/orders', 'store');
     });
 
@@ -240,17 +268,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-color/{color_id}', 'editColor');
         Route::post('admin/update-color/{color_id}', 'updateColor'); 
         Route::get('admin/delete-color/{color_id}', 'deleteColor');
-
-    });
-
-    
-    Route::controller(PurchaseReturnController::class)->group(function () {
-        Route::get('admin/purchase-return', 'index');
-        Route::get('admin/purchase-return-show-data', 'purchaseReturnShowData');
-        Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
-        Route::post('admin/save-return-item', 'saveReturnProduct');
-        Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
-        Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
     });
 
     // sales return 
@@ -262,31 +279,33 @@ Route::group(['middleware'=>'admin_auth'], function(){
         // Route::get('admin/update-release-status/{sales_return_id}', 'updateSalesReleaseStatus');
         Route::get('admin/sales-return-invoice/{sales_return_id}','salesReturnInvoice');
         Route::get('admin/sales_return-status-update/{sales_return_id}', 'updateSalesReturnStatus');
-
-
     });
 
     // offer return 
     Route::controller(OfferController::class)->group(function () {
         Route::get('admin/offer', 'index');
-        Route::post('admin/save-offer', 'saveOffer');
+        Route::post('admin/save-offer-apply', 'saveApplyOffer');
         Route::post('admin/save-create-offer', 'saveCreateOffers');
         Route::get('admin/edit-offer/{offer_id}', 'editOffer');
         Route::post('admin/update-offer/{offer_id}', 'updateOffer');
         Route::get('admin/delete-offer/{offer_id}', 'deleteOffer');
+        Route::get('admin/offer-type/{offer_type}', 'getOfferType');
+        Route::get('admin/applye_offer_update_status/{apply_offer_id}', 'applyOfferUpdateStatus');
 
     });
-
 
     Route::controller(PurchaseEntryController::class)->group(function () {
         Route::get('admin/purchase-entry', 'index');
         Route::post('admin/save-purchase-entry', 'savePurchaseEntry');
         Route::get('admin/edit-purchase-entry/{purchase_entry_id}', 'editPurchaseEntry');
         Route::post('admin/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
+        Route::get('admin/delete-purchase-entry-item-wise/{purchase_entry_item_id}','deletePurchaseEntryItemWise');
+        Route::get('admin/delete-purchase-entry-style-wise/{purchase_entry_id}','deletePurchaseEntryStyleWise');
 
-        // Route::get('admin/delete-purchase-entry/{product_id}', 'deletePurchaseEntry');
+        // Route::get('admin/delete-purchase-entry/{product_id}', 'deleteProductDetail');
 
         Route::get('admin/get-product-detail/{product_code}', 'getProductDetail');
+        // Route::get('admin/get-product-detail/{barcode}', 'getProductDetail');
 
         // Route::get('admin/barcode', 'getBarcode');
         Route::get('admin/get-color_code/{color_code}','getcolorcode');
@@ -306,10 +325,20 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
         Route::get('admin/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
 
-
-        Route::post('admin/save-purchase-entry-excel','savePurchaseEntryExcel');
+        Route::post('admin/load-pt-file-data','loadPtFileData');
+        Route::post('admin/save-pt-file','savePtFile');
 
     });
+
+    Route::controller(PurchaseReturnController::class)->group(function () {
+        Route::get('admin/purchase-return', 'index');
+        Route::get('admin/purchase-return-show-data', 'purchaseReturnShowData');
+        Route::get('admin/get-return-product-item/{barcode_code}', 'getReturnData');
+        Route::post('admin/save-return-item', 'saveReturnProduct');
+        Route::get('admin/update-release-status/{supplier}', 'updateReleaseStatus');
+        Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
+    });
+
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
@@ -348,112 +377,226 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-payment-receiving', 'savePaymentReceiving');
         
     });
+
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('admin/offer-report','offerReport');
+        // Route::get('admin/month-report-data/{month_id}','filterOfferReport');
+
+        // Route::get('admin/filter-barcode/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterBarcode');
+        Route::get('admin/sales-report','salesReport');
+        // Route::get('admin/sales-report-detail','salesReportDetail');
+        Route::get('admin/sales-report-detail/{month_id?}','salesReportDetail');
+        // Route::get('admin/brand-report/{from_date}','brandReport');
+        Route::get('admin/brand-report/{month_id?}','brandReport');
+        Route::get('admin/get-sales-payment/{customer_id}','getSalesPayment');
+        // Route::get('admin/get-sales-payment/{customer_id}/{month}','getSalesPayment');
+        
+    });
+
     
     Route::get('admin/logout', [AuthController::class, 'logout']);
 });
 
-//billing
-Route::group(['middleware'=>'billing_auth'], function(){
 
+Route::group(['middleware'=>'user_auth'], function(){
     Route::fallback(function () {
         return view('404');
     });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('billing', [BillingController::class, 'index']);
+    Route::controller(CountryStateCityController::class)->group(function () {
+        Route::get('/country-state-city','index');
+
+        Route::post('/manage-country', 'manageCountry');
+        Route::get('/edit-country/{country_id}', 'editCountry');
+        Route::get('/delete-country/{country_id}', 'deleteCountry');
+
+        Route::post('/manage-state', 'manageState');
+        Route::get('/edit-state/{state_id}', 'editState');
+        Route::get('/delete-state/{state_id}', 'deleteState');        
+
+        Route::post('/manage-city', 'manageCity');
+        Route::get('/edit-city/{city_id}', 'editCity');
+        Route::get('/delete-city/{city_id}', 'deleteCity');
+
+        Route::get('/get-state-by-country/{country_id}', 'getStateByCountry');
+        Route::get('/get-city-by-state/{state_id}', 'getCityByState');
+
+    });
 
     Route::controller(CategoryController::class)->group(function () {
-        Route::get('category', 'index');
+        Route::get('/category', 'index');
+        Route::post('/save-category', 'saveCategory');
+        Route::get('/edit-category/{category_id}', 'editCategory');
+        Route::post('/update-category/{category_id}', 'updateCategory');
+        Route::get('/delete-category/{category_id}', 'deleteCategory');
         // Route::post('/orders', 'store');
     });
 
+    Route::controller(SubCategoryController::class)->group(function () {
+        Route::get('/sub-category', 'index');
+        Route::post('/save-sub-category', 'saveSubCategory');
+        Route::get('/edit-sub-category/{sub_category_id}', 'editSubCategory');
+        Route::post('/update-sub-category/{sub_category_id}', 'updateSubCategory');
+        Route::get('/delete-sub-category/{sub_category_id}', 'deleteSubCategory');
+
+        Route::get('/get-sub-category-by-category/{category_id}', 'getSubCategoryByCategory');
+        
+    });
+
     Route::controller(SizeColorController::class)->group(function () {
-        Route::get('size-color', 'index');
+        Route::get('/size-color', 'index');
         //size
-        Route::post('save-size', 'saveSize');
-        Route::get('edit-size/{size_id}', 'editSize');
-        Route::post('update-size/{size_id}', 'updateSize'); 
-        Route::get('delete-size/{size_id}', 'deleteSize');
+        Route::post('/save-size', 'saveSize');
+        Route::get('/edit-size/{size_id}', 'editSize');
+        Route::post('/update-size/{size_id}', 'updateSize'); 
+        Route::get('/delete-size/{size_id}', 'deleteSize');
 
         //color
-        Route::post('save-color', 'saveColor');
-        Route::get('edit-color/{color_id}', 'editColor');
-        Route::post('update-color/{color_id}', 'updateColor'); 
-        Route::get('delete-color/{color_id}', 'deleteColor');
+        Route::post('/save-color', 'saveColor');
+        Route::get('/edit-color/{color_id}', 'editColor');
+        Route::post('/update-color/{color_id}', 'updateColor'); 
+        Route::get('/delete-color/{color_id}', 'deleteColor');
+    });
+
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('/brand','index');
+        Route::post('/save-brand','saveBrand');
+        Route::get('/edit-brand/{brand_id}','editBrand');
+        Route::post('/update-brand/{brand_id}','updateBrand');
+        Route::get('/delete-brand/{brand_id}','deleteBrand');
+
+    });
+
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('/customer','index');
+        // Route::get('admin/get-customer/{customer_id}','getCustomerData');
+        Route::get('/customer-detail/{customer_id}','CustomerDetail');
+        // Route::get('admin/get-customer-points/{customer_id}','getCustomerPoints');
+        // Route::get('admin/generate-invoice/{customer_id}','generateInvoice');
+    });
+
+    // sales invoice 
+    Route::controller(CustomerBillInvoiceController::class)->group(function () {
+        Route::get('/customer_bill_invoices','index');
+        Route::post('/save-order', 'saveOrder');
+        Route::get('/get-customer-data/{mobile_no}', 'getCustomerData');
+        Route::get('/generate-invoice/{bill_id}','generateInvoice');
+    });
+
+    // sales return 
+    Route::controller(SalesReturnController::class)->group(function () {
+        Route::get('/sales-return', 'index');
+        Route::get('/sales-return-item/{bill_no}/{barcode_code}', 'getSalesReturnData');
+        Route::get('/get-customer-details/{bill_no}', 'getCustomerDetails');
+        Route::post('/save-sales-return-item', 'saveSalesReturnProduct');
+        Route::get('/sales-return-invoice/{sales_return_id}','salesReturnInvoice');
+        Route::get('/sales_return-status-update/{sales_return_id}', 'updateSalesReturnStatus');
+    });
+
+    // supplier 
+    Route::controller(SupplierController::class)->group(function () {
+        Route::get('/supplier','index');
+        Route::post('/save-supplier-order', 'saveSupplier');
+        Route::get('/edit-supplier-order/{supplier_id}', 'editSupplier');
+        Route::post('/update-supplier-order/{supplier_id}', 'updateSupplier');
+        Route::get('/delete-supplier-order/{supplier_id}', 'deleteSupplier');
+        Route::get('/supplier-detail/{supplier_id}', 'supplierDetail');
+    
+        // Route::get('admin/get-state-by-country/{country_id}', 'getStateByCountry');
+        // Route::get('admin/get-city-by-state/{state_id}', 'getCityByState');
+        // Route::post('admin/manage-city', 'manageCity');
+    });
+
+    Route::controller(StyleNoController::class)->group(function () {
+        Route::get('/style-no','index');
+        Route::get('/style-no-by-supplier/{supplier_id}','styleNoBySupplier');
+        Route::post('/save-style-no','manageStyleNo');
+        Route::get('/supplier-style-no/{supplier_id}','supplierStyleNo');
+
+        Route::get('/edit-style-no/{style_id}','editStyleNo');
+        Route::get('/delete-style-no/{style_no_id}','deleteStyleNo');
+
+    });
+
+    Route::controller(PurchaseEntryController::class)->group(function () {
+        Route::get('/purchase-entry', 'index');
+        Route::post('/save-purchase-entry', 'savePurchaseEntry');
+        Route::get('/edit-purchase-entry/{purchase_entry_id}', 'editPurchaseEntry');
+        Route::post('/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
+        Route::get('/get-product-detail/{product_code}', 'getProductDetail');
+        Route::get('/get-color_code/{color_code}','getcolorcode');
+
+        // excel file route 
+        Route::get('/import-data','importProduct');
+        Route::post('/export-excel-data','exportProduct');
+
+        Route::get('/get-purchase-entry/{supplier_id}/{bill_no}','getPurchaseEntry');
+        Route::get('/generate-purchase-invoice/{purchase_id}','generatePurchaseInvoice');
+        Route::get('/view-purchase-entry/{purchase_id}','viewPurchaseEntry');
+        Route::post('/load-pt-file-data','loadPtFileData');
+        Route::post('/save-pt-file','savePtFile');
+
     });
 
     Route::controller(PurchaseReturnController::class)->group(function () {
-        Route::get('purchase-return', 'index');
-        
+        Route::get('/purchase-return', 'index');
+        Route::get('/purchase-return-show-data', 'purchaseReturnShowData');
+        Route::get('/get-return-product-item/{barcode_code}', 'getReturnData');
+        Route::post('/save-return-item', 'saveReturnProduct');
+        Route::get('/update-release-status/{supplier}', 'updateReleaseStatus');
+        Route::get('/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
     });
-   
 
+    Route::controller(BarcodeController::class)->group(function () {
+        Route::get('/barcode','index');
+        Route::get('/filter-barcode/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','filterBarcode');
+        Route::get('/barcode-by-purchase-entry/{purchase_entry_id}','getBarcodeByPurchaseEntry');
+        Route::get('/barcode-all-purchase-entry/{purchases_id}','getAllBarcodeByPurchaseEntry');
+    });
 
+    Route::controller(ManageStockController::class)->group(function () {
+        Route::get('/manage-stock', 'index');
+        Route::get('/show-product/{category_id}/{sub_category_id?}/{brand_id?}/{style_no_id?}/{color?}','showProduct');
+        Route::get('/get-style-no/{style_no_id}','getstyleNo');
+    });
+
+    
     Route::get('logout', [AuthController::class, 'logout']);
+
 });
 
-// MAIL_MAILER=smtp
-// MAIL_HOST=184.168.116.160
-// MAIL_PORT=25
-// MAIL_USERNAME=office@sdplweb.com
-// MAIL_PASSWORD=!*Office@99!*
-// MAIL_ENCRYPTION=
-// MAIL_FROM_ADDRESS=office@sdplweb.com
-// MAIL_FROM_NAME="SDPLweb"
+//billing
+// Route::group(['middleware'=>'billing_auth'], function(){
 
-//helper
-// use Illuminate\Support\Facades\Mail;
-
-// function sendMail($assigniforms_id,$created_by,$to_email,$project_name){
-//     $upload_files = UploadFiles::where(['assign_iform_id'=>$assigniforms_id])->get();
- 
-//     if($created_by == MyApp::PRAJWAL_SIR){
-//        $cc_mail = 'prajwalshrikhande@gmail.com';
-//     }else{
-//        $cc_mail = 'anuragshrikhande9@gmail.com';
-//     }
-    //--------------
-    // $cc_mail = 'ssdoffice44@gmail.com';
-    
-    // foreach ($upload_files as $file) {
-    //    $path = $file;
-    //    $attachments[] = $path;
-    // }
- 
-    //$attachments = collect([]);
-    //---------------
- 
-    // Mail::send([], [], function($msg) use($to_email, $cc_mail, $project_name, $upload_files){
-    //    $msg->to($to_email);
-    //    $msg->cc($cc_mail);
-    //    $msg->bcc('shriofficejabalpur@gmail.com');
-    //    $msg->subject($project_name);
-    //    $msg->setBody('This mail sent from SDPL. Please find required drawing from attachment.');
-       
-    //    foreach($upload_files as $file){
-    //       $msg->attach('public/storage/'. $file->file_path, array(
-    //          'as' => $file->file_name,
-    //          'mime' => 'application/pdf/png/jpeg/jpg')
-    //       );
-          //---------------
-          // $msg->attach('public/storage/'. $file->file_path, array(
-          //    'as' => $file->file_name,
-          //    'mime' => 'application/pdf/png/jpeg')
-          // );
-          //---------------
-//        }
- 
+//     Route::fallback(function () {
+//         return view('404');
 //     });
- 
-//     return $mail_status = [
-//        'status'=>200
-//     ];
-//  }
 
-//controller 
-// $mail_status = sendMail($assigniforms_id, $iform_data['created_by'], $to_email, $project_name);
-    
+//     Route::get('billing', [BillingController::class, 'index']);
 
-    
+//     Route::controller(CategoryController::class)->group(function () {
+//         Route::get('category', 'index');
+//     });
 
+//     Route::controller(SizeColorController::class)->group(function () {
+//         Route::get('size-color', 'index');
+//         Route::post('save-size', 'saveSize');
+//         Route::get('edit-size/{size_id}', 'editSize');
+//         Route::post('update-size/{size_id}', 'updateSize'); 
+//         Route::get('delete-size/{size_id}', 'deleteSize');
 
+//         Route::post('save-color', 'saveColor');
+//         Route::get('edit-color/{color_id}', 'editColor');
+//         Route::post('update-color/{color_id}', 'updateColor'); 
+//         Route::get('delete-color/{color_id}', 'deleteColor');
+//     });
 
+//     Route::controller(PurchaseReturnController::class)->group(function () {
+//         Route::get('purchase-return', 'index');
+        
+//     });
+   
+
+//     Route::get('logout', [AuthController::class, 'logout']);
+// });

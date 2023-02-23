@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class BillingAuth
+class UserAuth
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class BillingAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->session()->has('BILLING_LOGIN'))
+        if($request->session()->has('USER_LOGIN'))
         {
             // return redirect('/'. $path);
         }else{

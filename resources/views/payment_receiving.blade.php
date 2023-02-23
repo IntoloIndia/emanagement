@@ -10,7 +10,6 @@
         <div class="card mt-3">
             <div class="card-header"><h5><strong>Pending Payment</strong></h5></div>
             <div class="card-body">
-
                 <form id="paymentReceivingForm">
                     @csrf
                     <div id="payment_receiving_err"></div>
@@ -25,6 +24,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <input type="text" name="against_bill_id" id="against_bill_id" class="form-control form-control-sm" placeholder="Enter Bill No">
+                            {{-- <input type="text" name="id" class="form-control form-control-sm" id="bill_no"  placeholder="Enter Bill No"> --}}
                         </div>       
 
                         <div class="col-md-8">
@@ -92,93 +92,160 @@
                                 <input type="text" name="pay_card" id="card_payment" class="form-control form-control-sm hide"  value="0">
                         </div>
                         <div class="col-md-3">
-                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1 ">Receivings</button></div>
+                            <div class="col-md-6"><button id="savePaymentReceivingBtn" class="btn btn-primary btn-sm mx-1" >Receives</button></div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    {{-- right card --}}
+
     <div class="col-md-8">
         <div class="card mt-3">
-            <div class="card-header"><h5><strong>Payment Receivings</strong></h5></div>
+            <div class="card-header"><h5><strong>Pendings</strong></h5></div>
             <div class="card-body">
-                <table class="table table-head-fixed text-nowrap">
-                    <thead>
-                        <tr>
-                            <th row>SN</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Bill No</th>
-                            <th>Customer</th>
-                            <th>Online</th>
-                            <th>Cash</th>
-                            <th>Card</th>
-                            {{-- <th colspan="3">Payment By</th> --}}
-                            <th>Total Amount</th>
-                        </tr>
-                        {{-- <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Online</th>
-                            <th>Cash</th>
-                            <th>Card</th>
-                        </tr> --}}
-                    </thead>
-                    <tbody id="filter_table">
-                        @php
-                            $pay_online =0;
-                            $pay_cash =0;
-                            $pay_card =0;
-                            $total_balance_amount =0;
-                        @endphp
-                        @foreach ($all_receiving_payment as $key=> $list)
-                            <tr class="">
-                                @php
-                                    $balance_amount = ($list->pay_online + $list->pay_cash + $list->pay_card);
-                                @endphp
-                                <td>{{++$key}}</td>
-                                <td>{{ date('d-m-Y', strtotime($list->against_payment_date))}}</td>
-                                <td>{{ ($list->against_payment_time)}}</td>
-                                <td>{{ ($list->against_bill_id)}}</td>
-                                <td>{{ ucwords($list->customer_name)}}</td>
-                                <td>{{ ($list->pay_online)}}</td>
-                                <td>{{ ($list->pay_cash)}}</td>
-                                <td>{{ ($list->pay_card)}}</td>
-                                <td>{{$balance_amount}}</td>
-                                @php
-                                    $pay_online = ($pay_online) + $list->pay_online ;
-                                    $pay_cash = ($pay_cash) + $list->pay_cash ;
-                                    $pay_card = ($pay_card) + $list->pay_card ;
-                                    $total_balance_amount = ($total_balance_amount) + $balance_amount ;
-                                @endphp
-                                {{-- <td>{{ ($list->against_bill_id)}}</td> --}}
-                                <td>
-                                    
-                                   
-                                    {{-- @if($list->active_role == MyApp::ACTIVE)
-                                        <button type="button" class="btn  btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban" style="font-size:24px;color:lightcoral"></i></button> 
-                                        
-                                    @else
-                                        <button type="button" class="btn btn btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="far fa-check-circle" style="font-size:24px;color:rgb(5, 119, 5)"></i></button> 
-                                    @endif --}}
-                                </td>
+                <div class="table-responsive">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th row>SN</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Bill No</th>
+                                <th>Customer</th>
+                                <th>Total Amount</th>
+                                <th>Online</th>
+                                <th>Cash</th>
+                                <th>Card</th>                          
+                                <th>Balance Amount</th>
+                            </tr>                     
+                        </thead>
+                        <tbody id="filter_table">
+                            @php
+                                $pay_online =0;
+                                $pay_cash =0;
+                                $pay_card =0;
+                                $total_amount =0;
+                                $total_balance_amount =0;
+                            @endphp
+                            @foreach ($pending_recevings as $key=> $list)
+                                <tr class="">
+                                    @php
+                                        $balance_amount = ($list->pay_online + $list->pay_cash + $list->pay_card);
+                                    @endphp
+                                    <td>{{++$key}}</td>
+                                    <td>{{ date('d-m-Y', strtotime($list->bill_date))}}</td>
+                                    <td>{{ ($list->bill_time)}}</td>
+                                    <td>{{ ($list->id)}}</td>
+                                    <td>{{ ucwords($list->customer_name)}}</td>
+                                    <td>{{ ($list->total_amount)}}</td>
+                                    <td>{{ ($list->pay_online)}}</td>
+                                    <td>{{ ($list->pay_cash)}}</td>
+                                    <td>{{ ($list->pay_card)}}</td>
+                                    <td>{{$list->balance_amount}}</td>
+                                    @php
+                                        $pay_online = ($pay_online) + $list->pay_online ;
+                                        $pay_cash = ($pay_cash) + $list->pay_cash ;
+                                        $pay_card = ($pay_card) + $list->pay_card ;
+                                        $total_balance_amount = ($total_balance_amount) + $balance_amount ;
+                                        $total_amount = $total_amount + $list->total_amount;
+                                    @endphp  
+                                </tr>
+                            @endforeach 
+                            <tr>
+                                <td colspan="4"></td>
+                                <td><b>Total : </b></td>
+                                <td><b>{{$total_amount}}</b></td>
+                                <td><b>{{$pay_online}}</td>
+                                <td><b>{{$pay_cash}}</b></td>
+                                <td><b>{{$pay_card}}</b></td>
+                                <td><b>{{$total_balance_amount}}</b></td>
                             </tr>
-                        @endforeach 
-                        <tr>
-                            <td colspan="4"></td>
-                            <td><b>Total : </b></td>
-                            <td><b>{{$pay_online}}</td>
-                            <td><b>{{$pay_cash}}</b></td>
-                            <td><b>{{$pay_card}}</b></td>
-                            <td><b>{{$total_balance_amount}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><h5><strong>Receivings</strong></h5></div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th row>SN</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Bill No</th>
+                                <th>Customer</th>
+                                <th>Online</th>
+                                <th>Cash</th>
+                                <th>Card</th>
+                                {{-- <th colspan="3">Payment By</th> --}}
+                                <th>Total Amount</th>
+                            </tr>
+                            {{-- <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Online</th>
+                                <th>Cash</th>
+                                <th>Card</th>
+                            </tr> --}}
+                        </thead>
+                        <tbody id="filter_table">
+                            @php
+                                $pay_online =0;
+                                $pay_cash =0;
+                                $pay_card =0;
+                                $total_balance_amount =0;
+                            @endphp
+                            @foreach ($all_receiving_payment as $key=> $list)
+                                <tr class="">
+                                    @php
+                                        $balance_amount = ($list->pay_online + $list->pay_cash + $list->pay_card);
+                                    @endphp
+                                    <td>{{++$key}}</td>
+                                    <td>{{ date('d-m-Y', strtotime($list->against_payment_date))}}</td>
+                                    <td>{{ ($list->against_payment_time)}}</td>
+                                    <td>{{ ($list->against_bill_id)}}</td>
+                                    <td>{{ ucwords($list->customer_name)}}</td>
+                                    <td>{{ ($list->pay_online)}}</td>
+                                    <td>{{ ($list->pay_cash)}}</td>
+                                    <td>{{ ($list->pay_card)}}</td>
+                                    <td>{{$balance_amount}}</td>
+                                    @php
+                                        $pay_online = ($pay_online) + $list->pay_online ;
+                                        $pay_cash = ($pay_cash) + $list->pay_cash ;
+                                        $pay_card = ($pay_card) + $list->pay_card ;
+                                        $total_balance_amount = ($total_balance_amount) + $balance_amount ;
+                                    @endphp
+                                    {{-- <td>{{ ($list->against_bill_id)}}</td> --}}
+                                    <td>
+                                        
+                                    
+                                        {{-- @if($list->active_role == MyApp::ACTIVE)
+                                            <button type="button" class="btn  btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="fas fa-ban" style="font-size:24px;color:lightcoral"></i></button> 
+                                            
+                                        @else
+                                            <button type="button" class="btn btn btn-sm activeRoleBtn ml-1" value="{{$list->id}}"><i class="far fa-check-circle" style="font-size:24px;color:rgb(5, 119, 5)"></i></button> 
+                                        @endif --}}
+                                    </td>
+                                </tr>
+                            @endforeach 
+                            <tr>
+                                <td colspan="4"></td>
+                                <td><b>Total : </b></td>
+                                <td><b>{{$pay_online}}</td>
+                                <td><b>{{$pay_cash}}</b></td>
+                                <td><b>{{$pay_card}}</b></td>
+                                <td><b>{{$total_balance_amount}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -194,7 +261,8 @@
 
        $(document).ready(function () {
             $(document).on('change','#against_bill_id',function (e) {
-                var bill_id = $(this).val();              
+                var bill_id = $(this).val();  
+                // $('#bill_no').val(bill_id);
                 paymentReceiving(bill_id);
             });
 
@@ -221,6 +289,7 @@
             });
             $(document).on('click','#savePaymentReceivingBtn',function (e) {
                 // alert("dsf");
+
                 e.preventDefault();
                 savePaymentReceiving();
             });

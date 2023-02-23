@@ -317,6 +317,9 @@
         var total_qty = 0;
         var total_price = 0;
 
+        var fr_qty = parseFloat($('#fr_qty').val());
+        var fr_price = parseFloat($('#fr_price').val());
+
         var xs_qty = parseFloat($('#xs_qty').val());
         var xs_price = parseFloat($('#xs_price').val());
 
@@ -344,6 +347,11 @@
         var five_xl_qty = parseFloat($('#five_xl_qty').val());
         var five_xl_price = parseFloat($('#five_xl_price').val());
 
+        var six_xl_qty = parseFloat($('#six_xl_qty').val());
+        var six_xl_price = parseFloat($('#six_xl_price').val());
+
+        if(fr_qty == "" || isNaN(fr_qty))
+        {fr_qty = 0;}
         if(xs_qty == "" || isNaN(xs_qty))
         {xs_qty = 0;}
         if(s_qty == "" || isNaN(s_qty))
@@ -362,7 +370,11 @@
         {four_xl_qty = 0;}
         if(five_xl_qty == "" || isNaN(five_xl_qty))
         {five_xl_qty = 0;}
+        if(six_xl_qty == "" || isNaN(six_xl_qty))
+        {six_xl_qty = 0;}
 
+        if(fr_price == "" || isNaN(fr_price))
+        {fr_price = 0;}
         if(xs_price == "" || isNaN(xs_price))
         {xs_price = 0;}
         if(s_price == "" || isNaN(s_price))
@@ -381,15 +393,18 @@
         {four_xl_price = 0;}
         if(five_xl_price == "" || isNaN(five_xl_price))
         {five_xl_price = 0;}
+        if(six_xl_price == "" || isNaN(six_xl_price))
+        {six_xl_price = 0;}
 
-        total_qty = xs_qty + s_qty + m_qty + l_qty + xl_qty + xxl_qty + three_xl_qty + four_xl_qty + five_xl_qty;
+        total_qty = fr_qty + xs_qty + s_qty + m_qty + l_qty + xl_qty + xxl_qty + three_xl_qty + four_xl_qty + five_xl_qty + six_xl_qty;
         $('#total_qty').val(total_qty);
 
-        total_price = parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) + parseFloat(three_xl_qty * three_xl_price) + parseFloat(four_xl_qty * four_xl_price) + parseFloat(five_xl_qty * five_xl_price);
+        total_price = parseFloat(fr_qty * fr_price) + parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) + parseFloat(three_xl_qty * three_xl_price) + parseFloat(four_xl_qty * four_xl_price) + parseFloat(five_xl_qty * five_xl_price) + parseFloat(six_xl_qty * six_xl_price);
         $('#total_price').val(total_price);
 
         var total_amount = 0;
         var total_taxable = 0;
+        var fr_taxable = 0;
         var xs_taxable = 0;
         var s_taxable = 0;
         var m_taxable = 0;
@@ -399,10 +414,15 @@
         var three_xl_taxable = 0;
         var four_xl_taxable = 0;
         var five_xl_taxable = 0;
+        var six_xl_taxable = 0;
 
         var total_sgst = 0;
         var total_cgst = 0;
         var total_igst = 0;
+
+        var fr_sgst = 0;
+        var fr_cgst = 0;
+        var fr_igst = 0;
 
         var xs_sgst = 0;
         var xs_cgst = 0;
@@ -440,6 +460,20 @@
         var five_xl_cgst = 0;
         var five_xl_igst = 0;
 
+        var six_xl_sgst = 0;
+        var six_xl_cgst = 0;
+        var six_xl_igst = 0;
+
+        if (fr_qty > 0) {
+            var fr_taxable = calculateTaxable(fr_qty, fr_price);
+            if (fr_taxable > 0) {
+                var fr_gst = calculateGst(fr_taxable);
+                fr_sgst = fr_gst.sgst;
+                fr_cgst = fr_gst.cgst;
+                fr_igst = fr_gst.igst;
+            }
+           
+        }
         if (xs_qty > 0) {
             var xs_taxable = calculateTaxable(xs_qty, xs_price);
             if (xs_taxable > 0) {
@@ -526,12 +560,22 @@
             }
         }
 
-        total_taxable = xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable + three_xl_taxable + four_xl_taxable + five_xl_taxable;
+        if (six_xl_qty > 0) {
+            var six_xl_taxable = calculateTaxable(six_xl_qty, six_xl_price);
+            if (six_xl_taxable > 0) {
+                var six_xl_gst = calculateGst(six_xl_taxable);
+                six_xl_sgst = six_xl_gst.sgst;
+                six_xl_cgst = six_xl_gst.cgst;
+                six_xl_igst = six_xl_gst.igst;
+            }
+        }
+
+        total_taxable = fr_taxable + xs_taxable + s_taxable + m_taxable + l_taxable + xl_taxable + xxl_taxable + three_xl_taxable + four_xl_taxable + five_xl_taxable + six_xl_taxable;
         $('#taxable').val(total_taxable.toFixed(2));
 
-        total_sgst = parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst) + parseFloat(three_xl_sgst) + parseFloat(four_xl_sgst) + parseFloat(five_xl_sgst);
-        total_cgst = parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst) + parseFloat(three_xl_cgst) + parseFloat(four_xl_cgst) + parseFloat(five_xl_cgst);
-        total_igst = parseFloat(xs_igst) + parseFloat(s_igst) + parseFloat(m_igst) + parseFloat(l_igst) + parseFloat(xl_igst) + parseFloat(xxl_igst) + parseFloat(three_xl_igst) + parseFloat(four_xl_igst) + parseFloat(five_xl_igst);
+        total_sgst = parseFloat(fr_sgst) + parseFloat(xs_sgst) + parseFloat(s_sgst) + parseFloat(m_sgst) + parseFloat(l_sgst) + parseFloat(xl_sgst) + parseFloat(xxl_sgst) + parseFloat(three_xl_sgst) + parseFloat(four_xl_sgst) + parseFloat(five_xl_sgst) + parseFloat(six_xl_sgst);
+        total_cgst = parseFloat(fr_cgst) + parseFloat(xs_cgst) + parseFloat(s_cgst) + parseFloat(m_cgst) + parseFloat(l_cgst) + parseFloat(xl_cgst) + parseFloat(xxl_cgst) + parseFloat(three_xl_cgst) + parseFloat(four_xl_cgst) + parseFloat(five_xl_cgst) + parseFloat(six_xl_cgst);
+        total_igst = parseFloat(fr_igst) + parseFloat(xs_igst) + parseFloat(s_igst) + parseFloat(m_igst) + parseFloat(l_igst) + parseFloat(xl_igst) + parseFloat(xxl_igst) + parseFloat(three_xl_igst) + parseFloat(four_xl_igst) + parseFloat(five_xl_igst) + parseFloat(six_xl_igst);
 
         
         $('#total_sgst').val(total_sgst.toFixed(2));
@@ -638,7 +682,7 @@
         $("#item_list ").find(".item").chosen();
 
         $('.item_list > .row').each(function(index){
-            console.log(index);
+            // console.log(index);
         });
         
     }
@@ -657,7 +701,6 @@
             url: "supplier-detail/"+supplier_id,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
                 if (response.status == 200) {
                    $('#gst_no').val(response.supplier.gst_no) ;
                    $('#supplier_code').val(response.supplier.supplier_code) ;
@@ -692,7 +735,6 @@
         document.body.innerHTML = printContents;
         window.print();
         document.body.innerHTML = originalContents;
-
     }
 
     function getBarcode() {
@@ -701,7 +743,6 @@
             url: "barcode",
             dataType: "json",
             success: function (response) {
-                //console.log(response);
                 if (response.status == 200) {
                     $('#generateBarcodeModal').html(response.html);
                     $('#generateBarcodeModal').modal('show');
@@ -717,7 +758,6 @@
             url: "get-purchase-entry/"+supplier_id+'/'+bill_no,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
                 if (response.status == 200) {
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
                     $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_total_qty').html('');
@@ -803,20 +843,38 @@
             url: "generate-purchase-invoice/"+purchase_id,
             dataType: "json",
             success: function (response) {
-                console.log(response);
                 if (response.status == 200) {
                     $('#generatePurchaseInvoiceModal').modal('show');
                     $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').html('');
                     $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').append(response.html);
+                    // var amount_in_words = convertNumberToWords(response.grand_total);
+                    // $('#amount_in_words').val(amount_in_words);
                 }
             }
         });
 
     }
 
-    function manageSizeTypeHtml() {
-        // console.log(size_type);
+    // function convertNumberToWords(fees_amount) {
+        
+    //     var ones = ["", "One ", "Two ", "Three ", "Four ", "Five ", "Six ", "Seven ", "Eight ", "Nine ", "Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ", "Fifteen ", "Sixteen ", "Seventeen ", "Eighteen ", "Nineteen "];
+    //     var tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+    //     if ((fees_amount = fees_amount.toString()).length > 9) return "Overflow: Maximum 9 digits supported";
+    //     n = ("000000000" + fees_amount).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    //     if (!n) return;
+    //     var str = "";
+    //     str += n[1] != 0 ? (ones[Number(n[1])] || tens[n[1][0]] + " " + ones[n[1][1]]) + "Crore " : "";
+    //     str += n[2] != 0 ? (ones[Number(n[2])] || tens[n[2][0]] + " " + ones[n[2][1]]) + "Lakh " : "";
+    //     str += n[3] != 0 ? (ones[Number(n[3])] || tens[n[3][0]] + " " + ones[n[3][1]]) + "Thousand " : "";
+    //     str += n[4] != 0 ? (ones[Number(n[4])] || tens[n[4][0]] + " " + ones[n[4][1]]) + "Hundred " : "";
+    //     str += n[5] != 0 ? (str != "" ? "and " : "") + (ones[Number(n[5])] || tens[n[5][0]] + " " + ones[n[5][1]]) : " ";
+        
+    //     return str+"Rupees Only";
+    // }
 
+
+
+    function manageSizeTypeHtml() {
         var category_id = $('#category_id').val();
         var size_type = $('#category_id').find("option:selected").attr('size-type');
         $('#size_type_id').val(size_type);
@@ -865,7 +923,7 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
+                // console.log(response);
 
                 if (response.status === 400) {
                     $('#purchase_entry_err').html('');
@@ -926,9 +984,7 @@
             dataType: "json",
             success: function (response) {
                 // console.log(response);
-
                 if(response.status == 200){
-
                     $('#purchaseEntryModal').modal('show');
                     $('#product_err').html('');
                     $('#product_err').removeClass('alert alert-danger');
@@ -991,6 +1047,8 @@
                                 size = 'four_xl';
                             }else if(list.size == '5xl'){
                                 size = 'five_xl';
+                            }else if(list.size == '6xl'){
+                                size = 'six_xl';
                             }else{
                                 size = list.size;
                             }
@@ -1057,6 +1115,35 @@
                 }else{
                     $('#purchase_entry_err').html('');
                     $('#purchaseEntryModal').modal('hide');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+    function deletePurchaseEntryItemWise(purchase_entry_item_id) {
+        $.ajax({
+            type: "get",
+            url: "delete-purchase-entry-item-wise/" + purchase_entry_item_id,
+            data: "formData",
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 200)
+                {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+    function deletePurchaseEntryStyleWise(purchase_entry_id){
+        $.ajax({
+            type: "get",
+            url: "delete-purchase-entry-style-wise/"+purchase_entry_id,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if(response.status == 200){
                     window.location.reload();
                 }
             }
@@ -1162,7 +1249,7 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status === 400) {
                     $('#subcategory_err').html('');
                     $('#subcategory_err').addClass('alert alert-danger');
@@ -1266,7 +1353,7 @@
             url: "barcode-by-purchase-entry/"+purchase_entry_id,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     $('#barcodeModal').modal('show');
                     $('#view_barcode').html('');
@@ -1277,7 +1364,23 @@
 
     }
 
-    function savePurchaseEntryExcel() {
+    function getAllBarcodeByPurchaseEntry(purchases_id){
+        $.ajax({
+            type: "get",
+            url: "barcode-all-purchase-entry/"+purchases_id,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if (response.status == 200) {
+                    $('#barcodeModal').modal('show');
+                    $('#view_barcode').html('');
+                    $('#view_barcode').append(response.html);
+                }
+            }
+        });
+    }
+
+    function loadPtFileData() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1287,18 +1390,42 @@
         var formData = new FormData($("#purchaseEntryForm")[0]);
         $.ajax({
             type: "post",
-            url: "save-purchase-entry-excel",
+            url: "load-pt-file-data",
             data: formData,
             dataType: "json",
             cache: false,
             contentType: false, 
             processData: false, 
             success: function (response) {
-                console.log(response);
+                $('#show_pt_file_data').html('');
                 if (response.status == 200) {
                     // $('#barcodeModal').modal('show');
-                    $('#show_pt_file_data').html('');
                     $('#show_pt_file_data').append(response.html);
+                }
+            }
+        });
+    }
+
+    function savePtFile(formData) {
+        $.ajax({
+            type: "post",
+            url: "save-pt-file",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if(response.status === 400)
+                {
+                    $('#purchase_entry_err').html('');
+                    $('#purchase_entry_err').addClass('alert alert-danger');
+                    var count = 1;
+                    $.each(response.errors, function (key, err_value) { 
+                        $('#purchase_entry_err').append('<span>' + count++ +'. '+ err_value+'</span></br>');
+                    });
+                }else{
+                    $('#purchase_entry_err').html('');
+                    $('#purchaseEntryModal').modal('hide');
+                    window.location.reload();
                 }
             }
         });

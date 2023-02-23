@@ -13,13 +13,19 @@ class PaymentReceivingController extends Controller
   public function index()
   {
     $all_receiving_payment = PaymentReceiving::join('customers','payment_receivings.customer_id','=','customers.id')
-    ->select('payment_receivings.*','customers.customer_name')
-    ->orderBy('against_payment_date','DESC')
-    ->orderBy('against_payment_time','DESC')
-    ->get();
+      ->orderBy('against_payment_date','DESC')
+      ->orderBy('against_payment_time','DESC')
+      ->select('payment_receivings.*','customers.customer_name')
+      ->get();
+
+    $pending_recevings = CustomerBill::join('customers','customer_bills.customer_id','=','customers.id')
+      ->where(['customer_bills.pending_amount_status'=>MyApp::STATUS])
+      ->select('customer_bills.*','customers.customer_name')
+      ->get();
    
     return view('payment_receiving',[
-        'all_receiving_payment'=>$all_receiving_payment
+        'all_receiving_payment'=>$all_receiving_payment,
+        'pending_recevings'=>$pending_recevings
        
     ]);
   }
@@ -61,23 +67,41 @@ class PaymentReceivingController extends Controller
               'errors'=>$validator->messages("all field required"),
           ]);
       }else{
+          
           $model = new PaymentReceiving;
+          $against_bill_id = $req->input('against_bill_id');
           $model->against_payment_date = date('Y-m-d');
           $model->against_payment_time = date('g:i A');
-          $model->against_bill_id = $req->input('against_bill_id');
+          $model->against_bill_id = $against_bill_id;
           $model->customer_id = $req->input('customer_id');
           $model->pay_online = $req->input('pay_online');
           $model->pay_cash = $req->input('pay_cash');
           $model->pay_card = $req->input('pay_card');
           $model->balance_amount = $req->input('balance_amount');
-          $model->save();
+          
+          if($model->save())
+          {
+            $customer_bills = CustomerBill::find($against_bill_id);
+            $customer_bills->pending_amount_status = MyApp::PENDING_AMOUNT;
+            $customer_bills->save();
 
               return response()->json([
-                  'status'=>200,
+                  'status'=>200,                
               ]);
+            }
           }
     
   }
+
+  // public function pendingAmountStatus($bill_id)
+  // {
+  //   $pending_amount_status = CustomerBill::find($bill_id);
+    
+  //   return response()->json([
+  //     'status'=>200,
+  //     'pending_amount_status'=>$pending_amount_status
+  // ]);
+  // }
 
 
 
