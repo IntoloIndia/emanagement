@@ -74,8 +74,7 @@ class CustomerBillInvoiceController extends Controller
 
      function saveOrder(Request $req)
     {
-        // return $req;
-        // die();
+        
         $validator = Validator::make($req->all(),[
             'customer_name'=>'required',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
