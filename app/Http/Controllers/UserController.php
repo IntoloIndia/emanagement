@@ -187,30 +187,21 @@ class UserController extends Controller
         }
     }
 
-    // function updateStatus($user_id)
-    // {
-    //     $status_data =User::find($user_id);
-    //     $status_data->status = MyApp::ACTIVE;
-    //     $status_data->save();
-        
-    //     return response()->json([
-    //         'status'=>200
-    //     ]);
-    // }
-
-    function userIsActive($user_id, $user_role_id)
+    public function userIsActive(Request $req)
     {
-        $status_data =SystemKey::where(['user_id'=>$user_id, 'user_role_id'=>$user_role_id])->first();
+        
+        $status_data = SystemKey::where(['user_id'=>$req['user_id'], 'user_role_id'=>$req['user_role_id'], 'key'=>$req['system_key']])->first();
+        
         if($status_data->is_active == 1){
             $status_data->is_active = MyApp::INACTIVE;
         }else{
             $status_data->is_active = MyApp::ACTIVE;
         }
         $status_data->save();
-        
         return response()->json([
             'status'=>200,
         ]);
+        
     }
     
 }

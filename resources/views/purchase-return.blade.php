@@ -153,22 +153,8 @@
         </div>
 
         <div class="col-md-6" id="tableData">
-           {{-- @foreach ($purchase_return as $key1 => $list)
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"> <b>{{ucwords($list->supplier_name)}}</b></h3>
-                        <button type="button" class="btn btn-success btn-sm ml-2 float-right generatePurchaseInvoice"  value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
-                        <button class="btn btn-warning btn-sm float-right releaseStatusBtn" id="release_date" value="{{$list->id}}">Relese</button>
-                    </div>
-                    <div class="card-body"> --}}
-                       <div id="panding_release_purchese_note">
-
-                       </div>
-                    {{-- </div>
-                </div>
-            @endforeach
-        </div> --}}
-    </div>
+            <div id="panding_release_purchese_note"></div>
+        </div>
 
 <div class="row">
     <div class="col-md-6">
@@ -199,9 +185,9 @@
                                 <td>{{date('d-m-Y',strtotime($list->release_date))}}</td>
                                 <td>{{$list->release_time}}</td>
                                 <td>
-                                <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice"  value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                <button type="button" class="btn btn-success btn-sm generatePurchaseReturnInvoice"  value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                 {{-- <button type="button" class="btn btn-success btn-flat btn-sm returnproductBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
-                                {{-- <button type="button" class="btn btn-success btn-flat btn-sm generatePurchaseInvoiceModal" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
+                                {{-- <button type="button" class="btn btn-success btn-flat btn-sm generatePurchaseReturnInvoiceModal" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button> --}}
                                 </td>
                             </tr>
                             @endforeach
@@ -265,43 +251,9 @@
         </tbody>
     </table>
     
-    {{-- <section>
-        <div class="modal fade" id="viewAlterVoucherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="height: 550px;">
-            <div class="modal-dialog modal-md modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Debit Note Invoice</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="print_alter_voucher">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <h6><b>Mangaldeep (Jabalpur)<br>
-                                Samdariya Mall Jabalpur-482002</b></h6>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            {{-- <div class="col-6"><h6>GSTNO : 1245GDFTE4587</h6></div>
-                            <div class="col-6 text-end"><h6>Mobile No : 5487587458</h6></div> --}}
-                        {{-- </div>
-                        <hr>
-                        <div id='alter_item_list'></div> --}}
-                        {{-- <div class="row">
-                            <div class="col-md-12 text-center">
-                                <p>Thankyou! Visit Again</p>
-                            </div>
-                        </div> --}}
-                    {{-- </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
-                    </div>
-                </div>
-            </div>
-        </div> 
-    </section>
-    --}} 
+    
     <section>
-        <div class="modal fade" id="generatePurchaseInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="generatePurchaseReturnInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -309,133 +261,120 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id="show_purchase_invoice"> </div>
+                        <div id="show_purchase_return_invoice"> </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-sm float-end" onClick="printAlterReceipt()">Print</button>
+                        <button type="button" class="btn btn-primary btn-sm float-end" onClick="printInvoice('print_invoice')" >Print</button>
                     </div>
                 </div>
             </div>
         </div>  
         
     </section>
+
+@endsection
+
 @section('script')
 <script>
     $(document).ready(function(){
         purchaseReturnShowData();
         addItem();
 
-        // $(document).on('change','#barcode',function(){
-        // });
         // save funcation 
         $(document).on('click','#saveReturnItem',function(){
             // alert("call");
             saveReturnProduct();
         });
 
-        $(document).on('click','.generatePurchaseInvoice',function(){
+        $(document).on('click','.generatePurchaseReturnInvoice',function(){
           var purchase_return_id = $(this).val();
-            $('#generatePurchaseInvoiceModal').modal('show');
+            $('#generatePurchaseReturnInvoiceModal').modal('show');
             purchaseReturnInvoice(purchase_return_id);
-    
             
         });
 
         // supplier details 
 
         $(document).on('change','#supplier_id', function (e) {
-                e.preventDefault();
-                var supplier_id = $('#supplier_id').val();
+            e.preventDefault();
+            var supplier_id = $('#supplier_id').val();
 
-                supplierDetail(supplier_id);
-
-                // $('#bill_no').val('');
-                // $('#discount').val('0');
-                // $('#purchaseEntryModal').find('#purchaseEntryForm').find('#show_purchase_entry').html('');
-
+            supplierDetail(supplier_id);
         });
 
-        $(document).on('click','#printAlterReceiptBrn', function () {
-                // $('#viewAlterVoucherModal').modal('show');
-                printAlterReceipt();
-            });
-
         $(document).on('click','.releaseStatusBtn', function (e) {
-                e.preventDefault();
-                const supplier_id = $(this).val();
-                $('#releaseStatusModal').modal('show');
-                $('#yesReleaseStatusBtn').val(supplier_id);
-            });
+            e.preventDefault();
+            const supplier_id = $(this).val();
+            $('#releaseStatusModal').modal('show');
+            $('#yesReleaseStatusBtn').val(supplier_id);
+        });
 
-            $(document).on('click','#yesReleaseStatusBtn', function (e) {
-                e.preventDefault();
-                const supplier_id = $(this).val();
-                updateReleaseStatus(supplier_id);
-            });
-
-
+        $(document).on('click','#yesReleaseStatusBtn', function (e) {
+            e.preventDefault();
+            const supplier_id = $(this).val();
+            updateReleaseStatus(supplier_id);
+        });
           
     });
     
 
     // function start 
         function addItem() {
-            
             $('#item_list').append($('#item_row').html());
             // $("#item_list tr").find(".item").chosen();
         }
 
         $(document).on('change','#barcode', function () {
-                const barcode_code = $(this).val();
-                $.ajax({
-                    type: "get",
-                    url: "get-return-product-item/"+barcode_code,
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response);
-                        if (response.status == 200) {
-                            $('#style_no').val(response.return_product.style_no);
-                            $('#style_no_id').val(response.return_product.style_no_id);
-                            $('#size').val(response.return_product.size);
-                            // $('#qty').val(response.return_product.qty);
-                            $('#color').val(response.return_product.color);
-                            $('#price').val(response.return_product.price);
-                            $('#taxable').val(response.return_product.taxable);
-                            $('#discount').val(response.return_product.discount);
-                            $('#total_sgst').val(response.return_product.sgst);
-                            $('#total_cgst').val(response.return_product.cgst);
-                            $('#total_igst').val(response.return_product.igst);
-                            $('#total_amount').val(response.return_product.amount);
-                        }else{
-                            $('#style_no').val("");
-                            $('#style_no_id').val("");
-                            $('#size').val("");
-                            $('#color').val("");
-                            $('#price').val("");
-                            $('#discount').val("");
-                            $('#taxable').val("");
-                            $('#total_igst').val("");
-                            $('#total_sgst').val("");
-                            $('#total_cgst').val("");
-                            $('#total_amount').val("");
-                            $('#barcode').val("");
-                        }
-                       
+            const barcode_code = $(this).val();
+            $.ajax({
+                type: "get",
+                url: "get-return-product-item/"+barcode_code,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        $('#style_no').val(response.return_product.style_no);
+                        $('#style_no_id').val(response.return_product.style_no_id);
+                        $('#size').val(response.return_product.size);
+                        // $('#qty').val(response.return_product.qty);
+                        $('#color').val(response.return_product.color);
+                        $('#price').val(response.return_product.price);
+                        $('#taxable').val(response.return_product.taxable);
+                        $('#discount').val(response.return_product.discount);
+                        $('#total_sgst').val(response.return_product.sgst);
+                        $('#total_cgst').val(response.return_product.cgst);
+                        $('#total_igst').val(response.return_product.igst);
+                        $('#total_amount').val(response.return_product.amount);
+                    }else{
+                        $('#style_no').val("");
+                        $('#style_no_id').val("");
+                        $('#size').val("");
+                        $('#color').val("");
+                        $('#price').val("");
+                        $('#discount').val("");
+                        $('#taxable').val("");
+                        $('#total_igst').val("");
+                        $('#total_sgst').val("");
+                        $('#total_cgst').val("");
+                        $('#total_amount').val("");
+                        $('#barcode').val("");
                     }
-                });
-                
+                        
+                }
             });
+            
+        });
 
            
             function saveReturnProduct() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-            var formData = new FormData($("#returnItemsData")[0]);
-            $.ajax({
+                var formData = new FormData($("#returnItemsData")[0]);
+                $.ajax({
                 type: "post",
                 url: "save-return-item",
                 data: formData,
@@ -473,24 +412,24 @@
                             purchaseReturnShowData();
                         }
                         
-                }
-            });
-        }
+                    }
+                });
+            }
         
 
         function updateReleaseStatus(supplier_id) {
-        $.ajax({
-            type: "get",
-            url: `update-release-status/${supplier_id}`,
-            dataType: "json",
-            success: function (response) {
-                console.log(response);
-                if(response.status == 200){
+            $.ajax({
+                type: "get",
+                url: `update-release-status/${supplier_id}`,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if(response.status == 200){
+                    }
+                    window.location.reload();
                 }
-                window.location.reload();
-            }
-        });
-    } 
+            });
+        } 
 
 
     
@@ -500,23 +439,23 @@
             url: `purchase-return-invoice/${purchase_return_id}`,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response.status == 200){
-                    $('#show_purchase_invoice').html("");
-                    $('#show_purchase_invoice').append(response.html);
+                    $('#show_purchase_return_invoice').html("");
+                    $('#show_purchase_return_invoice').append(response.html);
                 }
             }
         });
     } 
 
-    function printAlterReceipt(){
-        var backup = document.body.innerHTML;
-        var div_content = document.getElementById("generatePurchaseInvoiceModal").innerHTML;
-        document.body.innerHTML = div_content;
-        window.print();
-        document.body.innerHTML = backup;
-        window.location.reload();
-    }
+    // function printAlterReceipt(){
+    //     var backup = document.body.innerHTML;
+    //     var div_content = document.getElementById("generatePurchaseReturnInvoiceModal").innerHTML;
+    //     document.body.innerHTML = div_content;
+    //     window.print();
+    //     document.body.innerHTML = backup;
+    //     window.location.reload();
+    // }
 
     function supplierDetail(supplier_id) {
         $.ajax({
@@ -539,21 +478,21 @@
     }
 
         function purchaseReturnShowData(){
-                $.ajax({
-                type: "get",
-                url: `purchase-return-show-data`,
-                dataType: "json",
-                success: function (response) {
-                    if(response.status == 200){
-                        // console.log(response);
-                        $('#panding_release_purchese_note').html("");
-                        $('#panding_release_purchese_note').append(response.html);
-                        }
-                  }
+            $.ajax({
+            type: "get",
+            url: `purchase-return-show-data`,
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 200){
+                    // console.log(response);
+                    $('#panding_release_purchese_note').html("");
+                    $('#panding_release_purchese_note').append(response.html);
+                    }
+                }
             });
         }
 
 
 </script>
 @endsection
-@endsection
+

@@ -1,8 +1,80 @@
 @extends('layouts.app')
-@section('page_title', '    ')
+@section('page_title', 'Customer')
 
 @section('content')
+
+<div class="modal fade" id="coustomerModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CustomerDetail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    @csrf
+                    <div id="customer_error"></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label  class="form-label">Customer name</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="customer_name" id="customer_name" class="form-control form-control-sm" placeholder="name">
+                            {{-- <span class="text-danger">
+                                @error('customer_name')
+                                    {{$message}}
+                                @enderror
+                            </span> --}}
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <label  class="form-label">Mobile no</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" name="mobile_no" id="mobile_no" class="form-control form-control-sm" placeholder="mobile no">
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <label  class="form-label">City</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="city_id" id="city_id" class="form-select">
+                                <option selected disabled>City</option>
+                                @foreach ($cities as $item)
+                                    <option value="{{ $item->id }}">{{ ucwords($item->city) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <label  class="form-label"> Advance amount</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" name="advance_amount" id="advance_amount" class="form-control form-control-sm" placeholder="amount">
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="saveCustomerBtn" class="btn btn-primary btn-sm ">Save </button>
+                        <button type="button" id="updateCustomerBtn" class="btn btn-primary btn-sm hide">Update </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-primary btn-sm float-right" id="addCustomer"  data-bs-target="#staticBackdrop">Add Advance Amount</button>
+    </div>
+</div>
+
+<div class="row mt-2">
     <div class="col-md-5">
         <div class="card">
 
@@ -75,13 +147,35 @@
 </section>
 
 @endsection
+
 @section('script')
 <script>
     $(document).ready(function(){
+
+        $(document).ready(function () {
+            $(document).on('click','#addCustomer', function (e) {
+                e.preventDefault();
+                $('#coustomerModal').modal('show');
+                $('#customer_error').html('');
+                $('#customer_error').removeClass('alert alert-danger');
+                $("#customerForm").trigger("reset"); 
+                $('#saveCustomerBtn').removeClass('hide');
+                $('#updateCustomerBtn').addClass('hide');
+            });
+        })
+
+
         $(document).on('change','#customer_id', function(e){
             e.preventDefault();
             var customer_id = $(this).val();
             getProjects(customer_id);
+        });
+
+        // save customer datails
+        $(document).on('click','#saveCustomerBtn', function(e){
+            e.preventDefault();
+            // alert("call");
+            saveCustomerAdvanceAmount();
         });
 
         
@@ -107,6 +201,41 @@
 
 
     });
+
+    function saveCustomerAdvanceAmount() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData($("#customerForm")[0]);
+            $.ajax({
+                type: "POST",
+                url: "save-customer-advance-amount",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status === 400) {
+                        $('#customer_error').html('');
+                        $('#customer_error').addClass('alert alert-danger');
+                        var count = 1;
+                        $.each(response.errors, function (key, err_value) {
+                            $('#customer_error').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+                        });
+
+                    } else {
+                        $('#customer_error').html('');
+                        $('#coustomerModal').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
 
     function getProjects(customer_id) {
         $.ajax({

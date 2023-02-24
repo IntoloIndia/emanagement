@@ -53,8 +53,6 @@ function generateInvoice(bill_id) {
        url: "generate-invoice/"+bill_id,
        dataType: "json",
        success: function (response) {
-        //    console.log(response);
-
            if (response.status == 200) {
                $('#generateInvoiceModal').html(response.html);
                $('#generateInvoiceModal').modal('show');
@@ -162,6 +160,17 @@ function convertNumberToWords(fees_amount) {
 
 function printBarcode(params) {
     
+    // alert(params)
+    var backup = document.body.innerHTML;
+    var div_content = document.getElementById(params).innerHTML;
+    document.body.innerHTML = div_content;
+    window.print();
+    document.body.innerHTML = backup;
+    window.location.reload();
+}
+
+function printInvoice(params) {
+    // alert(params);
     var backup = document.body.innerHTML;
     var div_content = document.getElementById(params).innerHTML;
     document.body.innerHTML = div_content;

@@ -69,11 +69,7 @@
                                                 <td>
                                                     {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
                                                     {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
-                                                    <button type="button"
-                                                        class="btn btn-success btn-flat btn-sm orderInvoiceBtn"
-                                                        value="{{ $item->id }}" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Invoice"><i
-                                                            class="fas fa-file-invoice"></i></button>
+                                                    <button type="button" class="btn btn-success btn-flat btn-sm billInvoiceBtn" value="{{ $item->id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
                                                     {{-- <button type="button" class="btn btn-danger btn-flat btn-sm" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"><i class="fas fa-ban"></i></button> --}}
                                                 </td>
                                             </tr>
@@ -597,8 +593,7 @@
     
     <section>
         <div id="newcontent">
-            <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="generateInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
             </div>
         </div>
@@ -609,16 +604,13 @@
             <div class="card">
                 <div class="card-header">
                     <b>Billing</b>
-                    <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop">
-                        View Invoice
-                    </button>
+                    <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> View Invoice </button>
                 </div>
                 <div class="card-body">
                     <form id="orderForm">
                         @csrf
                         <div class="row">
-                            <div class="order_err"></div>
+                            <div id="order_err"></div>
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-header">
@@ -1520,15 +1512,15 @@
                 validateForm();
             });
 
-            $(document).on('click', '.orderInvoiceBtn', function(e) {
+            $(document).on('click', '.billInvoiceBtn', function(e) {
                 e.preventDefault();
                 const bill_id = $(this).val();
-                // alert(bill_id);
                 generateInvoice(bill_id);
             });
 
-            $(document).on('click', '#printBtn', function() {
-                printInvoice();
+            $(document).on('click', '#printBillInvoiceBtn', function() {
+                var print_section = $(this).attr('print-section');
+                printInvoice(print_section);
             });
 
             $(document).on('click', '#reload_invoice_print', function() {
@@ -2223,8 +2215,7 @@
                         $('#order_err').removeClass('alert alert-danger');
                         var count = 1;
                         $.each(response.errors, function(key, err_value) {
-                            $('#order_err').append('<span>' + count++ + '. ' + err_value +
-                                '</span></br>');
+                            $('#order_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');
                         });
 
                     } else {
@@ -2252,42 +2243,18 @@
 
         // }
 
-        function printInvoice() {
-            var backup = document.body.innerHTML;
-            var div_content = document.getElementById("invoiceModalPrint").innerHTML;
-            document.body.innerHTML = div_content;
-            window.print();
-            document.body.innerHTML = backup;
-            window.location.reload();
-        }
-
-        // function generateInvoice(bill_id) {
-        //  $.ajax({
-        //     type: "get",
-        //     url: "generate-invoice/"+bill_id,
-        //     dataType: "json",
-        //     success: function (response) {
-
-        //         if (response.status == 200) {
-        //             $('#generateInvoiceModal').html(response.html);
-        //             $('#generateInvoiceModal').modal('show');
-        //             // window.location.reload();
-        //         }
-        //     }
-        // });
-
+        // function printInvoice() {
+        //     var backup = document.body.innerHTML;
+        //     var div_content = document.getElementById("invoiceModalPrint").innerHTML;
+        //     document.body.innerHTML = div_content;
+        //     window.print();
+        //     document.body.innerHTML = backup;
+        //     window.location.reload();
         // }
+
+        
     </script>
-    <script>
-        function myFun(params) {
-            // alert("call");
-            var backup = document.body.innerHTML;
-            var divcon = document.getElementById(params).innerHTML;
-            document.body.innerHTML = divcon;
-            window.print();
-            document.body.innerHTML = backup;
-        }
-    </script>
+    
 
 @endsection
 

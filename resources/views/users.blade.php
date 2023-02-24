@@ -162,9 +162,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{$count = "",$status=0;}}
+                            {{$count = "", $status=0;}}
                             @foreach ($Users as $list)
-                            
                                 <tr>
                                     <td>{{++$count}}</td>
                                     {{-- <td>{{($list->role == MyApp::ADMINISTRATOR) ? "Administrator" : "Mess" }}</td> --}}
@@ -177,50 +176,21 @@
                                     <td><img src="{{$list->qrcode}}" width="40px" height="40px"><br/></td>
                                     <td>
                                         @php
-                                            
                                             $getIsActive = checkIsActive($list->id, $list->role_id);
-                                            // echo $getIsActive;
-                                            
-                                            foreach ($getIsActive as $key => $item) {
-                                               
-                                            }
                                         @endphp
-
-                                            @foreach ($getIsActive as $key => $item)
-
-                                                <ul class="list-group list-group-horizontal">
-                                                    <li class="list-group-item"><b>System Key</b></li>
-                                                    <li class="list-group-item">{{$item->created_at}}</li>
-                                                    <li class="list-group-item"><button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></li>
-                                                </ul>
-                                                
-                                            {{-- <ul style="list-style: none">
-                                                @if ($item->is_active == MyApp::ACTIVE) 
-                                                    <li><span><b>System Key</b></span>{{$item->created_at}} <span><button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></span></li>
-                                                    @else
-                                                    <li><span><b>System Key</b></span> {{$item->created_at}}<span> <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></span> </li>
+                                        @foreach ($getIsActive as $key => $item)
+                                            <ul class="list-group list-group-horizontal">
+                                                <li class="list-group-item"><b>System Key</b></li>
+                                                <li class="list-group-item">{{$item->created_at}}</li>
+                                                @if ($item->is_active == 1)
+                                                    <li class="list-group-item"><button type="button" class="btn btn-success isActive btn-sm  ml-1" system-key="{{$item->key}}" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button></li>
+                                                @else
+                                                    <li class="list-group-item"><button type="button" class="btn btn-danger isActive btn-sm  ml-1" system-key="{{$item->key}}" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Deactive</button></li>
                                                 @endif
-                                            </ul> --}}
-                                            @endforeach
-
-                                             {{-- @if ($item->is_active == MyApp::ACTIVE) 
-                                                 <button type="button" class="btn btn-success isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Active</button>  
-                                                 <ul style="list-style: none">
-                                                    {{-- <li>{{$item->key}}</li> --}}
-                                                {{-- </ul> --}}
-                                            {{-- @else
-                                            <button type="button" class="btn btn-warning isActive btn-sm  ml-1" value="{{$list->id}}" user-role-id="{{$list->role_id}}" >Deactive</button> 
-                                            <ul style="list-style: none">
-                                                {{-- <li>{{$item->key}}</li> --}}
-                                            {{-- </ul> 
-                                            @endif --}} 
-                                            
+                                            </ul>
+                                        @endforeach
                                      </td>
-                                     {{-- <td>
-                                        <ul style="list-style: none">
-                                            <li>{{$item->key}}</li>
-                                        </ul>
-                                     </td> --}}
+                                     
                                     <td>    
                                         <button type="button" class="btn btn-info btn-sm editUserBtn mr-1" value="{{$list->id}}"><i class="fas fa-edit"></i></button> 
                                     </td>
@@ -302,11 +272,15 @@
 
             $(document).on('click','.isActive', function (e) {
                 e.preventDefault();
-                const user_id = $(this).val();
-                const user_role_id = $(this).attr('user-role-id');
-                // alert(user_id);
-                // alert(user_role_id);
-                userIsActive(user_id,user_role_id);
+                var user_id = $(this).val();
+                var user_role_id = $(this).attr('user-role-id');
+                var system_key = $(this).attr('system-key');
+
+                // console.log(user_id);
+                // console.log(user_role_id);
+                // console.log(key);
+
+                userIsActive(user_id, user_role_id, system_key);
                 
             });
 
@@ -459,6 +433,34 @@
                     }
                 }
             });
+
+
+        }
+
+        function userIsActive(user_id, user_role_id, system_key){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "user-is-active",
+                data: {user_id:user_id, user_role_id:user_role_id,system_key:system_key},
+                dataType: "json",
+                // cache: false,
+                // contentType: false,
+                // processData: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        window.location.reload();
+                    }
+                    
+                }
+            });
+            
         }
 
         // function deleteUser(user_id){
@@ -474,19 +476,7 @@
         //     });
         // }
 
-        function userIsActive(user_id,user_role_id){
-            $.ajax({
-                type: "get",
-                url: `user-is-active/${user_id}/${user_role_id}`,
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    if(response.status == 200){
-                        window.location.reload();
-                    }
-                }
-            });
-        }
+        
 
 
 

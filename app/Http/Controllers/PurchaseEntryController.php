@@ -1124,7 +1124,7 @@ class PurchaseEntryController extends Controller
                             $html .="<td>";
                                 $html .="<button type='button' class='btn btn-info btn-flat btn-sm mx-1 barcodeBtn' value='".$list->id."' > <i class='fas fa-barcode'></i></button>";
                                 $html .="<button type='button' class='btn btn-secondary btn-flat btn-sm mx-1 editPurchaseEntryBtn' value='".$list->id."' ><i class='far fa-edit'></i></button>";
-                                $html .="<button type='button' class='btn btn-danger btn-flat btn-sm ' id='deletePurchaseEntryStyleBtn' value='".$list->id."' ><i class='fa fa-trash'></i></button>";
+                                $html .="<button type='button' class='btn btn-danger btn-flat btn-sm' purchase-id='".$purchase_id."'  id='deletePurchaseEntryStyleBtn' value='".$list->id."' ><i class='fa fa-trash'></i></button>";
                             $html .="</td>";
                         $html .="</tr> ";
 
@@ -1151,7 +1151,7 @@ class PurchaseEntryController extends Controller
                                                     $html .="<td>".$item->size."</td>";
                                                     $html .="<td>".$item->qty."</td>";
                                                     $html .="<td>".$item->price."</td>";
-                                                    $html .="<td><button type='button' class='btn btn-danger btn-sm' id='deletePurchaseEntryItemBtn' value='".$item->id."'>Delete</button></td>";
+                                                    $html .="<td><button type='button' class='btn btn-danger btn-sm' purchase-id='".$purchase_id."' purchase-entry-id='".$item->purchase_entry_id."' id='deletePurchaseEntryItemBtn' value='".$item->id."'>Delete</button></td>";
                                                 $html .="</tr>";
                                             }
 
@@ -1213,181 +1213,200 @@ class PurchaseEntryController extends Controller
 
         $html = "";
 
-        $html .= "<div class='row mb-1'>";
-            $html .= "<div class='col-sm-12'>";
-                $html .= "<h5 class='modal-title text-center'><b> ".strtoupper($supplier->supplier_name)." </b></h5>";
-            $html .= "</div>";
+        $html .="<div class='modal-dialog modal-lg'>";
+            $html .="<div class='modal-content'>";
 
-            $html .= "<div class='col-sm-12 text-center'>";
-                $html .= "<small class='modal-title'>";
-                    $html .= "<b>".$supplier->address."</b><br>";
-                    $html .= "<b>".ucwords($supplier->city)."</b><br>";
-                $html .= "</small>";
-            $html .= "</div>";
-            $html .= "<div class='col-sm-6 '>";
-                $html .= "<small class='modal-title'>";
-                    $html .= "<b>GSTNO -  </b> ".$supplier->gst_no."<br>";
-                $html .= "</small>";
-            $html .= "</div>";
-            $html .= "<div class='col-sm-6 text-right'>";
-                $html .= "<small class='modal-title'>";
-                    $html .= "<b>Mobile -  </b> ".$supplier->mobile_no."<br>";
-                $html .= "</small>";
-            $html .= "</div>";
-            
-        $html .= "</div>";
+                $html .="<div class='modal-header'>";
+                    $html .="<h5 class='modal-title' id='staticBackdropLabel'>Purchase Invoice</h5>";
+                    $html .="<button type='button' class='btn-close' id='reload_invoice_print' data-bs-dismiss='modal' aria-label='Close'></button>";
+                $html .="</div>";
 
-        $html .= "<div class='row'>";
-                
-            $html .= "<div class='card text-dark bg-light mt-2' >";
-                $html .= "<div class='card-header text-center'><b>TAX INVOICE</b></div>";
-                $html .= "<div class='card-body'>";
-                    $html .= "<div class='row'>";
-                        $html .= "<div class='col-md-6'>";
-                        $html .= "<small class='modal-title'>";
+                $html .="<div class='modal-body' id='print_invoice' style='border:1px solid black'>";
+
+                    $html .= "<div class='row mb-1' >";
+                        $html .= "<div class='col-sm-12'>";
+                            $html .= "<h5 class='modal-title text-center'><b> ".strtoupper($supplier->supplier_name)." </b></h5>";
+                        $html .= "</div>";
+
+                        $html .= "<div class='col-sm-12 text-center'>";
+                            $html .= "<small class='modal-title'>";
+                                $html .= "<b>".$supplier->address."</b><br>";
+                                $html .= "<b>".ucwords($supplier->city)."</b><br>";
+                            $html .= "</small>";
+                        $html .= "</div>";
+                        $html .= "<div class='col-sm-6 '>";
+                            $html .= "<small class='modal-title'>";
+                                $html .= "<b>GSTNO -  </b> ".$supplier->gst_no."<br>";
+                            $html .= "</small>";
+                        $html .= "</div>";
+                        $html .= "<div class='col-sm-6 text-right'>";
+                            $html .= "<small class='modal-title'>";
+                                $html .= "<b>Mobile -  </b> ".$supplier->mobile_no."<br>";
+                            $html .= "</small>";
+                        $html .= "</div>";
                         
-                            $html .= "<b>".$business_detail->business_name." </b>";
-                            $html .= "<p style='inline-size:180px'>".$business_detail->company_address." </p>";
-                            $html .= "<b>GSTNO - ".$business_detail->gst." </b><br>";
-                        $html .= "</small>";
-                        $html .= "</div>";
-                        $html .= "<div class='col-md-6'>";
-                        $html .= "<small class='modal-title'>";
-                            $html .= "<b>Bill No -  </b> ".$purchase->bill_no." <br>";
-                            $html .= "<b>Bill Date -  </b> ". date('d-m-Y', strtotime($purchase->bill_date)) ."<br>";
-                        $html .= "</small>";
-                        $html .= "</div>";
                     $html .= "</div>";
-                $html .= "</div>";
-            $html .= "</div>";
-            
-        $html .= "</div>";
 
-        $html .= "<div class='row'>";
-            $html .= "<table class='table table-bordered border-dark'>";
-                $html .= "<thead>";
-                    $html .= "<tr>";
-                        $html .= "<th style='width: 5%;'>SN</th>";
-                        $html .= "<th style='width: 25%;'>Description</th>";
-                        $html .= "<th style='width: 20%;'>Style No</th>";
-                        $html .= "<th style='width: 10%;'>Color</th>";
-
-                        $html .= "<th style='width: 5%;'>Size</th>";
-                        $html .= "<th style='width: 5%;'>Qty</th>";
-                        $html .= "<th >Price</th>";
-                        $html .= "<th >Dis.</th>";
-                        $html .= "<th >Taxable</th>";
-                        $html .= "<th >SGST</th>";
-                        $html .= "<th >CGST</th>";
-                        $html .= "<th >IGST</th>";
-                        $html .= "<th >Amount</th>";
-                    $html .= "</tr>";
-                $html .= "</thead>";
-    
-                $html .= "<tbody>";
-
-                $total_sgst = 0;
-                $total_cgst = 0;
-                $total_igst = 0;
-                $discount_amount = 0;
-                $total_taxable = 0;
-                $grand_total = 0;
-
-                foreach ($purchase_entry as $key => $list) {
-                    
-                    $data = $this->getPurchaseEntryItems($list->id);
-                    $row_count = count($data['items']);
-
-                    $html .= "<tr >";
+                    $html .= "<div class='row'>";
+                            
+                        $html .= "<div class='card text-dark bg-light mt-2' >";
+                            $html .= "<div class='card-header text-center'><b>TAX INVOICE</b></div>";
+                            $html .= "<div class='card-body'>";
+                                $html .= "<div class='row'>";
+                                    $html .= "<div class='col-md-6'>";
+                                    $html .= "<small class='modal-title'>";
+                                    
+                                        $html .= "<b>".$business_detail->business_name." </b>";
+                                        $html .= "<p style='inline-size:180px'>".$business_detail->company_address." </p>";
+                                        $html .= "<b>GSTNO - ".$business_detail->gst." </b><br>";
+                                    $html .= "</small>";
+                                    $html .= "</div>";
+                                    $html .= "<div class='col-md-6'>";
+                                    $html .= "<small class='modal-title'>";
+                                        $html .= "<b>Bill No -  </b> ".$purchase->bill_no." <br>";
+                                        $html .= "<b>Bill Date -  </b> ". date('d-m-Y', strtotime($purchase->bill_date)) ."<br>";
+                                    $html .= "</small>";
+                                    $html .= "</div>";
+                                $html .= "</div>";
+                            $html .= "</div>";
+                        $html .= "</div>";
                         
-                        $html .= "<td rowspan='". ($row_count + 1) ."'>".++$key."</td>";
-                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->sub_category)."</td>";
-                        $html .= "<td rowspan='". ($row_count + 1) ."'>".$list->style_no."</td>";
-                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->color)."</td>";
-                        $html .= "<td >";
+                    $html .= "</div>";
 
-                        $sgst = 0;
-                        $cgst = 0;
-                        $igst = 0;
-                        $discount = 0;
-                        $taxable = 0;
-                        $amount = 0;
-                        
-                        foreach ($data['items'] as $item) {
-                               
-                            $html .= "<tr>"; 
-                                $html .= "<td >".$item->size."</td>";
-                                $html .= "<td >".$item->qty."</td>";
-                                $html .= "<td >".$item->price."</td>";
-                                $html .= "<td >".$item->discount."</td>";
-                                $html .= "<td >".$item->taxable."</td>";
-                                $html .= "<td >".$item->sgst."</td>";
-                                $html .= "<td >".$item->cgst."</td>";
-                                $html .= "<td >".$item->igst."</td>";
-                                $html .= "<td >".$item->amount."</td>";
-                            $html .= "</tr>";
+                    $html .= "<div class='row'>";
+                        $html .= "<table class='table table-bordered border-dark'>";
+                            $html .= "<thead>";
+                                $html .= "<tr>";
+                                    $html .= "<th style='width: 5%;'>SN</th>";
+                                    $html .= "<th style='width: 25%;'>Description</th>";
+                                    $html .= "<th style='width: 20%;'>Style No</th>";
+                                    $html .= "<th style='width: 10%;'>Color</th>";
 
-                            $sgst = $sgst + $item->sgst;
-                            $cgst = $cgst + $item->cgst;
-                            $igst = $igst + $item->igst;
-                            $discount = $discount + $item->discount_amount;
-                            $taxable = $taxable + $item->taxable;
-                            $amount = $amount + $item->amount;
-                        }
+                                    $html .= "<th style='width: 5%;'>Size</th>";
+                                    $html .= "<th style='width: 5%;'>Qty</th>";
+                                    $html .= "<th >Price</th>";
+                                    $html .= "<th >Dis.</th>";
+                                    $html .= "<th >Taxable</th>";
+                                    $html .= "<th >SGST</th>";
+                                    $html .= "<th >CGST</th>";
+                                    $html .= "<th >IGST</th>";
+                                    $html .= "<th >Amount</th>";
+                                $html .= "</tr>";
+                            $html .= "</thead>";
+                
+                            $html .= "<tbody>";
 
-                        $total_sgst = $total_sgst + $sgst ;
-                        $total_cgst = $total_cgst + $cgst ;
-                        $total_igst = $total_igst + $igst ;
-                        $discount_amount = $discount_amount + $discount ;
-                        $grand_total = $grand_total + $amount ;
-                        $total_taxable = $total_taxable + $taxable ;                        
-                        $html .= "</td>";
-                        
-                    $html .= "</tr>";
-                }
+                                $total_sgst = 0;
+                                $total_cgst = 0;
+                                $total_igst = 0;
+                                $discount_amount = 0;
+                                $total_taxable = 0;
+                                $grand_total = 0;
 
-                $html .= "</tbody>";
-    
-                $html .= "<tfoot>";
+                                foreach ($purchase_entry as $key => $list) {
+                                    
+                                    $data = $this->getPurchaseEntryItems($list->id);
+                                    $row_count = count($data['items']);
 
-                    // $html .= "<tr>";
-                    //     $html .= "<td colspan='5' class='align-top'></td>";
-                    //     $html .= "<td  >Total Qty</td>";
-                    //     $html .= "<td  >Total Price</td>";
-                    // $html .= "</tr> ";
+                                    $html .= "<tr >";
+                                        
+                                        $html .= "<td rowspan='". ($row_count + 1) ."'>".++$key."</td>";
+                                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->sub_category)."</td>";
+                                        $html .= "<td rowspan='". ($row_count + 1) ."'>".$list->style_no."</td>";
+                                        $html .= "<td rowspan='". ($row_count + 1) ."'>".ucwords($list->color)."</td>";
+                                        $html .= "<td >";
 
-                    $html .= "<tr>";
-                        $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
-                            $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'>".convertNumberToWords($grand_total)."</textarea>";
-                        $html .= "</td>  ";
-                        $html .= "<td colspan='3' ><b>Total Amount :</b></td>";
-                        $html .= "<td colspan='2'><input type='text' class='form-control form-control-sm' value='".$total_taxable."' readonly></td>";
-                    $html .= "</tr> ";
-                    $html .= "<tr>";
-                        $html .= "<td colspan='3'><b>Discount :</b></td>";
-                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$discount_amount."' readonly></td>";
-                    $html .= "</tr>";
-                    $html .= "<tr>";
-                        $html .= "<td colspan='3'><b>SGST : </b></td>";
-                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_sgst."' readonly></td>";
-                    $html .= "</tr>";
-                    $html .= "<tr> ";
-                        $html .= "<td colspan='3'><b>CGST : </b></td>";
-                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_cgst."' readonly></td>";
-                    $html .= "</tr>";
-                    $html .= "<tr>";
-                        $html .= "<td colspan='3'><b>IGST : </b></td>";
-                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_igst."' readonly></td>";
-                    $html .= "</tr>";
-                    $html .= "<tr>";
-                        $html .= "<td colspan='3'><b>Grand Total : </b></td>";
-                        $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$grand_total."' readonly ></td>";
-                    $html .= "</tr>";
-                    
-                $html .= "</tfoot>";
-    
-            $html .= "</table>";
-        $html .= "</div>";
+                                        $sgst = 0;
+                                        $cgst = 0;
+                                        $igst = 0;
+                                        $discount = 0;
+                                        $taxable = 0;
+                                        $amount = 0;
+                                        
+                                        foreach ($data['items'] as $item) {
+                                            
+                                            $html .= "<tr>"; 
+                                                $html .= "<td >".$item->size."</td>";
+                                                $html .= "<td >".$item->qty."</td>";
+                                                $html .= "<td >".$item->price."</td>";
+                                                $html .= "<td >".$item->discount."</td>";
+                                                $html .= "<td >".$item->taxable."</td>";
+                                                $html .= "<td >".$item->sgst."</td>";
+                                                $html .= "<td >".$item->cgst."</td>";
+                                                $html .= "<td >".$item->igst."</td>";
+                                                $html .= "<td >".$item->amount."</td>";
+                                            $html .= "</tr>";
+
+                                            $sgst = $sgst + $item->sgst;
+                                            $cgst = $cgst + $item->cgst;
+                                            $igst = $igst + $item->igst;
+                                            $discount = $discount + $item->discount_amount;
+                                            $taxable = $taxable + $item->taxable;
+                                            $amount = $amount + $item->amount;
+                                        }
+
+                                        $total_sgst = $total_sgst + $sgst ;
+                                        $total_cgst = $total_cgst + $cgst ;
+                                        $total_igst = $total_igst + $igst ;
+                                        $discount_amount = $discount_amount + $discount ;
+                                        $grand_total = $grand_total + $amount ;
+                                        $total_taxable = $total_taxable + $taxable ;                        
+                                        $html .= "</td>";
+                                        
+                                    $html .= "</tr>";
+                                }
+
+                            $html .= "</tbody>";
+                
+                            $html .= "<tfoot>";
+
+                                // $html .= "<tr>";
+                                //     $html .= "<td colspan='5' class='align-top'></td>";
+                                //     $html .= "<td  >Total Qty</td>";
+                                //     $html .= "<td  >Total Price</td>";
+                                // $html .= "</tr> ";
+
+                                $html .= "<tr>";
+                                    $html .= "<td colspan='8' rowspan='6'  class='align-top'> Amount in Words : ";
+                                        $html .= "<textarea class='form-control' name='amount_in_words' id='amount_in_words'>".convertNumberToWords($grand_total)."</textarea>";
+                                    $html .= "</td>  ";
+                                    $html .= "<td colspan='3' ><b>Total Amount :</b></td>";
+                                    $html .= "<td colspan='2'><input type='text' class='form-control form-control-sm' value='".$total_taxable."' readonly></td>";
+                                $html .= "</tr> ";
+                                $html .= "<tr>";
+                                    $html .= "<td colspan='3'><b>Discount :</b></td>";
+                                    $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$discount_amount."' readonly></td>";
+                                $html .= "</tr>";
+                                $html .= "<tr>";
+                                    $html .= "<td colspan='3'><b>SGST : </b></td>";
+                                    $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_sgst."' readonly></td>";
+                                $html .= "</tr>";
+                                $html .= "<tr> ";
+                                    $html .= "<td colspan='3'><b>CGST : </b></td>";
+                                    $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_cgst."' readonly></td>";
+                                $html .= "</tr>";
+                                $html .= "<tr>";
+                                    $html .= "<td colspan='3'><b>IGST : </b></td>";
+                                    $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$total_igst."' readonly></td>";
+                                $html .= "</tr>";
+                                $html .= "<tr>";
+                                    $html .= "<td colspan='3'><b>Grand Total : </b></td>";
+                                    $html .= "<td colspan='2'><input class='form-control form-control-sm' type='text' value='".$grand_total."' readonly ></td>";
+                                $html .= "</tr>";
+                                
+                            $html .= "</tfoot>";
+                
+                        $html .= "</table>";
+                    $html .= "</div>";
+
+                $html .="</div>";
+
+                $html .="<div class='modal-footer'>";
+                    $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal' id='reload_invoice_print'>Close</button>";
+                $html .="<button type='button' id='printPurchaseInvoice' class='btn btn-primary btn-sm' print-section='print_invoice'>Print</button>";
+
+            $html .="</div>";
+        $html .="</div>";
 
         return response()->json([
             'status'=>200,
@@ -1562,7 +1581,7 @@ class PurchaseEntryController extends Controller
 
         return response()->json([
             'status'=>200,
-            // 'purchase_entry_items'=>$purchase_entry_items
+            
         ]);
     }
 

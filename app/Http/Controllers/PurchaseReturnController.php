@@ -69,13 +69,13 @@ class PurchaseReturnController extends Controller
 
 
         $html = "";
-         $html .= "<div class='row'>";
+         $html .= "<div class='row' id='print_invoice'>";
             foreach ($purchase_return as $key1 => $list){
             $html .= "<div class='col-md-12'>";
                 $html .= "<div class='card'>";
                     $html .= "<div class='card-header'>";
                     $html .= "<h3 class='card-title'><b>".ucwords($list->supplier_name)."</b></h3>";
-                    $html .= "<button type='button' class='btn btn-success btn-sm ml-2 float-right generatePurchaseInvoice'  value=".$list->id. "data-bs-toggle='tooltip' data-bs-placement='top' title='Invoice'><i class='fas fa-file-invoice'></i></button>";
+                    $html .= "<button type='button' class='btn btn-success btn-sm ml-2 float-right generatePurchaseReturnInvoice' value=".$list->id. "data-bs-toggle='tooltip' data-bs-placement='top' title='Invoice'><i class='fas fa-file-invoice'></i></button>";
                     $html .= "<button type='button' class='btn btn-warning btn-sm btn-sm  float-right releaseStatusBtn' id='release_date' value=".$list->id.">Relese</button>";
                     $html .= "</div>";
                     $html .= "<div class='card-body'>";
@@ -302,7 +302,7 @@ class PurchaseReturnController extends Controller
 
         $html = "";
 
-        $html .= "<div class='row'>";
+        $html .= "<div class='row' id='print_invoice'>";
             $html .= "<div class='col-sm-12 text-center'>";
                 $html .= "<small class='modal-title'>";
                     $html .= "<h5><b>".$business_detail->business_name."</b> <h5>";                   
