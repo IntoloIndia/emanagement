@@ -16,7 +16,7 @@
         $('#total_qty').val(total_qty);
 
         total_price = parseFloat(without_qty * without_price);
-        $('#total_price').val(total_price);
+        $('#total_price').val(total_price.toFixed(2));
 
         var total_amount = 0;
         var total_taxable = 0;
@@ -57,7 +57,6 @@
 
         
     }
-    
     
     //kids size type
     function calculateQtyPriceKids() {
@@ -140,7 +139,7 @@
         $('#total_qty').val(total_qty);
 
         total_price = parseFloat(k_18_qty * k_18_price) + parseFloat(k_20_qty * k_20_price) + parseFloat(k_22_qty * k_22_price) + parseFloat(k_24_qty * k_24_price) + parseFloat(k_26_qty * k_26_price) + parseFloat(k_28_qty * k_28_price) + parseFloat(k_30_qty * k_30_price) + parseFloat(k_32_qty * k_32_price) + parseFloat(k_34_qty * k_34_price) + parseFloat(k_36_qty * k_36_price);
-        $('#total_price').val(total_price);
+        $('#total_price').val(total_price.toFixed(2));
 
         var total_amount = 0;
         var total_taxable = 0;
@@ -400,7 +399,7 @@
         $('#total_qty').val(total_qty);
 
         total_price = parseFloat(fr_qty * fr_price) + parseFloat(xs_qty * xs_price) + parseFloat(s_qty * s_price) + parseFloat(m_qty * m_price) + parseFloat(l_qty * l_price) + parseFloat(xl_qty * xl_price) + parseFloat(xxl_qty * xxl_price) + parseFloat(three_xl_qty * three_xl_price) + parseFloat(four_xl_qty * four_xl_price) + parseFloat(five_xl_qty * five_xl_price) + parseFloat(six_xl_qty * six_xl_price);
-        $('#total_price').val(total_price);
+        $('#total_price').val(total_price.toFixed(2));
 
         var total_amount = 0;
         var total_taxable = 0;
@@ -843,12 +842,15 @@
             url: "generate-purchase-invoice/"+purchase_id,
             dataType: "json",
             success: function (response) {
+                console.log(response)
                 if (response.status == 200) {
+                    // $('#generatePurchaseInvoiceModal').modal('show');
+                    // $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').html('');
+                    // $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').append(response.html);
+
+                    $('#generatePurchaseInvoiceModal').html(response.html);
                     $('#generatePurchaseInvoiceModal').modal('show');
-                    $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').html('');
-                    $('#generatePurchaseInvoiceModal').find('#show_purchase_invoice').append(response.html);
-                    // var amount_in_words = convertNumberToWords(response.grand_total);
-                    // $('#amount_in_words').val(amount_in_words);
+                    
                 }
             }
         });
@@ -1125,12 +1127,12 @@
         $.ajax({
             type: "get",
             url: "delete-purchase-entry-item-wise/" + purchase_entry_item_id,
-            data: "formData",
             dataType: "json",
             success: function (response) {
+                console.log(response);
                 if(response.status == 200)
                 {
-                    window.location.reload();
+                    // window.location.reload();
                 }
             }
         });
@@ -1144,7 +1146,11 @@
             success: function (response) {
                 // console.log(response);
                 if(response.status == 200){
-                    window.location.reload();
+                    // window.location.reload();
+                    // setTimeout(() => {
+                    //     alert("call");
+                    //     viewPurchaseEntry(purchase_id="");
+                    // }, 100);
                 }
             }
         });
@@ -1164,34 +1170,35 @@
         });
     }
 
-    function printBarcode(){
+    // function printBarcode(){
 
-        var backup = document.body.innerHTML;
-        var div_content = document.getElementById("show_barcode_body").innerHTML;
-        document.body.innerHTML = div_content;
-        window.print();
-        document.body.innerHTML = backup;
+    //     var backup = document.body.innerHTML;
+    //     var div_content = document.getElementById("show_barcode_body").innerHTML;
+    //     document.body.innerHTML = div_content;
+    //     window.print();
+    //     document.body.innerHTML = backup;
 
+    //     /////////////////////////////////////////
+    //     // const section = $("section");
+    //     // // const modalBody = $("#show_barcode_body").detach();
+    //     // const modalBody = document.getElementById("barcode_body").innerHTML;
 
-        // const section = $("section");
-        // // const modalBody = $("#show_barcode_body").detach();
-        // const modalBody = document.getElementById("barcode_body").innerHTML;
+    //     // section.empty();
+    //     // section.append(modalBody);
+    //     // window.print();
+    //     // window.location.reload();
 
-        // section.empty();
-        // section.append(modalBody);
-        // window.print();
-        // window.location.reload();
-
-        // var print_div = document.getElementById("show_barcode_body");
-        // // var print_div = document.getElementById("barcode_body");
-        // var print_area = window.open();
-        // print_area.document.write(print_div.innerHTML);
-        // print_area.document.close();
-        // print_area.focus();
-        // print_area.print();
+    //     // var print_div = document.getElementById("show_barcode_body");
+    //     // // var print_div = document.getElementById("barcode_body");
+    //     // var print_area = window.open();
+    //     // print_area.document.write(print_div.innerHTML);
+    //     // print_area.document.close();
+    //     // print_area.focus();
+    //     // print_area.print();
+    //     /////////////////////////////////////
       
-        window.location.reload();
-    }
+    //     window.location.reload();
+    // }
 
     // save category of purchase entry
     function saveCategory() {

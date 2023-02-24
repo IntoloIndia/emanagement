@@ -136,6 +136,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
 
     Route::controller(CustomerController::class)->group(function () {
         Route::get('admin/customer','index');
+        Route::post('admin/save-customer-advance-amount','saveCustomerAdvanceAmount');
         // Route::get('admin/get-customer/{customer_id}','getCustomerData');
         Route::get('admin/customer-detail/{customer_id}','CustomerDetail');
     //  Route::get('admin/get-customer-points/{customer_id}','getCustomerPoints');
@@ -232,7 +233,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/edit-user/{user_id}', 'editUser');
         Route::post('admin/update-user/{user_id}', 'updateUser');
         // Route::get('admin/delete-user/{user_id}', 'deleteUser');
-        Route::get('admin/user-is-active/{user_id}/{user_role_id}', 'userIsActive');
+        Route::post('admin/user-is-active', 'userIsActive');
     });
     
     Route::controller(CategoryController::class)->group(function () {
@@ -404,6 +405,33 @@ Route::group(['middleware'=>'user_auth'], function(){
     });
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
+    Route::controller(RoleController::class)->group(function(){
+        Route::get('/role','index');
+        Route::post('/save-role','saveRole');
+        Route::get('/edit-role/{role_id}','editRole');
+        Route::post('/update-role/{role_id}','updateRole');
+        Route::get('/delete-role/{role_id}','deleteRole');
+        Route::get('/active-deactive-role/{role_id}','activeDeactiveRole');
+    });
+
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/user','index');
+        Route::post('/save-user', 'saveUser');
+        Route::get('/edit-user/{user_id}', 'editUser');
+        Route::post('/update-user/{user_id}', 'updateUser');
+        // Route::get('admin/delete-user/{user_id}', 'deleteUser');
+        Route::post('/user-is-active', 'userIsActive');
+    });
+
+    Route::controller(DepartmentController::class)->group(function () {
+        Route::get('/department', 'index');
+        Route::post('/save-department', 'saveDepartment');
+        Route::get('/edit-department/{department_id}', 'editDepartment');
+        Route::post('/update-department/{department_id}', 'updateDepartment');
+        Route::get('/delete-department/{department_id}', 'deleteDepartment');
+    });
+
     Route::controller(CountryStateCityController::class)->group(function () {
         Route::get('/country-state-city','index');
 
@@ -526,6 +554,8 @@ Route::group(['middleware'=>'user_auth'], function(){
         Route::post('/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
         Route::get('/get-product-detail/{product_code}', 'getProductDetail');
         Route::get('/get-color_code/{color_code}','getcolorcode');
+        Route::get('/delete-purchase-entry-item-wise/{purchase_entry_item_id}','deletePurchaseEntryItemWise');
+        Route::get('/delete-purchase-entry-style-wise/{purchase_entry_id}','deletePurchaseEntryStyleWise');
 
         // excel file route 
         Route::get('/import-data','importProduct');

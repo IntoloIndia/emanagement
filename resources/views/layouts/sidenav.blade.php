@@ -168,7 +168,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="alteration_voucher" class="nav-link">
-                        <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
+                        <i class="fas fa-angle-right nav-icon"></i><p>Alteration Voucher</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -272,7 +272,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="alteration_voucher" class="nav-link">
-                            <i class="fas fa-angle-right nav-icon"></i><p>Altration Voucher</p>
+                            <i class="fas fa-angle-right nav-icon"></i><p>Alteration Voucher</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -323,6 +323,46 @@
                     </li>
                     
                 @elseif(session('LOGIN_ROLE') == MyApp::ACCOUNTANT)
+
+                @elseif(session('LOGIN_ROLE') == MyApp::MANAGER)
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>User Management<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="role" class="nav-link">
+                                    <i class="fas fa-angle-right nav-icon"></i><p>Role </p>
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item ">
+                                <a href="admin" class="nav-link">
+                                    <i class="fas fa-angle-right nav-icon"></i><p>Admin </p>
+                                </a>
+                            </li> --}}
+                            <li class="nav-item ">
+                                <a href="department" class="nav-link">
+                                    <i class="fas fa-angle-right nav-icon"></i><p>Department </p>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item ">
+                                <a href="user" class="nav-link ">
+                                    <i class="fas fa-angle-right nav-icon"></i><p>Team</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <hr style="margin: 0px; color:#ffffff;">
+                    <li class="nav-header text-light">Stock Management</li>
+                    <hr style="margin: 0px; color:#ffffff;">
+            
+                    <li class="nav-item">
+                        <a href="manage-stock" class="nav-link">
+                            <i class="fas fa-angle-right nav-icon"></i><p>Available Stock </p>
+                        </a>
+                    </li>
 
                 @elseif(session('LOGIN_ROLE') == MyApp::BARCODE)
                     <li class="nav-item">

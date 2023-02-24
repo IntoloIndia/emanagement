@@ -76,11 +76,11 @@ class CustomerBillInvoiceController extends Controller
     {
         
         $validator = Validator::make($req->all(),[
-            'customer_name'=>'required',
+            // 'customer_name'=>'required',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
-            'birthday_date'=>'required|max:191',
-            'month_id'=>'required|max:191',
-            'state_type'=>'required|max:191',
+            // 'birthday_date'=>'required|max:191',
+            // 'month_id'=>'required|max:191',
+            // 'state_type'=>'required|max:191',
             'employee_id'=>'required',
           
         ]);
@@ -89,14 +89,14 @@ class CustomerBillInvoiceController extends Controller
         {
             return response()->json([
                 'status'=>400,
-                'errors'=>$validator->messages("plz  all field required"),
+                'errors'=>$validator->messages("plz all field required"),
             ]);
 
         }else{
             
             $customer_id = 0;
             
-            $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first('id');
+            $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first(['id', 'advance_amount']);
             
             if ($data == null) {
 
@@ -116,8 +116,20 @@ class CustomerBillInvoiceController extends Controller
                 $customer_id = $model->id;
                 
             }else{
+                //only for advance amount
+                if ($data->advance_amount > 0) {
+                    $data->birthday_date = $req->input('birthday_date');
+                    $data->month_id = $req->input('month_id');
+                    $data->anniversary_date = $req->input('anniversary_date');
+                    $data->state_type = $req->input('state_type');
+                    $data->gst_no = $req->input('gst_no');
+                    $data->date = date('Y-m-d');
+                    $data->time = date('g:i A');
+                    $data->save();
+                } 
                 $customer_id = $data->id;
             }
+
             $earn_point =0;
             $total_amount = $req->input('total_amount');
             $pay_online = $req->input('pay_online');
@@ -172,9 +184,6 @@ class CustomerBillInvoiceController extends Controller
               $billmodel->bill_date = date('Y-m-d');
               $billmodel->bill_time = date('g:i A');
               $billmodel->save();
-              
-              
-              
               
               $product_id = $req->input('product_id');
               $purchase_entry_item_id = $req->input('purchase_entry_item_id');
@@ -238,9 +247,6 @@ class CustomerBillInvoiceController extends Controller
                         } 
                     }
 
-                    // dd($credit_note_amount); 
-                    // dd($total_amount); 
-                    // die();
                     if($credit_note_amount > $total_amount){
 
                         $model_item = new SalesReturn;
@@ -360,147 +366,147 @@ class CustomerBillInvoiceController extends Controller
                 $html .="<div class='modal-header'>";
                     $html .="<button type='button' class='btn-close' id='reload_invoice_print' data-bs-dismiss='modal' aria-label='Close'></button>";
                 $html .="</div>";
-                    $html .="<div class='modal-body' id='invoiceModalPrint' style='border:1px solid black'>";
+                $html .="<div class='modal-body' id='print_invoice' style='border:1px solid black'>";
 
-                        $html .="<div class='row mb-1'>";
-                                $html .="<div class='col-md-3 '>";
-                                    $html .="<span></span><br>";
-                                    $html .="<span><b>GST NO : </b><small>".$business_detail->gst."</small></span><br>";
-                                    $html .="<span></span><br>";
-                                $html .="</div>";
-                            $html .="<div class='col-md-6 text-center'>";
-                                    $html .="<span><b>".$business_detail->business_name."</b></span><br>";
-                                    $html .="<span>".$business_detail->company_address."</span><br>";
-                                    // $html .="<span>ERENOWN CLOTHING CO </span><br>";
-                                    // $html .="<span>Shop no.8-9,Ground Floor Samdariya Mall </span><br>";
+                    $html .="<div class='row mb-1' >";
+                            $html .="<div class='col-md-3 '>";
+                                $html .="<span></span><br>";
+                                $html .="<span><b>GST NO : </b><small>".$business_detail->gst."</small></span><br>";
+                                $html .="<span></span><br>";
                             $html .="</div>";
-                            $html .="<div class='col-md-3' >";
-                                    $html .="<p><b>Phone no : </b>0761-4047699</p><br>";                                  
-                                    $html .="<p><b>Mobile no : </b>".$business_detail->mobile_no."</p>";                                  
-                            $html .="</div>";
+                        $html .="<div class='col-md-6 text-center'>";
+                                $html .="<span><b>".$business_detail->business_name."</b></span><br>";
+                                $html .="<span>".$business_detail->company_address."</span><br>";
+                                
                         $html .="</div>";
-                        $html .="<div class='row '>";
-                            $html .="<div class='col-md-7' style='border:1px solid black'>";
-                            $html .="<span>Customer name: <small>".ucwords($bills->customer_name)."</small></span><br>";
-                            $html .="<span>Location : <small>". ucwords($bills->city)."</small></span><br>";
-                            $html .="<span>Mobile no : <small>".$bills->mobile_no."</small></span><br>";
-                            // $html .="<span>State code  : <small>0761</small></span><br>";
-                            // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
-                            $html .="</div>";
-                            // $html .="<div class='col-md-2' style='border:1px solid black'>";
-                            // // $html .="<span class=''>Payment :<br/>";
-                            // $html .="<span class=''>online :<br/>";
-                            // $html .="<span class=''>cash :<br/>";
-                            // $html .="<span class=''>card :<br/>";
-                            // $html .="<span class=''>credit :<br/>";
-                            // $html .="</div>";
-                            $html .="<div class='col-md-5' style='border:1px solid black'>";
-                            $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($bills->bill_date))."</small></span><br>";
-                            $html .="<span>Invoice No : <h5 class='float-end'>".$bills->id."</h5></span><br>";
-                                // $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
-                            $html .="</div>";
+                        $html .="<div class='col-md-3' >";
+                                $html .="<p><b>Phone no : </b>0761-4047699</p><br>";                                  
+                                $html .="<p><b>Mobile no : </b>".$business_detail->mobile_no."</p>";                                  
                         $html .="</div>";
-                        // $html .="<hr>";
+                    $html .="</div>";
+                    
+                    $html .="<div class='row'>";
+                        $html .="<div class='col-md-7' style='border:1px solid black'>";
+                        $html .="<span>Customer name: <small>".ucwords($bills->customer_name)."</small></span><br>";
+                        $html .="<span>Location : <small>". ucwords($bills->city)."</small></span><br>";
+                        $html .="<span>Mobile no : <small>".$bills->mobile_no."</small></span><br>";
+                        // $html .="<span>State code  : <small>0761</small></span><br>";
+                        // $html .="<span>Payment : <small>".$payment_mode."</small></span> ";
+                        $html .="</div>";
+                        // $html .="<div class='col-md-2' style='border:1px solid black'>";
+                        // // $html .="<span class=''>Payment :<br/>";
+                        // $html .="<span class=''>online :<br/>";
+                        // $html .="<span class=''>cash :<br/>";
+                        // $html .="<span class=''>card :<br/>";
+                        // $html .="<span class=''>credit :<br/>";
+                        // $html .="</div>";
+                        $html .="<div class='col-md-5' style='border:1px solid black'>";
+                        $html .="<span class=''>Date : <small class='float-end'>".date('d/M/Y', strtotime($bills->bill_date))."</small></span><br>";
+                        $html .="<span>Invoice No : <h5 class='float-end'>".$bills->id."</h5></span><br>";
+                            // $html .="<span class=''>Attent By : <small class='float-end'></small></span> ";
+                        $html .="</div>";
+                    $html .="</div>";
+                    // $html .="<hr>";
 
-                        $html .="<div class='row mt-2'>";
-                            $html .="<div class='table-responsive'>";
-                            $html .="<table class='table table-bordered'>";
+                    $html .="<div class='row mt-2'>";
+                        $html .="<div class='table-responsive'>";
+                        $html .="<table class='table table-bordered'>";
+                    
+                            $html .="<thead>";
+                                $html .="<tr>";
+                                    $html .="<th>#</th>";
+                                    $html .="<th>Item Name</th>";
+                                    $html .="<th>Size</th>";
+                                    $html .="<th>Qty</th>";
+                                    // $html .="<th>Color</th>";
+                                    $html .="<th>MRP</th>";
+                                    // $html .="<th>Rate</th>";
+                                    $html .="<th>Disc</th>";
+                                    $html .="<th>Taxable</th>";
+                                    $html .="<th>SGST</th>";
+                                    $html .="<th>CGST</th>";
+                                    $html .="<th>IGST</th>";
+                                    $html .="<th>Total</th>";
+                                $html .="</tr>";
+                            $html .="</thead>";
+                            $html .="<tbody>";
+                            // $total_amount = 0;
+                            $total_cgst = 0;
+                            $total_sgst = 0;
+                            $total_igst = 0;
+                            $taxfree_amount =0;
+                            $total_qty = 0;
+                            $total_discount_amount = 0;
+
+                            foreach ($bill_invoise as $key => $list) {
+                                // dd($list);
+                                $html .="<tr>";
+                                    $html .="<td>".++$key."</td>";
+                                    $html .="<td>".ucwords($list->sub_category)."</td>";
+                                    $html .="<td>".$list->size."</td>";
+                                    $html .="<td>".$list->qty."</td>";
+                                    // $html .="<td>".$list->color."</td>";
+                                    $html .="<td>".$list->price."</td>";
+                                    // $html .="<td>".$list->price."</td>";
+                                    $html .="<td>".$list->discount_amount."</td>";
+                                    $html .="<td>".$list->taxfree_amount."</td>";
+                                    $html .="<td>".$list->cgst."</td>";
+                                    $html .="<td>".$list->sgst."</td>";
+                                    $html .="<td>".$list->igst."</td>";
+                                    $html .="<td>".$list->amount."</td>";
+                                $html .="</tr>";
+                            // $total_amount =  $list->total_amount;
+                            $total_qty = $total_qty + $list->qty;
+                            $total_cgst =  $total_cgst + $list->cgst;
+                            $total_sgst =  $total_sgst+ $list->sgst;
+                            $total_igst =  $total_igst+ $list->igst;
+                            $taxfree_amount =  $taxfree_amount+ $list->taxfree_amount;
+                            $total_discount_amount =  $total_discount_amount+ $list->discount_amount;
+
+                            }
+                                
+                            $html .="</tbody>";
+                            $html .="<tfoot>";
+                                $html .="<tr>";
+                                $html .="<td colspan='3'></td>";
+                                $html .="<td>".$total_qty."</td>";
+                                    $html .="<td colspan='1'><b>Total :</b></td>";
+                                    $html .="<td><b>".$total_discount_amount."</b></td>";
+                                    $html .="<td><b>".$taxfree_amount."</b></td>";
+                                    $html .="<td><b>".$total_sgst."</b></td>";
+                                    $html .="<td><b>".$total_cgst."</b></td>";
+                                    $html .="<td><b>".$total_igst."</b></td>";
+                                    $html .="<td><b>".$bills->total_amount."</b></td>";
+                                $html .="</tr>";
+                            $html .="</tfoot>";
+                        $html .="</table>";
+                        $html .="</div>";
+                    $html .="</div>";
+
+                    $html .="<div class='row'>";
+                    $html .="<div class='col-md-8'>";
+                    $html .="<span class='float-start'><b>Amount of Tax Subject to Reverse Charge :</b></span><br>";
+                    $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
+                    $html .="<span class='ml-2'>Online :</span> <span class='ml-4'><b>".$bills->pay_online."</b></span><br>";
+                    $html .="<span class='ml-2'>Cash : </span><span class='ml-4'><b>".$bills->pay_cash."</b></span><br>";
+                    $html .="<span class='ml-2'>Card : </span><span class='ml-4'><b>".$bills->pay_card."</b></span><br>";
+                    $html .="<span class='ml-2'>Credit : </span><span class='ml-4'><b>".$bills->balance_amount."</b></span><br>";
+                    $html.="</div>";
                         
-                                $html .="<thead>";
-                                    $html .="<tr>";
-                                        $html .="<th>#</th>";
-                                        $html .="<th>Item Name</th>";
-                                        $html .="<th>Size</th>";
-                                        $html .="<th>Qty</th>";
-                                        // $html .="<th>Color</th>";
-                                        $html .="<th>MRP</th>";
-                                        // $html .="<th>Rate</th>";
-                                        $html .="<th>Disc</th>";
-                                        $html .="<th>Taxable</th>";
-                                        $html .="<th>SGST</th>";
-                                        $html .="<th>CGST</th>";
-                                        $html .="<th>IGST</th>";
-                                        $html .="<th>Total</th>";
-                                    $html .="</tr>";
-                                $html .="</thead>";
-                                $html .="<tbody>";
-                                // $total_amount = 0;
-                                $total_cgst = 0;
-                                $total_sgst = 0;
-                                $total_igst = 0;
-                                $taxfree_amount =0;
-                                $total_qty = 0;
-                                $total_discount_amount = 0;
+                    $html .="</div>";
+                    $html .="<div class='col-md-2'>";
 
-                                foreach ($bill_invoise as $key => $list) {
-                                    // dd($list);
-                                    $html .="<tr>";
-                                        $html .="<td>".++$key."</td>";
-                                        $html .="<td>".ucwords($list->sub_category)."</td>";
-                                        $html .="<td>".$list->size."</td>";
-                                        $html .="<td>".$list->qty."</td>";
-                                        // $html .="<td>".$list->color."</td>";
-                                        $html .="<td>".$list->price."</td>";
-                                        // $html .="<td>".$list->price."</td>";
-                                        $html .="<td>".$list->discount_amount."</td>";
-                                        $html .="<td>".$list->taxfree_amount."</td>";
-                                        $html .="<td>".$list->cgst."</td>";
-                                        $html .="<td>".$list->sgst."</td>";
-                                        $html .="<td>".$list->igst."</td>";
-                                        $html .="<td>".$list->amount."</td>";
-                                    $html .="</tr>";
-                                // $total_amount =  $list->total_amount;
-                                $total_qty = $total_qty + $list->qty;
-                                $total_cgst =  $total_cgst + $list->cgst;
-                                $total_sgst =  $total_sgst+ $list->sgst;
-                                $total_igst =  $total_igst+ $list->igst;
-                                $taxfree_amount =  $taxfree_amount+ $list->taxfree_amount;
-                                $total_discount_amount =  $total_discount_amount+ $list->discount_amount;
+                            $html .="<span class='float-end'>TOTAL AMOUNT:</span><br>";
+                            $html .="<span class='float-end'>DISCOUNT:</span><br>";
+                            $html .="<span class='float-end'>SGST : </span><br>";
+                            $html .="<span class='float-end'>CGST :</span> <br>";
+                            $html .="<span class='float-end'>IGST : </span><br>";
+                            $html .="<span class='float-end'>Points :</span> <br>";
+                            $html .="<span class='float-end'>Note amount :</span> <br>";
+                            $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
 
-                                }
-                                    
-                                $html .="</tbody>";
-                                $html .="<tfoot>";
-                                    $html .="<tr>";
-                                    $html .="<td colspan='3'></td>";
-                                    $html .="<td>".$total_qty."</td>";
-                                        $html .="<td colspan='1'><b>Total :</b></td>";
-                                        $html .="<td><b>".$total_discount_amount."</b></td>";
-                                        $html .="<td><b>".$taxfree_amount."</b></td>";
-                                        $html .="<td><b>".$total_sgst."</b></td>";
-                                        $html .="<td><b>".$total_cgst."</b></td>";
-                                        $html .="<td><b>".$total_igst."</b></td>";
-                                        $html .="<td><b>".$bills->total_amount."</b></td>";
-                                    $html .="</tr>";
-                                $html .="</tfoot>";
-                            $html .="</table>";
-                            $html .="</div>";
-                        $html .="</div>";
-
-                        $html .="<div class='row'>";
-                        $html .="<div class='col-md-8'>";
-                        $html .="<span class='float-start'><b>Amount of Tax Subject to Reverse Charge :</b></span><br>";
-                        $html.="<div class='mt-3' style='width:300px;height:100px;border: 1px solid black;'>";
-                        $html .="<span class='ml-2'>Online :</span> <span class='ml-4'><b>".$bills->pay_online."</b></span><br>";
-                        $html .="<span class='ml-2'>Cash : </span><span class='ml-4'><b>".$bills->pay_cash."</b></span><br>";
-                        $html .="<span class='ml-2'>Card : </span><span class='ml-4'><b>".$bills->pay_card."</b></span><br>";
-                        $html .="<span class='ml-2'>Credit : </span><span class='ml-4'><b>".$bills->balance_amount."</b></span><br>";
-                        $html.="</div>";
-                           
-                        $html .="</div>";
-                        $html .="<div class='col-md-2'>";
-
-                                $html .="<span class='float-end'>TOTAL AMOUNT:</span><br>";
-                                $html .="<span class='float-end'>DISCOUNT:</span><br>";
-                                $html .="<span class='float-end'>SGST : </span><br>";
-                                $html .="<span class='float-end'>CGST :</span> <br>";
-                                $html .="<span class='float-end'>IGST : </span><br>";
-                                $html .="<span class='float-end'>Points :</span> <br>";
-                                $html .="<span class='float-end'>Note amount :</span> <br>";
-                                $html .="<span class='float-end'>GROSS.TOTAL : </span><br>";
-
-                        $html .="</div>";
-                        $html .="<div class='col-md-2'>";
+                    $html .="</div>";
+                    $html .="<div class='col-md-2'>";
 
                             $html .="<b class='text-center'>".$taxfree_amount."</b><br>";
                             $html .="<b class='text-center'>".$total_discount_amount."</b><br>";
@@ -516,21 +522,19 @@ class CustomerBillInvoiceController extends Controller
                     $html .="</div>";
 
                     
-                        $html .="<hr>";
-                        $html .="<div class='row text-center'>";
-                            $html .="<h6><b>Thank  Have a Nice Day </b></h6>";
-                            $html .="<small>Visit Again !</small>";
-                        $html .="</div>";
+                    $html .="<hr>";
+                    $html .="<div class='row text-center'>";
+                        $html .="<h6><b>Thank  Have a Nice Day </b></h6>";
+                        $html .="<small>Visit Again !</small>";
+                    $html .="</div>";
 
                     // $html .="</div>";
                 
-             $html .="</div>";
+                $html .="</div>";
 
                 $html .="<div class='modal-footer'>";
                     $html .="<button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal' id='reload_invoice_print'>Close</button>";
-                    $html .="<button type='button' id='printBtn' class='btn btn-primary btn-sm' order-id='".$bills->id."'>Print</button>";
-                    // <button type="button" class="btn btn-primary btn-sm float-end " id="printAlterReceiptBrn">Print</button>
-
+                    $html .="<button type='button' id='printBillInvoiceBtn' class='btn btn-primary btn-sm' order-id='".$bills->id."' print-section='print_invoice'>Print</button>";
                 $html .="</div>";
 
             $html .="</div>";

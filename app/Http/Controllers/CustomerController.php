@@ -7,22 +7,57 @@ use App\Models\Customer;
 use App\Models\CustomerBill;
 use App\Models\CustomerBillInvoice;
 use App\Models\CustomerPoint;
+use App\Models\City;
 use Validator;
 use App\MyApp;
 
 class CustomerController extends Controller
 {
     public function index(){
+        $cities = City::all();
         $customers = Customer::join('cities','customers.city_id','=','cities.id')
-        ->select('customers.*','cities.city')
-        ->get();
+            ->select('customers.*','cities.city')
+            ->get();
         $customer_points = CustomerPoint::all();
         
         return view('customer',[
+            'cities' => $cities,
             'customers' => $customers,
             'customer_points' => $customer_points
         ]);
     }
+
+
+    function saveCustomerAdvanceAmount(Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            'customer_name' => 'required',
+            'mobile_no' => 'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
+            'city_id' => 'required',
+            'advance_amount' => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages(),
+            ]);
+        }else{
+            $model = new Customer ;
+            $model->customer_name = $req->input('customer_name');
+            $model->mobile_no = $req->input('mobile_no');
+            $model->city_id = $req->input('city_id');
+            $model->advance_amount = $req->input('advance_amount');
+            
+            if($model->save()){
+                return response()->json([
+                    'status'=>200,
+                ]);
+            }
+        }
+    }
+
     
     public function CustomerDetail($customer_id)
     {

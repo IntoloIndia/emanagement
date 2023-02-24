@@ -10,6 +10,7 @@ class MyApp {
     const ACCOUNTANT = 4;
     // const OTHER = ;
     const BARCODE = 9;
+    const MANAGER = 7;
 
     const ACTIVE = 1;
     const USED = 2;

@@ -3,7 +3,7 @@
 @section('page_title', 'Purchase Entry')
 @section('style')
 
-<link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" />
+{{-- <link rel="stylesheet" media="print" href="{{asset('public/assets/css/print.css')}}" /> --}}
 <style>
 
 .form-control, .form-select {
@@ -30,41 +30,12 @@
   width: 200px;  
 }
 
-/* textarea.popover-textarea {
-   border: 0px;   
-   margin: 0px; 
-   width: 100%;
-   height: 100%;
-   padding: 0px;  
-   box-shadow: none;
-}
 
-.popover-footer {
-  margin: 0;
-  padding: 8px 14px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 18px;
-  background-color: #F7F7F7;
-  border-bottom: 1px solid #EBEBEB;
-  border-radius: 5px 5px 0 0;
-}
-
-a {
-    padding: 0px 20px 20px 20px;
-    float: left;
-    vertical-align: middle;
-    width: 100px;
-    margin: 5px;
-}  */
 
 </style>
 @endsection
 
 @include('purchase.modals')
-
-
-
 
 @section('content-header')
     <div class="content-header">
@@ -85,6 +56,9 @@ a {
 @endsection
 
 @section('content')
+
+
+
     <div class="row">
 
         <div class="col-md-7">
@@ -129,8 +103,8 @@ a {
                                 {{$count = "";}}
                                 @foreach ($purchases as $list)
                                     {{-- {{$list}} --}}
-                                    <tr>
-                                        <td >{{++$count}}</td>
+                                    <tr class="supplier_row_filter" supplier-name="{{ucwords($list['supplier_name'])}}">
+                                        <td scope="row">{{++$count}}</td>
                                         <td >{{date('d-m-Y', strtotime($list->bill_date))}}</td>
                                         <td >{{strtoupper($list->bill_no)}}</td>
                                         <td >{{ucwords($list->supplier_name)}}</td>
@@ -406,42 +380,72 @@ a {
             $(document).on('click','.editPurchaseEntryBtn', function (e) {
                 e.preventDefault();
                 const purchase_entry_id = $(this).val();
-
                 editPurchaseEntry(purchase_entry_id);
             });
 
             $(document).on('click','#updatePurchaseEntryBtn', function (e) {
                 e.preventDefault();
-                
                 const purchase_id = $('#purchase_id').val();
                 const purchase_entry_id = $('#purchase_entry_id').val();
-
                 updatePurchaseEntry(purchase_id, purchase_entry_id);
             });
 
             $(document).on('click','#deletePurchaseEntryItemBtn',function(e) {
                 var purchase_entry_item_id = $(this).val();
+                var purchase_id = $(this).attr('purchase-id'); 
+
                 $('#deletePurchaseEntryItemModal').modal('show');
                 $('#yesPurchaseEntryItemBtn').val(purchase_entry_item_id);
+                $('#yesPurchaseEntryItemBtn').attr('purchase-id', purchase_id);
+                
             });
             
             $(document).on('click','#yesPurchaseEntryItemBtn',function(e) {
                 var purchase_entry_item_id = $(this).val();
+                var purchase_id = $(this).attr('purchase-id');
+
                 deletePurchaseEntryItemWise(purchase_entry_item_id);
+                setTimeout(() => { 
+                    viewPurchaseEntry(purchase_id);
+                    $('#deletePurchaseEntryItemModal').modal('hide');
+                }, 500);
             });
 
             $(document).on('click','#deletePurchaseEntryStyleBtn',function(e) {
                 var purchase_entry_id = $(this).val();
-                // alert(purchase_entry_id);
+                var purchase_id = $(this).attr('purchase-id');
+                
                 $('#deletePurchaseEntryStyleModal').modal('show');
                 $('#yesPurchaseEntryItemStyleBtn').val(purchase_entry_id);
-            });
-
-            $(document).on('click','#yesPurchaseEntryItemStyleBtn',function(e) {
-                var purchase_entry_id = $(this).val();
-                deletePurchaseEntryStyleWise(purchase_entry_id);
+                $('#yesPurchaseEntryItemStyleBtn').attr('purchase-id', purchase_id);
             });
             
+            $(document).on('click','#yesPurchaseEntryItemStyleBtn',function(e) {
+                var purchase_entry_id = $(this).val();
+                var purchase_id = $(this).attr('purchase-id');
+                
+                deletePurchaseEntryStyleWise(purchase_entry_id);
+                setTimeout(() => { 
+                    viewPurchaseEntry(purchase_id);
+                    $('#deletePurchaseEntryStyleModal').modal('hide');
+                }, 500);
+            });
+            
+            // $(document).on('change','#filter_supplier_id',function(e) {
+
+            //     var supplier_name = $("#filter_supplier_id option:selected").text();
+            //     var row = $('.supplier_row_filter');
+            //     row.hide();
+            //     row.each(function(i, el) {
+            //         var name = $(el).attr('supplier-name');
+            //         if(name == supplier_name) {
+            //             $(el).show();
+            //             console.log(el);
+            //             alert(el);
+            //         }
+            //     })
+              
+            // });
 
             
             $(document).on('click','.deleteProductBtn', function (e) {
@@ -590,9 +594,8 @@ a {
             $(document).on('click','.viewPurchaseEntry', function (e) {
                 e.preventDefault();
                 var purchase_id = $(this).val();
-
                 viewPurchaseEntry(purchase_id);
-
+                // $('#yesPurchaseEntryItemStyleBtn').val(purchase_id)
                 // generatePurchaseInvoice(purchase_id);
             });
 
@@ -615,6 +618,12 @@ a {
                 var print_section = $(this).attr('print-section');
                 printBarcode(print_section);
             });
+
+            $(document).on('click', '#printPurchaseInvoice', function() {
+                var print_section = $(this).attr('print-section');
+                printInvoice(print_section);
+            });
+
 
             $(document).on('change','#formFileSm', function (e) {
                 e.preventDefault();

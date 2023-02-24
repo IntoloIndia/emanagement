@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Management</title>
+        <title>I-Manage Garments</title>
     
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <link rel="stylesheet" href="{{asset('public/assets/css/bootstrap.min.css')}}" >
@@ -21,7 +21,7 @@
         <div class="login-box">
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
-                    <a href="{{url('/')}}" class="h2"><b> </b>E-Management</a>
+                    <a href="{{url('/')}}" class="h2"><b> </b>I-Manage Garments</a>
                 </div>
                 <div class="card-body">
                     
@@ -59,7 +59,8 @@
                                 </p>
                             </div>
                         </div>
-                        <input type="hidden" name="key" id="key">
+                        <input type="hidden" name="key" id="key" >
+                        {{-- <input type="hidden" name="key" id="key" value="OlCIKVcI0zBPBt4EmbkkO/vWjRSHhhXFMfDjRvR7OJ0=ac"> --}}
                         @if(session()->has('error'))
                             <div class="alert alert-danger mt-2" role="alert">
                                 {{session('error')}} 
