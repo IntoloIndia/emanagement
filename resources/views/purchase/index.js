@@ -857,6 +857,10 @@
 
     }
 
+
+   
+
+
     // function convertNumberToWords(fees_amount) {
         
     //     var ones = ["", "One ", "Two ", "Three ", "Four ", "Five ", "Six ", "Seven ", "Eight ", "Nine ", "Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ", "Fifteen ", "Sixteen ", "Seventeen ", "Eighteen ", "Nineteen "];
@@ -873,6 +877,10 @@
         
     //     return str+"Rupees Only";
     // }
+
+
+
+
 
 
 
@@ -1118,6 +1126,22 @@
                     $('#purchase_entry_err').html('');
                     $('#purchaseEntryModal').modal('hide');
                     window.location.reload();
+                }
+            }
+        });
+    }
+
+    function deletePurchaseEntry(purchase_entry_id) {
+        $.ajax({
+            type: "get",
+            url: "delete-purchase-entry/" + purchase_entry_id,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if(response.status == 200)
+                {
+                    window.location.reload();
+                    
                 }
             }
         });

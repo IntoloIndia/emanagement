@@ -41,6 +41,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    {{-- <div class="row mb-2">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <input type="date" id="sales_invoice_date" class="form-control form-control-sm">
+                        </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12 table-responsive p-0" style="height: 550px;">
@@ -65,7 +71,7 @@
                                                 <td>{{ ucwords($item->customer_name) }}</td>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->total_amount }}</td>
-                                                <td>{{ $item->bill_date }}</td>
+                                                <td>{{ date('d-m-Y',strtotime($item->bill_date)) }}</td>
                                                 <td>
                                                     {{-- <button type="button" class="btn btn-secondary btn-flat btn-sm editOrderBtn" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Order"><i class="far fa-edit"></i></button> --}}
                                                     {{-- <button type="button" class="btn btn-info btn-flat btn-sm orderDetailBtn" value="{{$item->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order"><i class="far fa-eye"></i></button> --}}
@@ -687,7 +693,12 @@
                                                 <input type="text" class="form-control form-control-sm"
                                                     id="customer_name" required name="customer_name"
                                                     placeholder="Enter name">
-                                                 
+                                                    
+                                                    {{-- <samp class="text-danger">
+                                                        @error('customer_name')
+                                                            {{$message}}
+                                                        @enderror
+                                                    </samp> --}}
                                             </div>
                                         </div>
                                         <div class="row mt-1">
@@ -1297,6 +1308,11 @@
                 // $(".product_code").focus();
             });
 
+            // $(document).on('change', '#sales_invoice_date', function() {
+            //     var sales_invoice_date = $(this).val();
+            //     alert(sales_invoice_date);
+            // });
+
             $(document).on('change', '.product_code', function() {
                 var object = $(this);
                 getProductDetail(object);
@@ -1669,14 +1685,14 @@
             $("#item_list tr").each(function () {
                 row_obj = $(this);
                 offer_id = row_obj.attr('offer-id');
-                console.log("table row",offer_id);
+                // console.log("table row",offer_id);
 
                 if (offer_id > 0) {
                     var offer_type = $('#apply_offer_id_'+offer_id).find('div').attr('offer-type');
                     var offer_discount = $('#apply_offer_id_'+offer_id).find('div').attr('discount-offer');
     
-                    console.log(offer_type);
-                    console.log(offer_discount);
+                    // console.log(offer_type);
+                    // console.log(offer_discount);
                     object.parent().parent().find(".discount").val(offer_discount);
                     // row_obj.parent().parent().find(".discount").css('border', '2px solid red');
                     calculateAmount(row_obj);
@@ -2212,7 +2228,7 @@
                 success: function(response) {
                     if (response.status == 400) {
                         $('#order_err').html('');
-                        $('#order_err').removeClass('alert alert-danger');
+                        $('#order_err').addClass('alert alert-danger');
                         var count = 1;
                         $.each(response.errors, function(key, err_value) {
                             $('#order_err').append('<span>' + count++ + '. ' + err_value + '</span></br>');

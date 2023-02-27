@@ -45,7 +45,8 @@ class CustomerBillInvoiceController extends Controller
 
 
         // $customers_billing = CustomerBill::all();
-        $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')->get([
+        $customers_billing = CustomerBill::join('customers','customers.id','=','customer_bills.customer_id')
+            ->where(['date'=>date('Y-m-d')])->get([
             'customers.*','customer_bills.*'
         ]);
         
@@ -79,9 +80,11 @@ class CustomerBillInvoiceController extends Controller
             // 'customer_name'=>'required',
             // 'mobile_no'=>'required|unique:customers,mobile_no,'.$req->input('mobile_no'),
             // 'birthday_date'=>'required|max:191',
-            // 'month_id'=>'required|max:191',
-            // 'state_type'=>'required|max:191',
-            'employee_id'=>'required',
+            // 'month'=>'required|max:191',
+            // 'employee_id'=>'required',
+            // 'GST NO'=>'required',
+            // 'City'=>'required',
+            // 'anniversary_date'=>'required',
           
         ]);
 
@@ -89,14 +92,14 @@ class CustomerBillInvoiceController extends Controller
         {
             return response()->json([
                 'status'=>400,
-                'errors'=>$validator->messages("plz all field required"),
+                'errors'=>$validator->messages(),
             ]);
 
         }else{
             
             $customer_id = 0;
             
-            $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first(['id', 'advance_amount']);
+            $data = Customer::where(['mobile_no'=>$req->input('mobile_no')])->first(['id']);
             
             if ($data == null) {
 

@@ -43,7 +43,7 @@
                             <select name="city_id" id="city_id" class="form-select">
                                 <option selected disabled>City</option>
                                 @foreach ($cities as $item)
-                                    <option value="{{ $item->id }}">{{ ucwords($item->city) }}
+                                    <option value="{{ $item->id }}">{{ucwords($item->city) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -68,14 +68,14 @@
     </div>
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-12">
         <button type="button" class="btn btn-primary btn-sm float-right" id="addCustomer"  data-bs-target="#staticBackdrop">Add Advance Amount</button>
     </div>
-</div>
+</div> --}}
 
 <div class="row mt-2">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="card">
 
             <div class="card-header">
@@ -91,6 +91,7 @@
                                     <th>Customer</th>
                                     <th>Mobile</th>
                                     <th>City</th>
+                                    {{-- <th>Advance Amount</th> --}}
                                     <th>Member</th>
                                     <th>Action</th>
                                 </tr>
@@ -105,6 +106,7 @@
                                         <td>{{ucwords($list->customer_name)}}</td>
                                         <td>{{$list->mobile_no}}</td>
                                         <td>{{ucwords($list->city)}}</td>
+                                        {{-- <td>{{$list->advance_amount}}</td> --}}
                                         @if($member == MyApp::SILVER)
                                             <td style='color:#454545';><b>{{MyApp::SILVER}}</b></td>
                                         @elseif($member == MyApp::GOLDEN)
@@ -122,7 +124,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Customer Detail</h3>
@@ -172,11 +174,11 @@
         });
 
         // save customer datails
-        $(document).on('click','#saveCustomerBtn', function(e){
-            e.preventDefault();
-            // alert("call");
-            saveCustomerAdvanceAmount();
-        });
+        // $(document).on('click','#saveCustomerBtn', function(e){
+        //     e.preventDefault();
+        //     // alert("call");
+        //     saveCustomerAdvanceAmount();
+        // });
 
         
         $(document).on('click','#customer_row_id', function(e){
@@ -202,40 +204,40 @@
 
     });
 
-    function saveCustomerAdvanceAmount() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+    // function saveCustomerAdvanceAmount() {
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         });
 
-            var formData = new FormData($("#customerForm")[0]);
-            $.ajax({
-                type: "POST",
-                url: "save-customer-advance-amount",
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    // console.log(response);
-                    if (response.status === 400) {
-                        $('#customer_error').html('');
-                        $('#customer_error').addClass('alert alert-danger');
-                        var count = 1;
-                        $.each(response.errors, function (key, err_value) {
-                            $('#customer_error').append('<span>' + count++ + '. ' + err_value + '</span></br>');
-                        });
+    //         var formData = new FormData($("#customerForm")[0]);
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "save-customer-advance-amount",
+    //             data: formData,
+    //             dataType: "json",
+    //             cache: false,
+    //             contentType: false,
+    //             processData: false,
+    //             success: function (response) {
+    //                 // console.log(response);
+    //                 if (response.status === 400) {
+    //                     $('#customer_error').html('');
+    //                     $('#customer_error').addClass('alert alert-danger');
+    //                     var count = 1;
+    //                     $.each(response.errors, function (key, err_value) {
+    //                         $('#customer_error').append('<span>' + count++ + '. ' + err_value + '</span></br>');
+    //                     });
 
-                    } else {
-                        $('#customer_error').html('');
-                        $('#coustomerModal').modal('hide');
-                        window.location.reload();
-                    }
-                }
-            });
-        }
+    //                 } else {
+    //                     $('#customer_error').html('');
+    //                     $('#coustomerModal').modal('hide');
+    //                     window.location.reload();
+    //                 }
+    //             }
+    //         });
+    //     }
 
     function getProjects(customer_id) {
         $.ajax({

@@ -1087,11 +1087,24 @@ class PurchaseEntryController extends Controller
 
             $html = "";
             $html .= "<div class='card'>";
-
                 $html .= "<div class='card-header'>";
                 $html .= "<div class='row'>";
                     $html .= "<div class='col-md-8 col-lg-8 col-xl-8'>";
-                        $html .= "<h3 class='card-title'>Purchase Entry</h3>";
+                        $html .= "<div class='row'>";
+                            $html .= "<div class='col-md-6'>";
+                                $html .= "<h3 class='card-title'>Purchase Entry</h3>";
+                            $html .= "</div>";
+                            $html .= "<div class='col-md-6'>";
+                             $html .= "<div class='input-group input-group-sm' style='width: 200px;'>";
+                                 $html .= "<input type='text' class='form-control float-right filter_purchase_entry_style' id='' placeholder='Search Style No'>";
+                                 $html .= "<div class='input-group-append'>";
+                                     $html .= "<button type='submit' class='btn btn-default'>";
+                                         $html .= "<i class='fas fa-search'></i>";
+                                     $html .= "</button>";
+                                 $html .= "</div>";
+                             $html .= "</div>";
+                            $html .= "</div>";
+                        $html .= "</div>";
                     $html .= "</div>";
                 $html .= "</div>";
                 $html .= "</div>";
@@ -1110,11 +1123,11 @@ class PurchaseEntryController extends Controller
                             $html .="<th>Action</th>";
                         $html .="</tr>";
                     $html .="</thead>";
-                    $html .="<tbody >";
+                    $html .="<tbody id='filterStyleTable'>";
                         
                     foreach ($purchase_entry as $key => $list) {
                                
-                        $html .="<tr class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne'>";
+                        $html .="<tr class='accordion-button collapsed filter_style_table' data-bs-toggle='collapse' data-bs-target='#collapse_".$list->id."' aria-expanded='false' aria-controls='flush-collapseOne' >";
                             $html .="<td>".++$key."</td>";
                             // $html .="<td>".ucwords($list->category)."</td>";
                             $html .="<td>".ucwords($list->sub_category)."</td>";
@@ -1281,7 +1294,6 @@ class PurchaseEntryController extends Controller
                                     $html .= "<th style='width: 25%;'>Description</th>";
                                     $html .= "<th style='width: 20%;'>Style No</th>";
                                     $html .= "<th style='width: 10%;'>Color</th>";
-
                                     $html .= "<th style='width: 5%;'>Size</th>";
                                     $html .= "<th style='width: 5%;'>Qty</th>";
                                     $html .= "<th >Price</th>";
@@ -1551,11 +1563,36 @@ class PurchaseEntryController extends Controller
         }
         
     }
+    public function deletePurchaseEntry($purchase_entry_id)
+    {
+        
+        $purchase_entry_style_id = PurchaseEntry::where(['purchase_id'=>$purchase_entry_id])->get(['id']);
+        
+        foreach ($purchase_entry_style_id as $key => $list) {
+            $purchase_entry_items = PurchaseEntryItem::where(['purchase_entry_id'=>$list->id])->get(['id']);
+            $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
+        }
+        if($purchase_entry_items)
+        {
+            $purchase_entry_style = PurchaseEntry::where(['purchase_id'=>$purchase_entry_id])->get('id');
+            $purchase_entry_deleted = PurchaseEntry::destroy($purchase_entry_style->toArray());
+          
+            if($purchase_entry_deleted)
+            {
+                $purchase_entry = Purchase::find($purchase_entry_id);
+                $purchase_entry->delete();   
+            }
+           
+        }
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
 
     public function deletePurchaseEntryStyleWise($purchase_entry_id)
     {
-       
         $purchase_entry_items = PurchaseEntryItem::where('purchase_entry_id', $purchase_entry_id)->get(['id']);
+        // dd($purchase_entry_items);
         $items_deleted = PurchaseEntryItem::destroy($purchase_entry_items->toArray());
         if($items_deleted)
         {
@@ -1584,6 +1621,8 @@ class PurchaseEntryController extends Controller
             
         ]);
     }
+
+
 
 
     public function getProductDetail($product_code)
@@ -2372,5 +2411,7 @@ class PurchaseEntryController extends Controller
 
     }
 
+
+   
   
 }

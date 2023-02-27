@@ -70,13 +70,23 @@
                             <h3 class="card-title">Purchase</h3>
                         </div>
                         <div class=" col-md-4 col-lg-4 col-xl-4">
-                            <select id="filter_supplier_id" name="filter_supplier_id" class="form-select form-select-sm select_chosen">
+                            <div class="input-group input-group-sm" style="width: 200px;">
+                                <input type="text" class="form-control float-right" id="filter_supplier_id" placeholder="Search Supplier">
+    
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- <select id="filter_supplier_id" name="filter_supplier_id" class="form-select form-select-sm select_chosen">
                                 <option selected disabled value="0">Supplier</option>                                          
                                 @foreach ($suppliers as $list)
                                 <option value="{{$list->id}}" state-type="{{$list->state_type}}"> {{ucwords($list->supplier_name)}} </option>
                                 
                                 @endforeach
-                            </select>
+                            </select> --}}
+
                         </div>
                         
                     </div>
@@ -94,7 +104,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="filterSupplierTable">
                             @if($purchases->isEmpty())
                                 <div class="alert alert-warning text-light my-2" role="alert">
                                     <span>Purchase is not available to add new purchase click on " Purchase Entry " button</span>
@@ -102,7 +112,6 @@
                             @else
                                 {{$count = "";}}
                                 @foreach ($purchases as $list)
-                                    {{-- {{$list}} --}}
                                     <tr class="supplier_row_filter" supplier-name="{{ucwords($list['supplier_name'])}}">
                                         <td scope="row">{{++$count}}</td>
                                         <td >{{date('d-m-Y', strtotime($list->bill_date))}}</td>
@@ -113,6 +122,7 @@
                                             <button type='button' class='btn btn-secondary btn-flat btn-sm allbarcodeBtn' value="{{$list->id}}" > <i class='fas fa-barcode'></i></button>
                                             <button type="button" class="btn btn-info btn-sm mx-1 viewPurchaseEntry" value="{{$list->id}}"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-success btn-sm generatePurchaseInvoice" value="{{$list->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="fas fa-file-invoice"></i></button>
+                                            <button type='button' class='btn btn-danger btn-flat btn-sm deletePurchaseEntry' value="{{$list->id}}" ><i class='fa fa-trash'></i></button>
                                             {{-- <button type="button" class="btn btn-danger btn-sm deleteBtn" module-type="{{MyApp::STATE}}" value="{{$item->id}}"><i class="fas fa-trash"></i></button> --}}
                                         </td>
                                     </tr>
@@ -430,24 +440,61 @@
                     $('#deletePurchaseEntryStyleModal').modal('hide');
                 }, 500);
             });
-            
-            // $(document).on('change','#filter_supplier_id',function(e) {
 
-            //     var supplier_name = $("#filter_supplier_id option:selected").text();
-            //     var row = $('.supplier_row_filter');
-            //     row.hide();
-            //     row.each(function(i, el) {
-            //         var name = $(el).attr('supplier-name');
-            //         if(name == supplier_name) {
-            //             $(el).show();
-            //             console.log(el);
-            //             alert(el);
-            //         }
-            //     })
+
+            // delete purchase entey 
+
+            $(document).on('click','.deletePurchaseEntry', function (e) {
+                e.preventDefault();
+                var purchase_entry_id = $(this).val();                
+                $('#deletePurchaseEntryModal').modal('show');
+                $('#yesDeletedeletePurchaseEntry').val(purchase_entry_id);
+            });
+            $(document).on('click','#yesDeletedeletePurchaseEntry', function (e) {
+                e.preventDefault();
+                const purchase_entry_id = $(this).val();
+                deletePurchaseEntry(purchase_entry_id);
+            });
+
+            $(document).on('keyup','#filter_supplier_id', function (e) {
+                e.preventDefault();
+                var value = $(this).val().toLowerCase();
+                    $("#filterSupplierTable tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)              
+                    });
+            });
+           
+            $(document).on('keyup','.filter_purchase_entry_style', function (e) {
+                e.preventDefault();
+                var value = $(this).val().toLowerCase();
+                    $("#filterStyleTable tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)              
+                    });
+            });
+
+            
               
+                // const supplier_name = $("#filter_supplier_id option:selected").text();
+                // // alert(supplier_name);
+                // var row = $('.supplier_row_filter');             
+                // row.hide()
+                // row.each(function(i, el) {
+                //     if($(el).attr('supplier-name') == supplier_name) {
+                //         $(el).show();
+                //     }
+                // })
             // });
 
             
+
+            // $(document).on('click','#yesDeleteProductBtn', function (e) {
+            //     e.preventDefault();
+            //     const product_id = $(this).val();
+            //     // alert(product_id)
+            //     deleteProduct(product_id);
+            // });
+
+
             $(document).on('click','.deleteProductBtn', function (e) {
                 e.preventDefault();
                 const product_id = $(this).val();

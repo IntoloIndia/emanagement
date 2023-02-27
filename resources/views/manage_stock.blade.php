@@ -24,7 +24,7 @@
                                 <th >SN</th>
                                 <th >Category</th>
                                 <th >Qty</th>
-                                {{-- <th >Amount</th> --}}
+                            
                             </tr>
                         </thead>
                         <tbody>
@@ -34,11 +34,12 @@
                                 @php 
                                     $result = stockItemQtyByCategory($item['id']);
                                 @endphp 
+                                  
                                     <tr>
                                         <th scope="row">{{++$key}}</th>
                                         <td>{{ucwords($item['category'])}}</td>
                                         <td>{{$result['total_qty']}}</td>
-                                        {{-- <td>{{$result['total_amount']}}</td> --}}
+                                    
                                     </tr>
                             @endforeach
                         </tbody>
@@ -67,21 +68,18 @@
                                 <th >SN</th>
                                 <th >Sub Categoty</th>
                                 <th >Qty</th>
-                                {{-- <th >Amount</th> --}}
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($sub_categories as $key => $item)
                                 @php 
                                     $result = stockItemQtyBySubCategory($item['id']);
-                                 
-                                    
                                 @endphp 
                                 <tr class="row_filter" category-id="{{$item['category_id']}}">
                                     <th scope="row">{{++$key}}</th>
                                     <td>{{ucwords($item['sub_category'])}}</td>
                                     <td>{{$result['total_qty']}}</td>
-                                    {{-- <td>{{$result['total_amount']}}</td> --}}
+                                 
                                 </tr>
                             @endforeach
                         </tbody>

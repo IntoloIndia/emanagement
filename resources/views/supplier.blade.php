@@ -360,7 +360,7 @@
                 e.preventDefault();
                 const city_id = $(this).val();
 
-                var row = $('.row_filter');
+                var row = $('.row_filter');             
                 row.hide()
                 row.each(function(i, el) {
                     if($(el).attr('city-id') == city_id) {

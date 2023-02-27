@@ -167,6 +167,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="find-product" class="nav-link">
+                        <i class="fas fa-angle-right nav-icon"></i><p>Find Product</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="alteration_voucher" class="nav-link">
                         <i class="fas fa-angle-right nav-icon"></i><p>Alteration Voucher</p>
                     </a>

@@ -555,6 +555,25 @@
 
 </div>
 
+{{-- delete purchase entery modal --}}
+<div class="modal fade" id="deletePurchaseEntryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Purchase Entry </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <h5 class="text-red"><b>Are you sure? you want to delete purchase entry with items</b></h5>
+                        <button type="button" id="yesDeletedeletePurchaseEntry" class="btn btn-primary btn-sm mx-1 ">Yes</button>
+                        <button type="button" class="btn btn-secondary mx-1 btn-sm" data-bs-dismiss="modal">No</button>
+                    <hr>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
 {{-- delete purchase entery item wise modal --}}
 <div class="modal fade" id="deletePurchaseEntryItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">

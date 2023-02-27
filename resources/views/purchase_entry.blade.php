@@ -1273,6 +1273,12 @@ a {
                 manageStyleNo();
             });
 
+          
+
+           
+        });
+            
+
             $(document).on('click','.generatePurchaseInvoice', function (e) {
                 e.preventDefault();
                 generatePurchaseInvoice();

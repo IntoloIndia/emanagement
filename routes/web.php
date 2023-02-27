@@ -33,6 +33,7 @@ use App\Http\Controllers\CompanySupplierController;
 use App\Http\Controllers\CompanyPurchaseController;
 use App\Http\Controllers\CompanySalesController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\FindProductController;
 
 use App\MyApp;
 /*
@@ -300,8 +301,10 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-purchase-entry', 'savePurchaseEntry');
         Route::get('admin/edit-purchase-entry/{purchase_entry_id}', 'editPurchaseEntry');
         Route::post('admin/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
+        Route::get('admin/delete-purchase-entry/{purchase_entry_id}','deletePurchaseEntry');
         Route::get('admin/delete-purchase-entry-item-wise/{purchase_entry_item_id}','deletePurchaseEntryItemWise');
         Route::get('admin/delete-purchase-entry-style-wise/{purchase_entry_id}','deletePurchaseEntryStyleWise');
+  
 
         // Route::get('admin/delete-purchase-entry/{product_id}', 'deleteProductDetail');
 
@@ -330,6 +333,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::post('admin/save-pt-file','savePtFile');
 
     });
+    
 
     Route::controller(PurchaseReturnController::class)->group(function () {
         Route::get('admin/purchase-return', 'index');
@@ -340,6 +344,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
         Route::get('admin/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
     });
 
+
+    Route::controller(FindProductController::class)->group(function () {
+        Route::get('admin/find-product', 'index');
+        Route::get('admin/search-style-no/{style_no}', 'searchStyleNo');
+    });
     
     Route::controller(ManageStockController::class)->group(function () {
         Route::get('admin/manage-stock', 'index');
@@ -554,6 +563,7 @@ Route::group(['middleware'=>'user_auth'], function(){
         Route::post('/update-purchase-entry/{purchase_id}/{purchase_entry_id}', 'updatePurchaseEntry');
         Route::get('/get-product-detail/{product_code}', 'getProductDetail');
         Route::get('/get-color_code/{color_code}','getcolorcode');
+        Route::get('/delete-purchase-entry/{purchase_entry_id}','deletePurchaseEntry');
         Route::get('/delete-purchase-entry-item-wise/{purchase_entry_item_id}','deletePurchaseEntryItemWise');
         Route::get('/delete-purchase-entry-style-wise/{purchase_entry_id}','deletePurchaseEntryStyleWise');
 
@@ -577,6 +587,9 @@ Route::group(['middleware'=>'user_auth'], function(){
         Route::get('/update-release-status/{supplier}', 'updateReleaseStatus');
         Route::get('/purchase-return-invoice/{purchase_return_id}','purchaseReturnInvoice');
     });
+   
+    
+
 
     Route::controller(BarcodeController::class)->group(function () {
         Route::get('/barcode','index');

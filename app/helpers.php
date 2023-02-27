@@ -240,7 +240,7 @@
             }elseif ($stock_type == MyApp::MINUS_MANAGE_STOCK) {
                 $total_qty = ($data->total_qty - $qty);
             }
-            
+                        
             $manageStock->total_qty = $total_qty;
             $manageStock->save();
             
